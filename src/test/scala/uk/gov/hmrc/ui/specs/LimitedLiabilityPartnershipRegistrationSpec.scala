@@ -19,13 +19,7 @@ package uk.gov.hmrc.ui.specs
 class LimitedLiabilityPartnershipRegistrationSpec extends BaseSpec {
 
   Feature("Limited Liability Partnership registration journey") {
-
-    Scenario("placeholder") {
-      Given("")
-      When("")
-      Then("")
-    }
-
+    pending
     Scenario("placeholder") {
       Given("")
       When("")

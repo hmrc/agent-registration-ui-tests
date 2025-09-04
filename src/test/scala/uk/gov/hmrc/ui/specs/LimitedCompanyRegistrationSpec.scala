@@ -19,7 +19,7 @@ package uk.gov.hmrc.ui.specs
 class LimitedCompanyRegistrationSpec extends BaseSpec {
 
   Feature("Limited Company registration journey") {
-
+    pending
     Scenario("Applicant is a director") {
       Given("Applicant start the registration journey and is a director")
       And("They provide their business details")

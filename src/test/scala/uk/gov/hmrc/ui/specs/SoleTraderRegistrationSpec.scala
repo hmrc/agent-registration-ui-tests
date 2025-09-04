@@ -19,7 +19,7 @@ package uk.gov.hmrc.ui.specs
 class SoleTraderRegistrationSpec extends BaseSpec {
 
   Feature("Sole Trader registration journey") {
-
+    pending
     Scenario("Applicant is the business owner") {
       Given("Applicant start the registration journey and is the business owner")
       And("They provide their business details")

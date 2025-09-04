@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.utils
+package uk.gov.hmrc.ui.pages
 
-import com.typesafe.config.ConfigFactory
-object AppConfig {
-  private val c       = ConfigFactory.load()
-  val baseUrl: String = sys.env.getOrElse("BASE_URL", c.getString("baseUrl"))
+import uk.gov.hmrc.selenium.webdriver.Driver
+
+object AgentRegistrationPage extends BasePage {
+
+  val url: String = "http://localhost:22201/agent-registration"
+
+  def goTo(): Unit =
+    Driver.instance.get(url)
+
+  def title: String =
+    Driver.instance.getTitle
 }

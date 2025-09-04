@@ -16,14 +16,23 @@
 
 package uk.gov.hmrc.ui.specs
 
-class PartnershipRegistrationSpec extends BaseSpec {
+import uk.gov.hmrc.ui.pages.AgentRegistrationPage
+import uk.gov.hmrc.ui.utils.Tags
 
-  Feature("Partnership registration journey") {
-    pending
-    Scenario("placeholder") {
-      Given("")
-      When("")
-      Then("")
+class AgentRegistrationSpec extends BaseSpec {
+
+  Feature("Agent Registration Page") {
+
+    Scenario("Launch the page and verify the title", Tags.Smoke) {
+
+      Given("I navigate to the agent-registration page")
+      AgentRegistrationPage.goTo()
+
+      When("the page loads")
+      val actualTitle = AgentRegistrationPage.title
+
+      Then("the page title should be displayed correctly")
+      actualTitle shouldBe "Sign in"
     }
   }
 }

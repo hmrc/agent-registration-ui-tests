@@ -29,8 +29,6 @@ trait BaseSpec
     with Browser
     with ScreenshotOnFailure {
 
-  protected val baseUrl: String = uk.gov.hmrc.ui.utils.AppConfig.baseUrl
-
   override def beforeEach(): Unit =
     startBrowser()
 
