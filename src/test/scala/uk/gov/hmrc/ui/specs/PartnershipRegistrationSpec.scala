@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.specs
 
-import uk.gov.hmrc.selenium.component.PageObject
-import uk.gov.hmrc.selenium.webdriver.Driver
-import uk.gov.hmrc.ui.utils.AppConfig
+class PartnershipRegistrationSpec extends BaseSpec {
 
-trait BasePage extends PageObject {
-  def path: String // abstract
-  def url: String   = AppConfig.baseUrl + path
-  def open(): Unit  = Driver.instance.get(url)
-  def title: String = Driver.instance.getTitle
+  Feature("Partnership registration journey") {
+    pending
+    Scenario("placeholder") {
+      Given("")
+      When("")
+      Then("")
+    }
+  }
 }
