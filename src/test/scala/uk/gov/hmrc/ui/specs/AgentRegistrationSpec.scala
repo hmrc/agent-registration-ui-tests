@@ -26,7 +26,7 @@ class AgentRegistrationSpec extends BaseSpec {
     Scenario("Launch the page and verify the title", Tags.Smoke) {
 
       Given("I navigate to the agent-registration page")
-      AgentRegistrationPage.goTo()
+      AgentRegistrationPage.open()
 
       When("the page loads")
       val actualTitle = AgentRegistrationPage.title

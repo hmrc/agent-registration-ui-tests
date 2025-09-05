@@ -20,6 +20,7 @@ import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{BeforeAndAfterEach, GivenWhenThen}
 import uk.gov.hmrc.selenium.webdriver.{Browser, ScreenshotOnFailure}
+import uk.gov.hmrc.ui.utils.EnsureSystemProperties
 
 trait BaseSpec
     extends AnyFeatureSpec
@@ -28,6 +29,9 @@ trait BaseSpec
     with BeforeAndAfterEach
     with Browser
     with ScreenshotOnFailure {
+
+  // Ensure system properties are always set with defaults
+  EnsureSystemProperties()
 
   override def beforeEach(): Unit =
     startBrowser()

@@ -16,15 +16,6 @@
 
 package uk.gov.hmrc.ui.pages
 
-import uk.gov.hmrc.selenium.webdriver.Driver
-
 object AgentRegistrationPage extends BasePage {
-
-  val url: String = "http://localhost:22201/agent-registration"
-
-  def goTo(): Unit =
-    Driver.instance.get(url)
-
-  def title: String =
-    Driver.instance.getTitle
+  override val path: String = "/agent-registration"
 }

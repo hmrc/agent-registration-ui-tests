@@ -17,5 +17,12 @@
 package uk.gov.hmrc.ui.pages
 
 import uk.gov.hmrc.selenium.component.PageObject
+import uk.gov.hmrc.selenium.webdriver.Driver
+import uk.gov.hmrc.ui.utils.AppConfig
 
-trait BasePage extends PageObject {}
+trait BasePage extends PageObject {
+  def path: String // abstract
+  def url: String = AppConfig.baseUrl + path
+  def open(): Unit = Driver.instance.get(url)
+  def title: String = Driver.instance.getTitle
+}

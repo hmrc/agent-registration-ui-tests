@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 set -e
+set -x
 
 BROWSER=${1:-chrome}
-ENV=${2:-local}
+HEADLESS=${3:-true}
+LOGGING=${4:-true}
 
-echo "Running Agent Registration UI tests with browser=$BROWSER, env=$ENV"
-
-sbt "test" -Dbrowser=$BROWSER -Denvironment=$ENV
+sbt \
+clean \
+-Dbrowser="${BROWSER:=chrome}" \
+-Dbrowser.option.headless=${HEADLESS:=true} \
+-Dbrowser.logging="$LOGGING" \
+test
+testReport
