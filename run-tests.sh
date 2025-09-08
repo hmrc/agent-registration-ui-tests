@@ -11,5 +11,5 @@ clean \
 -Dbrowser="${BROWSER:=chrome}" \
 -Dbrowser.option.headless=${HEADLESS:=true} \
 -Dbrowser.logging="$LOGGING" \
-test
+test \
 testReport
