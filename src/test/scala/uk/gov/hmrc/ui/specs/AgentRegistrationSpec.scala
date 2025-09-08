@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.specs
 
-import uk.gov.hmrc.selenium.component.PageObject
-import uk.gov.hmrc.selenium.webdriver.Driver
-import uk.gov.hmrc.ui.utils.AppConfig
+import uk.gov.hmrc.ui.pages.AgentRegistrationPage
+import uk.gov.hmrc.ui.utils.Tags
 
-trait BasePage extends PageObject {
-  def path: String // abstract
-  def url: String   = AppConfig.baseUrl + path
-  def open(): Unit  = Driver.instance.get(url)
-  def title: String = Driver.instance.getTitle
+class AgentRegistrationSpec extends BaseSpec {
+
+  Feature("Agent Registration Page") {
+
+    Scenario("Launch the page and verify the title", Tags.Smoke) {
+
+      Given("I navigate to the agent-registration page")
+      AgentRegistrationPage.open()
+
+      When("the page loads")
+      val actualTitle = AgentRegistrationPage.title
+
+      Then("the page title should be displayed correctly")
+      actualTitle shouldBe "Sign in"
+    }
+  }
 }
