@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.ui.pages
 
-object AgentRegistrationPage extends BasePage {
-  override val path: String = "/agent-registration"
+object CreateYourAgentAccountPage extends BasePage {
+  override val path: String       = "/agent-registration/apply/about-your-business/sign-in"
+  override val expectedH1: String = "Create your agent account sign in details"
+
 }
