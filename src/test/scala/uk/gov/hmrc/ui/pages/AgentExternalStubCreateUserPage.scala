@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs
+package uk.gov.hmrc.ui.pages
 
-import uk.gov.hmrc.ui.pages.AgentRegistrationPage
-import uk.gov.hmrc.ui.utils.Tags
+import uk.gov.hmrc.ui.pages.HowIsYourBusinessSetUpPage.selectRadioById
 
-class AgentRegistrationSpec extends BaseSpec {
+object AgentExternalStubCreateUserPage extends BasePage {
+  override val path: String              = "agents-external-stubs/user/create"
+  override val expectedH1                = "(ignored)"
+  override protected val skipH1Assertion = true
 
-  Feature("Agent Registration Page") {
-
-    Scenario("Launch the page and verify the title", Tags.Smoke) {
-
-      Given("I navigate to the agent-registration page")
-      AgentRegistrationPage.open()
-
-      When("the page loads")
-      val actualTitle = AgentRegistrationPage.title
-
-      Then("the page title should be displayed correctly")
-      actualTitle shouldBe "Sign in"
-    }
-  }
+  def selectAffinityGroupAgent(): Unit = selectRadioById("affinityGroup-4")
+  def selectEnrolmentNone(): Unit      = selectFromDropdownByIdValue("principalEnrolmentService", "none")
 }
