@@ -16,13 +16,16 @@
 
 package uk.gov.hmrc.ui.pages
 
-import uk.gov.hmrc.ui.pages.HowIsYourBusinessSetUpPage.selectRadioById
+import org.openqa.selenium.By
 
 object AgentExternalStubCreateUserPage extends BasePage {
   override val path: String              = "agents-external-stubs/user/create"
   override val expectedH1                = "(ignored)"
   override protected val skipH1Assertion = true
 
-  def selectAffinityGroupAgent(): Unit = selectRadioById("affinityGroup-4")
-  def selectEnrolmentNone(): Unit      = selectFromDropdownByIdValue("principalEnrolmentService", "none")
+  private val affinityGroupAgentRadio = By.id("affinityGroup-4")
+  private val enrolmentDropdown       = By.id("principalEnrolmentService")
+
+  def selectAffinityGroupAgent(): Unit = click(affinityGroupAgentRadio)
+  def selectEnrolmentNone(): Unit      = selectByValue(enrolmentDropdown, "none")
 }

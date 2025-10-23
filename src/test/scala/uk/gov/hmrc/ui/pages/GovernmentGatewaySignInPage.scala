@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.pages
 
+import org.openqa.selenium.By
 import uk.gov.hmrc.ui.utils.RandomData
 
 object GovernmentGatewaySignInPage extends BasePage {
@@ -23,20 +24,20 @@ object GovernmentGatewaySignInPage extends BasePage {
   override val expectedH1: String = "Sign in"
 
   // Prefer stable IDs if you have them:
-  private val usernameId = "userId"
-  private val planetId   = "planetId"
+  private val usernameId = By.id("userId")
+  private val planetId   = By.id("planetId")
 
   /** Fill username with a generated value and return it */
   def enterRandomUsername(prefix: String = "user"): String = {
     val value = RandomData.username(prefix)
-    fillById(usernameId, value)
+    sendKeys(usernameId, value)
     value
   }
 
   /** Fill group ID with a generated value and return it */
   def enterRandomPlanetId(prefix: String = "pln", len: Int = 8): String = {
     val value = RandomData.planetId(prefix, len)
-    fillById(planetId, value)
+    sendKeys(planetId, value)
     value
   }
 }

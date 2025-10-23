@@ -16,13 +16,19 @@
 
 package uk.gov.hmrc.ui.pages
 
+import org.openqa.selenium.By
+
 object HowIsYourBusinessSetUpPage extends BasePage {
   override val path: String       = "agent-registration/apply/about-your-business/business-type"
   override val expectedH1: String = "How is your business set up?"
-//  override val expectedContentSnippet: String = "Select one option."
 
-  def selectSoleTrader(): Unit         = selectRadioById("businessType")
-  def selectLimitedCompany(): Unit     = selectRadioById("businessType-2")
-  def selectATypeOfPartnership(): Unit = selectRadioById("businessType-3")
-  def selectSomethingElse(): Unit      = selectRadioById("businessType-5")
+  private val soleTraderRadio    = By.id("businessType")
+  private val limitedCompany     = By.id("businessType-2")
+  private val aTypeOfPartnership = By.id("businessType-3")
+  private val somethingElse      = By.id("businessType-4")
+
+  def selectSoleTrader(): Unit         = click(soleTraderRadio)
+  def selectLimitedCompany(): Unit     = click(limitedCompany)
+  def selectATypeOfPartnership(): Unit = click(aTypeOfPartnership)
+  def selectSomethingElse(): Unit      = click(somethingElse)
 }

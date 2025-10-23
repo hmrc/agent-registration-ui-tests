@@ -16,10 +16,15 @@
 
 package uk.gov.hmrc.ui.pages
 
+import org.openqa.selenium.By
+
 object HmrcOnlineServicesAccountPage extends BasePage {
   override val path: String       = "/agent-registration/apply/about-your-business/agent-online-services-account"
   override val expectedH1: String = "Do you have an HMRC online services for agents account?"
 
-  def selectYes(): Unit = selectRadioById("typeOfSignIn")
-  def selectNo(): Unit  = selectRadioById("typeOfSignIn-2")
+  private val yesRadio = By.id("typeOfSignIn")
+  private val noRadio  = By.id("typeOfSignIn-2")
+
+  def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit  = click(noRadio)
 }

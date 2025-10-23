@@ -15,14 +15,23 @@
  */
 
 package uk.gov.hmrc.ui.pages
+import org.openqa.selenium.By
 
 object WhatTypeOfPartnershipPage extends BasePage {
   override val path: String       = "/agent-registration/apply/about-your-business/partnership-type"
   override val expectedH1: String = "What type of partnership?"
 
-  def selectGeneralPartnership(): Unit           = selectRadioById("partnershipType")
-  def selectLimitedLiabilityPartnership(): Unit  = selectRadioById("partnershipType-2")
-  def selectLimitedPartnership(): Unit           = selectRadioById("partnershipType-3")
-  def selectScottishLiabilityPartnership(): Unit = selectRadioById("partnershipTyp-4")
-  def selectScottishPartnership(): Unit          = selectRadioById("partnershipTyp-5")
+  private val generalPartnershipRadio           = By.id("partnershipType")
+  private val limitedLiabilityPartnershipRadio  = By.id("partnershipType-2")
+  private val limitedPartnershipRadio           = By.id("partnershipType-3")
+  private val scottishLiabilityPartnershipRadio = By.id("partnershipType-4")
+  private val scottishPartnershipRadio          = By.id("partnershipType-5")
+
+  def selectGeneralPartnership(): Unit                  = click(generalPartnershipRadio)
+  def selectLimitedLiabilityPartnership(): Unit         = click(limitedLiabilityPartnershipRadio)
+  def selectLimitedPartnership(): Unit                  = click(limitedPartnershipRadio)
+  def selectScottishLimitedLiabilityPartnership(): Unit = click(scottishLiabilityPartnershipRadio)
+  def selectScottishPartnership(): Unit                 = click(scottishPartnershipRadio)
+
+  def submit(): Unit = clickContinue()
 }
