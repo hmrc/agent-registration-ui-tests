@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.ui.pages
 
-import org.openqa.selenium.{By, WebElement}
-import org.openqa.selenium.support.ui.{ExpectedConditions, WebDriverWait}
-import java.time.Duration
 import uk.gov.hmrc.selenium.component.PageObject
-import uk.gov.hmrc.selenium.webdriver.Driver
 import uk.gov.hmrc.ui.utils.AppConfig
-import org.openqa.selenium.support.ui.Select
+import org.openqa.selenium.By
+import uk.gov.hmrc.selenium.webdriver.Driver
+import java.time.Duration
+import org.openqa.selenium.support.ui.{ExpectedConditions, FluentWait}
 
 trait BasePage extends PageObject {
   def path: String
@@ -32,64 +31,55 @@ trait BasePage extends PageObject {
   /** Set true on stub/setup pages where H1 is dynamic or irrelevant. */
   protected def skipH1Assertion: Boolean = false
 
+  // ---- Navigation ----
   def url: String   = AppConfig.baseUrl + path
-  def open(): Unit  = Driver.instance.get(url)
-  def title: String = Driver.instance.getTitle
+  def open(): Unit  = get(url)
+  def title: String = getTitle
 
-  /** renamed to avoid conflict with Object.wait() */
-  protected def webDriverWait: WebDriverWait =
-    new WebDriverWait(Driver.instance, Duration.ofSeconds(10))
-
-  protected def findVisible(locator: By): WebElement =
-    webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(locator))
-
+  // ---- Common selectors ----
   protected def continueSelector: String =
     "button.govuk-button[type='submit'], input.govuk-button[type='submit'], a.govuk-button[role='button']"
 
-  protected def h1: WebElement =
-    findVisible(By.cssSelector("h1"))
+  // ---- Assertions ----
+  /** Call after navigation to assert we're on the expected page */
+  private def urlPath(url: String): String =
+    try
+      new java.net.URI(url).getPath
+    catch {
+      case _: Throwable => url
+    }
 
-  /** Common assertion after any navigation */
-  def assertPageIsDisplayed(): Unit = {
-    webDriverWait.until(ExpectedConditions.urlContains(path))
+  def assertPageIsDisplayed(timeoutSec: Long = 15): Unit = {
+    val driver = Driver.instance
+    val wait   = new FluentWait(driver)
+      .withTimeout(Duration.ofSeconds(timeoutSec))
+      .pollingEvery(Duration.ofMillis(200))
 
-    // Only assert H1 when it's meaningful for this page
-    if (!skipH1Assertion) {
-      val actualH1 = h1.getText.trim
-      assert(
-        actualH1 == expectedH1,
-        s"Expected H1 '$expectedH1' but got '$actualH1'"
+    val h1By = By.cssSelector("main h1, #main-content h1, h1")
+
+    // 1) Wait until EITHER the URL path contains ours OR an <h1> is present (no text check here)
+    wait.until(
+      ExpectedConditions.or(
+        (_: org.openqa.selenium.WebDriver) => urlPath(driver.getCurrentUrl).contains(path),
+        ExpectedConditions.presenceOfElementLocated(h1By)
       )
+    )
+
+    // 2) Final URL assertion (now navigation should be settled enough)
+    val current = driver.getCurrentUrl
+    assert(
+      urlPath(current).contains(path),
+      s"Expected URL path to contain '$path' but was: $current"
+    )
+
+    // 3) Optional H1 text assertion (do this AFTER the presence wait)
+    if (!skipH1Assertion) {
+      val actual = getText(h1By).trim // PageObject.getText waits for presence again
+      assert(actual == expectedH1, s"Expected H1 '$expectedH1' but got '$actual' at URL: $current")
     }
   }
 
-  def clickContinue(cssOverride: Option[String] = None, timeoutSec: Int = 10): Unit = {
-    val driver = Driver.instance
-    val by     = By.cssSelector(cssOverride.getOrElse(continueSelector))
-    val wait   = new WebDriverWait(driver, Duration.ofSeconds(timeoutSec))
-
-    // Re-locate each poll so we don't hold a stale reference
-    val el = wait.until(
-      ExpectedConditions.refreshed(
-        ExpectedConditions.visibilityOfElementLocated(by)
-      )
-    )
-    el.click()
-  }
-
-  /** --- Helpers for GOV.UK form interactions --- */
-  def selectRadioById(id: String): Unit =
-    Driver.instance.findElement(By.id(id)).click()
-
-  def fillById(id: String, value: String): Unit = {
-    val input = Driver.instance.findElement(By.id(id))
-    input.clear()
-    input.sendKeys(value)
-  }
-
-  /** Select from a native <select> by its id, using the option's value attribute */
-  def selectFromDropdownByIdValue(selectId: String, value: String): Unit = {
-    val selectEl: WebElement = Driver.instance.findElement(By.id(selectId)) // MUST be <select>
-    new Select(selectEl).selectByValue(value)
-  }
+  // ---- Interactions (thin wrappers over PageObject helpers) ----
+  def clickContinue(cssOverride: Option[String] = None): Unit =
+    click(By.cssSelector(cssOverride.getOrElse(continueSelector)))
 }
