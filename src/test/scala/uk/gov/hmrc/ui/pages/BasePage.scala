@@ -33,7 +33,6 @@ trait BasePage extends PageObject {
 
   // ---- Navigation ----
   def url: String   = AppConfig.baseUrl + path
-  def open(): Unit  = get(url)
   def title: String = getTitle
 
   // ---- Common selectors ----

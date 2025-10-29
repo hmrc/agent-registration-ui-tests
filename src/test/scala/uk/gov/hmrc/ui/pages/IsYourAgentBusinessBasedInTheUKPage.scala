@@ -18,7 +18,7 @@ package uk.gov.hmrc.ui.pages
 
 import org.openqa.selenium.By
 
-object IsYourAgentBusinessBasedInTheUKPage extends BasePage {
+object IsYourAgentBusinessBasedInTheUKPage extends EntryPage {
   override val path: String       = "/agent-registration/apply"
   override val expectedH1: String = "Is your agent business based in the UK?"
 
