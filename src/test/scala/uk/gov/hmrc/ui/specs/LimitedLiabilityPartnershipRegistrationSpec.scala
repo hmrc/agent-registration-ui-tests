@@ -27,14 +27,14 @@ class LimitedLiabilityPartnershipRegistrationSpec extends BaseSpec with StubbedS
     Scenario("UK-based business -> select partnership -> choose LLP -> existing online agents account", HappyPath) {
 
       Given("I start the Agent Registration journey at the apply page")
-      IsYourAgenBusinessBasedInTheUKPage.open()
+      IsYourAgentBusinessBasedInTheUKPage.open()
 
       Then("the start page is displayed")
-      IsYourAgenBusinessBasedInTheUKPage.assertPageIsDisplayed()
+      IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
 
       When("I answer that the business is based in the UK and continue")
-      IsYourAgenBusinessBasedInTheUKPage.selectYes()
-      IsYourAgenBusinessBasedInTheUKPage.clickContinue()
+      IsYourAgentBusinessBasedInTheUKPage.selectYes()
+      IsYourAgentBusinessBasedInTheUKPage.clickContinue()
 
       Then("the 'How is your business set up?' page is displayed")
       HowIsYourBusinessSetUpPage.assertPageIsDisplayed()
@@ -76,14 +76,14 @@ class LimitedLiabilityPartnershipRegistrationSpec extends BaseSpec with StubbedS
     Scenario("UK-based business -> select partnership -> choose LLP -> no online agents account", HappyPath) {
 
       Given("I start the Agent Registration journey at the apply page")
-      IsYourAgenBusinessBasedInTheUKPage.open()
+      IsYourAgentBusinessBasedInTheUKPage.open()
 
       Then("the start page is displayed")
-      IsYourAgenBusinessBasedInTheUKPage.assertPageIsDisplayed()
+      IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
 
       When("I answer that the business is based in the UK and continue")
-      IsYourAgenBusinessBasedInTheUKPage.selectYes()
-      IsYourAgenBusinessBasedInTheUKPage.clickContinue()
+      IsYourAgentBusinessBasedInTheUKPage.selectYes()
+      IsYourAgentBusinessBasedInTheUKPage.clickContinue()
 
       Then("the 'How is your business set up?' page is displayed")
       HowIsYourBusinessSetUpPage.assertPageIsDisplayed()

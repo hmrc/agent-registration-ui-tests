@@ -16,11 +16,16 @@
 
 package uk.gov.hmrc.ui.pages
 
+import org.openqa.selenium.By
+
 object SignInWithAgentAccountPage extends BasePage {
   override val path: String       = "/agent-registration/apply/about-your-business/sign-in"
   override val expectedH1: String = "Sign in with your agent account details"
 
-  def selectYes(): Unit = selectRadioById("typeOfSignIn")
-  def selectNo(): Unit  = selectRadioById("typeOfSignIn-2")
+  private val yesRadio = By.id("typeOfSignIn")
+  private val noRadio  = By.id("typeOfSignIn-2")
+
+  def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit  = click(noRadio)
 
 }

@@ -16,10 +16,16 @@
 
 package uk.gov.hmrc.ui.pages
 
-object IsYourAgenBusinessBasedInTheUKPage extends BasePage {
+import org.openqa.selenium.By
+
+object IsYourAgentBusinessBasedInTheUKPage extends EntryPage {
   override val path: String       = "/agent-registration/apply"
   override val expectedH1: String = "Is your agent business based in the UK?"
 
-  def selectYes(): Unit = selectRadioById("agentType")
-  def selectNo(): Unit  = selectRadioById("agentType-2")
+  private val yesRadio = By.id("agentType")
+  private val noRadio  = By.id("agentType-2")
+
+  def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit  = click(noRadio)
+
 }
