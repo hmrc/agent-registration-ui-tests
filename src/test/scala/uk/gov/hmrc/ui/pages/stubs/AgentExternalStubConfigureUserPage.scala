@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.stubs
 
-trait EntryPage extends BasePage {
-  def open(): Unit = get(url)
+import uk.gov.hmrc.ui.pages.BasePage
+
+object AgentExternalStubConfigureUserPage extends BasePage {
+  override val path: String = "agents-external-stubs/user/edit"
 }

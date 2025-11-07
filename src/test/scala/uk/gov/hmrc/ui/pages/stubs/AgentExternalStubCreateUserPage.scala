@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.stubs
 
 import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 
 object AgentExternalStubCreateUserPage extends BasePage {
-  override val path: String              = "agents-external-stubs/user/create"
-  override val expectedH1                = "(ignored)"
-  override protected val skipH1Assertion = true
+  override val path: String = "agents-external-stubs/user/create"
 
   private val affinityGroupAgentRadio = By.id("affinityGroup-4")
   private val enrolmentDropdown       = By.id("principalEnrolmentService")
+  private val currentUserLink         = By.id("link_users_current")
+  private val bearerTokenField        = By.id("authToken")
+  private val sessionIdField          = By.id("sessionId")
 
   def selectAffinityGroupAgent(): Unit = click(affinityGroupAgentRadio)
   def selectEnrolmentNone(): Unit      = selectByValue(enrolmentDropdown, "none")
+  def selectCurrentUserLink(): Unit    = click(currentUserLink)
+  def bearerToken: String              = getText(bearerTokenField)
+  def sessionId: String                = getText(sessionIdField)
 }

@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.contactDetailsSection
 
-trait EntryPage extends BasePage {
-  def open(): Unit = get(url)
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
+
+object AreTheseYourDetailsPage extends BasePage {
+  override val path: String = "/agent-registration/apply/applicant/member-name-match"
+
+  private val yesRadio = By.id("companiesHouseOfficer")
+  private val noRadio  = By.id("companiesHouseOfficer_2")
+
+  def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit  = click(noRadio)
 }

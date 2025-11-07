@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.applyJourney
+
 import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 
 object WhatTypeOfPartnershipPage extends BasePage {
-  override val path: String       = "/agent-registration/apply/about-your-business/partnership-type"
-  override val expectedH1: String = "What type of partnership?"
+  override val path: String = "/agent-registration/apply/about-your-business/partnership-type"
 
   private val generalPartnershipRadio           = By.id("partnershipType")
   private val limitedLiabilityPartnershipRadio  = By.id("partnershipType-2")
