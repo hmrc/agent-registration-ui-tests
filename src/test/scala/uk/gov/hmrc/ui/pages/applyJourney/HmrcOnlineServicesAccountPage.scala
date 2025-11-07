@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.applyJourney
 
-object GrsDataSetupPage extends BasePage {
-  override val path: String              = "agent-registration/test-only/grs-stub"
-  override val expectedH1                = "(ignored)"
-  override protected val skipH1Assertion = true
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
+
+object HmrcOnlineServicesAccountPage extends BasePage {
+  override val path: String = "/agent-registration/apply/about-your-business/agent-online-services-account"
+
+  private val yesRadio = By.id("typeOfSignIn")
+  private val noRadio  = By.id("typeOfSignIn-2")
+
+  def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit  = click(noRadio)
 }

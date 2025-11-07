@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.applyJourney
 
 import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.EntryPage
 
 object IsYourAgentBusinessBasedInTheUKPage extends EntryPage {
-  override val path: String       = "/agent-registration/apply"
-  override val expectedH1: String = "Is your agent business based in the UK?"
+  override val path: String = "/agent-registration/apply"
 
   private val yesRadio = By.id("agentType")
   private val noRadio  = By.id("agentType-2")

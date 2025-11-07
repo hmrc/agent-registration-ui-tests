@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.stubs
 
 import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.RandomData
 
 object GovernmentGatewaySignInPage extends BasePage {
-  override val path: String       = "/bas-gateway/sign-in"
-  override val expectedH1: String = "Sign in"
+  override val path: String = "/bas-gateway/sign-in"
 
   // Prefer stable IDs if you have them:
   private val usernameId = By.id("userId")

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.applyJourney
 
 import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 
 object HowIsYourBusinessSetUpPage extends BasePage {
-  override val path: String       = "agent-registration/apply/about-your-business/business-type"
-  override val expectedH1: String = "How is your business set up?"
+  override val path: String = "agent-registration/apply/about-your-business/business-type"
 
   private val soleTraderRadio    = By.id("businessType")
   private val limitedCompany     = By.id("businessType-2")

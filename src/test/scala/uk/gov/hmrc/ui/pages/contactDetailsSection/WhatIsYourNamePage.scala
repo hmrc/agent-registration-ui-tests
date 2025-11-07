@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.contactDetailsSection
 
-object CreateYourAgentAccountPage extends BasePage {
-  override val path: String       = "/agent-registration/apply/about-your-business/sign-in"
-  override val expectedH1: String = "Create your agent account sign in details"
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 
+object WhatIsYourNamePage extends BasePage {
+  override val path: String = "/agent-registration/apply/applicant/member-name"
+
+  private val firstNameField = By.id("firstName")
+  private val lastNameField  = By.id("lastName")
+
+  def enterFirstName(): Unit                = sendKeys(firstNameField, "Bob")
+  def enterLastName(lastName: String): Unit = sendKeys(lastNameField, lastName)
 }

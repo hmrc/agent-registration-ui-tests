@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.contactDetailsSection
 
-object AgentExternalStubConfigureUserPage extends BasePage {
-  override val path: String              = "agents-external-stubs/user/edit"
-  override val expectedH1                = "(ignored)"
-  override protected val skipH1Assertion = true
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
+
+object EmailAddressPage extends BasePage {
+  override val path: String = "/agent-registration/apply/applicant/email-address"
+
+  private val emailAddressField = By.id("emailAddress")
+
+  def enterEmailAddress(): Unit = sendKeys(emailAddressField, "test@test.com")
 }
