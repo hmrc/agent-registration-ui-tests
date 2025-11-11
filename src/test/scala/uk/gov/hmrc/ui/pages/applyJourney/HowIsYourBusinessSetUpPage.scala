@@ -18,9 +18,14 @@ package uk.gov.hmrc.ui.pages.applyJourney
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 
 object HowIsYourBusinessSetUpPage extends BasePage {
-  override val path: String = "agent-registration/apply/about-your-business/business-type"
+  override val path: String    = "/agent-registration/apply/about-your-business/business-type"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
 
   private val soleTraderRadio    = By.id("businessType")
   private val limitedCompany     = By.id("businessType-2")

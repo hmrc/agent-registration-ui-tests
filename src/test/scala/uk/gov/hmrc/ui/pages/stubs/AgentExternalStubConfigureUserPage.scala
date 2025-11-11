@@ -17,7 +17,12 @@
 package uk.gov.hmrc.ui.pages.stubs
 
 import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 
 object AgentExternalStubConfigureUserPage extends BasePage {
-  override val path: String = "agents-external-stubs/user/edit"
+  override val path: String    = "/agents-external-stubs/user/edit"
+  override val baseUrl: String = AppConfig.baseUrlExternalStubs
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
 }

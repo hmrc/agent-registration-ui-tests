@@ -16,6 +16,14 @@
 
 package uk.gov.hmrc.ui.pages
 
-trait EntryPage extends BasePage {
-  def open(): Unit = get(url)
-}
+import uk.gov.hmrc.selenium.component.PageObject
+
+trait EntryPage:
+
+  val path: String
+  val baseUrl: String
+  final def url: String = baseUrl + path
+
+  def open(): Unit =
+    new PageObject:
+      get(url)

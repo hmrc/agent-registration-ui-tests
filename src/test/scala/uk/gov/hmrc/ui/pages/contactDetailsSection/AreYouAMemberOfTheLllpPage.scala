@@ -16,11 +16,16 @@
 
 package uk.gov.hmrc.ui.pages.contactDetailsSection
 
-import uk.gov.hmrc.ui.pages.BasePage
 import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 
 object AreYouAMemberOfTheLllpPage extends BasePage {
-  override val path: String = "/agent-registration/apply/applicant/llp-member"
+  override val path: String    = "/agent-registration/apply/applicant/llp-member"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
 
   private val yesRadio = By.id("applicantRoleInLlp")
   private val noRadio  = By.id("applicantRoleInLlp-2")

@@ -16,8 +16,11 @@
 
 package uk.gov.hmrc.ui.utils
 
-object AppConfig {
-  val baseUrlAgentRegistrationFrontend: String = "http://localhost:22201"
-  val baseUrlExternalStubs: String             = "http://localhost:9099"
-  val baseUrlGovernmentGateway: String         = baseUrlExternalStubs
-}
+object SystemPropertiesHelper:
+
+  def isTestRunFromIdea: Boolean =
+    Option(System.getProperty("java.class.path")).exists(_.contains("IntelliJIdea")) ||
+      System.getProperty("idea.test.cyclic.buffer.size") != null ||
+      System.getProperty("idea.launcher.port") != null ||
+      System.getProperty("idea.launcher.bin.path") != null ||
+      System.getProperty("java.class.path", "").contains("idea_rt.jar")

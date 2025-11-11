@@ -18,11 +18,16 @@ package uk.gov.hmrc.ui.pages.stubs
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
-import uk.gov.hmrc.ui.utils.RandomData
+import uk.gov.hmrc.ui.utils.{AppConfig, RandomData}
 
 object GovernmentGatewaySignInPage extends BasePage {
-  override val path: String = "/bas-gateway/sign-in"
+  override val path: String    = "/bas-gateway/sign-in" 
+  override val baseUrl: String = AppConfig.baseUrlGovernmentGateway
 
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl should startWith (url)
+
+  
   // Prefer stable IDs if you have them:
   private val usernameId = By.id("userId")
   private val planetId   = By.id("planetId")

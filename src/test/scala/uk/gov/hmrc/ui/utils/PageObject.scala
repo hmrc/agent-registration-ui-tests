@@ -16,8 +16,4 @@
 
 package uk.gov.hmrc.ui.utils
 
-object AppConfig {
-  val baseUrlAgentRegistrationFrontend: String = "http://localhost:22201"
-  val baseUrlExternalStubs: String             = "http://localhost:9099"
-  val baseUrlGovernmentGateway: String         = baseUrlExternalStubs
-}
+trait PageObject {}

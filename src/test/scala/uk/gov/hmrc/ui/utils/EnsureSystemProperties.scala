@@ -16,21 +16,41 @@
 
 package uk.gov.hmrc.ui.utils
 
+import com.typesafe.scalalogging.LazyLogging
+
 import scala.util.chaining.scalaUtilChainingOps
 
-object EnsureSystemProperties:
+/** Sets default values for system properties if they are not already set.
+  */
+object EnsureSystemProperties extends LazyLogging:
 
   def apply(): Unit =
-    "browser".pipe(p => if (System.getProperty(p) == null) System.setProperty(p, "chrome"))
-    "environment".pipe(p => if (System.getProperty(p) == null) System.setProperty(p, "local"))
-    // other options?
+    logger.info("Ensuring system properties are set")
+    "browser"
+      .pipe: p =>
+        if System.getProperty(p) == null
+        then
+          val defaultValue: String = "chrome"
+          logger.info(s"'$p' property not set, defaulting it to '$defaultValue'")
+          System.setProperty(p, "chrome")
 
-    val isTestRunFromIdea =
-      System.getProperty("idea.test.cyclic.buffer.size") != null ||
-        System.getProperty("idea.launcher.port") != null ||
-        System.getProperty("idea.launcher.bin.path") != null ||
-        System.getProperty("java.class.path", "").contains("idea_rt.jar")
+    "environment"
+      .pipe: p =>
+        if (System.getProperty(p) == null) {
+          val defaultValue: String = "local"
+          logger.info(s"'$p' property not set, defaulting it to '$defaultValue'")
+          System.setProperty(p, defaultValue)
+        }
 
     // show browser when running tests from intellij idea
-    if (isTestRunFromIdea)
-      "browser.option.headless".pipe(p => if (System.getProperty(p) == null) System.setProperty(p, "false"))
+    if (SystemPropertiesHelper.isTestRunFromIdea) {
+      logger.info(s"Running tests from intellij idea...")
+      "browser.option.headless"
+        .pipe: p =>
+          if (System.getProperty(p) == null)
+            val defaultValue = "false"
+            logger.info(
+              s"  '$p' property not set, defaulting it to '$defaultValue' (as test is running from intellij idea)"
+            )
+            System.setProperty(p, defaultValue)
+    }

@@ -16,12 +16,18 @@
 
 package uk.gov.hmrc.ui.pages.contactDetailsSection
 
-import uk.gov.hmrc.ui.pages.BasePage
 import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 
 object MulitpleNameMatchesPage extends BasePage {
-  override val path: String = "agent-registration/apply/applicant/member-name-match"
+  override val path: String    = "/agent-registration/apply/applicant/member-name-match"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
+
+  
   private val firstMatchRadio  = By.id("companiesHouseOfficer")
   private val secondMatchRadio = By.id("companiesHouseOfficer-2")
 

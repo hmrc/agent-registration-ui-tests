@@ -18,19 +18,19 @@ package uk.gov.hmrc.ui.specs.Limited_Liability_Partnership
 
 import uk.gov.hmrc.ui.flows.StubbedSignInData
 import uk.gov.hmrc.ui.pages.applyJourney.TaskListPage
-import uk.gov.hmrc.ui.specs.Limited_Liability_Partnership.sections.{BusinessDetails, ContactDetails}
 import uk.gov.hmrc.ui.specs.BaseSpec
+import uk.gov.hmrc.ui.specs.Limited_Liability_Partnership.sections.{BusinessDetails, ContactDetails}
 import uk.gov.hmrc.ui.utils.Tags.HappyPath
 
 class ApplyJourneySpec extends BaseSpec {
 
-  Feature("LLP apply journey - registration and key sections") {
+  Feature("LLP Application Journey") {
 
     Scenario("UK-based business -> LLP -> existing online agents account", HappyPath) {
 
       info(
         "Covers: User providing business detail and completing contact details, " +
-          "Key Variables - existing online agents account and single name match"
+          "Key Variables - existing online agents account and single name match".withPos
       )
 
       Given("I start the LLP application and reach the Application Task List")

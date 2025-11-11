@@ -18,9 +18,15 @@ package uk.gov.hmrc.ui.pages.applyJourney
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 
 object TaskListPage extends BasePage {
-  override val path: String = "/agent-registration/apply/task-list"
+
+  override val path: String    = "/agent-registration/apply/task-list"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
 
   private val contactDetailsLink   = By.cssSelector("a[aria-describedby='contact-1-status']")
   private val contactDetailsStatus = By.id("contact-1-status")

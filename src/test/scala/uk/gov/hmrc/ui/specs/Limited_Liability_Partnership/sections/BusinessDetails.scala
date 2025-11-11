@@ -18,7 +18,7 @@ package uk.gov.hmrc.ui.specs.Limited_Liability_Partnership.sections
 
 import uk.gov.hmrc.ui.flows.{StubbedSignIn, StubbedSignInData}
 import uk.gov.hmrc.ui.pages.*
-import uk.gov.hmrc.ui.pages.applyJourney.{CreateYourAgentAccountPage, HmrcOnlineServicesAccountPage, HowIsYourBusinessSetUpPage, IsYourAgentBusinessBasedInTheUKPage, SignInWithAgentAccountPage, TaskListPage, WhatTypeOfPartnershipPage}
+import uk.gov.hmrc.ui.pages.applyJourney.*
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 
 object BusinessDetails extends StubbedSignIn {
@@ -32,7 +32,7 @@ object BusinessDetails extends StubbedSignIn {
   /** Core journey: UK-based LLP with a flag for online agents account. */
   private def ukBasedLlp(hasOnlineAgentsAccount: Boolean): StubbedSignInData = {
 
-    IsYourAgentBusinessBasedInTheUKPage.open()
+    ApplyEntryPage.open()
     IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
 
     IsYourAgentBusinessBasedInTheUKPage.selectYes()

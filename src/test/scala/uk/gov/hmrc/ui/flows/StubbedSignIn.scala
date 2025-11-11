@@ -28,7 +28,8 @@ final case class StubbedSignInData(
 /** Encapsulates the Agents External Stubs sign-in/setup screens. */
 trait StubbedSignIn {
 
-  /** Runs the stubbed sign-in flow and returns the generated username (if needed it later). */
+  /** Runs the stubbed sign-in flow and returns the generated username (if needed it later).
+    */
   def signInAndDataSetupViaStubs(): StubbedSignInData = {
     // We assume the test is already on GovernmentGatewaySignInPage
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
@@ -42,7 +43,7 @@ trait StubbedSignIn {
     AgentExternalStubCreateUserPage.selectCurrentUserLink()
     val bearerToken = AgentExternalStubCreateUserPage.bearerToken
     val sessionId   = AgentExternalStubCreateUserPage.sessionId
-    AgentExternalStubCreateUserPage.goBack()
+    AgentExternalStubCreateUserPage.clickBrowserBack()
 
     // Configure user on stubs
     AgentExternalStubCreateUserPage.selectAffinityGroupAgent()

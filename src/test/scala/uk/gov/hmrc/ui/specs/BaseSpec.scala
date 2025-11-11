@@ -16,27 +16,23 @@
 
 package uk.gov.hmrc.ui.specs
 
+import com.typesafe.scalalogging.LazyLogging
+import org.scalatest.GivenWhenThen
 import org.scalatest.featurespec.AnyFeatureSpec
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.{BeforeAndAfterEach, GivenWhenThen}
-import uk.gov.hmrc.selenium.webdriver.{Browser, ScreenshotOnFailure}
-import uk.gov.hmrc.ui.utils.EnsureSystemProperties
+import uk.gov.hmrc.selenium.webdriver.ScreenshotOnFailure
+import uk.gov.hmrc.ui.utils.*
 
 trait BaseSpec
     extends AnyFeatureSpec
     with GivenWhenThen
-    with Matchers
-    with BeforeAndAfterEach
-    with Browser
-    with ScreenshotOnFailure {
+    with RichMatchers
+    with BrowserStart
+    with BrowserQuit
+    with ScreenshotOnFailure
+    with PageDebugInfoOnFailure
+    with LazyLogging
+    with SetupDevToolsForChrome:
 
-  // Ensure system properties are always set with defaults
   EnsureSystemProperties()
 
-  override def beforeEach(): Unit =
-    startBrowser()
-
-  override def afterEach(): Unit =
-    quitBrowser()
-
-}
+  export uk.gov.hmrc.ui.utils.withPos

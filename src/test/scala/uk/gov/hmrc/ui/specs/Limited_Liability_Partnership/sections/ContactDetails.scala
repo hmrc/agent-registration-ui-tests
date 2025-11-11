@@ -19,7 +19,7 @@ package uk.gov.hmrc.ui.specs.Limited_Liability_Partnership.sections
 import org.scalatest.matchers.should.Matchers.shouldBe
 import uk.gov.hmrc.ui.flows.StubbedSignInData
 import uk.gov.hmrc.ui.pages.applyJourney.{CheckYourAnswersPage, TaskListPage}
-import uk.gov.hmrc.ui.pages.contactDetailsSection.{AreTheseYourDetailsPage, AreYouAMemberOfTheLllpPage, ConfirmYourEmailPage, EmailAddressPage, MulitpleNameMatchesPage, TelephoneNumberPage, WhatIsYourNamePage}
+import uk.gov.hmrc.ui.pages.contactDetailsSection.*
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 object ContactDetails {

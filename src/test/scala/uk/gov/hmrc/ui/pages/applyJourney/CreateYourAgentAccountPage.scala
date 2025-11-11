@@ -17,7 +17,13 @@
 package uk.gov.hmrc.ui.pages.applyJourney
 
 import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 
 object CreateYourAgentAccountPage extends BasePage {
-  override val path: String = "/agent-registration/apply/about-your-business/sign-in"
+  override val path: String    = "/agent-registration/apply/about-your-business/sign-in"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
+
 }

@@ -20,6 +20,11 @@ Start `AGENT_REGISTRATION_ALL` services as follows:
 sm2 --start AGENT_REGISTRATION_ALL
 ```
 
+```bash
+sm2 -stop-all \
+&& sm2 -s
+```
+
 ## Tests
 
 Run tests as follows:

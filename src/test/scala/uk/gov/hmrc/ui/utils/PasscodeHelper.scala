@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.ui.utils
 
+import play.api.libs.json.*
+
 import java.net.{HttpURLConnection, URL}
 import scala.io.Source
-import play.api.libs.json._
-import play.api.libs.json.{JsObject, Json}
 
 object PasscodeHelper {
   private val passcodesUrl = "http://localhost:9891/test-only/passcodes"

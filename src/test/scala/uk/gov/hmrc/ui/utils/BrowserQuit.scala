@@ -16,8 +16,21 @@
 
 package uk.gov.hmrc.ui.utils
 
-object AppConfig {
-  val baseUrlAgentRegistrationFrontend: String = "http://localhost:22201"
-  val baseUrlExternalStubs: String             = "http://localhost:9099"
-  val baseUrlGovernmentGateway: String         = baseUrlExternalStubs
+import com.typesafe.scalalogging.LazyLogging
+import org.scalatest.{Outcome, TestSuite, TestSuiteMixin}
+import uk.gov.hmrc.selenium.webdriver.Browser
+
+trait BrowserQuit extends TestSuiteMixin, LazyLogging { self: TestSuite =>
+
+  abstract override def withFixture(test: NoArgTest): Outcome = {
+    val testOutcome: Outcome = super.withFixture(test)
+
+    if SystemPropertiesHelper.isTestRunFromIdea && (testOutcome.isExceptional || testOutcome.isFailed)
+    then logger.info("Test run from intellij, skipping browser quit, so it's easier to debug test failure")
+    else
+      new Browser:
+        quitBrowser()
+
+    testOutcome
+  }
 }

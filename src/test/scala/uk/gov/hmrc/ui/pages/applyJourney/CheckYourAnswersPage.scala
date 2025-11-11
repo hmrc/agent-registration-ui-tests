@@ -17,12 +17,17 @@
 package uk.gov.hmrc.ui.pages.applyJourney
 
 import org.openqa.selenium.By
-import org.scalatest.Assertions.withClue
-import org.scalatest.matchers.should.Matchers.shouldBe
 import uk.gov.hmrc.ui.pages.BasePage
-object CheckYourAnswersPage extends BasePage {
-  override val path: String = "/agent-registration/apply/applicant/check-your-answers"
+import uk.gov.hmrc.ui.utils.AppConfig
 
+object CheckYourAnswersPage extends BasePage {
+  override val path: String    = "/agent-registration/apply/applicant/check-your-answers"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
+
+  
   // Key labels used on this page (reusable across journeys)
 //  val memberOfLlpKey: String = "Member of the limited liability partnership"
 //  val nameKey: String        = "Name"

@@ -18,9 +18,14 @@ package uk.gov.hmrc.ui.pages.stubs
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 
 object AgentExternalStubCreateUserPage extends BasePage {
-  override val path: String = "agents-external-stubs/user/create"
+  override val path: String    = "/agents-external-stubs/user/create"
+  override val baseUrl: String = AppConfig.baseUrlExternalStubs
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
 
   private val affinityGroupAgentRadio = By.id("affinityGroup-4")
   private val enrolmentDropdown       = By.id("principalEnrolmentService")

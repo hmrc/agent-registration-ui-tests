@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.ui.utils
 
-object AppConfig {
-  val baseUrlAgentRegistrationFrontend: String = "http://localhost:22201"
-  val baseUrlExternalStubs: String             = "http://localhost:9099"
-  val baseUrlGovernmentGateway: String         = baseUrlExternalStubs
-}
+import org.scalactic.source.Position
+
+extension (message: String)(using pos: Position)
+  def withPos: String =
+    s"$message (${pos.fileName}:${pos.lineNumber})"

@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.utils
+package uk.gov.hmrc.ui.pages.applyJourney
 
-object AppConfig {
-  val baseUrlAgentRegistrationFrontend: String = "http://localhost:22201"
-  val baseUrlExternalStubs: String             = "http://localhost:9099"
-  val baseUrlGovernmentGateway: String         = baseUrlExternalStubs
-}
+import uk.gov.hmrc.ui.pages.EntryPage
+import uk.gov.hmrc.ui.utils.AppConfig
+
+object ApplyEntryPage extends EntryPage:
+  override val path: String    = "/agent-registration/apply"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
