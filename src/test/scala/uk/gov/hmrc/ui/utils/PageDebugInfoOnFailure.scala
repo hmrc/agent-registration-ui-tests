@@ -19,20 +19,26 @@ package uk.gov.hmrc.ui.utils
 import com.typesafe.scalalogging.LazyLogging
 import org.openqa.selenium.By
 import org.scalactic.source.Position
-import org.scalatest.{Documenting, Outcome, TestSuite, TestSuiteMixin}
+import org.scalatest.Documenting
+import org.scalatest.Outcome
+import org.scalatest.TestSuite
+import org.scalatest.TestSuiteMixin
 import uk.gov.hmrc.selenium.component.PageObject
 
 import scala.util.Try
 
-trait PageDebugInfoOnFailure extends TestSuiteMixin, Documenting, LazyLogging { this: TestSuite =>
+trait PageDebugInfoOnFailure
+extends TestSuiteMixin,
+  Documenting,
+  LazyLogging { this: TestSuite =>
 
-  abstract override def withFixture(test: NoArgTest): Outcome =
+  override abstract def withFixture(test: NoArgTest): Outcome =
     val testOutcome: Outcome = super.withFixture(test)
     showDebugInfoOnFailure(testOutcome)
     testOutcome
 
   def showDebugInfoOnFailure(testOutcome: Outcome): Unit =
-    val pos                     = Position.here
+    val pos = Position.here
     val showPageSource: Boolean = false
 
     if (testOutcome.isExceptional || testOutcome.isFailed) {
@@ -48,7 +54,10 @@ trait PageDebugInfoOnFailure extends TestSuiteMixin, Documenting, LazyLogging { 
              |${Try(getText(By.tagName("html")).stripSpaces.take(1000))
               .fold[String](e => s"Could not get html text: ${e.getMessage}", identity)}
              |>>> page source was:
-             |${if (showPageSource) getPageSource else s"not shown, configure at (${pos.fileName}:${pos.lineNumber})"}
+             |${if (showPageSource)
+              getPageSource
+            else
+              s"not shown, configure at (${pos.fileName}:${pos.lineNumber})"}
              |""".stripMargin
 
         logger.error(debugInfoOnFailure)

@@ -17,12 +17,16 @@
 package uk.gov.hmrc.ui.utils
 
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.{Outcome, TestSuite, TestSuiteMixin}
+import org.scalatest.Outcome
+import org.scalatest.TestSuite
+import org.scalatest.TestSuiteMixin
 import uk.gov.hmrc.selenium.webdriver.Browser
 
-trait BrowserQuit extends TestSuiteMixin, LazyLogging { self: TestSuite =>
+trait BrowserQuit
+extends TestSuiteMixin,
+  LazyLogging { self: TestSuite =>
 
-  abstract override def withFixture(test: NoArgTest): Outcome = {
+  override abstract def withFixture(test: NoArgTest): Outcome = {
     val testOutcome: Outcome = super.withFixture(test)
 
     if SystemPropertiesHelper.isTestRunFromIdea && (testOutcome.isExceptional || testOutcome.isFailed)

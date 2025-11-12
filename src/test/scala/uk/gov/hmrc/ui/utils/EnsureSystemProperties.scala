@@ -22,7 +22,8 @@ import scala.util.chaining.scalaUtilChainingOps
 
 /** Sets default values for system properties if they are not already set.
   */
-object EnsureSystemProperties extends LazyLogging:
+object EnsureSystemProperties
+extends LazyLogging:
 
   def apply(): Unit =
     logger.info("Ensuring system properties are set")

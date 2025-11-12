@@ -19,25 +19,28 @@ package uk.gov.hmrc.ui.utils
 import scala.util.Random
 
 object RandomData {
+
   private val rnd = new Random()
 
   /** A–Z, a–z, 0–9 only */
-  def alphaNum(n: Int): String =
-    rnd.alphanumeric.filter(_.isLetterOrDigit).take(n).mkString
+  def alphaNum(n: Int): String = rnd.alphanumeric.filter(_.isLetterOrDigit).take(n).mkString
 
   /** 0–9 only */
-  def digits(n: Int): String =
-    (1 to n).map(_ => rnd.nextInt(10)).mkString
+  def digits(n: Int): String = (1 to n).map(_ => rnd.nextInt(10)).mkString
 
   /** username = prefix + random alphanumerics (no separators) */
-  def username(prefix: String = "test", len: Int = 10): String =
-    prefix + alphaNum(len)
+  def username(
+    prefix: String = "test",
+    len: Int = 10
+  ): String = prefix + alphaNum(len)
 
   /** groupId = prefix + random alphanumerics (no separators) */
-  def planetId(prefix: String = "planet", len: Int = 8): String =
-    prefix + alphaNum(len)
+  def planetId(
+    prefix: String = "planet",
+    len: Int = 8
+  ): String = prefix + alphaNum(len)
 
   /** If you still need a UUID-like string without hyphens */
-  def uuidCompact(): String =
-    java.util.UUID.randomUUID().toString.replaceAll("-", "")
+  def uuidCompact(): String = java.util.UUID.randomUUID().toString.replaceAll("-", "")
+
 }

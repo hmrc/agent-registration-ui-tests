@@ -19,5 +19,4 @@ package uk.gov.hmrc.ui.utils
 import org.scalactic.source.Position
 
 extension (message: String)(using pos: Position)
-  def withPos: String =
-    s"$message (${pos.fileName}:${pos.lineNumber})"
+  def withPos: String = s"$message (${pos.fileName}:${pos.lineNumber})"

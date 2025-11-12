@@ -16,14 +16,10 @@
 
 package uk.gov.hmrc.ui.pages
 
-import uk.gov.hmrc.selenium.component.PageObject
-
 trait EntryPage:
 
   val path: String
   val baseUrl: String
   final def url: String = baseUrl + path
 
-  def open(): Unit =
-    new PageObject:
-      get(url)
+  def open(): Unit = PageObject.get(url)

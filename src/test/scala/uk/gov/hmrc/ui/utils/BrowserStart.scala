@@ -16,10 +16,12 @@
 
 package uk.gov.hmrc.ui.utils
 
-import org.scalatest.{BeforeAndAfterEach, TestSuite}
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.TestSuite
 import uk.gov.hmrc.selenium.webdriver.Browser
 
-trait BrowserStart extends BeforeAndAfterEach { self: TestSuite =>
+trait BrowserStart
+extends BeforeAndAfterEach { self: TestSuite =>
 
   override def beforeEach(): Unit =
     super.beforeEach()

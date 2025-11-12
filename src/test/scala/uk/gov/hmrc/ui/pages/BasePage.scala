@@ -17,32 +17,27 @@
 package uk.gov.hmrc.ui.pages
 
 import org.openqa.selenium.By
-import uk.gov.hmrc.selenium.component.PageObject
 import uk.gov.hmrc.selenium.webdriver.Driver
 import uk.gov.hmrc.ui.utils.RichMatchers
 
-trait BasePage extends PageObject:
+trait BasePage
+extends PageObject:
 
   val path: String
   val baseUrl: String
 
   /** Call this method after navigation to ensure you've reached the expected page.
-   */
+    */
   inline def assertPageIsDisplayed(): Unit
 
-  
   final def url: String = baseUrl + path
 
-  def clickContinue(continueSelector: By = continueSelector): Unit =
-    click(continueSelector)
+  def clickContinue(continueSelector: By = continueSelector): Unit = click(continueSelector)
 
-  def clickBrowserBack(): Unit =
-    Driver.instance.navigate().back()
-
+  def clickBrowserBack(): Unit = Driver.instance.navigate().back()
 
   export RichMatchers.*
 
   private val continueSelector: By =
-    val selectorString =
-      "button.govuk-button[type='submit'], input.govuk-button[type='submit'], a.govuk-button[role='button']"
+    val selectorString = "button.govuk-button[type='submit'], input.govuk-button[type='submit'], a.govuk-button[role='button']"
     By.cssSelector(selectorString)

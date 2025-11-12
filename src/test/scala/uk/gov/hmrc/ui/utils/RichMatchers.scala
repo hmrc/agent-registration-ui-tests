@@ -18,22 +18,26 @@ package uk.gov.hmrc.ui.utils
 
 import org.scalatest.*
 import org.scalatest.concurrent.Futures.scaled
-import org.scalatest.concurrent.{Eventually, ScalaFutures}
+import org.scalatest.concurrent.Eventually
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.diagrams.Diagrams
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.time.{Millis, Seconds, Span}
+import org.scalatest.time.Millis
+import org.scalatest.time.Seconds
+import org.scalatest.time.Span
 
-object RichMatchers extends RichMatchers
+object RichMatchers
+extends RichMatchers
 
 trait RichMatchers
-    extends Matchers,
-      Diagrams,
-      TryValues,
-      EitherValues,
-      OptionValues,
-      AppendedClues,
-      ScalaFutures,
-      Eventually:
+extends Matchers,
+  Diagrams,
+  TryValues,
+  EitherValues,
+  OptionValues,
+  AppendedClues,
+  ScalaFutures,
+  Eventually:
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(
     timeout = scaled(Span(3, Seconds)),

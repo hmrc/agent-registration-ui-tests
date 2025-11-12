@@ -23,16 +23,17 @@ import uk.gov.hmrc.selenium.webdriver.ScreenshotOnFailure
 import uk.gov.hmrc.ui.utils.*
 
 trait BaseSpec
-    extends AnyFeatureSpec
-    with GivenWhenThen
-    with RichMatchers
-    with BrowserStart
-    with BrowserQuit
-    with ScreenshotOnFailure
-    with PageDebugInfoOnFailure
-    with LazyLogging
-    with SetupDevToolsForChrome:
+extends AnyFeatureSpec
+with GivenWhenThen
+with RichMatchers
+with BrowserStart
+with BrowserQuit
+with ScreenshotOnFailure
+with PageDebugInfoOnFailure
+with LazyLogging
+with SetupDevToolsForChrome:
 
   EnsureSystemProperties()
 
   export uk.gov.hmrc.ui.utils.withPos
+  export uk.gov.hmrc.ui.utils.Tags.*
