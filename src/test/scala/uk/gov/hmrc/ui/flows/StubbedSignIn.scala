@@ -16,13 +16,20 @@
 
 package uk.gov.hmrc.ui.flows
 
-import uk.gov.hmrc.ui.pages._
+import uk.gov.hmrc.ui.pages.*
+import uk.gov.hmrc.ui.pages.stubs.{AgentExternalStubConfigureUserPage, AgentExternalStubCreateUserPage, GovernmentGatewaySignInPage, GrsDataSetupPage}
+
+final case class StubbedSignInData(
+  username: String,
+  bearerToken: String,
+  sessionId: String
+)
 
 /** Encapsulates the Agents External Stubs sign-in/setup screens. */
 trait StubbedSignIn {
 
   /** Runs the stubbed sign-in flow and returns the generated username (if needed it later). */
-  def signInAndDataSetupViaStubs(): String = {
+  def signInAndDataSetupViaStubs(): StubbedSignInData = {
     // We assume the test is already on GovernmentGatewaySignInPage
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
 
@@ -30,6 +37,12 @@ trait StubbedSignIn {
     val username = GovernmentGatewaySignInPage.enterRandomUsername()
     GovernmentGatewaySignInPage.enterRandomPlanetId()
     GovernmentGatewaySignInPage.clickContinue()
+
+    // Capture Bearer Token and Session ID
+    AgentExternalStubCreateUserPage.selectCurrentUserLink()
+    val bearerToken = AgentExternalStubCreateUserPage.bearerToken
+    val sessionId   = AgentExternalStubCreateUserPage.sessionId
+    AgentExternalStubCreateUserPage.goBack()
 
     // Configure user on stubs
     AgentExternalStubCreateUserPage.selectAffinityGroupAgent()
@@ -42,6 +55,6 @@ trait StubbedSignIn {
     GrsDataSetupPage.assertPageIsDisplayed()
     GrsDataSetupPage.clickContinue()
 
-    username
+    StubbedSignInData(username, bearerToken, sessionId)
   }
 }

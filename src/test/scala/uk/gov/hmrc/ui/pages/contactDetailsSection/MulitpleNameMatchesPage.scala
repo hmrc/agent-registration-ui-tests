@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.contactDetailsSection
 
-object ApplicationTaskList extends BasePage {
-  override val path: String       = "/agent-registration/apply/task-list"
-  override val expectedH1: String = "Application for Test Partnership LLP"
+import uk.gov.hmrc.ui.pages.BasePage
+import org.openqa.selenium.By
 
+object MulitpleNameMatchesPage extends BasePage {
+  override val path: String = "agent-registration/apply/applicant/member-name-match"
+
+  private val firstMatchRadio  = By.id("companiesHouseOfficer")
+  private val secondMatchRadio = By.id("companiesHouseOfficer-2")
+
+  def selectFirstMatch(): Unit  = click(firstMatchRadio)
+  def selectSecondMatch(): Unit = click(secondMatchRadio)
 }

@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs
+package uk.gov.hmrc.ui.pages.applyJourney
 
-class PartnershipRegistrationSpec extends BaseSpec {
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 
-  Feature("Partnership registration journey") {
-    pending
-    Scenario("placeholder") {
-      Given("")
-      When("")
-      Then("")
-    }
-  }
+object TaskListPage extends BasePage {
+  override val path: String = "/agent-registration/apply/task-list"
+
+  private val contactDetailsLink   = By.cssSelector("a[aria-describedby='contact-1-status']")
+  private val contactDetailsStatus = By.id("contact-1-status")
+
+  def selectContactDetailsLink(): Unit = click(contactDetailsLink)
+  def getContactDetailsStatus: String  = getText(contactDetailsStatus)
+
 }

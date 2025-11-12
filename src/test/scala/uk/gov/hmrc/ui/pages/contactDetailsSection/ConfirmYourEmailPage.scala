@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.contactDetailsSection
 
-trait EntryPage extends BasePage {
-  def open(): Unit = get(url)
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
+
+object ConfirmYourEmailPage extends BasePage {
+  override val path: String = "/agent-registration/apply/applicant/verify-email-address"
+
+  private val confirmationCodeField = By.id("passcode")
+
+  def enterConfirmationCode(code: String): Unit = sendKeys(confirmationCodeField, code)
 }

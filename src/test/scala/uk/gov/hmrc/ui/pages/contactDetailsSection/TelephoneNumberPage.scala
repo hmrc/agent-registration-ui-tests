@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.contactDetailsSection
 
 import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 
-object HmrcOnlineServicesAccountPage extends BasePage {
-  override val path: String       = "/agent-registration/apply/about-your-business/agent-online-services-account"
-  override val expectedH1: String = "Do you have an HMRC online services for agents account?"
+object TelephoneNumberPage extends BasePage() {
+  override val path: String = "/agent-registration/apply/applicant/telephone-number"
 
-  private val yesRadio = By.id("typeOfSignIn")
-  private val noRadio  = By.id("typeOfSignIn-2")
+  private val telephoneNumberField = By.id("telephoneNumber")
 
-  def selectYes(): Unit = click(yesRadio)
-  def selectNo(): Unit  = click(noRadio)
+  def enterTelephoneNumber(): Unit = sendKeys(telephoneNumberField, "07777777777")
 }

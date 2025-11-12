@@ -14,8 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages
+package uk.gov.hmrc.ui.pages.applyJourney
 
-trait EntryPage extends BasePage {
-  def open(): Unit = get(url)
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
+
+object SignInWithAgentAccountPage extends BasePage {
+  override val path: String = "/agent-registration/apply/about-your-business/sign-in"
+
+  private val yesRadio = By.id("typeOfSignIn")
+  private val noRadio  = By.id("typeOfSignIn-2")
+
+  def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit  = click(noRadio)
+
 }
