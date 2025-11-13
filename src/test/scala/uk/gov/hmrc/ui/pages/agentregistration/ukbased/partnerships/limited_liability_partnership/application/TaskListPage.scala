@@ -29,11 +29,11 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  def assertContactDetailsStatus(expectedStatus: String): Unit = getContactDetailsStatus() shouldBe expectedStatus
+  def assertContactDetailsStatus(expectedStatus: String): Unit = getText(contactDetailsStatus) shouldBe expectedStatus
+  def assertBusinessDetailsStatus(expectedStatus: String): Unit = getText(businessDetailsStatus) shouldBe expectedStatus
 
   def clickOnApplicantContactDetailsLink(): Unit = click(contactDetailsLink)
 
-  private def getContactDetailsStatus(): String = getText(contactDetailsStatus)
-
   private val contactDetailsLink = By.cssSelector("a[aria-describedby='contact-1-status']")
   private val contactDetailsStatus = By.id("contact-1-status")
+  private val businessDetailsStatus = By.id("businessDetails-1-status")

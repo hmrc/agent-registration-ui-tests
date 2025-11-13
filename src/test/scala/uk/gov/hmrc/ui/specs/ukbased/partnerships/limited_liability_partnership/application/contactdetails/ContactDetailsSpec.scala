@@ -22,6 +22,7 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.pages
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ContactDetailsSpec
@@ -30,43 +31,60 @@ extends BaseSpec:
   Feature("Complete Contact Details section"):
     Scenario("The Companies House responds with multiple name matches for the applicant's name query", HappyPath):
 
-      Given("User has completed Business Details section and is on the Task List page")
       val stubbedSignInData = BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
         .runFlow()
 
-      When("User completes Contact Details section from the Task List")
       ContactDetailsFlow
         .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
-
-      Then("The Contact Details section is completed")
       TaskListPage.assertContactDetailsStatus("Completed")
 
     Scenario("The Companies House responds with multiple one exact match for the applicant's name query", HappyPath):
 
-      Given("User has completed Business Details section and is on the Task List page")
       val stubbedSignInData = BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
         .runFlow()
 
-      When("User completes Contact Details section from the Task List")
       ContactDetailsFlow
         .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
-
-      Then("The Contact Details section is completed")
       TaskListPage.assertContactDetailsStatus("Completed")
 
     Scenario("The Companies House responds with no matches for the applicant's name query", HappyPath):
       pending
-      Given("User has completed Business Details section and is on the Task List page")
       val stubbedSignInData = BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
         .runFlow()
 
-      When("User completes Contact Details section from the Task List and declares his name instead of choosing")
-      // TODO
+      // TODO acutal test here
 
-      Then("The Contact Details section is completed")
+      TaskListPage.assertContactDetailsStatus("Completed")
+
+    Scenario("Change X from CYA page ", HappyPath):
+      pending
+      val stubbedSignInData = BusinessDetailsFlow
+        .WhenHasNoOnlineAgentAccount
+        .runFlow()
+      ContactDetailsFlow
+        .WhenOnlyOneNameMatch
+        .runFlowUntilCyaPage(stubbedSignInData)
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+//      CheckYourAnswersPage.clickChangeX(...) TODO
+
+      TaskListPage.assertContactDetailsStatus("Completed")
+
+    Scenario("Change Y from CYA page ", HappyPath):
+      pending
+      val stubbedSignInData = BusinessDetailsFlow
+        .WhenHasNoOnlineAgentAccount
+        .runFlow()
+      ContactDetailsFlow
+        .WhenOnlyOneNameMatch
+        .runFlowUntilCyaPage(stubbedSignInData)
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+//      CheckYourAnswersPage.clickChangeY(...) TODO
+
       TaskListPage.assertContactDetailsStatus("Completed")

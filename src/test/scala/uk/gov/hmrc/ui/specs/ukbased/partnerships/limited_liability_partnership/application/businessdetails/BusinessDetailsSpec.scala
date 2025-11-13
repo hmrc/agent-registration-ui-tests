@@ -26,12 +26,16 @@ extends BaseSpec:
 
   Feature("Complete BusinessDetails"):
     Scenario("When user has no online agent account", HappyPath):
+
       BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
         .runFlow()
       TaskListPage.assertPageIsDisplayed()
+      TaskListPage.assertBusinessDetailsStatus("Completed")
 
     Scenario("When user has existing online agent account", HappyPath):
       businessdetails.BusinessDetailsFlow
         .WhenHasOnlineAgentAccount
         .runFlow()
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.assertBusinessDetailsStatus("Completed")

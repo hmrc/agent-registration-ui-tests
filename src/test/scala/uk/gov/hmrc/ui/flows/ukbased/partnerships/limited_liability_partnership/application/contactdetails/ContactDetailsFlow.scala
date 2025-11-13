@@ -33,9 +33,21 @@ object ContactDetailsFlow {
   object WhenMultiNameMatch:
     def runFlow(stubData: StubbedSignInData): Unit = addContactDetails(stubData, multiNameMatch = true)
   object WhenOnlyOneNameMatch:
-    def runFlow(stubData: StubbedSignInData): Unit = addContactDetails(stubData, multiNameMatch = false)
 
-  def addContactDetails(
+    def runFlow(stubData: StubbedSignInData): Unit = addContactDetails(stubData, multiNameMatch = false)
+    def runFlowUntilCyaPage(stubData: StubbedSignInData): Unit = addContactDetailsUntilCyaPage(stubData, multiNameMatch = false)
+
+  private def addContactDetails(
+    stubData: StubbedSignInData,
+    multiNameMatch: Boolean
+  ): Unit = {
+    addContactDetailsUntilCyaPage(stubData, multiNameMatch)
+    CheckYourAnswersPage.assertPageIsDisplayed()
+    CheckYourAnswersPage.clickContinue()
+    TaskListPage.assertPageIsDisplayed()
+  }
+
+  private def addContactDetailsUntilCyaPage(
     stubData: StubbedSignInData,
     multiNameMatch: Boolean = false
   ): Unit = {
@@ -95,9 +107,6 @@ object ContactDetailsFlow {
     }
     CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
     CheckYourAnswersPage.assertSummaryRow("Email address", "test@test.com")
-    CheckYourAnswersPage.clickContinue()
-
-    TaskListPage.assertPageIsDisplayed()
   }
 
 }
