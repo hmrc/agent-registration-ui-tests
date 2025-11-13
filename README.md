@@ -1,55 +1,47 @@
-**This is the template README. Please update this with project specific content.**
-
 # agent-registration-ui-tests
 
-<SERVICE_NAME> UI journey tests.
+This repository contains UI tests for agent registration service. The tests require services to be running and
+use Selenium WebDriver to interact with the UI elements.
 
 ## Pre-requisites
 
-### Services
+### Mongo
 
-Start Mongo Docker container as follows:
+Start the Mongo Docker container if it's not already running:
 
 ```bash
 docker run --rm -d -p 27017:27017 --name mongo percona/percona-server-mongodb:6.0
 ```
 
-Start `AGENT_REGISTRATION_ALL` services as follows:
+### Agent Registration Services
+
+Start `AGENT_REGISTRATION_ALL` services:
 
 ```bash
 sm2 --start AGENT_REGISTRATION_ALL
 ```
 
-## Tests
+## Running tests
 
-Run tests as follows:
+### From command line 
 
-* Argument `<browser>` must be `chrome`, `edge`, or `firefox`.
-* Argument `<environment>` must be `local`, `dev`, `qa` or `staging`.
-
-```bash
-./run-tests.sh chrome local
-```
-
-## Scalafmt
-
-Check all project files are formatted as expected as follows:
+To run tests in batch mode, use `run-tests.sh`. The script accepts parameters to adjust the run as needed. See its
+contents for details.
+This is how the tests are run from CI (Jenkins).
 
 ```bash
-sbt scalafmtCheckAll scalafmtCheck
+./run-tests.sh
 ```
 
-Format `*.sbt` and `project/*.scala` files as follows:
+### From intellij IDEA
 
-```bash
-sbt scalafmtSbt
-```
+Use built-in run configurations to run individual scenarios, see below screenshot for guidance:
 
-Format all project files as follows:
+![howToRunFromIntellijIdea.png](readme/howToRunFromIntellijIdea.png)
 
-```bash
-sbt scalafmtAll
-```
+Ensure the project is imported into IntelliJ correctly, see below screenshot for guidance
+
+![howToImportProjectIntoIntelliJIdea.png](readme/howToImportProjectIntoIntelliJIdea.png)
 
 ## License
 
