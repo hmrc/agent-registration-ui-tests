@@ -40,7 +40,7 @@ extends BaseSpec:
         .runFlow(stubbedSignInData)
       TaskListPage.assertContactDetailsStatus("Completed")
 
-    Scenario("The Companies House responds with multiple one exact match for the applicant's name query", HappyPath):
+    Scenario("The Companies House responds with one exact match for the applicant's name query", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
