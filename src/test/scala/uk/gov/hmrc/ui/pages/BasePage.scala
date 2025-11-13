@@ -16,42 +16,28 @@
 
 package uk.gov.hmrc.ui.pages
 
-import uk.gov.hmrc.selenium.component.PageObject
-import uk.gov.hmrc.ui.utils.AppConfig
-import org.openqa.selenium.{By, WebDriver}
+import org.openqa.selenium.By
 import uk.gov.hmrc.selenium.webdriver.Driver
+import uk.gov.hmrc.ui.utils.RichMatchers
 
-import java.time.Duration
-import org.openqa.selenium.support.ui.{ExpectedConditions, FluentWait}
+trait BasePage
+extends PageObject:
 
-trait BasePage extends PageObject {
-  def path: String
-  def expectedRadioIds: Seq[String] = Seq.empty
+  val path: String
+  val baseUrl: String
 
-  /** Set true on stub/setup pages where H1 is dynamic or irrelevant. */
-  protected def skipH1Assertion: Boolean = false
+  /** Call this method after navigation to ensure you've reached the expected page.
+    */
+  inline def assertPageIsDisplayed(): Unit
 
-  // ---- Navigation ----
-  def url: String                                             = AppConfig.baseUrl + path
-  def title: String                                           = getTitle
-  def clickContinue(cssOverride: Option[String] = None): Unit =
-    click(By.cssSelector(cssOverride.getOrElse(continueSelector)))
+  final def url: String = baseUrl + path
 
-  // ---- Common selectors ----
-  protected def continueSelector: String =
-    "button.govuk-button[type='submit'], input.govuk-button[type='submit'], a.govuk-button[role='button']"
+  def clickContinue(continueSelector: By = continueSelector): Unit = click(continueSelector)
 
-  // in BasePage
-  def goBack(): Unit =
-    Driver.instance.navigate().back()
+  def clickBrowserBack(): Unit = Driver.instance.navigate().back()
 
-  // ---- Assertions ----
-  /** Call after navigation to assert we're on the expected page */
-  def assertPageIsDisplayed(timeoutSec: Int = 5, pollingMs: Int = 500): Unit = {
-    val driver = Driver.instance
-    new FluentWait[WebDriver](driver)
-      .withTimeout(Duration.ofSeconds(timeoutSec))
-      .pollingEvery(Duration.ofMillis(pollingMs))
-      .until(ExpectedConditions.urlContains(path)) // `path` comes from this page object
-  }
-}
+  export RichMatchers.*
+
+  private val continueSelector: By =
+    val selectorString = "button.govuk-button[type='submit'], input.govuk-button[type='submit'], a.govuk-button[role='button']"
+    By.cssSelector(selectorString)

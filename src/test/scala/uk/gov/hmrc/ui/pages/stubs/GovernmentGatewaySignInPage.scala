@@ -18,14 +18,21 @@ package uk.gov.hmrc.ui.pages.stubs
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 import uk.gov.hmrc.ui.utils.RandomData
 
-object GovernmentGatewaySignInPage extends BasePage {
+object GovernmentGatewaySignInPage
+extends BasePage {
+
   override val path: String = "/bas-gateway/sign-in"
+  override val baseUrl: String = AppConfig.baseUrlGovernmentGateway
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl should startWith(url)
 
   // Prefer stable IDs if you have them:
   private val usernameId = By.id("userId")
-  private val planetId   = By.id("planetId")
+  private val planetId = By.id("planetId")
 
   /** Fill username with a generated value and return it */
   def enterRandomUsername(prefix: String = "user"): String = {
@@ -35,9 +42,13 @@ object GovernmentGatewaySignInPage extends BasePage {
   }
 
   /** Fill group ID with a generated value and return it */
-  def enterRandomPlanetId(prefix: String = "pln", len: Int = 8): String = {
+  def enterRandomPlanetId(
+    prefix: String = "pln",
+    len: Int = 8
+  ): String = {
     val value = RandomData.planetId(prefix, len)
     sendKeys(planetId, value)
     value
   }
+
 }
