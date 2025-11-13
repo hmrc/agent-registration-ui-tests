@@ -22,7 +22,7 @@ import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage.eventually
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage.getCurrentUrl
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object WhatIsYourNamePage
+object MemberNamePage
 extends BasePage {
 
   override val path: String = "/agent-registration/apply/applicant/member-name"

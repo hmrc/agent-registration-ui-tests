@@ -22,7 +22,8 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.pages
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.{CheckYourAnswersPage, IsYourAgentBusinessBasedInTheUKPage}
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.{ApplicantNamePage, AreYouAMemberOfTheLllpPage}
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ContactDetailsSpec
@@ -57,12 +58,12 @@ extends BaseSpec:
         .WhenHasNoOnlineAgentAccount
         .runFlow()
 
-      // TODO acutal test here
+      // TODO actual test here
 
       TaskListPage.assertContactDetailsStatus("Completed")
 
-    Scenario("Change X from CYA page ", HappyPath):
-      pending
+    Scenario("Change Member Status from CYA page ", HappyPath):
+
       val stubbedSignInData = BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
         .runFlow()
@@ -70,10 +71,20 @@ extends BaseSpec:
         .WhenOnlyOneNameMatch
         .runFlowUntilCyaPage(stubbedSignInData)
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
-//      CheckYourAnswersPage.clickChangeX(...) TODO
+      CheckYourAnswersPage.clickChangeFor("Member of the limited liability partnership")
 
-      TaskListPage.assertContactDetailsStatus("Completed")
+      AreYouAMemberOfTheLllpPage.assertPageIsDisplayed()
+      AreYouAMemberOfTheLllpPage.selectNo()
+      AreYouAMemberOfTheLllpPage.clickContinue()
+
+      ApplicantNamePage.assertPageIsDisplayed()
+      ApplicantNamePage.enterFullName("John Smith")
+      ApplicantNamePage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Member of the limited liability partnership",
+        "No, but I’m authorised by them to set up this account")
+      CheckYourAnswersPage.assertSummaryRow("Name", "John Smith")
 
     Scenario("Change Y from CYA page ", HappyPath):
       pending

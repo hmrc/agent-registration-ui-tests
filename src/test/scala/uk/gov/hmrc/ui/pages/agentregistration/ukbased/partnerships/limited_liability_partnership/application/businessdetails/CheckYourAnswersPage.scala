@@ -42,6 +42,12 @@ extends BasePage {
       "//dd[contains(@class,'govuk-summary-list__value')]"
   )
 
+  private def changeLinkLocatorFor(keyText: String): By = By.xpath(
+    "//div[contains(@class,'govuk-summary-list__row')]" +
+      s"[normalize-space(.//dt[contains(@class,'govuk-summary-list__key')])='$keyText']" +
+      "//dd[contains(@class,'govuk-summary-list__actions')]//a"
+  )
+
   /** Generic getter */
   def getSummaryValueFor(keyText: String): String = getText(valueLocatorFor(keyText)).trim
 
@@ -56,4 +62,7 @@ extends BasePage {
     }
   }
 
+  /** Click the 'Change' link for the given summary key */
+  def clickChangeFor(keyText: String): Unit =
+    click(changeLinkLocatorFor(keyText))
 }

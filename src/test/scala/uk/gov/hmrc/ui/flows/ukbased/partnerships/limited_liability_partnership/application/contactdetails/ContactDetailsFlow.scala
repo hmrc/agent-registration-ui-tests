@@ -25,7 +25,7 @@ import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liabi
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.EmailAddressPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.MulitpleNameMatchesPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.TelephoneNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.WhatIsYourNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.MemberNamePage
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 object ContactDetailsFlow {
@@ -33,7 +33,6 @@ object ContactDetailsFlow {
   object WhenMultiNameMatch:
     def runFlow(stubData: StubbedSignInData): Unit = addContactDetails(stubData, multiNameMatch = true)
   object WhenOnlyOneNameMatch:
-
     def runFlow(stubData: StubbedSignInData): Unit = addContactDetails(stubData, multiNameMatch = false)
     def runFlowUntilCyaPage(stubData: StubbedSignInData): Unit = addContactDetailsUntilCyaPage(stubData, multiNameMatch = false)
 
@@ -61,20 +60,20 @@ object ContactDetailsFlow {
     AreYouAMemberOfTheLllpPage.clickContinue()
 
     // enter name
-    WhatIsYourNamePage.assertPageIsDisplayed()
-    WhatIsYourNamePage.enterFirstName()
+    MemberNamePage.assertPageIsDisplayed()
+    MemberNamePage.enterFirstName()
     // Enter surname based on multiNameMatch flag
     if (multiNameMatch) {
-      WhatIsYourNamePage.enterLastName("Tester")
-      WhatIsYourNamePage.clickContinue()
+      MemberNamePage.enterLastName("Tester")
+      MemberNamePage.clickContinue()
 
       MulitpleNameMatchesPage.assertPageIsDisplayed()
       MulitpleNameMatchesPage.selectSecondMatch()
       MulitpleNameMatchesPage.clickContinue()
     }
     else {
-      WhatIsYourNamePage.enterLastName("Smith")
-      WhatIsYourNamePage.clickContinue()
+      MemberNamePage.enterLastName("Smith")
+      MemberNamePage.clickContinue()
 
       // confirm name matching result for single match
       AreTheseYourDetailsPage.assertPageIsDisplayed()
