@@ -15,9 +15,15 @@
  */
 
 package uk.gov.hmrc.ui.utils
+
 import org.scalatest.Tag
 object Tags {
-  object Smoke extends Tag("Smoke")
-  object HappyPath extends Tag("HappyPath")
-  object Wip extends Tag("Wip")
+
+  object Smoke
+  extends Tag("Smoke")
+  object HappyPath
+  extends Tag("HappyPath")
+  object Wip
+  extends Tag("Wip")
+
 }

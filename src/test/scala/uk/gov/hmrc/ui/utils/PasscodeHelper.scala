@@ -16,18 +16,23 @@
 
 package uk.gov.hmrc.ui.utils
 
-import java.net.{HttpURLConnection, URL}
+import play.api.libs.json.*
+
+import java.net.HttpURLConnection
+import java.net.URL
 import scala.io.Source
-import play.api.libs.json._
-import play.api.libs.json.{JsObject, Json}
 
 object PasscodeHelper {
+
   private val passcodesUrl = "http://localhost:9891/test-only/passcodes"
 
-  def getPasscode(bearerToken: String, sessionId: String): String = {
+  def getPasscode(
+    bearerToken: String,
+    sessionId: String
+  ): String = {
 
     def call(): (Int, String) = {
-      val url  = new URL(passcodesUrl)
+      val url = new URL(passcodesUrl)
       val conn = url.openConnection().asInstanceOf[HttpURLConnection]
 
       conn.setRequestMethod("GET")
@@ -35,8 +40,12 @@ object PasscodeHelper {
       conn.setRequestProperty("X-Session-ID", sessionId)
 
       val status = conn.getResponseCode
-      val stream = if (status >= 200 && status < 300) conn.getInputStream else conn.getErrorStream
-      val body   =
+      val stream =
+        if (status >= 200 && status < 300)
+          conn.getInputStream
+        else
+          conn.getErrorStream
+      val body =
         if (stream != null)
           try Source.fromInputStream(stream).mkString
           finally stream.close()
@@ -51,20 +60,23 @@ object PasscodeHelper {
     while (attempts < 5) {
       val (status, body) = call()
       if (status >= 200 && status < 300) {
-        val json      = Json.parse(body)
+        val json = Json.parse(body)
         val passcodes = (json \ "passcodes").as[Seq[JsObject]]
         return passcodes.headOption
           .flatMap(obj => (obj \ "passcode").asOpt[String])
           .getOrElse(sys.error(s"Could not find passcode in response: $body"))
-      } else if (status == 404) {
+      }
+      else if (status == 404) {
         // passcode not ready yet – wait briefly then try again
         attempts += 1
         Thread.sleep(500) // half a second between tries
-      } else {
+      }
+      else {
         throw new IllegalArgumentException(s"Passcodes call failed with status $status")
       }
     }
 
     throw new IllegalStateException("Passcode not available after 5 attempts")
   }
+
 }
