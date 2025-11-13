@@ -62,7 +62,7 @@ object PasscodeHelper {
       if (status >= 200 && status < 300) {
         val json = Json.parse(body)
         val passcodes = (json \ "passcodes").as[Seq[JsObject]]
-        return passcodes.headOption
+        return passcodes.lastOption
           .flatMap(obj => (obj \ "passcode").asOpt[String])
           .getOrElse(sys.error(s"Could not find passcode in response: $body"))
       }
