@@ -19,7 +19,7 @@ package uk.gov.hmrc.ui.pages.agentregistration.nonukbased
 /** Temporary placeholder class to maintain package structure consistency.
   *
   * This class exists solely to preserve the package hierarchy until actual implementation classes are added. It will be removed once the package is populated
-  * with proper functionality for general partnership flows.
+  * with proper functionality reflected in the package name.
   *
   * @note
   *   This is a temporary class intended for removal
