@@ -16,16 +16,24 @@
 
 package uk.gov.hmrc.ui.utils
 
+import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.BeforeAndAfterEachTestData
 import org.scalatest.TestSuite
 import uk.gov.hmrc.selenium.webdriver.Browser
+import uk.gov.hmrc.selenium.webdriver.Driver
+import uk.gov.hmrc.ui.utils.RichMatchers.eventually
 
 trait BrowserStart
-extends BeforeAndAfterEach { self: TestSuite =>
+extends BeforeAndAfterEachTestData,
+  LazyLogging { self: TestSuite =>
 
-  override def beforeEach(): Unit =
-    super.beforeEach()
+  override def beforeEach(testData: org.scalatest.TestData): Unit =
+    super.beforeEach(testData)
     new Browser:
-      startBrowser()
+      logger.info(s"Trying to starting browser for test ${testData.name} (current Driver.instance = ${Driver.instance})")
+      eventually:
+        logger.info(s"...starting browser for test '${testData.name}' (current Driver.instance = ${Driver.instance}")
+        if Driver.instance == null then startBrowser()
 
 }

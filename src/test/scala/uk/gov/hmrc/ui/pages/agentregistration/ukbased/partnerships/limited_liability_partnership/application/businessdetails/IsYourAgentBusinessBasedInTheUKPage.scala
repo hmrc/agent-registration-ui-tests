@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object IsYourAgentBusinessBasedInTheUKPage
-extends BasePage {
+extends BasePage:
 
   override val path: String = "/agent-registration/apply/about-your-business/agent-type"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -34,5 +34,3 @@ extends BasePage {
 
   def selectYes(): Unit = click(yesRadio)
   def selectNo(): Unit = click(noRadio)
-
-}
