@@ -63,6 +63,6 @@ extends BasePage {
   }
 
   /** Click the 'Change' link for the given summary key */
-  def clickChangeFor(keyText: String): Unit =
-    click(changeLinkLocatorFor(keyText))
+  def clickChangeFor(keyText: String): Unit = click(changeLinkLocatorFor(keyText))
+
 }

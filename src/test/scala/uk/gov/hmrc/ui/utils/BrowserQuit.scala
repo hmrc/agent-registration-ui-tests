@@ -26,7 +26,7 @@ trait BrowserQuit
 extends TestSuiteMixin,
   LazyLogging { self: TestSuite =>
 
-  override abstract def withFixture(test: NoArgTest): Outcome = {
+  override abstract def withFixture(test: NoArgTest): Outcome =
     val testOutcome: Outcome = super.withFixture(test)
 
     if SystemPropertiesHelper.isTestRunFromIdea && (testOutcome.isExceptional || testOutcome.isFailed)
@@ -36,5 +36,4 @@ extends TestSuiteMixin,
         quitBrowser()
 
     testOutcome
-  }
 }

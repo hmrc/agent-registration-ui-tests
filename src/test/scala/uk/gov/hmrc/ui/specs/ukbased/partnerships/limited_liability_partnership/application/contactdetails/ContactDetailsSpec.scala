@@ -17,13 +17,13 @@
 package uk
   .gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.contactdetails
 
-import uk.gov.hmrc.ui.flows
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
+import uk.gov.hmrc.ui.flows
 import uk.gov.hmrc.ui.pages
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.{CheckYourAnswersPage, IsYourAgentBusinessBasedInTheUKPage}
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.{ApplicantNamePage, AreTheseYourDetailsPage, AreYouAMemberOfTheLllpPage, ConfirmYourEmailPage, EmailAddressPage, MemberNamePage, TelephoneNumberPage}
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.*
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
@@ -83,8 +83,10 @@ extends BaseSpec:
       ApplicantNamePage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Member of the limited liability partnership",
-        "No, but I’m authorised by them to set up this account")
+      CheckYourAnswersPage.assertSummaryRow(
+        "Member of the limited liability partnership",
+        "No, but I’m authorised by them to set up this account"
+      )
       CheckYourAnswersPage.assertSummaryRow("Name", "John Smith")
 
     Scenario("Change Name from CYA page", HappyPath):
@@ -126,11 +128,10 @@ extends BaseSpec:
       EmailAddressPage.clickContinue()
 
       // Get a fresh passcode using the SAME session
-      val passcode =
-        PasscodeHelper.getPasscode(
-          stubbedSignInData.bearerToken,
-          stubbedSignInData.sessionId
-        )
+      val passcode = PasscodeHelper.getPasscode(
+        stubbedSignInData.bearerToken,
+        stubbedSignInData.sessionId
+      )
 
       ConfirmYourEmailPage.assertPageIsDisplayed()
       ConfirmYourEmailPage.enterConfirmationCode(passcode)

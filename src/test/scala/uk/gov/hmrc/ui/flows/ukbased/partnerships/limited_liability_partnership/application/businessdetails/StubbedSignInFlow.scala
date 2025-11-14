@@ -23,11 +23,11 @@ import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.pages.stubs.GrsDataSetupPage
 
 /** Encapsulates the Agents External Stubs sign-in/setup screens. */
-object StubbedSignInFlow {
+object StubbedSignInFlow:
 
   /** Runs the stubbed sign-in flow and returns the generated username (if needed it later).
     */
-  def signInAndDataSetupViaStubs(): StubbedSignInData = {
+  def signInAndDataSetupViaStubs(): StubbedSignInData =
     // We assume the test is already on GovernmentGatewaySignInPage
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
 
@@ -59,5 +59,3 @@ object StubbedSignInFlow {
       bearerToken,
       sessionId
     )
-  }
-}
