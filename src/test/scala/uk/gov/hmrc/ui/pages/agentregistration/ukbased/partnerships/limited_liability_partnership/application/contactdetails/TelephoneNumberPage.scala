@@ -31,6 +31,7 @@ extends BasePage() {
 
   private val telephoneNumberField = By.id("telephoneNumber")
 
-  def enterTelephoneNumber(): Unit = sendKeys(telephoneNumberField, "07777777777")
+  def enterTelephoneNumber(telephoneNumber: String = "07777777777"): Unit = 
+    sendKeys(telephoneNumberField, telephoneNumber)
 
 }

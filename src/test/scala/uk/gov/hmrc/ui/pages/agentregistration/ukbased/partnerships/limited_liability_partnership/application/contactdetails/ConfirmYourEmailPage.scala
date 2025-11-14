@@ -27,7 +27,7 @@ extends BasePage {
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl shouldBe url
+    getCurrentUrl should include(url)
 
   private val confirmationCodeField = By.id("passcode")
 

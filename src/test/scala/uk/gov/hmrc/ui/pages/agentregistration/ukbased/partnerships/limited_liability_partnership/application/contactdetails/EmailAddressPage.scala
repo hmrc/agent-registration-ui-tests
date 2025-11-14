@@ -31,6 +31,6 @@ extends BasePage {
 
   private val emailAddressField = By.id("emailAddress")
 
-  def enterEmailAddress(): Unit = sendKeys(emailAddressField, "test@test.com")
+  def enterEmailAddress(email: String = "test@test.com"): Unit = sendKeys(emailAddressField, email)
 
 }

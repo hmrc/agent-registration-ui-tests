@@ -22,8 +22,10 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.pages
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.{CheckYourAnswersPage, IsYourAgentBusinessBasedInTheUKPage}
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.{ApplicantNamePage, AreTheseYourDetailsPage, AreYouAMemberOfTheLllpPage, ConfirmYourEmailPage, EmailAddressPage, MemberNamePage, TelephoneNumberPage}
 import uk.gov.hmrc.ui.specs.BaseSpec
+import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 class ContactDetailsSpec
 extends BaseSpec:
@@ -57,12 +59,12 @@ extends BaseSpec:
         .WhenHasNoOnlineAgentAccount
         .runFlow()
 
-      // TODO acutal test here
+      // TODO actual test here
 
       TaskListPage.assertContactDetailsStatus("Completed")
 
-    Scenario("Change X from CYA page ", HappyPath):
-      pending
+    Scenario("Change Member Status from CYA page", HappyPath):
+
       val stubbedSignInData = BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
         .runFlow()
@@ -70,13 +72,23 @@ extends BaseSpec:
         .WhenOnlyOneNameMatch
         .runFlowUntilCyaPage(stubbedSignInData)
 
+      CheckYourAnswersPage.clickChangeFor("Member of the limited liability partnership")
+
+      AreYouAMemberOfTheLllpPage.assertPageIsDisplayed()
+      AreYouAMemberOfTheLllpPage.selectNo()
+      AreYouAMemberOfTheLllpPage.clickContinue()
+
+      ApplicantNamePage.assertPageIsDisplayed()
+      ApplicantNamePage.enterFullName("John Smith")
+      ApplicantNamePage.clickContinue()
+
       CheckYourAnswersPage.assertPageIsDisplayed()
-//      CheckYourAnswersPage.clickChangeX(...) TODO
+      CheckYourAnswersPage.assertSummaryRow("Member of the limited liability partnership",
+        "No, but I’m authorised by them to set up this account")
+      CheckYourAnswersPage.assertSummaryRow("Name", "John Smith")
 
-      TaskListPage.assertContactDetailsStatus("Completed")
+    Scenario("Change Name from CYA page", HappyPath):
 
-    Scenario("Change Y from CYA page ", HappyPath):
-      pending
       val stubbedSignInData = BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
         .runFlow()
@@ -84,7 +96,63 @@ extends BaseSpec:
         .WhenOnlyOneNameMatch
         .runFlowUntilCyaPage(stubbedSignInData)
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
-//      CheckYourAnswersPage.clickChangeY(...) TODO
+      CheckYourAnswersPage.clickChangeFor("Name")
 
-      TaskListPage.assertContactDetailsStatus("Completed")
+      MemberNamePage.assertPageIsDisplayed()
+      MemberNamePage.enterFirstName()
+      MemberNamePage.enterLastName("Jones")
+      MemberNamePage.clickContinue()
+
+      AreTheseYourDetailsPage.assertPageIsDisplayed()
+      AreTheseYourDetailsPage.selectYes()
+      AreTheseYourDetailsPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Name", "JONES, Jane")
+
+    Scenario("Change Email address from CYA page", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .WhenHasNoOnlineAgentAccount
+        .runFlow()
+      ContactDetailsFlow
+        .WhenOnlyOneNameMatch
+        .runFlowUntilCyaPage(stubbedSignInData)
+
+      CheckYourAnswersPage.clickChangeFor("Email address")
+
+      EmailAddressPage.assertPageIsDisplayed()
+      EmailAddressPage.enterEmailAddress("new@test.com")
+      EmailAddressPage.clickContinue()
+
+      // Get a fresh passcode using the SAME session
+      val passcode =
+        PasscodeHelper.getPasscode(
+          stubbedSignInData.bearerToken,
+          stubbedSignInData.sessionId
+        )
+
+      ConfirmYourEmailPage.assertPageIsDisplayed()
+      ConfirmYourEmailPage.enterConfirmationCode(passcode)
+      ConfirmYourEmailPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Email address", "new@test.com")
+
+    Scenario("Change Telephone number from CYA page", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .WhenHasNoOnlineAgentAccount
+        .runFlow()
+      ContactDetailsFlow
+        .WhenOnlyOneNameMatch
+        .runFlowUntilCyaPage(stubbedSignInData)
+
+      CheckYourAnswersPage.clickChangeFor("Telephone number")
+
+      TelephoneNumberPage.assertPageIsDisplayed()
+      TelephoneNumberPage.enterTelephoneNumber("08888888888")
+      TelephoneNumberPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Telephone number", "08888888888")
