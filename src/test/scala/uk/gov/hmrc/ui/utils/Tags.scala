@@ -17,7 +17,7 @@
 package uk.gov.hmrc.ui.utils
 
 import org.scalatest.Tag
-object Tags {
+object Tags:
 
   object Smoke
   extends Tag("Smoke")
@@ -25,5 +25,3 @@ object Tags {
   extends Tag("HappyPath")
   object Wip
   extends Tag("Wip")
-
-}

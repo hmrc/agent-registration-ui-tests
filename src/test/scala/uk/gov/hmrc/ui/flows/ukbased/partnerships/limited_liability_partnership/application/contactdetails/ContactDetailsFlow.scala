@@ -33,6 +33,7 @@ object ContactDetailsFlow {
   object WhenMultiNameMatch:
     def runFlow(stubData: StubbedSignInData): Unit = addContactDetails(stubData, multiNameMatch = true)
   object WhenOnlyOneNameMatch:
+
     def runFlow(stubData: StubbedSignInData): Unit = addContactDetails(stubData, multiNameMatch = false)
     def runFlowUntilCyaPage(stubData: StubbedSignInData): Unit = addContactDetailsUntilCyaPage(stubData, multiNameMatch = false)
 

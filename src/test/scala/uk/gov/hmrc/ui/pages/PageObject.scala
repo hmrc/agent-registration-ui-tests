@@ -42,7 +42,7 @@ extends PageObject
   *   - Avoids hard-to-debug Selenium exception stack traces that often obscure the root cause
   *   - Makes test failures more actionable by providing relevant context and clean failure messages
   */
-trait PageObject {
+trait PageObject:
 
   inline def findElementBy(locator: By): Option[WebElement] = eventually:
     Try(Driver.instance.findElement(locator))
@@ -132,5 +132,3 @@ trait PageObject {
       .invisibilityOfElementWithText(locator, text)
       .apply(Driver.instance)
       .booleanValue() shouldBe true
-
-}

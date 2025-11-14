@@ -16,20 +16,24 @@
 
 package uk.gov.hmrc.ui.utils
 
+import com.typesafe.scalalogging.LazyLogging
 import play.api.libs.json.*
 
 import java.net.HttpURLConnection
 import java.net.URL
 import scala.io.Source
 
-object PasscodeHelper {
+object PasscodeHelper
+extends LazyLogging:
 
   private val passcodesUrl = "http://localhost:9891/test-only/passcodes"
 
+  // TODO: rewrite using sttp and eventually
+  // example: https://github.com/hmrc/agent-helpdesk-ui-tests/blob/main/src/test/scala/utils/ExternalStubs.scala
   def getPasscode(
     bearerToken: String,
     sessionId: String
-  ): String = {
+  ): String =
 
     def call(): (Int, String) = {
       val url = new URL(passcodesUrl)
@@ -77,6 +81,3 @@ object PasscodeHelper {
     }
 
     throw new IllegalStateException("Passcode not available after 5 attempts")
-  }
-
-}

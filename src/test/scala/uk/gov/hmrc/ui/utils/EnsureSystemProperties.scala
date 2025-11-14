@@ -37,21 +37,19 @@ extends LazyLogging:
 
     "environment"
       .pipe: p =>
-        if (System.getProperty(p) == null) {
+        if System.getProperty(p) == null then
           val defaultValue: String = "local"
           logger.info(s"'$p' property not set, defaulting it to '$defaultValue'")
           System.setProperty(p, defaultValue)
-        }
 
     // show browser when running tests from intellij idea
-    if (SystemPropertiesHelper.isTestRunFromIdea) {
+    if SystemPropertiesHelper.isTestRunFromIdea then
       logger.info(s"Running tests from intellij idea...")
-      "browser.option.headless"
-        .pipe: p =>
-          if (System.getProperty(p) == null)
-            val defaultValue = "false"
-            logger.info(
-              s"  '$p' property not set, defaulting it to '$defaultValue' (as test is running from intellij idea)"
-            )
-            System.setProperty(p, defaultValue)
-    }
+    "browser.option.headless"
+      .pipe: p =>
+        if System.getProperty(p) == null then
+          val defaultValue = "false"
+          logger.info(
+            s"  '$p' property not set, defaulting it to '$defaultValue' (as test is running from intellij idea)"
+          )
+          System.setProperty(p, defaultValue)

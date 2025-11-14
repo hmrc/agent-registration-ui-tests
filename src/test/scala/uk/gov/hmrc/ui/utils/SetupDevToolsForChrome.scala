@@ -30,12 +30,11 @@ import scala.collection.mutable
 trait SetupDevToolsForChrome
 extends BeforeAndAfterEach { self: BaseSpec =>
 
-  override def beforeEach(): Unit = {
+  override def beforeEach(): Unit =
     super.beforeEach()
     Driver.instance match
       case driver: ChromeDriver if SystemPropertiesHelper.isTestRunFromIdea => setupChromeDriver(driver)
       case _ => ()
-  }
 
   private def setupChromeDriver(driver: ChromeDriver): Unit =
     val devTools: DevTools = driver.getDevTools
@@ -66,23 +65,23 @@ extends BeforeAndAfterEach { self: BaseSpec =>
       (request: org.openqa.selenium.devtools.v137.network.model.RequestWillBeSent) =>
         if ignoredExtensions.exists(request.getRequest.getUrl.endsWith) || ignoredExtensions.exists(request.getRequest.getUrl.startsWith)
         then ()
-        else {
+        else
           // Redirects are available directly in the responseReceived event, not sure why...
-          if (request.getRedirectResponse.isPresent) {
+          if request.getRedirectResponse.isPresent
+          then
             val redirectResp: Response = request.getRedirectResponse.get()
             val originalRequest = pendingRequests.get(request.getRequestId.toString)
             val location = "Location=" + redirectResp.getHeaders.get("Location")
-            originalRequest.foreach { req =>
+            originalRequest.foreach: req =>
               println(
                 s"<<< ${req.getRequest.getMethod} ${req.getRequest.getUrl} ${redirectResp.getStatusText}(${redirectResp.getStatus}), $location"
               )
-            }
-          }
+          else ()
 
           pendingRequests += (request.getRequestId.toString -> request)
           println(s">>> ${request.getRequest.getMethod} ${request.getRequest.getUrl}")
-        }
     )
+
     devTools.addListener(
       org.openqa.selenium.devtools.v137.network.Network.responseReceived(),
       (response: org.openqa.selenium.devtools.v137.network.model.ResponseReceived) =>
@@ -93,11 +92,11 @@ extends BeforeAndAfterEach { self: BaseSpec =>
               s"<<< ${request.getRequest.getMethod} ${request.getRequest.getUrl} ${response.getResponse.getStatusText}(${response.getResponse.getStatus}) "
             )
 
-            if (response.getResponse.getStatus < 300)
+            if response.getResponse.getStatus < 300
+            then
               // remove only 2xx, because chrome reuses request id for other status codes ...
               pendingRequests.remove(response.getRequestId.toString)
-            else
-              ()
+            else ()
     )
 
 }

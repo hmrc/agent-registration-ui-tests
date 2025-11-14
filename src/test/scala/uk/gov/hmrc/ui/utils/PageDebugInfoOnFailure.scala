@@ -41,7 +41,7 @@ extends TestSuiteMixin,
     val pos = Position.here
     val showPageSource: Boolean = false
 
-    if (testOutcome.isExceptional || testOutcome.isFailed) {
+    if testOutcome.isExceptional || testOutcome.isFailed then
       new PageObject:
         val debugInfoOnFailure =
           s"""
@@ -61,7 +61,6 @@ extends TestSuiteMixin,
              |""".stripMargin
 
         logger.error(debugInfoOnFailure)
-    }
 
   extension (s: String)
     /** Transforms string so it's easier to inspect visually

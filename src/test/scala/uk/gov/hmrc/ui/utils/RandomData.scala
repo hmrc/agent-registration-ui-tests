@@ -18,7 +18,7 @@ package uk.gov.hmrc.ui.utils
 
 import scala.util.Random
 
-object RandomData {
+object RandomData:
 
   private val rnd = new Random()
 
@@ -42,5 +42,3 @@ object RandomData {
 
   /** If you still need a UUID-like string without hyphens */
   def uuidCompact(): String = java.util.UUID.randomUUID().toString.replaceAll("-", "")
-
-}

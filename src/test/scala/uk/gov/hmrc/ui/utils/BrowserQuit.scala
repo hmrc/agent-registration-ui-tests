@@ -26,15 +26,15 @@ trait BrowserQuit
 extends TestSuiteMixin,
   LazyLogging { self: TestSuite =>
 
-  override abstract def withFixture(test: NoArgTest): Outcome = {
+  override abstract def withFixture(test: NoArgTest): Outcome =
     val testOutcome: Outcome = super.withFixture(test)
 
     if SystemPropertiesHelper.isTestRunFromIdea && (testOutcome.isExceptional || testOutcome.isFailed)
     then logger.info("Test run from intellij, skipping browser quit, so it's easier to debug test failure")
     else
+      logger.info(s"Quitting browser after test '${test.name}'")
       new Browser:
         quitBrowser()
 
     testOutcome
-  }
 }
