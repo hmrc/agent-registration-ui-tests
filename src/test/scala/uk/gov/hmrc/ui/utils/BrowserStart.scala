@@ -17,7 +17,6 @@
 package uk.gov.hmrc.ui.utils
 
 import com.typesafe.scalalogging.LazyLogging
-import org.scalatest.BeforeAndAfterEach
 import org.scalatest.BeforeAndAfterEachTestData
 import org.scalatest.TestSuite
 import uk.gov.hmrc.selenium.webdriver.Browser
@@ -32,6 +31,12 @@ extends BeforeAndAfterEachTestData,
     super.beforeEach(testData)
     new Browser:
       logger.info(s"Trying to starting browser for test ${testData.name} (current Driver.instance = ${Driver.instance})")
+
+      // For sbt / run-tests.sh runs, make sure we don't reuse a stale driver
+      if !SystemPropertiesHelper.isTestRunFromIdea && Driver.instance != null then
+        logger.info("Driver.instance was non-null before test; clearing stale reference so a fresh browser can be started")
+        Driver.instance = null
+
       eventually:
         logger.info(s"...starting browser for test '${testData.name}' (current Driver.instance = ${Driver.instance}")
         if Driver.instance == null then startBrowser()

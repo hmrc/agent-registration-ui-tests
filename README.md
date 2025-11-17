@@ -43,6 +43,10 @@ Ensure the project is imported into IntelliJ correctly, see below screenshot for
 
 ![howToImportProjectIntoIntelliJIdea.png](readme/howToImportProjectIntoIntelliJIdea.png)
 
+To keep the browser open when a UI test fails in IntelliJ, add the following to VM Options in your ScalaTest Run Configuration:
+
+```-DkeepBrowserOnFailure=true```
+
 ## License
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
