@@ -27,9 +27,9 @@ extends AnyFeatureSpec
 with GivenWhenThen
 with RichMatchers
 with BrowserStart
-with BrowserQuit
 with ScreenshotOnFailure
 with PageDebugInfoOnFailure
+with BrowserQuit
 with LazyLogging
 with SetupDevToolsForChrome:
 

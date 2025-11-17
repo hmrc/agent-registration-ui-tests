@@ -29,8 +29,16 @@ extends TestSuiteMixin,
   override abstract def withFixture(test: NoArgTest): Outcome =
     val testOutcome: Outcome = super.withFixture(test)
 
-    if SystemPropertiesHelper.isTestRunFromIdea && (testOutcome.isExceptional || testOutcome.isFailed)
-    then logger.info("Test run from intellij, skipping browser quit, so it's easier to debug test failure")
+    // allow forcing browser to stay open on failure if a system property is set
+    val keepBrowserOnFailure: Boolean = Option(System.getProperty("keepBrowserOnFailure")).exists(_.equalsIgnoreCase("true"))
+
+    val isIdeaRun: Boolean = SystemPropertiesHelper.isTestRunFromIdea || keepBrowserOnFailure
+
+    if isIdeaRun && (testOutcome.isExceptional || testOutcome.isFailed) then
+      logger.info(
+        s"Test run from IntelliJ (or keepBrowserOnFailure property set) " +
+          s"and test failed; skipping browser quit so it's easier to debug"
+      )
     else
       logger.info(s"Quitting browser after test '${test.name}'")
       new Browser:
