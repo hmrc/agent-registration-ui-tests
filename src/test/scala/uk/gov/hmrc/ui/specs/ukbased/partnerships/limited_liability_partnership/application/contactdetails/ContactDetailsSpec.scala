@@ -124,7 +124,7 @@ extends BaseSpec:
       CheckYourAnswersPage.clickChangeFor("Email address")
 
       EmailAddressPage.assertPageIsDisplayed()
-      EmailAddressPage.enterEmailAddress("new@test.com")
+      val newEmail = EmailAddressPage.enterEmailAddress("@newtest.com")
       EmailAddressPage.clickContinue()
 
       // Get a fresh passcode using the SAME session
@@ -138,7 +138,7 @@ extends BaseSpec:
       ConfirmYourEmailPage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Email address", "new@test.com")
+      CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
 
     Scenario("Change Telephone number from CYA page", HappyPath):
 

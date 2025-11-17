@@ -89,7 +89,7 @@ object ContactDetailsFlow {
 
     // enter email address
     EmailAddressPage.assertPageIsDisplayed()
-    EmailAddressPage.enterEmailAddress()
+    val email = EmailAddressPage.enterEmailAddress()
     EmailAddressPage.clickContinue()
 
     // confirm email by providing confirmation code
@@ -106,7 +106,7 @@ object ContactDetailsFlow {
       CheckYourAnswersPage.assertSummaryRow("Name", "Tester, John Ian")
     }
     CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
-    CheckYourAnswersPage.assertSummaryRow("Email address", "test@test.com")
+    CheckYourAnswersPage.assertSummaryRow("Email address", email)
   }
 
 }

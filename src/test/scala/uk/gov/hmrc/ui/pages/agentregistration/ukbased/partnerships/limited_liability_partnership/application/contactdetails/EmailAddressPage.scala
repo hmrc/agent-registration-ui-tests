@@ -19,6 +19,7 @@ package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liab
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
+import uk.gov.hmrc.ui.utils.RandomData
 
 object EmailAddressPage
 extends BasePage {
@@ -31,6 +32,10 @@ extends BasePage {
 
   private val emailAddressField = By.id("emailAddress")
 
-  def enterEmailAddress(email: String = "test@test.com"): Unit = sendKeys(emailAddressField, email)
+  def enterEmailAddress(suffix: String = "@test.com"): String = {
+    val value = RandomData.email(suffix)
+    sendKeys(emailAddressField, value)
+    value
+  }
 
 }

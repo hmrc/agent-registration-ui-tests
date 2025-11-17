@@ -40,5 +40,11 @@ object RandomData:
     len: Int = 8
   ): String = prefix + alphaNum(len)
 
+  /** email = random alphanumerics (no separators) + suffix */
+  def email(
+    suffix: String = "@test.com",
+    len: Int = 8
+  ): String = alphaNum(len) + suffix
+
   /** If you still need a UUID-like string without hyphens */
   def uuidCompact(): String = java.util.UUID.randomUUID().toString.replaceAll("-", "")
