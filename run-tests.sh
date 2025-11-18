@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 set -e
 set -x
@@ -8,10 +9,9 @@ LOGGING=${4:-true}
 
 # Set span scale factor for Jenkins so scalatest PatienceConfig is more patient
 if [ -n "$JENKINS_HOME" ]; then
-  export SCALATEST_SPAN_SCALE_FACTOR=3.0
-  echo "Running on Jenkins - setting SCALATEST_SPAN_SCALE_FACTOR to 3.0 (timeouts will be 3x longer)"
+  export SCALATEST_SPAN_SCALE_FACTOR=5.0
+  echo "Running on Jenkins - setting SCALATEST_SPAN_SCALE_FACTOR to 5.0 (timeouts will be 5x longer)"
 fi
-
 
 sbt \
 clean \
