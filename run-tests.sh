@@ -18,5 +18,6 @@ clean \
 -Dbrowser="${BROWSER:=chrome}" \
 -Dbrowser.option.headless=${HEADLESS:=true} \
 -Dbrowser.logging="$LOGGING" \
+-Dscalatest.scalingFactor=${SCALATEST_SPAN_SCALE_FACTOR} \
 test \
 testReport
