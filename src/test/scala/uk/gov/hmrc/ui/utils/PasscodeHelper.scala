@@ -32,8 +32,9 @@ extends LazyLogging:
   // example: https://github.com/hmrc/agent-helpdesk-ui-tests/blob/main/src/test/scala/utils/ExternalStubs.scala
   def getPasscode(
     bearerToken: String,
-    sessionId: String
-  ): String =
+    sessionId: String,
+    expectedEmail: Option[String] = None
+  ): String = {
 
     def call(): (Int, String) = {
       val url = new URL(passcodesUrl)
@@ -49,6 +50,7 @@ extends LazyLogging:
           conn.getInputStream
         else
           conn.getErrorStream
+
       val body =
         if (stream != null)
           try Source.fromInputStream(stream).mkString
@@ -63,21 +65,45 @@ extends LazyLogging:
     var attempts = 0
     while (attempts < 5) {
       val (status, body) = call()
+
       if (status >= 200 && status < 300) {
         val json = Json.parse(body)
         val passcodes = (json \ "passcodes").as[Seq[JsObject]]
-        return passcodes.lastOption
-          .flatMap(obj => (obj \ "passcode").asOpt[String])
-          .getOrElse(sys.error(s"Could not find passcode in response: $body"))
+
+        passcodes.lastOption match {
+          case Some(obj) =>
+            val emailOpt = (obj \ "email").asOpt[String]
+            val codeOpt = (obj \ "passcode").asOpt[String]
+
+            // Condition: last email must match expected email, if provided
+            if (expectedEmail.forall(exp => emailOpt.exists(_.equalsIgnoreCase(exp)))) {
+              return codeOpt.getOrElse(
+                sys.error(s"Could not find passcode in response: $body")
+              )
+            }
+            else {
+              println(
+                s"[DEBUG] Latest passcode email=$emailOpt does not match expected=$expectedEmail – retrying"
+              )
+              attempts += 1
+              Thread.sleep(500)
+            }
+
+          case None =>
+            attempts += 1
+            Thread.sleep(500)
+        }
       }
       else if (status == 404) {
-        // passcode not ready yet – wait briefly then try again
         attempts += 1
-        Thread.sleep(500) // half a second between tries
+        Thread.sleep(500)
       }
       else {
-        throw new IllegalArgumentException(s"Passcodes call failed with status $status")
+        throw new IllegalArgumentException(
+          s"Passcodes call failed with status $status"
+        )
       }
     }
 
-    throw new IllegalStateException("Passcode not available after 5 attempts")
+    throw new IllegalStateException("Passcode not available after retries")
+  }

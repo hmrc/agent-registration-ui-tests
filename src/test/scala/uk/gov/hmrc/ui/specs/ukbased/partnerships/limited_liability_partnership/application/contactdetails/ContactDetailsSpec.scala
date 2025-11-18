@@ -130,7 +130,8 @@ extends BaseSpec:
       // Get a fresh passcode using the SAME session
       val passcode = PasscodeHelper.getPasscode(
         stubbedSignInData.bearerToken,
-        stubbedSignInData.sessionId
+        stubbedSignInData.sessionId,
+        expectedEmail = Some(newEmail)
       )
 
       ConfirmYourEmailPage.assertPageIsDisplayed()
