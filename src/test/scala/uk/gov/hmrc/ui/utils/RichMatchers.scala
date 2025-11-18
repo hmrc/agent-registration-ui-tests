@@ -39,7 +39,15 @@ extends Matchers,
   ScalaFutures,
   Eventually:
 
-  override implicit val patienceConfig: PatienceConfig = PatienceConfig(
-    timeout = scaled(Span(3, Seconds)),
-    interval = scaled(Span(100, Millis))
-  )
+  override implicit val patienceConfig: PatienceConfig = {
+    val config = PatienceConfig(
+      timeout = scaled(Span(3, Seconds)),
+      interval = scaled(Span(100, Millis))
+    )
+
+    // Debug log to confirm scaling
+    println(s"[DEBUG] Effective PatienceConfig -> timeout: ${config.timeout}, interval: ${config.interval}")
+    println(s"[DEBUG] SCALATEST_SPAN_SCALE_FACTOR: ${sys.env.getOrElse("SCALATEST_SPAN_SCALE_FACTOR", "not set")}")
+
+    config
+  }
