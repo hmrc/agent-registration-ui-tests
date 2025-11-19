@@ -19,6 +19,7 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.pages.*
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubCreateUserPage
+import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubUserPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.pages.stubs.GrsDataSetupPage
 
@@ -37,10 +38,12 @@ object StubbedSignInFlow:
     GovernmentGatewaySignInPage.clickContinue()
 
     // Capture Bearer Token and Session ID
+    AgentExternalStubCreateUserPage.assertPageIsDisplayed()
     AgentExternalStubCreateUserPage.selectCurrentUserLink()
-    val bearerToken = AgentExternalStubCreateUserPage.bearerToken
-    val sessionId = AgentExternalStubCreateUserPage.sessionId
-    AgentExternalStubCreateUserPage.clickBrowserBack()
+    AgentExternalStubUserPage.assertPageIsDisplayed()
+    val bearerToken = AgentExternalStubUserPage.bearerToken
+    val sessionId = AgentExternalStubUserPage.sessionId
+    AgentExternalStubUserPage.clickBrowserBack()
 
     // Configure user on stubs
     AgentExternalStubCreateUserPage.selectAffinityGroupAgent()
