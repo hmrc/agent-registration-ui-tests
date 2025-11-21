@@ -31,9 +31,13 @@ extends BasePage:
 
   def assertContactDetailsStatus(expectedStatus: String): Unit = getText(contactDetailsStatus) shouldBe expectedStatus
   def assertBusinessDetailsStatus(expectedStatus: String): Unit = getText(businessDetailsStatus) shouldBe expectedStatus
+  def assertAgentServicesAccountDetailsStatus(expectedStatus: String): Unit = getText(agentServicesAccountDetailsStatus) shouldBe expectedStatus
 
   def clickOnApplicantContactDetailsLink(): Unit = click(contactDetailsLink)
+  def clickOnAgentServicesAccountDetailsLink(): Unit = click(agentServicesAccountDetailsLink)
 
   private val contactDetailsLink = By.cssSelector("a[aria-describedby='contact-1-status']")
+  private val agentServicesAccountDetailsLink = By.cssSelector("a[aria-describedby='accountDetails-1-status']")
   private val contactDetailsStatus = By.id("contact-1-status")
   private val businessDetailsStatus = By.id("businessDetails-1-status")
+  private val agentServicesAccountDetailsStatus = By.id("accountDetails-1-status")

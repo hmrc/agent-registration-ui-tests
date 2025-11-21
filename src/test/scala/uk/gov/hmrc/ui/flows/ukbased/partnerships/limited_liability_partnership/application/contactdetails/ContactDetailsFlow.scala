@@ -18,8 +18,8 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.StubbedSignInData
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.AreTheseYourDetailsPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.AreYouAMemberOfTheLllpPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ConfirmYourEmailPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.EmailAddressPage
@@ -35,7 +35,7 @@ object ContactDetailsFlow {
   object WhenOnlyOneNameMatch:
 
     def runFlow(stubData: StubbedSignInData): Unit = addContactDetails(stubData, multiNameMatch = false)
-    def runFlowUntilCyaPage(stubData: StubbedSignInData): Unit = addContactDetailsUntilCyaPage(stubData, multiNameMatch = false)
+    def runFlowUntilCyaPage(stubData: StubbedSignInData): Unit = addContactDetailsUntilCyaPage(stubData)
 
   private def addContactDetails(
     stubData: StubbedSignInData,
@@ -78,7 +78,7 @@ object ContactDetailsFlow {
 
       // confirm name matching result for single match
       AreTheseYourDetailsPage.assertPageIsDisplayed()
-      AreTheseYourDetailsPage.selectYes() // Fork - Name with produce 1 match
+      AreTheseYourDetailsPage.selectYes()
       AreTheseYourDetailsPage.clickContinue()
     }
 

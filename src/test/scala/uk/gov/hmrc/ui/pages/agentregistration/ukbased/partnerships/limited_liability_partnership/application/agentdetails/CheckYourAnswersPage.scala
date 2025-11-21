@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
@@ -23,17 +23,11 @@ import uk.gov.hmrc.ui.utils.AppConfig
 object CheckYourAnswersPage
 extends BasePage {
 
-  override val path: String = "/agent-registration/apply/applicant/check-your-answers"
+  override val path: String = "/agent-registration/apply/agent-details/check-your-answers"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
-
-  // Key labels used on this page (reusable across journeys)
-//  val memberOfLlpKey: String = "Member of the limited liability partnership"
-//  val nameKey: String        = "Name"
-//  val emailKey: String       = "Email address"           // example
-//  val phoneKey: String       = "Telephone number"        // example
 
   /** Low-level helper: locator for the value cell for a given key text */
   private def valueLocatorFor(keyText: String): By = By.xpath(
