@@ -17,9 +17,11 @@
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails
 
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatBusinessNamePage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatTelephoneNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatBusinessNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatCorrespondenceAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatEmailAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatTelephoneNumberPage
 
 object AgentDetailsFlow {
 
@@ -28,6 +30,8 @@ object AgentDetailsFlow {
       startJourney()
       selectBusinessName("existing")
       selectTelephoneNumber("you provided")
+      selectEmailAddress("you provided")
+      selectCorrespondenceAddress("companies house provided")
       verifyCheckYourAnswers(expectedName = "Test Partnership LLP", expectedNumber = "07777777777")
       completeCheckYourAnswers()
 
@@ -36,13 +40,18 @@ object AgentDetailsFlow {
       startJourney()
       selectBusinessName("My Custom LLP")
       selectTelephoneNumber("07777788888")
+      selectEmailAddress("you provided")
+      selectCorrespondenceAddress("companies house provided")
       verifyCheckYourAnswers(expectedName = "My Custom LLP", expectedNumber = "07777788888")
       completeCheckYourAnswers()
+
   object runToCheckYourAnswers:
     def runFlow(): Unit =
       startJourney()
       selectBusinessName("existing")
       selectTelephoneNumber("you provided")
+      selectEmailAddress("you provided")
+      selectCorrespondenceAddress("companies house provided")
       verifyCheckYourAnswers(expectedName = "Test Partnership LLP", expectedNumber = "07777777777")
 
   def startJourney(): Unit =
@@ -69,15 +78,37 @@ object AgentDetailsFlow {
         WhatTelephoneNumberPage.enterOtherTelephoneNumber(custom)
     WhatTelephoneNumberPage.clickContinue()
 
-  def verifyCheckYourAnswers(
+  def selectEmailAddress(option: String): Unit =
+    WhatEmailAddressPage.assertPageIsDisplayed()
+    option match
+      case "you provided" => WhatEmailAddressPage.selectEmailYouProvided()
+      case "hmrc provided" => WhatEmailAddressPage.selectEmailHMRCProvided()
+      case custom =>
+        WhatEmailAddressPage.selectSomethingElse()
+        WhatEmailAddressPage.enterEmailAddress()
+    WhatEmailAddressPage.clickContinue()
+
+  // TODO step to verify email address
+
+  def selectCorrespondenceAddress(option: String): Unit =
+    WhatCorrespondenceAddressPage.assertPageIsDisplayed()
+    option match
+      case "companies house provided" => WhatCorrespondenceAddressPage.selectAddressCompaniesHouseProvided()
+      case "hmrc provided" => WhatCorrespondenceAddressPage.selectAddressHMRCProvided()
+      case "something else" => WhatCorrespondenceAddressPage.selectSomethingElse()
+    WhatCorrespondenceAddressPage.clickContinue()
+
+  // TODO add pages and steps for adding a new address
+
+  private def verifyCheckYourAnswers(
     expectedName: String,
     expectedNumber: String
   ): Unit =
     CheckYourAnswersPage.assertPageIsDisplayed()
-    CheckYourAnswersPage.assertSummaryRow("Business name for clients", expectedName)
+    CheckYourAnswersPage.assertSummaryRow("Name shown to clients", expectedName)
     CheckYourAnswersPage.assertSummaryRow("Telephone number", expectedNumber)
 
-  def completeCheckYourAnswers(): Unit =
+  private def completeCheckYourAnswers(): Unit =
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
 
