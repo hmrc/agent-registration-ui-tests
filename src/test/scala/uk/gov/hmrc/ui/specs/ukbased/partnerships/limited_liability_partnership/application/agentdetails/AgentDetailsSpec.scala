@@ -28,7 +28,7 @@ import uk.gov.hmrc.ui.specs.BaseSpec
 class AgentDetailsSpec
 extends BaseSpec:
 
-  Feature("Complete Business Name section"):
+  Feature("Complete Business details section"):
     Scenario("User selects existing details", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
@@ -42,7 +42,7 @@ extends BaseSpec:
       AgentDetailsFlow
         .WhenUsingProvidedOptions
         .runFlow()
-      TaskListPage.assertAgentServicesAccountDetailsStatus("Incomplete") // TODO change to complete once email and correspondence addresses added
+      TaskListPage.assertAgentServicesAccountDetailsStatus("Completed") // TODO change to complete once email and correspondence addresses added
 
     Scenario("User enters all custom values", HappyPath):
 
@@ -57,7 +57,7 @@ extends BaseSpec:
       AgentDetailsFlow
         .WhenUsingCustomValues
         .runFlow()
-      TaskListPage.assertAgentServicesAccountDetailsStatus("Incomplete") // TODO change to complete once email and correspondence addresses added
+      TaskListPage.assertAgentServicesAccountDetailsStatus("Completed") // TODO change to complete once email and correspondence addresses added
 
     Scenario("User mixes provided and custom options", HappyPath):
 
@@ -72,14 +72,16 @@ extends BaseSpec:
       AgentDetailsFlow.startJourney()
       AgentDetailsFlow.selectBusinessName("My Custom LLP")
       AgentDetailsFlow.selectTelephoneNumber("hmrc provided")
+      AgentDetailsFlow.selectEmailAddress("hmrc provided")
+      AgentDetailsFlow.selectCorrespondenceAddress("hmrc provided")
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Business name for clients", "My Custom LLP")
+      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom LLP")
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "01234567890")
       CheckYourAnswersPage.clickContinue()
 
       TaskListPage.assertPageIsDisplayed()
-      TaskListPage.assertAgentServicesAccountDetailsStatus("Incomplete") // TODO change to complete once email and correspondence addresses added
+      TaskListPage.assertAgentServicesAccountDetailsStatus("Completed") // TODO change to complete once email and correspondence addresses added
 
     Scenario("Change Business Name from Check Your Answers page", HappyPath):
 
@@ -95,7 +97,7 @@ extends BaseSpec:
         .runToCheckYourAnswers
         .runFlow()
 
-      CheckYourAnswersPage.clickChangeFor("Business name for clients")
+      CheckYourAnswersPage.clickChangeFor("Name shown to clients")
 
       WhatBusinessNamePage.assertPageIsDisplayed()
       WhatBusinessNamePage.selectSomethingElse()
@@ -103,7 +105,7 @@ extends BaseSpec:
       WhatBusinessNamePage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Business name for clients", "Updated LLP Name")
+      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "Updated LLP Name")
 
     Scenario("Change Telephone Number from Check Your Answers page", HappyPath):
 
