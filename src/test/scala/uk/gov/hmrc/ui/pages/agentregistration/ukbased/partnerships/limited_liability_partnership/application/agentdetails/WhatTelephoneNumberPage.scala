@@ -38,3 +38,4 @@ extends BasePage:
   def selectNumberHmrcProvided(): Unit = click(numberHMRCProvidedRadio)
   def selectSomethingElse(): Unit = click(somethingElseRadio)
   def enterOtherTelephoneNumber(number: String): Unit = sendKeys(otherTelephoneNumberField, number)
+  def assertNumberYouProvidedRadioIsSelected(): Unit = isSelected(numberYouProvidedRadio) shouldBe true

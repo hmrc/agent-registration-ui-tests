@@ -36,3 +36,4 @@ extends BasePage:
   def selectExistingName(): Unit = click(existingNameRadio)
   def selectSomethingElse(): Unit = click(somethingElseRadio)
   def enterCustomName(name: String): Unit = sendKeys(otherBusinessNameField, name)
+  def assertExistingNameRadioIsSelected(): Unit = isSelected(existingNameRadio) shouldBe true

@@ -19,28 +19,16 @@ package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liab
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
-import uk.gov.hmrc.ui.utils.RandomData
 
-object WhatEmailAddressPage
+object ConfirmYourEmailPage
 extends BasePage:
 
-  override val path: String = "/agent-registration/apply/agent-details/email-address"
+  override val path: String = "/agent-registration/apply/agent-details/verify-email-address"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl shouldBe url
+    getCurrentUrl should include(url)
 
-  private val emailYouProvidedRadio = By.id("agentEmailAddress")
-  private val emailHMRCProvidedRadio = By.id("agentEmailAddress-2")
-  private val somethingElseRadio = By.id("agentEmailAddress-4")
-  private val enterEmailAddressField = By.id("otherAgentEmailAddress")
+  private val confirmationCodeField = By.id("passcode")
 
-  def selectEmailYouProvided(): Unit = click(emailYouProvidedRadio)
-  def selectEmailHMRCProvided(): Unit = click(emailHMRCProvidedRadio)
-  def selectSomethingElse(): Unit = click(somethingElseRadio)
-  def enterEmailAddress(suffix: String = "@test.com"): String = {
-    val value = RandomData.email(suffix)
-    sendKeys(enterEmailAddressField, value)
-    value
-  }
-  def assertEmailYouProvidedRadioIsSelected(): Unit = isSelected(emailYouProvidedRadio) shouldBe true
+  def enterConfirmationCode(code: String): Unit = sendKeys(confirmationCodeField, code)

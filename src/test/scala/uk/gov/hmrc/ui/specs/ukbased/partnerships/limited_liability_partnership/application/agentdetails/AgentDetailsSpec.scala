@@ -18,12 +18,21 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.
 
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails.AgentDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails.AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.ConfirmYourEmailPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressConfirmPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressCountryPickerPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressEditPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressLookupPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatBusinessNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatCorrespondenceAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatEmailAddressPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatTelephoneNumberPage
 import uk.gov.hmrc.ui.specs.BaseSpec
+import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 class AgentDetailsSpec
 extends BaseSpec:
@@ -41,8 +50,8 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow()
-      TaskListPage.assertAgentServicesAccountDetailsStatus("Completed") // TODO change to complete once email and correspondence addresses added
+        .runFlow(stubbedSignInData)
+      TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario("User enters all custom values", HappyPath):
 
@@ -56,8 +65,8 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingCustomValues
-        .runFlow()
-      TaskListPage.assertAgentServicesAccountDetailsStatus("Completed") // TODO change to complete once email and correspondence addresses added
+        .runFlow(stubbedSignInData)
+      TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario("User mixes provided and custom options", HappyPath):
 
@@ -70,10 +79,10 @@ extends BaseSpec:
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow.startJourney()
-      AgentDetailsFlow.selectBusinessName("My Custom LLP")
-      AgentDetailsFlow.selectTelephoneNumber("hmrc provided")
-      AgentDetailsFlow.selectEmailAddress("hmrc provided")
-      AgentDetailsFlow.selectCorrespondenceAddress("hmrc provided")
+      AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom LLP"))
+      AgentDetailsFlow.selectTelephoneNumber(AgentDetailOption.HmrcProvided)
+      AgentDetailsFlow.selectEmailAddress(AgentDetailOption.Custom("@newtest.com"), Some(stubbedSignInData))
+      AgentDetailsFlow.selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
 
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom LLP")
@@ -81,7 +90,7 @@ extends BaseSpec:
       CheckYourAnswersPage.clickContinue()
 
       TaskListPage.assertPageIsDisplayed()
-      TaskListPage.assertAgentServicesAccountDetailsStatus("Completed") // TODO change to complete once email and correspondence addresses added
+      TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario("Change Business Name from Check Your Answers page", HappyPath):
 
@@ -95,11 +104,12 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow()
+        .runFlow(stubbedSignInData)
 
       CheckYourAnswersPage.clickChangeFor("Name shown to clients")
 
       WhatBusinessNamePage.assertPageIsDisplayed()
+      WhatBusinessNamePage.assertExistingNameRadioIsSelected()
       WhatBusinessNamePage.selectSomethingElse()
       WhatBusinessNamePage.enterCustomName("Updated LLP Name")
       WhatBusinessNamePage.clickContinue()
@@ -119,14 +129,90 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow()
+        .runFlow(stubbedSignInData)
 
       CheckYourAnswersPage.clickChangeFor("Telephone number")
 
       WhatTelephoneNumberPage.assertPageIsDisplayed()
+      WhatTelephoneNumberPage.assertNumberYouProvidedRadioIsSelected()
       WhatTelephoneNumberPage.selectSomethingElse()
       WhatTelephoneNumberPage.enterOtherTelephoneNumber("07777799999")
       WhatTelephoneNumberPage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777799999")
+
+    Scenario("Change Email Address from Check Your Answers page", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .WhenHasNoOnlineAgentAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .WhenMultiNameMatch
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .runToCheckYourAnswers
+        .runFlow(stubbedSignInData)
+
+      CheckYourAnswersPage.clickChangeFor("Email address")
+
+      WhatEmailAddressPage.assertPageIsDisplayed()
+      WhatEmailAddressPage.assertEmailYouProvidedRadioIsSelected()
+      WhatEmailAddressPage.selectSomethingElse()
+      val newEmail = WhatEmailAddressPage.enterEmailAddress("@newtest.com")
+      WhatEmailAddressPage.clickContinue()
+
+      // Get a fresh passcode using the SAME session
+      val passcode = PasscodeHelper.getPasscode(
+        stubbedSignInData.bearerToken,
+        stubbedSignInData.sessionId,
+        expectedEmail = Some(newEmail)
+      )
+
+      ConfirmYourEmailPage.assertPageIsDisplayed()
+      ConfirmYourEmailPage.enterConfirmationCode(passcode)
+      ConfirmYourEmailPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
+
+    Scenario("Change Correspondence Address from Check Your Answers page", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .WhenHasNoOnlineAgentAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .WhenMultiNameMatch
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .runToCheckYourAnswers
+        .runFlow(stubbedSignInData)
+
+      CheckYourAnswersPage.clickChangeFor("Correspondence address")
+
+      WhatCorrespondenceAddressPage.assertPageIsDisplayed()
+      WhatCorrespondenceAddressPage.assertAddressCompaniesHouseProvidedRadioIsSelected()
+      WhatCorrespondenceAddressPage.selectSomethingElse()
+      WhatCorrespondenceAddressPage.clickContinue()
+
+      LookupAddressCountryPickerPage.assertPageIsDisplayed()
+      LookupAddressCountryPickerPage.enterCountry()
+      LookupAddressCountryPickerPage.clickContinue()
+
+      LookupAddressLookupPage.assertPageIsDisplayed()
+      LookupAddressLookupPage.clickAddressManually()
+
+      LookupAddressEditPage.assertPageIsDisplayed()
+      LookupAddressEditPage.enterAddressLineOne("4 Privet Drive")
+      LookupAddressEditPage.enterTown("Little Whinging")
+      LookupAddressEditPage.clickContinue()
+
+      LookupAddressConfirmPage.assertPageIsDisplayed()
+      LookupAddressConfirmPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Correspondence address", "4 Privet Drive\nLittle Whinging\nGB")
