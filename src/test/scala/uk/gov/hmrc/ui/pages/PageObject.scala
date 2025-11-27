@@ -47,7 +47,10 @@ trait PageObject:
   inline def findElementBy(locator: By): Option[WebElement] = eventually:
     Try(Driver.instance.findElement(locator))
       .toOption
-  inline def getElementBy(locator: By): WebElement = findElementBy(locator).value
+  inline def getElementBy(locator: By): WebElement =
+    findElementBy(locator) match
+      case None => fail(s"Element not found: $locator")
+      case Some(value) => value
 
   inline def findElementsBy(locator: By): Seq[WebElement] = eventually:
     Driver
@@ -64,42 +67,37 @@ trait PageObject:
 
   inline def getPageSource: String = Driver.instance.getPageSource
 
-  inline def getText(locator: By): String = findElementBy(locator).value.getText
+  inline def getText(locator: By): String = getElementBy(locator).getText
 
   inline def getTitle: String = Driver.instance.getTitle
 
   inline def sendKeys(
     locator: By,
     value: String
-  ): Unit = findElementBy(locator)
-    .value
+  ): Unit = getElementBy(locator)
     .tap(_.clear())
     .sendKeys(value)
 
   inline def sendKeys(
     locator: By,
     keys: Keys*
-  ): Unit = findElementBy(locator)
-    .value
+  ): Unit = getElementBy(locator)
     .tap(_.clear())
     .tap(element => keys.foreach(key => element.sendKeys(key)))
 
-  inline def isSelected(locator: By): Boolean = findElementBy(locator).value.isSelected
+  inline def isSelected(locator: By): Boolean = getElementBy(locator).isSelected
 
-  inline def selectCheckbox(locator: By): Unit = findElementBy(locator)
-    .value
+  inline def selectCheckbox(locator: By): Unit = getElementBy(locator)
     .tap(element =>
       if !element.isSelected then element.click() else ()
     )
 
-  inline def deselectCheckbox(locator: By): Unit = findElementBy(locator)
-    .value
+  inline def deselectCheckbox(locator: By): Unit = getElementBy(locator)
     .tap(element =>
       if element.isSelected then element.click() else ()
     )
 
-  private inline def getSelect(locator: By): Select = findElementBy(locator)
-    .value
+  private inline def getSelect(locator: By): Select = getElementBy(locator)
     .pipe(element => new Select(element))
 
   inline def selectByValue(
@@ -122,7 +120,7 @@ trait PageObject:
     value: String
   ): Unit = getSelect(locator).deselectByVisibleText(value)
 
-  inline def clear(locator: By): Unit = findElementBy(locator).value.clear()
+  inline def clear(locator: By): Unit = getElementBy(locator).clear()
 
   protected def waitForInvisibilityOfElementWithText(
     locator: By,
