@@ -43,10 +43,10 @@ extends LazyLogging:
           System.setProperty(p, defaultValue)
 
     // show browser when running tests from intellij idea
-    if SystemPropertiesHelper.isTestRunFromIdea then
-      logger.info(s"Running tests from intellij idea...")
-    "browser.option.headless"
-      .pipe: p =>
+    if SystemPropertiesHelper.isTestRunFromIdea
+    then
+      "browser.option.headless".pipe: p =>
+        logger.info(s"Running tests from intellij idea...")
         if System.getProperty(p) == null then
           val defaultValue = "false"
           logger.info(

@@ -26,12 +26,12 @@ trait BaseSpec
 extends AnyFeatureSpec
 with GivenWhenThen
 with RichMatchers
+with SetupDevToolsForChrome
 with BrowserStart
 with ScreenshotOnFailure
 with PageDebugInfoOnFailure
 with BrowserQuit
-with LazyLogging
-with SetupDevToolsForChrome:
+with LazyLogging:
 
   EnsureSystemProperties()
 

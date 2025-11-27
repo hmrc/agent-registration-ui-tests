@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.utils
 
+import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.*
 import org.scalatest.concurrent.Futures.scaled
 import org.scalatest.concurrent.Eventually
@@ -37,7 +38,8 @@ extends Matchers,
   OptionValues,
   AppendedClues,
   ScalaFutures,
-  Eventually:
+  Eventually,
+  LazyLogging:
 
   override implicit val patienceConfig: PatienceConfig = {
     val config = PatienceConfig(
@@ -46,8 +48,8 @@ extends Matchers,
     )
 
     // Debug log to confirm scaling
-    println(s"[DEBUG] Effective PatienceConfig -> timeout: ${config.timeout}, interval: ${config.interval}")
-    println(s"[DEBUG] SCALATEST_SPAN_SCALE_FACTOR: ${sys.env.getOrElse("SCALATEST_SPAN_SCALE_FACTOR", "not set")}")
+    logger.debug(s"Effective PatienceConfig -> timeout: ${config.timeout}, interval: ${config.interval}")
+    logger.debug(s"SCALATEST_SPAN_SCALE_FACTOR: ${sys.env.getOrElse("SCALATEST_SPAN_SCALE_FACTOR", "not set")}")
 
     config
   }
