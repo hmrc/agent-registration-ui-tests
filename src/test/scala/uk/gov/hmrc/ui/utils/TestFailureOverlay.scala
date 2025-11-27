@@ -1,3 +1,19 @@
+/*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.gov.hmrc.ui.utils
 
 import com.typesafe.scalalogging.LazyLogging
@@ -9,76 +25,50 @@ import scala.util.Try
 object TestFailureOverlay
 extends LazyLogging:
 
-  /** Renders a draggable HTML overlay on the browser showing test failure information.
+  /** Creates an interactive HTML overlay on the browser window to display test failure information.
+    *
+    * The overlay provides a detailed view of the test failure with:
+    *   - Test name and error message
+    *   - Precise failure location (class name, file and line number)
+    *   - Full stack trace in a collapsible section
+    *
+    * Features:
+    *   - Draggable window that can be positioned anywhere on screen
+    *   - Resizable panel for better readability
+    *   - Minimizable view to reduce screen space
+    *   - Copyable text content for sharing/debugging
+    *
+    * @param testName
+    *   The name of the test that failed
+    * @param outcomeOrException
+    *   The test failure details, either as a ScalaTest Outcome or Throwable
     */
   def renderTestFailureOverlay(
     testName: String,
     outcomeOrException: Outcome | Throwable
   ): Unit = Try:
 
-    val projectRoot = System.getProperty("user.dir")
-
-    def createIntellijLink(
-      fileName: String,
-      lineNumber: Int
-    ): String =
-      val filePath = s"$projectRoot/$fileName"
-      s"idea://open?file=${java.net.URLEncoder.encode(filePath, "UTF-8")}&line=$lineNumber"
-
-    def extractFailureLocation(ex: Throwable): (String, String, Int) =
+    def extractFailureLocation(ex: Throwable): String =
       ex match
         case tfe: org.scalatest.exceptions.StackDepthException =>
           tfe.failedCodeFileNameAndLineNumberString match
             case Some(location) =>
               val stackElement = tfe.getStackTrace()(tfe.failedCodeStackDepth)
-              val className = stackElement.getClassName
-              val fileName = stackElement.getFileName
-              val lineNumber = stackElement.getLineNumber
-              (s"$className at ($location)", fileName, lineNumber)
-            case None => ("", "", 0)
+              s"${stackElement.getClassName} at ($location)"
+            case None => ""
         case _ =>
           ex.getStackTrace.headOption.map { ste =>
-            (s"${ste.getClassName} at (${ste.getFileName}:${ste.getLineNumber})", ste.getFileName, ste.getLineNumber)
-          }.getOrElse(("", "", 0))
+            s"${ste.getClassName} at (${ste.getFileName}:${ste.getLineNumber})"
+          }.getOrElse("")
 
-    def makeStackTraceClickable(stackTrace: String): String =
-      // Pattern matches: at package.Class.method(File.scala:123)
-      val pattern = """at (.+)\((.+\.scala):(\d+)\)""".r
-      stackTrace.split("\n").map { line =>
-        pattern.findFirstMatchIn(line) match
-          case Some(m) =>
-            val method = m.group(1)
-            val fileName = m.group(2)
-            val lineNumber = m.group(3).toInt
-            val link = createIntellijLink(fileName, lineNumber)
-            s"""<a href="$link" style="color: #81c784; text-decoration: underline;">at $method($fileName:$lineNumber)</a>"""
-          case None => line
-      }.mkString("\n")
-
-    val (errorMessage, failureLocationText, failureFileName, failureLineNumber, stackTrace) =
+    val (errorMessage, failureLocation, stackTrace) =
       outcomeOrException match
         case outcome: Outcome =>
           outcome match
-            case org.scalatest.Failed(ex) =>
-              val (locText, locFile, locLine) = extractFailureLocation(ex)
-              val rawStack = ex.getStackTrace.map(_.toString).mkString("\n")
-              (ex.getMessage, locText, locFile, locLine, rawStack)
-            case org.scalatest.Canceled(ex) =>
-              val (locText, locFile, locLine) = extractFailureLocation(ex)
-              val rawStack = ex.getStackTrace.map(_.toString).mkString("\n")
-              (ex.getMessage, locText, locFile, locLine, rawStack)
-            case _ => ("Unknown failure", "", "", 0, "")
-        case ex: Throwable =>
-          val (locText, locFile, locLine) = extractFailureLocation(ex)
-          val rawStack = ex.getStackTrace.map(_.toString).mkString("\n")
-          (ex.getMessage, locText, locFile, locLine, rawStack)
-
-    val failureLocationLink =
-      if failureFileName.nonEmpty && failureLineNumber > 0 then
-        createIntellijLink(failureFileName, failureLineNumber)
-      else ""
-
-    val clickableStackTrace = makeStackTraceClickable(stackTrace)
+            case org.scalatest.Failed(ex) => (ex.getMessage, extractFailureLocation(ex), ex.getStackTrace.map(_.toString).mkString("\n"))
+            case org.scalatest.Canceled(ex) => (ex.getMessage, extractFailureLocation(ex), ex.getStackTrace.map(_.toString).mkString("\n"))
+            case _ => ("Unknown failure", "", "")
+        case ex: Throwable => (ex.getMessage, extractFailureLocation(ex), ex.getStackTrace.map(_.toString).mkString("\n"))
 
     val js = Driver.instance.asInstanceOf[org.openqa.selenium.JavascriptExecutor]
     js.executeScript(
@@ -174,8 +164,9 @@ extends LazyLogging:
         |errorDiv.style.overflowWrap = 'break-word';
         |errorDiv.textContent = arguments[1];
         |
-        |var failureLocationDiv = document.createElement('div');
+        |var failureLocationDiv = document.createElement('pre');
         |failureLocationDiv.style.userSelect = 'text';
+        |failureLocationDiv.style.cursor = 'text';
         |failureLocationDiv.style.fontSize = '11px';
         |failureLocationDiv.style.lineHeight = '1.4';
         |failureLocationDiv.style.margin = '0 0 12px 0';
@@ -186,18 +177,10 @@ extends LazyLogging:
         |failureLocationDiv.style.borderRadius = '3px';
         |failureLocationDiv.style.border = '1px solid #e0e0e0';
         |failureLocationDiv.style.fontFamily = '"JetBrains Mono", "Fira Code", "SF Mono", Monaco, Consolas, monospace';
-        |
-        |if (arguments[3]) {
-        |  var failureLink = document.createElement('a');
-        |  failureLink.href = arguments[3];
-        |  failureLink.textContent = arguments[2];
-        |  failureLink.style.color = '#1976d2';
-        |  failureLink.style.textDecoration = 'underline';
-        |  failureLink.style.cursor = 'pointer';
-        |  failureLocationDiv.appendChild(failureLink);
-        |} else {
-        |  failureLocationDiv.textContent = arguments[2];
-        |}
+        |failureLocationDiv.style.whiteSpace = 'pre-wrap';
+        |failureLocationDiv.style.wordWrap = 'break-word';
+        |failureLocationDiv.style.overflowWrap = 'break-word';
+        |failureLocationDiv.textContent = arguments[2];
         |
         |var toggleButton = document.createElement('button');
         |toggleButton.style.marginTop = '8px';
@@ -241,7 +224,7 @@ extends LazyLogging:
         |stackTraceDiv.style.whiteSpace = 'pre-wrap';
         |stackTraceDiv.style.wordWrap = 'break-word';
         |stackTraceDiv.style.overflowWrap = 'break-word';
-        |stackTraceDiv.innerHTML = arguments[4];
+        |stackTraceDiv.textContent = arguments[3];
         |
         |toggleButton.addEventListener('click', function() {
         |  if (stackTraceDiv.style.display === 'none') {
@@ -320,9 +303,8 @@ extends LazyLogging:
         |""".stripMargin,
       testName,
       errorMessage,
-      failureLocationText,
-      failureLocationLink,
-      clickableStackTrace
+      failureLocation,
+      stackTrace
     )
   .recover:
     case ex => logger.warn(s"Could not display test failure info on browser: ${ex.getMessage}")
