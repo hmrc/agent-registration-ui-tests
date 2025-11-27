@@ -34,6 +34,16 @@ extends PageObject:
 
   def clickContinue(continueSelector: By = continueSelector): Unit = click(continueSelector)
 
+  def enterTextAndBlur(
+    locator: By,
+    text: String
+  ): Unit =
+    val element = findElementBy(locator).getOrElse(
+      throw new NoSuchElementException(s"Element not found for locator: $locator")
+    )
+    element.sendKeys(text)
+    element.sendKeys(org.openqa.selenium.Keys.TAB)
+
   def clickBrowserBack(): Unit = Driver.instance.navigate().back()
 
   export RichMatchers.*

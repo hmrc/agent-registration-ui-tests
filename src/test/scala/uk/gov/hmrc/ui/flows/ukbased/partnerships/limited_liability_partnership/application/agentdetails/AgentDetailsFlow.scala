@@ -17,41 +17,62 @@
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails
 
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.StubbedSignInData
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.ConfirmYourEmailPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressConfirmPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressCountryPickerPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressLookupPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressSelectPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatBusinessNamePage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatCorrespondenceAddressPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatEmailAddressPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatTelephoneNumberPage
+import uk.gov.hmrc.ui.utils.PasscodeHelper
 
-object AgentDetailsFlow {
+object AgentDetailsFlow:
+
+  sealed trait AgentDetailOption
+  object AgentDetailOption:
+
+    case object YouProvided
+    extends AgentDetailOption
+    case object HmrcProvided
+    extends AgentDetailOption
+    case object CompaniesHouseProvided
+    extends AgentDetailOption
+    case object SomethingElse
+    extends AgentDetailOption
+    case class Custom(value: String)
+    extends AgentDetailOption
 
   object WhenUsingProvidedOptions:
-    def runFlow(): Unit =
+    def runFlow(stubData: StubbedSignInData): Unit =
       startJourney()
-      selectBusinessName("existing")
-      selectTelephoneNumber("you provided")
-      selectEmailAddress("you provided")
-      selectCorrespondenceAddress("companies house provided")
+      selectBusinessName(AgentDetailOption.HmrcProvided)
+      selectTelephoneNumber(AgentDetailOption.YouProvided)
+      selectEmailAddress(AgentDetailOption.YouProvided)
+      selectCorrespondenceAddress(AgentDetailOption.CompaniesHouseProvided)
       verifyCheckYourAnswers(expectedName = "Test Partnership LLP", expectedNumber = "07777777777")
       completeCheckYourAnswers()
 
   object WhenUsingCustomValues:
-    def runFlow(): Unit =
+    def runFlow(stubData: StubbedSignInData): Unit =
       startJourney()
-      selectBusinessName("My Custom LLP")
-      selectTelephoneNumber("07777788888")
-      selectEmailAddress("you provided")
-      selectCorrespondenceAddress("companies house provided")
+      selectBusinessName(AgentDetailOption.Custom("My Custom LLP"))
+      selectTelephoneNumber(AgentDetailOption.Custom("07777788888"))
+      selectEmailAddress(AgentDetailOption.Custom("@newtest.com"), Some(stubData))
+      selectCorrespondenceAddress(AgentDetailOption.Custom(""))
       verifyCheckYourAnswers(expectedName = "My Custom LLP", expectedNumber = "07777788888")
       completeCheckYourAnswers()
 
   object runToCheckYourAnswers:
-    def runFlow(): Unit =
+    def runFlow(stubData: StubbedSignInData): Unit =
       startJourney()
-      selectBusinessName("existing")
-      selectTelephoneNumber("you provided")
-      selectEmailAddress("you provided")
-      selectCorrespondenceAddress("companies house provided")
+      selectBusinessName(AgentDetailOption.HmrcProvided)
+      selectTelephoneNumber(AgentDetailOption.YouProvided)
+      selectEmailAddress(AgentDetailOption.YouProvided)
+      selectCorrespondenceAddress(AgentDetailOption.CompaniesHouseProvided)
       verifyCheckYourAnswers(expectedName = "Test Partnership LLP", expectedNumber = "07777777777")
 
   def startJourney(): Unit =
@@ -59,46 +80,83 @@ object AgentDetailsFlow {
     TaskListPage.assertAgentServicesAccountDetailsStatus("Incomplete")
     TaskListPage.clickOnAgentServicesAccountDetailsLink()
 
-  def selectBusinessName(option: String): Unit =
+  def selectBusinessName(option: AgentDetailOption): Unit =
     WhatBusinessNamePage.assertPageIsDisplayed()
     option match
-      case "existing" => WhatBusinessNamePage.selectExistingName()
-      case custom =>
+      case AgentDetailOption.HmrcProvided => WhatBusinessNamePage.selectExistingName()
+      case AgentDetailOption.Custom(value) =>
         WhatBusinessNamePage.selectSomethingElse()
-        WhatBusinessNamePage.enterCustomName(custom)
+        WhatBusinessNamePage.enterCustomName(value)
+      case _ => throw new IllegalArgumentException("Unsupported option for business name")
     WhatBusinessNamePage.clickContinue()
 
-  def selectTelephoneNumber(option: String): Unit =
+  def selectTelephoneNumber(option: AgentDetailOption): Unit =
     WhatTelephoneNumberPage.assertPageIsDisplayed()
     option match
-      case "you provided" => WhatTelephoneNumberPage.selectNumberYouProvided()
-      case "hmrc provided" => WhatTelephoneNumberPage.selectNumberHmrcProvided()
-      case custom =>
+      case AgentDetailOption.YouProvided => WhatTelephoneNumberPage.selectNumberYouProvided()
+      case AgentDetailOption.HmrcProvided => WhatTelephoneNumberPage.selectNumberHmrcProvided()
+      case AgentDetailOption.Custom(value) =>
         WhatTelephoneNumberPage.selectSomethingElse()
-        WhatTelephoneNumberPage.enterOtherTelephoneNumber(custom)
+        WhatTelephoneNumberPage.enterOtherTelephoneNumber(value)
+      case _ => throw new IllegalArgumentException("Unsupported option for telephone number")
     WhatTelephoneNumberPage.clickContinue()
 
-  def selectEmailAddress(option: String): Unit =
+  def selectEmailAddress(
+    option: AgentDetailOption,
+    stubData: Option[StubbedSignInData] = None
+  ): Unit =
     WhatEmailAddressPage.assertPageIsDisplayed()
     option match
-      case "you provided" => WhatEmailAddressPage.selectEmailYouProvided()
-      case "hmrc provided" => WhatEmailAddressPage.selectEmailHMRCProvided()
-      case custom =>
+      case AgentDetailOption.YouProvided =>
+        WhatEmailAddressPage.selectEmailYouProvided()
+        WhatEmailAddressPage.clickContinue()
+      case AgentDetailOption.HmrcProvided =>
+        WhatEmailAddressPage.selectEmailHMRCProvided()
+        WhatEmailAddressPage.clickContinue()
+      case AgentDetailOption.Custom(value) =>
         WhatEmailAddressPage.selectSomethingElse()
-        WhatEmailAddressPage.enterEmailAddress()
-    WhatEmailAddressPage.clickContinue()
+        val newEmail = WhatEmailAddressPage.enterEmailAddress(value)
+        WhatEmailAddressPage.clickContinue()
 
-  // TODO step to verify email address
+        val data = stubData.getOrElse(
+          throw new IllegalArgumentException("stubData is required for Custom email flow")
+        )
 
-  def selectCorrespondenceAddress(option: String): Unit =
+        val passcode = PasscodeHelper.getPasscode(
+          data.bearerToken,
+          data.sessionId,
+          Some(newEmail)
+        )
+
+        ConfirmYourEmailPage.assertPageIsDisplayed()
+        ConfirmYourEmailPage.enterConfirmationCode(passcode)
+        ConfirmYourEmailPage.clickContinue()
+      case _ => throw new IllegalArgumentException("Unsupported option for email address")
+
+  def selectCorrespondenceAddress(option: AgentDetailOption): Unit =
     WhatCorrespondenceAddressPage.assertPageIsDisplayed()
     option match
-      case "companies house provided" => WhatCorrespondenceAddressPage.selectAddressCompaniesHouseProvided()
-      case "hmrc provided" => WhatCorrespondenceAddressPage.selectAddressHMRCProvided()
-      case "something else" => WhatCorrespondenceAddressPage.selectSomethingElse()
-    WhatCorrespondenceAddressPage.clickContinue()
-
-  // TODO add pages and steps for adding a new address
+      case AgentDetailOption.CompaniesHouseProvided =>
+        WhatCorrespondenceAddressPage.selectAddressCompaniesHouseProvided()
+        WhatCorrespondenceAddressPage.clickContinue()
+      case AgentDetailOption.HmrcProvided =>
+        WhatCorrespondenceAddressPage.selectAddressHMRCProvided()
+        WhatCorrespondenceAddressPage.clickContinue()
+      case AgentDetailOption.Custom(value) =>
+        WhatCorrespondenceAddressPage.selectSomethingElse()
+        WhatCorrespondenceAddressPage.clickContinue()
+        LookupAddressCountryPickerPage.assertPageIsDisplayed()
+        LookupAddressCountryPickerPage.enterCountry()
+        LookupAddressCountryPickerPage.clickContinue()
+        LookupAddressLookupPage.assertPageIsDisplayed()
+        LookupAddressLookupPage.enterPostcode()
+        LookupAddressLookupPage.clickContinue()
+        LookupAddressSelectPage.assertPageIsDisplayed()
+        LookupAddressSelectPage.selectAddress()
+        LookupAddressSelectPage.clickContinue()
+        LookupAddressConfirmPage.assertPageIsDisplayed()
+        LookupAddressConfirmPage.clickContinue()
+      case _ => throw new IllegalArgumentException("Unsupported option for correspondence address")
 
   private def verifyCheckYourAnswers(
     expectedName: String,
@@ -107,9 +165,8 @@ object AgentDetailsFlow {
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Name shown to clients", expectedName)
     CheckYourAnswersPage.assertSummaryRow("Telephone number", expectedNumber)
+    // TODO Update check your answers with email and correspondence address
 
   private def completeCheckYourAnswers(): Unit =
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
-
-}

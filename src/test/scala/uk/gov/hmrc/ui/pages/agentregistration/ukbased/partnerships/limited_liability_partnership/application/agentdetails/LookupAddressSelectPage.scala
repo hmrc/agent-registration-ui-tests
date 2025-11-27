@@ -20,20 +20,17 @@ import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object WhatCorrespondenceAddressPage
+object LookupAddressSelectPage
 extends BasePage:
 
-  override val path: String = "/agent-registration/apply/agent-details/correspondence-address"
-  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+  override val path: String = "/lookup-address"
+  override val baseUrl: String = AppConfig.baseUrlCountryPicker
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl shouldBe url
+    val currentUrl = getCurrentUrl
+    currentUrl should include(url)
+    currentUrl should include("/select?postcode")
 
-  private val addressCompaniesHouseProvidedRadio = By.id("agentCorrespondenceAddress")
-  private val addressHMRCProvidedRadio = By.id("agentCorrespondenceAddress-2")
-  private val somethingElseRadio = By.id("agentCorrespondenceAddress-4")
+  private val addressResultRadio = By.id("addressId")
 
-  def selectAddressCompaniesHouseProvided(): Unit = click(addressCompaniesHouseProvidedRadio)
-  def selectAddressHMRCProvided(): Unit = click(addressHMRCProvidedRadio)
-  def selectSomethingElse(): Unit = click(somethingElseRadio)
-  def assertAddressCompaniesHouseProvidedRadioIsSelected(): Unit = isSelected(addressCompaniesHouseProvidedRadio) shouldBe true
+  def selectAddress(): Unit = click(addressResultRadio)

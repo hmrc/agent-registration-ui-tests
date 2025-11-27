@@ -20,4 +20,5 @@ object AppConfig:
 
   val baseUrlAgentRegistrationFrontend: String = "http://localhost:22201"
   val baseUrlExternalStubs: String = "http://localhost:9099"
+  val baseUrlCountryPicker: String = "http://localhost:9028"
   val baseUrlGovernmentGateway: String = baseUrlExternalStubs
