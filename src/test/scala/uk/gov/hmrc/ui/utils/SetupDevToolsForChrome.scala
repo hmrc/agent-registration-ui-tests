@@ -24,6 +24,7 @@ import uk.gov.hmrc.selenium.webdriver.Driver
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 import scala.collection.mutable
+import scala.util.Try
 
 /** A trait that adds request/response logging capabilities to Chrome WebDriver tests.
   */
@@ -33,10 +34,13 @@ extends BeforeAndAfterEach { self: BaseSpec =>
   override def beforeEach(): Unit =
     super.beforeEach()
     Driver.instance match
-      case driver: ChromeDriver if SystemPropertiesHelper.isTestRunFromIdea => setupChromeDriver(driver)
+      case driver: ChromeDriver if SystemPropertiesHelper.isTestRunFromIdea =>
+        Try(setupChromeDriver(driver)).recover:
+          case e => logger.warn(s"Failed to setup DevTools for chrome: $e")
       case _ => ()
 
   private def setupChromeDriver(driver: ChromeDriver): Unit =
+    logger.info("Setting up DevTools for chrome...")
     val devTools: DevTools = driver.getDevTools
     devTools.createSession()
     // Enable network tracking
@@ -73,13 +77,13 @@ extends BeforeAndAfterEach { self: BaseSpec =>
             val originalRequest = pendingRequests.get(request.getRequestId.toString)
             val location = "Location=" + redirectResp.getHeaders.get("Location")
             originalRequest.foreach: req =>
-              println(
+              logger.debug(
                 s"<<< ${req.getRequest.getMethod} ${req.getRequest.getUrl} ${redirectResp.getStatusText}(${redirectResp.getStatus}), $location"
               )
           else ()
 
           pendingRequests += (request.getRequestId.toString -> request)
-          println(s">>> ${request.getRequest.getMethod} ${request.getRequest.getUrl}")
+          logger.debug(s">>> ${request.getRequest.getMethod} ${request.getRequest.getUrl}")
     )
 
     devTools.addListener(
@@ -88,7 +92,7 @@ extends BeforeAndAfterEach { self: BaseSpec =>
         pendingRequests
           .get(response.getRequestId.toString)
           .foreach: request =>
-            println(
+            logger.debug(
               s"<<< ${request.getRequest.getMethod} ${request.getRequest.getUrl} ${response.getResponse.getStatusText}(${response.getResponse.getStatus}) "
             )
 

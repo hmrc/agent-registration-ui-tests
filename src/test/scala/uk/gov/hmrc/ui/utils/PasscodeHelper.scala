@@ -59,7 +59,7 @@ with RichMatchers:
       else
         ""
 
-    println(s"[DEBUG] Passcodes call -> status=$status, body=$body")
+    logger.debug(s"Passcodes call -> status=$status, body=$body")
     (status, body)
   }
 

@@ -56,7 +56,7 @@ trait PageObject:
       .asScala
       .toSeq
 
-  inline def click(locator: By): Unit = findElementBy(locator).value.click()
+  inline def click(locator: By): Unit = getElementBy(locator).click()
 
   inline def get(url: String): Unit = Driver.instance.get(url)
 
