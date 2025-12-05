@@ -1,0 +1,78 @@
+/*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.amlsdetails
+
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.WhatRegistrationNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.WhatSupervisoryBodyPage
+
+object AmlsDetailsFlow:
+
+  sealed trait AmlsDetailsOption
+  object AmlsDetailsOption:
+
+    case object HmrcIsSupervisoryBody
+    extends AmlsDetailsOption
+    case object NonHmrcSupervisoryBody
+    extends AmlsDetailsOption
+
+  object WhenHmrcAreSupervisoryBody:
+    def runFlow(): Unit =
+      startJourney()
+      enterSupervisoryBody(AmlsDetailsOption.HmrcIsSupervisoryBody)
+      enterRegistrationNumber()
+      checkYourAnswers()
+
+  object WhenNonHmrcSupervisoryBody:
+    def runFlow(): Unit =
+      startJourney()
+      enterSupervisoryBody(AmlsDetailsOption.NonHmrcSupervisoryBody)
+      enterRegistrationNumber()
+      checkYourAnswers()
+
+  object RunToCheckYourAnswers:
+    def runFlow(): Unit =
+      startJourney()
+      enterSupervisoryBody(AmlsDetailsOption.HmrcIsSupervisoryBody)
+      enterRegistrationNumber()
+
+  def startJourney(): Unit =
+    TaskListPage.assertPageIsDisplayed()
+    TaskListPage.assertAmlsDetailsStatus("Incomplete")
+    TaskListPage.clickOnAmlsDetailsLink()
+
+  def enterSupervisoryBody(option: AmlsDetailsOption): Unit =
+    WhatSupervisoryBodyPage.assertPageIsDisplayed()
+    option match
+      case AmlsDetailsOption.HmrcIsSupervisoryBody => WhatSupervisoryBodyPage.enterSupervisor()
+      case AmlsDetailsOption.NonHmrcSupervisoryBody =>
+        WhatSupervisoryBodyPage.enterSupervisor("???")
+        // TODO Add pages for document upload
+      case _ => throw new IllegalArgumentException("Unsupported option for supervisory body")
+    WhatSupervisoryBodyPage.clickContinue()
+
+  def enterRegistrationNumber(): Unit =
+    WhatRegistrationNumberPage.assertPageIsDisplayed()
+    WhatRegistrationNumberPage.enterRegistrationNumber()
+    WhatRegistrationNumberPage.clickContinue()
+
+  def checkYourAnswers(): Unit =
+    CheckYourAnswersPage.assertPageIsDisplayed()
+    CheckYourAnswersPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
+    CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000123456")
+    CheckYourAnswersPage.clickContinue()

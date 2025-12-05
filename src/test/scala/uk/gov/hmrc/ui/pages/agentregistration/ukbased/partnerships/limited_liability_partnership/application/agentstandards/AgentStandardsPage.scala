@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentstandards
 
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.BaseCheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object CheckYourAnswersPage
-extends BaseCheckYourAnswersPage:
+object AgentStandardsPage
+extends BasePage:
 
-  override val path: String = "/agent-registration/apply/agent-details/check-your-answers"
+  override val path: String = "/agent-registration/apply/agent-standard/accept-agent-standard"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl should include(url)

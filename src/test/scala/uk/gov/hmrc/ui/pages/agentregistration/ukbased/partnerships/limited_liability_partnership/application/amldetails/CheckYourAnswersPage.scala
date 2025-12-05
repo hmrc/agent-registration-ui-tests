@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails
 
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.BaseCheckYourAnswersPage
 import uk.gov.hmrc.ui.utils.AppConfig
@@ -22,5 +22,5 @@ import uk.gov.hmrc.ui.utils.AppConfig
 object CheckYourAnswersPage
 extends BaseCheckYourAnswersPage:
 
-  override val path: String = "/agent-registration/apply/agent-details/check-your-answers"
+  override val path: String = "/agent-registration/apply/anti-money-laundering/check-your-answers"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
