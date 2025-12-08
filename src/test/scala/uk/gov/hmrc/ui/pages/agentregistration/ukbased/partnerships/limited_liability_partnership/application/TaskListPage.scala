@@ -32,12 +32,23 @@ extends BasePage:
   def assertContactDetailsStatus(expectedStatus: String): Unit = getText(contactDetailsStatus) shouldBe expectedStatus
   def assertBusinessDetailsStatus(expectedStatus: String): Unit = getText(businessDetailsStatus) shouldBe expectedStatus
   def assertAgentServicesAccountDetailsStatus(expectedStatus: String): Unit = getText(agentServicesAccountDetailsStatus) shouldBe expectedStatus
-
+  def assertAmlsDetailsStatus(expectedStatus: String): Unit = getText(amlsDetailsStatus) shouldBe expectedStatus
+  def assertHmrcStandardsForAgentsStatus(expectedStatus: String): Unit = getText(hmrcStandardsForAgentsStatus) shouldBe expectedStatus
+  def assertDeclarationStatus(expectedStatus: String): Unit = getText(declarationStatus) shouldBe expectedStatus
   def clickOnApplicantContactDetailsLink(): Unit = click(contactDetailsLink)
   def clickOnAgentServicesAccountDetailsLink(): Unit = click(agentServicesAccountDetailsLink)
+  def clickOnAmlsDetailsLink(): Unit = click(amlsDetailsLink)
+  def clickOnHmrcStandardsForAgentsLink(): Unit = click(hmrcStandardsForAgentsLink)
+  def clickOnDeclarationLink(): Unit = click(declarationLink)
 
   private val contactDetailsLink = By.cssSelector("a[aria-describedby='contact-1-status']")
   private val agentServicesAccountDetailsLink = By.cssSelector("a[aria-describedby='accountDetails-1-status']")
+  private val amlsDetailsLink = By.cssSelector("a[aria-describedby='hmrcStandards-1-status']")
+  private val hmrcStandardsForAgentsLink = By.cssSelector("a[aria-describedby='hmrcStandards-2-status']")
+  private val declarationLink = By.cssSelector("a[aria-describedby='declaration-1-status']")
   private val contactDetailsStatus = By.id("contact-1-status")
   private val businessDetailsStatus = By.id("businessDetails-1-status")
   private val agentServicesAccountDetailsStatus = By.id("accountDetails-1-status")
+  private val amlsDetailsStatus = By.id("hmrcStandards-1-status")
+  private val hmrcStandardsForAgentsStatus = By.id("hmrcStandards-2-status")
+  private val declarationStatus = By.id("declaration-1-status")

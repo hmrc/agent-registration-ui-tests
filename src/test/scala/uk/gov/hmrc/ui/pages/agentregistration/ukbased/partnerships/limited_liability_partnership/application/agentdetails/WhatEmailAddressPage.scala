@@ -35,6 +35,8 @@ extends BasePage:
   private val somethingElseRadio = By.id("agentEmailAddress-4")
   private val enterEmailAddressField = By.id("otherAgentEmailAddress")
 
+  private val saveAndComeBackButton = By.xpath("//button[@value='SaveAndComeBackLater']")
+
   def selectEmailYouProvided(): Unit = click(emailYouProvidedRadio)
   def selectEmailHMRCProvided(): Unit = click(emailHMRCProvidedRadio)
   def selectSomethingElse(): Unit = click(somethingElseRadio)
@@ -44,3 +46,5 @@ extends BasePage:
     value
   }
   def assertEmailYouProvidedRadioIsSelected(): Unit = isSelected(emailYouProvidedRadio) shouldBe true
+
+  def saveAndComeBack(): Unit = click(saveAndComeBackButton)
