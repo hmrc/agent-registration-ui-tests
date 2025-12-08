@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.declaration
 
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.declaration.DeclarationPage
 
@@ -26,6 +27,7 @@ object DeclarationFlow:
     def runFlow(): Unit =
       startJourney()
       clickAcceptAndSave()
+      completeJourney()
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()
@@ -35,3 +37,9 @@ object DeclarationFlow:
   def clickAcceptAndSave(): Unit =
     DeclarationPage.assertPageIsDisplayed()
     DeclarationPage.clickContinue()
+
+  def completeJourney(): Unit =
+    ApplicationSubmittedPage.assertPageIsDisplayed()
+    ApplicationSubmittedPage.assertCopyLinkButtonText("Copy link to clipboard")
+    ApplicationSubmittedPage.clickCopyLinkButton()
+    ApplicationSubmittedPage.assertCopyLinkButtonText("Link copied")

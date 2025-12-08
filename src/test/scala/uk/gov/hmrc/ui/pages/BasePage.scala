@@ -44,6 +44,24 @@ extends PageObject:
     element.sendKeys(text)
     element.sendKeys(org.openqa.selenium.Keys.TAB)
 
+  protected def valueLocatorFor(keyText: String): By = By.xpath(
+    "//div[contains(@class,'govuk-summary-list__row')]" +
+      s"[normalize-space(.//dt[contains(@class,'govuk-summary-list__key')])='$keyText']" +
+      "//dd[contains(@class,'govuk-summary-list__value')]"
+  )
+
+  def getSummaryValueFor(keyText: String): String = getText(valueLocatorFor(keyText)).trim
+
+  def assertSummaryRow(
+    key: String,
+    expectedValue: String
+  ): Unit = {
+    val actual = getSummaryValueFor(key)
+    withClue(s"For summary key '$key': ") {
+      actual shouldBe expectedValue
+    }
+  }
+
   def clickBrowserBack(): Unit = Driver.instance.navigate().back()
 
   export RichMatchers.*
