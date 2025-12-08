@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.declaration
+package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.viewapplication
 
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentstandards.AgentStandardsFlow
@@ -22,13 +22,16 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.declaration.DeclarationFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.viewapplication.ViewApplicationFlow
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.ViewApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
-class DeclarationSpec
+class ViewApplicationSpec
 extends BaseSpec:
 
-  Feature("Complete declaration section"):
-    Scenario("User accepts the declaration", HappyPath):
+  Feature("View application after first stage"):
+    Scenario("User reviews application details", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
@@ -53,3 +56,20 @@ extends BaseSpec:
       DeclarationFlow
         .AcceptDeclaration
         .runFlow()
+      ApplicationSubmittedPage.clickViewOrPrintLink()
+
+      ViewApplicationFlow
+        .ViewApplication
+        .runFlow()
+      ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
+      ViewApplicationPage.assertSummaryRow("Business type", "Limited liability partnership")
+      ViewApplicationPage.assertSummaryRow("Company name", "Test Partnership LLP")
+      ViewApplicationPage.assertSummaryRow("Member of the limited liability partnership", "Yes")
+      ViewApplicationPage.assertSummaryRow("Name", "Tester, John Ian")
+      ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
+      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test Partnership LLP")
+      ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
+      ViewApplicationPage.assertSummaryRow("Correspondence address", "23 Great Portland Street\nLondon\nW1 1AQ\nUnited Kingdom")
+      ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
+      ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")
+      ViewApplicationPage.assertSummaryRow("Agreed to meet the HMRC standard for agents", "Yes")
