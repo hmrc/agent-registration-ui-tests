@@ -14,30 +14,26 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails
+package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership
 
 import uk.gov.hmrc.ui.pages.*
-import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage
-import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubCreateUserPage
-import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubUserPage
-import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
-import uk.gov.hmrc.ui.pages.stubs.GrsDataSetupPage
+import uk.gov.hmrc.ui.pages.stubs.*
 
 /** Encapsulates the Agents External Stubs sign-in/setup screens. */
 object StubbedSignInFlow:
 
-  /** Runs the stubbed sign-in flow and returns the generated username (if needed it later).
-    */
-  def signInAndDataSetupViaStubs(): StubbedSignInData =
-    // We assume the test is already on GovernmentGatewaySignInPage
-    GovernmentGatewaySignInPage.assertPageIsDisplayed()
+  enum JourneyType:
+    case Agent, Individual
 
-    // Create random creds (page returns the generated values)
+  /** Public entry point—keeps all logic in one place. */
+  def signInAndDataSetupViaStubs(journey: JourneyType): StubbedSignInData =
+    // 1) Government Gateway sign-in
+    GovernmentGatewaySignInPage.assertPageIsDisplayed()
     val username = GovernmentGatewaySignInPage.enterRandomUsername()
     GovernmentGatewaySignInPage.enterRandomPlanetId()
     GovernmentGatewaySignInPage.clickContinue()
 
-    // Capture Bearer Token and Session ID
+    // 2) Capture bearer token + session
     AgentExternalStubCreateUserPage.assertPageIsDisplayed()
     AgentExternalStubCreateUserPage.selectCurrentUserLink()
     AgentExternalStubUserPage.assertPageIsDisplayed()
@@ -45,20 +41,36 @@ object StubbedSignInFlow:
     val sessionId = AgentExternalStubUserPage.sessionId
     AgentExternalStubUserPage.clickBrowserBack()
 
-    // Configure user on stubs
-    AgentExternalStubCreateUserPage.selectAffinityGroupAgent()
-    AgentExternalStubCreateUserPage.selectEnrolmentNone()
-    AgentExternalStubCreateUserPage.clickContinue()
-
-    AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
-    AgentExternalStubConfigureUserPage.clickContinue()
-
-    // GRS stub screen (heading may be dynamic; your page can set skipH1Assertion = true)
-    GrsDataSetupPage.assertPageIsDisplayed()
-    GrsDataSetupPage.clickContinue()
+    // 3) Configure user on stubs (journey-specific)
+    journey match
+      case JourneyType.Agent => configureForAgent()
+      case JourneyType.Individual => configureForIndividual()
 
     StubbedSignInData(
       username,
       bearerToken,
       sessionId
     )
+
+  // --- Convenience wrappers for callers that know the journey ---
+  def signInAndDataSetupViaStubsForAgent(): StubbedSignInData = signInAndDataSetupViaStubs(JourneyType.Agent)
+
+  def signInAndDataSetupViaStubsForIndividual(): StubbedSignInData = signInAndDataSetupViaStubs(JourneyType.Individual)
+
+  // --- Private helpers keep journey-specific steps isolated ---
+  private def configureForAgent(): Unit =
+    AgentExternalStubCreateUserPage.selectAffinityGroupAgent()
+    AgentExternalStubCreateUserPage.selectEnrolmentNone()
+    AgentExternalStubCreateUserPage.clickContinue()
+    AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
+    AgentExternalStubConfigureUserPage.clickContinue()
+    // GRS stub screen
+    GrsDataSetupPage.assertPageIsDisplayed()
+    GrsDataSetupPage.clickContinue()
+
+  private def configureForIndividual(): Unit =
+    AgentExternalStubCreateUserPage.selectAffinityGroupIndividual()
+    AgentExternalStubCreateUserPage.selectEnrolmentNone()
+    AgentExternalStubCreateUserPage.clickContinue()
+    AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
+    AgentExternalStubConfigureUserPage.clickContinue()

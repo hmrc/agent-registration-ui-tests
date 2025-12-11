@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails
 
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.CreateYourAgentAccountPage
@@ -74,7 +76,7 @@ object BusinessDetailsFlow:
       CreateYourAgentAccountPage.clickContinue()
 
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
-    val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubs()
+    val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForAgent()
     TaskListPage.assertPageIsDisplayed()
 
     stubbedSignInData
