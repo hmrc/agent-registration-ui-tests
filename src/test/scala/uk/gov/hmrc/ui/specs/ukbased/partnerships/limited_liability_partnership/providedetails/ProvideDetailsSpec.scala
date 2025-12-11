@@ -16,12 +16,21 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.providedetails
 
-/** Temporary placeholder class to maintain package structure consistency.
-  *
-  * This class exists solely to preserve the package hierarchy until actual implementation classes are added. It will be removed once the package is populated
-  * with proper functionality reflected in the package name.
-  *
-  * @note
-  *   This is a temporary class intended for removal
-  */
-object Placeholder
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow
+import uk.gov.hmrc.ui.specs.BaseSpec
+
+class ProvideDetailsSpec
+extends BaseSpec:
+
+  Feature("Complete provide member details section"):
+    Scenario("User provides member details with Nino and Utr", HappyPath):
+
+      ProvideDetailsFlow
+        .ProvideFullMemberDetails
+        .runFlow()
+
+    Scenario("User provides member details WITHOUT Nino and Utr", HappyPath):
+
+      ProvideDetailsFlow
+        .ProvidePartialMemberDetails
+        .runFlow()

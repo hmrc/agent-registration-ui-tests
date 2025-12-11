@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
 
-/** Temporary placeholder class to maintain package structure consistency.
-  *
-  * This class exists solely to preserve the package hierarchy until actual implementation classes are added. It will be removed once the package is populated
-  * with proper functionality reflected in the package name.
-  *
-  * @note
-  *   This is a temporary class intended for removal
-  */
-object Placeholder
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
+
+object ApproveApplicantPage
+extends BasePage:
+
+  override val path: String = "/agent-registration/provide-details/approve-applicant"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url

@@ -30,10 +30,12 @@ extends BasePage {
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl.split("\\?").head shouldBe url
 
+  private val affinityGroupIndividualRadio = By.id("affinityGroup-2")
   private val affinityGroupAgentRadio = By.id("affinityGroup-4")
   private val enrolmentDropdown = By.id("principalEnrolmentService")
   private val currentUserLink = By.id("link_users_current")
 
+  def selectAffinityGroupIndividual(): Unit = click(affinityGroupIndividualRadio)
   def selectAffinityGroupAgent(): Unit = click(affinityGroupAgentRadio)
   def selectEnrolmentNone(): Unit = selectByValue(enrolmentDropdown, "none")
   def selectCurrentUserLink(): Unit = click(currentUserLink)
