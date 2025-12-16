@@ -19,6 +19,7 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow
 import uk.gov.hmrc.ui.pages.agentregistration.ProvideDetailsEntryPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ApproveApplicantPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AreTheseYourDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
@@ -84,6 +85,8 @@ object ProvideDetailsFlow:
     MemberEmailAddressPage.assertPageIsDisplayed()
     val email = MemberEmailAddressPage.enterEmailAddress()
     MemberEmailAddressPage.clickContinue()
+    EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    EmailVerificationTestOnlyPage.clickContinue()
     // confirm email by providing confirmation code
     val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
     ConfirmYourEmailPage.enterConfirmationCode(passcode)

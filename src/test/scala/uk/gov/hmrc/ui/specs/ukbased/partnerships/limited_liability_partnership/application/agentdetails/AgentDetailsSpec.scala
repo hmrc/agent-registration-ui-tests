@@ -20,6 +20,7 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails.AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.ConfirmYourEmailPage
@@ -163,6 +164,8 @@ extends BaseSpec:
       WhatEmailAddressPage.selectSomethingElse()
       val newEmail = WhatEmailAddressPage.enterEmailAddress("@newtest.com")
       WhatEmailAddressPage.clickContinue()
+      EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+      EmailVerificationTestOnlyPage.clickContinue()
 
       // Get a fresh passcode using the SAME session
       val passcode = PasscodeHelper.getPasscode(
