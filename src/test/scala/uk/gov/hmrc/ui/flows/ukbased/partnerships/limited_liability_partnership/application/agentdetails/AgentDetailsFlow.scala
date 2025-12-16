@@ -17,6 +17,7 @@
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails
 
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.ConfirmYourEmailPage
@@ -117,6 +118,8 @@ object AgentDetailsFlow:
         WhatEmailAddressPage.selectSomethingElse()
         val newEmail = WhatEmailAddressPage.enterEmailAddress(value)
         WhatEmailAddressPage.clickContinue()
+        EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+        EmailVerificationTestOnlyPage.clickContinue()
 
         val data = stubData.getOrElse(
           throw new IllegalArgumentException("stubData is required for Custom email flow")
