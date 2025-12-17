@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership
 
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.JourneyType.{Agent, Individual, IndividualWithUtr}
 import uk.gov.hmrc.ui.pages.*
 import uk.gov.hmrc.ui.pages.stubs.*
 
@@ -23,7 +24,7 @@ import uk.gov.hmrc.ui.pages.stubs.*
 object StubbedSignInFlow:
 
   enum JourneyType:
-    case Agent, Individual
+    case Agent, Individual, IndividualWithUtr
 
   /** Public entry point—keeps all logic in one place. */
   def signInAndDataSetupViaStubs(journey: JourneyType): StubbedSignInData =
@@ -45,6 +46,7 @@ object StubbedSignInFlow:
     journey match
       case JourneyType.Agent => configureForAgent()
       case JourneyType.Individual => configureForIndividual()
+      case JourneyType.IndividualWithUtr => configureForIndividual(hasUtr = true)
 
     StubbedSignInData(
       username,
@@ -53,9 +55,9 @@ object StubbedSignInFlow:
     )
 
   // --- Convenience wrappers for callers that know the journey ---
-  def signInAndDataSetupViaStubsForAgent(): StubbedSignInData = signInAndDataSetupViaStubs(JourneyType.Agent)
-
-  def signInAndDataSetupViaStubsForIndividual(): StubbedSignInData = signInAndDataSetupViaStubs(JourneyType.Individual)
+  def signInAndDataSetupViaStubsForAgent(): StubbedSignInData = signInAndDataSetupViaStubs(Agent)
+  def signInAndDataSetupViaStubsForIndividual(): StubbedSignInData = signInAndDataSetupViaStubs(Individual)
+  def signInAndDataSetupViaStubsForIndividualWithUtr(): StubbedSignInData = signInAndDataSetupViaStubs(IndividualWithUtr)
 
   // --- Private helpers keep journey-specific steps isolated ---
   private def configureForAgent(): Unit =
@@ -68,9 +70,16 @@ object StubbedSignInFlow:
     GrsDataSetupPage.assertPageIsDisplayed()
     GrsDataSetupPage.clickContinue()
 
-  private def configureForIndividual(): Unit =
+  private def configureForIndividual(hasUtr: Boolean = false): Unit =
     AgentExternalStubCreateUserPage.selectAffinityGroupIndividual()
     AgentExternalStubCreateUserPage.selectEnrolmentNone()
     AgentExternalStubCreateUserPage.clickContinue()
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
+
+    if (hasUtr) {
+      AgentExternalStubConfigureUserPage.enterServiceKey()
+      AgentExternalStubConfigureUserPage.enterIdentifierName()
+      AgentExternalStubConfigureUserPage.enterIdentifierValue()
+    }
+
     AgentExternalStubConfigureUserPage.clickContinue()

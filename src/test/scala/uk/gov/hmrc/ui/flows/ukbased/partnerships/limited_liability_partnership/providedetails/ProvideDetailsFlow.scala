@@ -39,33 +39,55 @@ object ProvideDetailsFlow:
 
   object ProvideFullMemberDetails:
     def runFlow(): Unit =
-      val stubDate = startJourney()
+      startJourney()
+      val stubData = stubbedSignIn()
       enterName()
       enterTelephoneNumber()
-      enterEmailAddress(stubDate)
+      enterEmailAddress(stubData)
       enterNino(JourneyType.WithDetails)
       enterUtr(JourneyType.WithDetails)
       approveApplicant()
 
   object ProvidePartialMemberDetails:
     def runFlow(): Unit =
-      val stubDate = startJourney()
+      startJourney()
+      val stubData = stubbedSignIn()
       enterName()
       enterTelephoneNumber()
-      enterEmailAddress(stubDate)
+      enterEmailAddress(stubData)
       enterNino(JourneyType.WithoutDetails)
       enterUtr(JourneyType.WithoutDetails)
       approveApplicant()
 
-  def startJourney(): StubbedSignInData =
+  object UtrAndNinoFromHmrc:
+
+    def runFlow(): Unit =
+      startJourney()
+      val stubData = stubbedSignIn(hasUtr = true)
+      enterName()
+      enterTelephoneNumber()
+      enterEmailAddress(stubData)
+      approveApplicant()
+
+  def startJourney(): Unit =
     ProvideDetailsEntryPage.open()
     ProvideDetailsEntryPage.assertPageIsDisplayed()
     ProvideDetailsEntryPage.clickProvideDetailsTestLink()
     ProvideDetailsStartPage.assertPageIsDisplayed()
     ProvideDetailsStartPage.clickContinue()
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
-    val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForIndividual()
-    stubbedSignInData
+//    val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForIndividual()
+//    stubbedSignInData
+
+  def stubbedSignIn(hasUtr: Boolean = false): StubbedSignInData =
+    if(hasUtr) {
+      val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForIndividualWithUtr()
+      stubbedSignInData
+    } else {
+      val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForIndividual()
+      stubbedSignInData
+    }
+    
 
   def enterName(): Unit =
     WhatIsYourNamePage.assertPageIsDisplayed()

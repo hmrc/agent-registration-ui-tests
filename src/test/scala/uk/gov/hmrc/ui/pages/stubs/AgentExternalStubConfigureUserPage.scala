@@ -16,11 +16,12 @@
 
 package uk.gov.hmrc.ui.pages.stubs
 
+import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object AgentExternalStubConfigureUserPage
-extends BasePage {
+extends BasePage:
 
   override val path: String = "/agents-external-stubs/user/edit"
   override val baseUrl: String = AppConfig.baseUrlExternalStubs
@@ -28,4 +29,10 @@ extends BasePage {
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should startWith(url)
 
-}
+  private val serviceKeyField = By.id("assignedPrincipalEnrolments[0].key")
+  private val identifierNameField = By.id("assignedPrincipalEnrolments[0].identifiers[0].key")
+  private val identifierValueField = By.id("assignedPrincipalEnrolments[0].identifiers[0].value")
+  
+  def enterServiceKey(): Unit = sendKeys(serviceKeyField, "IR-SA")
+  def enterIdentifierName(): Unit = sendKeys(identifierNameField, "UTR")
+  def enterIdentifierValue(): Unit = sendKeys(identifierValueField, "5146529796")
