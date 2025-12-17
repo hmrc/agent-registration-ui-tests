@@ -34,3 +34,9 @@ extends BaseSpec:
       ProvideDetailsFlow
         .ProvidePartialMemberDetails
         .runFlow()
+
+    Scenario("Nino and Utr details retrieved from HMRC", HappyPath):
+
+      ProvideDetailsFlow
+        .UtrAndNinoFromHmrc
+        .runFlow()
