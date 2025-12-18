@@ -80,14 +80,14 @@ object ProvideDetailsFlow:
 //    stubbedSignInData
 
   def stubbedSignIn(hasUtr: Boolean = false): StubbedSignInData =
-    if(hasUtr) {
+    if (hasUtr) {
       val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForIndividualWithUtr()
       stubbedSignInData
-    } else {
+    }
+    else {
       val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForIndividual()
       stubbedSignInData
     }
-    
 
   def enterName(): Unit =
     WhatIsYourNamePage.assertPageIsDisplayed()

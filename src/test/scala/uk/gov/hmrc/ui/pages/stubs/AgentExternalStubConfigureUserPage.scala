@@ -32,7 +32,7 @@ extends BasePage:
   private val serviceKeyField = By.id("assignedPrincipalEnrolments[0].key")
   private val identifierNameField = By.id("assignedPrincipalEnrolments[0].identifiers[0].key")
   private val identifierValueField = By.id("assignedPrincipalEnrolments[0].identifiers[0].value")
-  
+
   def enterServiceKey(): Unit = sendKeys(serviceKeyField, "IR-SA")
   def enterIdentifierName(): Unit = sendKeys(identifierNameField, "UTR")
   def enterIdentifierValue(): Unit = sendKeys(identifierValueField, "5146529796")

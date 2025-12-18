@@ -41,6 +41,7 @@ extends PageObject:
     val element = findElementBy(locator).getOrElse(
       throw new NoSuchElementException(s"Element not found for locator: $locator")
     )
+    element.click()
     element.sendKeys(text)
     element.sendKeys(org.openqa.selenium.Keys.TAB)
 
