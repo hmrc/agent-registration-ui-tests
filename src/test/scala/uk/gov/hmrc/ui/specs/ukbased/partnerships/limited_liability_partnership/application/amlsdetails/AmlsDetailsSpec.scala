@@ -18,6 +18,7 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.
 
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.amlsdetails.AmlsDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
@@ -50,7 +51,7 @@ extends BaseSpec:
       TaskListPage.assertAmlsDetailsStatus("Completed")
 
     Scenario("User selects non-HMRC Supervisory Body", HappyPath):
-      pending
+
       val stubbedSignInData = BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
         .runFlow()
@@ -97,7 +98,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000111111")
 
     Scenario("Changes Supervisory Body from CYA page", HappyPath):
-      pending
+
       val stubbedSignInData = BusinessDetailsFlow
         .WhenHasNoOnlineAgentAccount
         .runFlow()
@@ -118,4 +119,10 @@ extends BaseSpec:
       CheckYourAnswersPage.clickChangeFor("Supervisory body")
 
       WhatSupervisoryBodyPage.assertPageIsDisplayed()
-      // TODO Steps to select non hmrc supervisory body
+      WhatSupervisoryBodyPage.enterSupervisor("Association of Chartered Certified Accountants (ACCA)")
+      WhatSupervisoryBodyPage.clickContinue()
+
+      AmlsDetailsFlow.enterRegistrationNumber()
+      AmlsDetailsFlow.enterSupervisionExpiryDate()
+      AmlsDetailsFlow.uploadSupervisionEvidence()
+      AmlsDetailsFlow.checkYourAnswersExpanded()

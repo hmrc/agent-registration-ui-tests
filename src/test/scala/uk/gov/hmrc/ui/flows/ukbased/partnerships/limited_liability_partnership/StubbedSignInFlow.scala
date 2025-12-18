@@ -16,7 +16,9 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership
 
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.JourneyType.{Agent, Individual, IndividualWithUtr}
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.JourneyType.Agent
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.JourneyType.Individual
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.JourneyType.IndividualWithUtr
 import uk.gov.hmrc.ui.pages.*
 import uk.gov.hmrc.ui.pages.stubs.*
 

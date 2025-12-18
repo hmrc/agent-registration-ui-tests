@@ -18,10 +18,21 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.EvidenceOfAmlSupervisionPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.EvidenceUploadCompletePage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.WhatRegistrationNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.WhatSupervisoryBodyPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.WhenDoesSupervisionRunOutPage
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 object AmlsDetailsFlow:
+
+  private val today = LocalDate.now()
+  private val nextYearDate = today.plusYears(1)
+  private val nonHmrcSupervisoryBody = "Association of Chartered Certified Accountants (ACCA)"
 
   sealed trait AmlsDetailsOption
   object AmlsDetailsOption:
@@ -43,7 +54,9 @@ object AmlsDetailsFlow:
       startJourney()
       enterSupervisoryBody(AmlsDetailsOption.NonHmrcSupervisoryBody)
       enterRegistrationNumber()
-      checkYourAnswers()
+      enterSupervisionExpiryDate()
+      uploadSupervisionEvidence()
+      checkYourAnswersExpanded()
 
   object RunToCheckYourAnswers:
     def runFlow(): Unit =
@@ -60,10 +73,8 @@ object AmlsDetailsFlow:
     WhatSupervisoryBodyPage.assertPageIsDisplayed()
     option match
       case AmlsDetailsOption.HmrcIsSupervisoryBody => WhatSupervisoryBodyPage.enterSupervisor()
-      case AmlsDetailsOption.NonHmrcSupervisoryBody =>
-        WhatSupervisoryBodyPage.enterSupervisor("???")
-        // TODO Add pages for document upload
-      case _ => throw new IllegalArgumentException("Unsupported option for supervisory body")
+      case AmlsDetailsOption.NonHmrcSupervisoryBody => WhatSupervisoryBodyPage.enterSupervisor(nonHmrcSupervisoryBody)
+      case null => throw new IllegalArgumentException("Unsupported option for supervisory body")
     WhatSupervisoryBodyPage.clickContinue()
 
   def enterRegistrationNumber(): Unit =
@@ -71,8 +82,34 @@ object AmlsDetailsFlow:
     WhatRegistrationNumberPage.enterRegistrationNumber()
     WhatRegistrationNumberPage.clickContinue()
 
+  def enterSupervisionExpiryDate(): Unit =
+    WhenDoesSupervisionRunOutPage.assertPageIsDisplayed()
+    WhenDoesSupervisionRunOutPage.enterDay()
+    WhenDoesSupervisionRunOutPage.enterMonth()
+    WhenDoesSupervisionRunOutPage.enterYear()
+    WhenDoesSupervisionRunOutPage.clickContinue()
+
+  def uploadSupervisionEvidence(): Unit =
+    EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
+    EvidenceOfAmlSupervisionPage.uploadFileFromResources()
+    EvidenceOfAmlSupervisionPage.clickContinue()
+    EvidenceUploadCompletePage.assertPageIsDisplayed()
+    EvidenceUploadCompletePage.clickContinue()
+
   def checkYourAnswers(): Unit =
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
     CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000123456")
     CheckYourAnswersPage.clickContinue()
+
+  def checkYourAnswersExpanded(): Unit =
+    CheckYourAnswersPage.assertPageIsDisplayed()
+    CheckYourAnswersPage.assertSummaryRow("Supervisory body", nonHmrcSupervisoryBody)
+    CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000123456")
+    CheckYourAnswersPage.assertSummaryRow("Supervision expiry date", formattedDate())
+    CheckYourAnswersPage.assertSummaryRow("Evidence of anti-money laundering supervision", "Aml-Evidence.docx")
+    CheckYourAnswersPage.clickContinue()
+
+  def formattedDate(): String = nextYearDate.format(
+    DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK)
+  )

@@ -17,21 +17,27 @@
 package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails
 
 import org.openqa.selenium.By
-import org.openqa.selenium.Keys
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-import java.nio.file.Files
+import java.nio.file.Paths
 
-object WhatSupervisoryBodyPage
+object EvidenceOfAmlSupervisionPage
 extends BasePage:
 
-  override val path: String = "/agent-registration/apply/anti-money-laundering/supervisor-name"
+  override val path: String = "/agent-registration/apply/anti-money-laundering/evidence"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl should include(url)
+    getCurrentUrl shouldBe url
 
-  private val supervisorField = By.id("amlsSupervisoryBody")
+  private val fileInput = By.id("fileToUpload")
 
-  def enterSupervisor(supervisoryBody: String = "HM Revenue and Customs (HMRC)"): Unit = enterTextAndBlur(supervisorField, supervisoryBody)
+  def uploadFileFromResources(): Unit =
+    val path =
+      Paths
+        .get(s"src/test/resources/test-files/Aml-Evidence.docx")
+        .toAbsolutePath
+        .toString
+
+    sendKeys(fileInput, path)
