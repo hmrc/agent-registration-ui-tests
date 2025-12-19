@@ -33,6 +33,7 @@ object AmlsDetailsFlow:
   private val today = LocalDate.now()
   private val nextYearDate = today.plusYears(1)
   private val nonHmrcSupervisoryBody = "Association of Chartered Certified Accountants (ACCA)"
+  private val evidenceFile = "Aml-Evidence.docx"
 
   sealed trait AmlsDetailsOption
   object AmlsDetailsOption:
@@ -55,7 +56,7 @@ object AmlsDetailsFlow:
       enterSupervisoryBody(AmlsDetailsOption.NonHmrcSupervisoryBody)
       enterRegistrationNumber()
       enterSupervisionExpiryDate()
-      uploadSupervisionEvidence()
+      uploadSupervisionEvidence(evidenceFile)
       checkYourAnswersExpanded()
 
   object RunToCheckYourAnswers:
@@ -74,7 +75,6 @@ object AmlsDetailsFlow:
     option match
       case AmlsDetailsOption.HmrcIsSupervisoryBody => WhatSupervisoryBodyPage.enterSupervisor()
       case AmlsDetailsOption.NonHmrcSupervisoryBody => WhatSupervisoryBodyPage.enterSupervisor(nonHmrcSupervisoryBody)
-      case null => throw new IllegalArgumentException("Unsupported option for supervisory body")
     WhatSupervisoryBodyPage.clickContinue()
 
   def enterRegistrationNumber(): Unit =
@@ -89,9 +89,9 @@ object AmlsDetailsFlow:
     WhenDoesSupervisionRunOutPage.enterYear()
     WhenDoesSupervisionRunOutPage.clickContinue()
 
-  def uploadSupervisionEvidence(): Unit =
+  def uploadSupervisionEvidence(fileName: String = evidenceFile): Unit =
     EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
-    EvidenceOfAmlSupervisionPage.uploadFileFromResources()
+    EvidenceOfAmlSupervisionPage.uploadFileFromResources(fileName)
     EvidenceOfAmlSupervisionPage.clickContinue()
     EvidenceUploadCompletePage.assertPageIsDisplayed()
     EvidenceUploadCompletePage.clickContinue()
