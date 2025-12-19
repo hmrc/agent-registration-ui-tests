@@ -19,7 +19,6 @@ package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liab
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
-
 import java.nio.file.Paths
 
 object EvidenceOfAmlSupervisionPage
@@ -32,12 +31,18 @@ extends BasePage:
     getCurrentUrl shouldBe url
 
   private val fileInput = By.id("fileToUpload")
+  private val uploadErrorMessageText = By.id("fileToUpload-error")
 
-  def uploadFileFromResources(): Unit =
+  def uploadFileFromResources(fileName: String): Unit =
     val path =
       Paths
-        .get(s"src/test/resources/test-files/Aml-Evidence.docx")
+        .get(s"src/test/resources/test-files/$fileName")
         .toAbsolutePath
         .toString
 
     sendKeys(fileInput, path)
+
+  def assertErrorMessage(expected: String): Unit = eventually:
+    val error = getElementBy(uploadErrorMessageText)
+    error.isDisplayed shouldBe true
+    error.getText.replace("Error:", "").trim shouldBe expected

@@ -19,10 +19,13 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.EvidenceOfAmlSupervisionPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.EvidenceUploadCompletePage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.WhatRegistrationNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.WhatSupervisoryBodyPage
 import uk.gov.hmrc.ui.specs.BaseSpec
@@ -126,3 +129,75 @@ extends BaseSpec:
       AmlsDetailsFlow.enterSupervisionExpiryDate()
       AmlsDetailsFlow.uploadSupervisionEvidence()
       AmlsDetailsFlow.checkYourAnswersExpanded()
+
+    Scenario("Upload evidence file exceeding 5MB in size", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .WhenHasNoOnlineAgentAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .WhenMultiNameMatch
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(stubbedSignInData)
+
+      AmlsDetailsFlow.startJourney()
+      AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
+      AmlsDetailsFlow.enterRegistrationNumber()
+      AmlsDetailsFlow.enterSupervisionExpiryDate()
+
+      EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
+      EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-plus-5mb.docx")
+      EvidenceOfAmlSupervisionPage.clickContinue()
+      EvidenceOfAmlSupervisionPage.assertErrorMessage("The selected file must not be larger than 5MB")
+
+    Scenario("Upload evidence file with virus", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .WhenHasNoOnlineAgentAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .WhenMultiNameMatch
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(stubbedSignInData)
+
+      AmlsDetailsFlow.startJourney()
+      AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
+      AmlsDetailsFlow.enterRegistrationNumber()
+      AmlsDetailsFlow.enterSupervisionExpiryDate()
+
+      EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
+      EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Virus.txt")
+      EvidenceOfAmlSupervisionPage.clickContinue()
+      EvidenceOfAmlSupervisionPage.assertErrorMessage("The file upload has failed. Try uploading another file.")
+
+    Scenario("Upload evidence file in invalid format", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .WhenHasNoOnlineAgentAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .WhenMultiNameMatch
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(stubbedSignInData)
+
+      AmlsDetailsFlow.startJourney()
+      AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
+      AmlsDetailsFlow.enterRegistrationNumber()
+      AmlsDetailsFlow.enterSupervisionExpiryDate()
+
+      EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
+      EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Invalid-ext..zip")
+      EvidenceOfAmlSupervisionPage.clickContinue()
+      EvidenceOfAmlSupervisionPage.assertErrorMessage("The selected file must be a JPG, JPEG, PNG, TIFF, PDF, TXT, MSG, DOC, DOCX, XLS, XLSX, PPT, PPTX, ODT, ODS or ODP file")
