@@ -111,6 +111,7 @@ object ProvideDetailsFlow:
     EmailVerificationTestOnlyPage.clickContinue()
     // confirm email by providing confirmation code
     val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
+    ConfirmYourEmailPage.assertPageIsDisplayed()
     ConfirmYourEmailPage.enterConfirmationCode(passcode)
     ConfirmYourEmailPage.clickContinue()
 
@@ -132,4 +133,5 @@ object ProvideDetailsFlow:
       case JourneyType.WithoutDetails => MemberUtrPage.selectNo()
     MemberUtrPage.clickContinue()
 
-  def approveApplicant(): Unit = ApproveApplicantPage.assertPageIsDisplayed()
+  def approveApplicant(): Unit =
+    ApproveApplicantPage.assertPageIsDisplayed()
