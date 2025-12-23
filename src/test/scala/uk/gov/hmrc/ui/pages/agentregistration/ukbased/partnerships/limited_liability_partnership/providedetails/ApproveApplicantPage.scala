@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
 
+import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
@@ -27,3 +28,9 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
+
+  private val yesRadio = By.id("memberApproveAgentApplication")
+  private val noRadio = By.id("memberApproveAgentApplication-2")
+
+  def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit = click(noRadio)

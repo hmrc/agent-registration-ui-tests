@@ -18,7 +18,6 @@ package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liab
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
-import uk.gov.hmrc.ui.utils.AppConfig
 
 abstract class BaseCheckYourAnswersPage
 extends BasePage:
