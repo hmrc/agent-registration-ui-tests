@@ -17,11 +17,8 @@
 package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails
 
 import org.openqa.selenium.By
-import org.openqa.selenium.Keys
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
-
-import java.nio.file.Files
 
 object WhatSupervisoryBodyPage
 extends BasePage:

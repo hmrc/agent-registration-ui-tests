@@ -19,7 +19,8 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.{ConfirmYourEmailPage, MemberEmailAddressPage}
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberEmailAddressPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ProvideDetailsSpec
@@ -63,4 +64,3 @@ extends BaseSpec:
       ConfirmYourEmailPage.clickChangeEmailAddress()
       ProvideDetailsFlow.enterEmailAddress(stubData: StubbedSignInData)
       ProvideDetailsFlow.approveApplicant()
-

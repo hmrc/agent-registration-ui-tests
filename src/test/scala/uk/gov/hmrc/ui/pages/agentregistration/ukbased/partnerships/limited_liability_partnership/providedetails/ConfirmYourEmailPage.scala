@@ -33,12 +33,11 @@ extends BasePage:
     val el = getElementBy(confirmationCodeField)
     Option(el.getAttribute("value")).getOrElse("").trim
 
-  inline def isPasscodeEmpty: Boolean =
-    passcodeValue.isEmpty
+  inline def isPasscodeEmpty: Boolean = passcodeValue.isEmpty
 
   private val confirmationCodeField = By.id("passcode")
   private val pageHeading = By.cssSelector("main#main-content h1.govuk-heading-l")
-  private val changeEmailAddressLink =By.linkText("you can change the email address you entered")
+  private val changeEmailAddressLink = By.linkText("you can change the email address you entered")
 
   def enterConfirmationCode(code: String): Unit = sendKeys(confirmationCodeField, code)
 
@@ -54,7 +53,10 @@ extends BasePage:
     clickContinue()
     waitUntilPasscodeEmpty()
 
-  def forceInvalidAttempts(code: String, attempts: Int = 5): Unit =
+  def forceInvalidAttempts(
+    code: String,
+    attempts: Int = 5
+  ): Unit =
     // Ensure ready for first attempt
     waitUntilPasscodeEmpty()
     (1 to attempts).foreach { _ =>
@@ -63,6 +65,3 @@ extends BasePage:
 
   def assertPageHeading(expected: String): Unit = eventually:
     getText(pageHeading).trim shouldBe expected
-
-
-

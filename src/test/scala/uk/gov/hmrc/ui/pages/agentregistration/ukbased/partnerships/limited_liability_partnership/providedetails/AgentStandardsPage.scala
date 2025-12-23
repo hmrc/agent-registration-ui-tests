@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
 
-import org.openqa.selenium.By
-import uk.gov.hmrc.ui.pages.EntryPage
-import uk.gov.hmrc.ui.pages.PageObject.click
-import uk.gov.hmrc.ui.pages.PageObject.getCurrentUrl
+import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
-import uk.gov.hmrc.ui.utils.RichMatchers.eventually
-import uk.gov.hmrc.ui.utils.RichMatchers.shouldBe
 
-object ProvideDetailsEntryPage
-extends EntryPage:
+object AgentStandardsPage
+extends BasePage:
 
-  override val path: String = "/agent-registration/test-only/get-link-id"
+  override val path: String = "/agent-registration/provide-details/agree-standard"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl shouldBe url
-
-  private val provideDetailsTestLink = By.xpath("//a[contains(@href, '/start/')]")
-
-  def clickProvideDetailsTestLink(): Unit = click(provideDetailsTestLink)
+    getCurrentUrl should include(url)

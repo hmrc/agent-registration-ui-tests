@@ -25,7 +25,6 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.EvidenceOfAmlSupervisionPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.EvidenceUploadCompletePage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.WhatRegistrationNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.amldetails.WhatSupervisoryBodyPage
 import uk.gov.hmrc.ui.specs.BaseSpec
@@ -200,4 +199,6 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Invalid-ext..zip")
       EvidenceOfAmlSupervisionPage.clickContinue()
-      EvidenceOfAmlSupervisionPage.assertErrorMessage("The selected file must be a JPG, JPEG, PNG, TIFF, PDF, TXT, MSG, DOC, DOCX, XLS, XLSX, PPT, PPTX, ODT, ODS or ODP file")
+      EvidenceOfAmlSupervisionPage.assertErrorMessage(
+        "The selected file must be a JPG, JPEG, PNG, TIFF, PDF, TXT, MSG, DOC, DOCX, XLS, XLSX, PPT, PPTX, ODT, ODS or ODP file"
+      )

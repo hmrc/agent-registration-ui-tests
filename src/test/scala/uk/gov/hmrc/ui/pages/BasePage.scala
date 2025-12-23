@@ -63,6 +63,9 @@ extends PageObject:
     }
   }
 
+  def assertSummaryRowNotPresent(key: String): Unit = eventually:
+    findElementBy(valueLocatorFor(key)) shouldBe None
+
   def clickBrowserBack(): Unit = Driver.instance.navigate().back()
 
   export RichMatchers.*

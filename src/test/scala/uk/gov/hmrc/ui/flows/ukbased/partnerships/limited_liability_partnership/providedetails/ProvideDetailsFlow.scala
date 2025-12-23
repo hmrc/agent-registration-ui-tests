@@ -18,10 +18,14 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.JourneyType.{AlreadyKnown, DoNotProvideDetails, ProvideDetails}
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.ProvideDetail.{No, Yes}
 import uk.gov.hmrc.ui.pages.agentregistration.ProvideDetailsEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AgentStandardsPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ApproveApplicantPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AreTheseYourDetailsPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberEmailAddressPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberNiNumberPage
@@ -35,7 +39,10 @@ import uk.gov.hmrc.ui.utils.PasscodeHelper
 object ProvideDetailsFlow:
 
   enum JourneyType:
-    case WithDetails, WithoutDetails
+    case ProvideDetails, DoNotProvideDetails, AlreadyKnown
+    
+  enum ProvideDetail:
+    case Yes, No
 
   object ProvideFullMemberDetails:
     def runFlow(): Unit =
@@ -43,10 +50,12 @@ object ProvideDetailsFlow:
       val stubData = stubbedSignIn()
       enterName()
       enterTelephoneNumber()
-      enterEmailAddress(stubData)
-      enterNino(JourneyType.WithDetails)
-      enterUtr(JourneyType.WithDetails)
+      val email = enterEmailAddress(stubData)
+      enterNino(Yes)
+      enterUtr(Yes)
       approveApplicant()
+      agreeStandards()
+      checkYourAnswers(email, ProvideDetails)
 
   object ProvidePartialMemberDetails:
     def runFlow(): Unit =
@@ -54,10 +63,12 @@ object ProvideDetailsFlow:
       val stubData = stubbedSignIn()
       enterName()
       enterTelephoneNumber()
-      enterEmailAddress(stubData)
-      enterNino(JourneyType.WithoutDetails)
-      enterUtr(JourneyType.WithoutDetails)
+      val email = enterEmailAddress(stubData)
+      enterNino(No)
+      enterUtr(No)
       approveApplicant()
+      agreeStandards()
+      checkYourAnswers(email, DoNotProvideDetails)
 
   object UtrAndNinoFromHmrc:
 
@@ -66,8 +77,10 @@ object ProvideDetailsFlow:
       val stubData = stubbedSignIn(hasUtr = true)
       enterName()
       enterTelephoneNumber()
-      enterEmailAddress(stubData)
+      val email = enterEmailAddress(stubData)
       approveApplicant()
+      agreeStandards()
+      checkYourAnswers(email, AlreadyKnown)
 
   def startJourney(): Unit =
     ProvideDetailsEntryPage.open()
@@ -76,8 +89,6 @@ object ProvideDetailsFlow:
     ProvideDetailsStartPage.assertPageIsDisplayed()
     ProvideDetailsStartPage.clickContinue()
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
-//    val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForIndividual()
-//    stubbedSignInData
 
   def stubbedSignIn(hasUtr: Boolean = false): StubbedSignInData =
     if (hasUtr) {
@@ -103,7 +114,7 @@ object ProvideDetailsFlow:
     MemberTelephoneNumberPage.enterTelephoneNumber()
     MemberTelephoneNumberPage.clickContinue()
 
-  def enterEmailAddress(stubData: StubbedSignInData): Unit =
+  def enterEmailAddress(stubData: StubbedSignInData): String =
     MemberEmailAddressPage.assertPageIsDisplayed()
     val email = MemberEmailAddressPage.enterEmailAddress()
     MemberEmailAddressPage.clickContinue()
@@ -114,24 +125,61 @@ object ProvideDetailsFlow:
     ConfirmYourEmailPage.assertPageIsDisplayed()
     ConfirmYourEmailPage.enterConfirmationCode(passcode)
     ConfirmYourEmailPage.clickContinue()
+    email
 
-  def enterNino(journey: JourneyType): Unit =
+  def enterNino(details: ProvideDetail): Unit =
     MemberNiNumberPage.assertPageIsDisplayed()
-    journey match
-      case JourneyType.WithDetails =>
+    details match
+      case ProvideDetail.Yes =>
         MemberNiNumberPage.selectYes()
         MemberNiNumberPage.enterNino()
-      case JourneyType.WithoutDetails => MemberNiNumberPage.selectNo()
+      case ProvideDetail.No => MemberNiNumberPage.selectNo()
     MemberNiNumberPage.clickContinue()
 
-  def enterUtr(journey: JourneyType): Unit =
+  def enterUtr(details: ProvideDetail): Unit =
     MemberUtrPage.assertPageIsDisplayed()
-    journey match
-      case JourneyType.WithDetails =>
+    details match
+      case ProvideDetail.Yes =>
         MemberUtrPage.selectYes()
         MemberUtrPage.enterUtr()
-      case JourneyType.WithoutDetails => MemberUtrPage.selectNo()
+      case ProvideDetail.Yes => MemberUtrPage.selectNo()
     MemberUtrPage.clickContinue()
 
   def approveApplicant(): Unit =
     ApproveApplicantPage.assertPageIsDisplayed()
+    ApproveApplicantPage.selectYes()
+    ApproveApplicantPage.clickContinue()
+
+  def agreeStandards(): Unit =
+    AgentStandardsPage.assertPageIsDisplayed()
+    AgentStandardsPage.clickContinue()
+
+  def checkYourAnswers(
+    email: String,
+    variant: JourneyType
+  ): Unit =
+    CheckYourAnswersPage.assertPageIsDisplayed()
+    CheckYourAnswersPage.assertSummaryRow("Name", "SMITH, Jane")
+    CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+    CheckYourAnswersPage.assertSummaryRow("Email address", email)
+
+    variant match
+      case JourneyType.ProvideDetails =>
+        CheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "Yes")
+        CheckYourAnswersPage.assertSummaryRow("National Insurance number", "AB123456C")
+        CheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
+        CheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567890")
+
+      case JourneyType.DoNotProvideDetails =>
+        CheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "No")
+        CheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
+        CheckYourAnswersPage.assertSummaryRowNotPresent("National Insurance number")
+        CheckYourAnswersPage.assertSummaryRowNotPresent("Self Assessment Unique Taxpayer Reference")
+
+      case JourneyType.AlreadyKnown =>
+        CheckYourAnswersPage.assertSummaryRowNotPresent("Do you have a National Insurance number?")
+        CheckYourAnswersPage.assertSummaryRowNotPresent("National Insurance number")
+        CheckYourAnswersPage.assertSummaryRowNotPresent("Do you have a Self Assessment Unique Taxpayer Reference?")
+        CheckYourAnswersPage.assertSummaryRowNotPresent("Self Assessment Unique Taxpayer Reference")
+
+    CheckYourAnswersPage.clickContinue()
