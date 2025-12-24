@@ -35,4 +35,4 @@ extends BasePage:
 
   def selectYes(): Unit = click(yesRadio)
   def selectNo(): Unit = click(noRadio)
-  def enterNino(): Unit = sendKeys(ninoField, "AB123456C")
+  def enterNino(nino: String = "AB123456C"): Unit = sendKeys(ninoField, nino)

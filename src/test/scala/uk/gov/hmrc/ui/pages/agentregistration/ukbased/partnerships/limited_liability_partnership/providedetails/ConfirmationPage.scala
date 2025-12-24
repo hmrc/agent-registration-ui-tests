@@ -16,11 +16,20 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
 
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.BaseCheckYourAnswersPage
+import org.openqa.selenium.By.cssSelector
+import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object ConfirmationPage
-extends BaseCheckYourAnswersPage:
+extends BasePage:
 
   override val path: String = "/agent-registration/provide-details/confirmation"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl should include(url)
+
+  private val confirmationTitle = cssSelector("h1.govuk-panel__title")
+
+  def verifyConfirmationTitle(expected: String = "You have finished this process"): Unit =
+    getText(confirmationTitle) shouldBe expected
