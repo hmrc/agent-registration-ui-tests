@@ -18,28 +18,18 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.JourneyType.{AlreadyKnown, DoNotProvideDetails, ProvideDetails}
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.JourneyType.{DoNotProvideNinoUtrDetails, NinoUtrAlreadyKnown, ProvideNinoUtrDetails, RunToCya}
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.ProvideDetail.{No, Yes}
 import uk.gov.hmrc.ui.pages.agentregistration.ProvideDetailsEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AgentStandardsPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ApproveApplicantPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AreTheseYourDetailsPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberEmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberNiNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberTelephoneNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberUtrPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsStartPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.WhatIsYourNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.{AgentStandardsPage, ApproveApplicantPage, AreTheseYourDetailsPage, CheckYourAnswersPage, ConfirmYourEmailPage, ConfirmationPage, MemberEmailAddressPage, MemberNiNumberPage, MemberTelephoneNumberPage, MemberUtrPage, ProvideDetailsStartPage, WhatIsYourNamePage}
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 object ProvideDetailsFlow:
 
   enum JourneyType:
-    case ProvideDetails, DoNotProvideDetails, AlreadyKnown
+    case ProvideNinoUtrDetails, DoNotProvideNinoUtrDetails, NinoUtrAlreadyKnown, RunToCya
     
   enum ProvideDetail:
     case Yes, No
@@ -55,7 +45,8 @@ object ProvideDetailsFlow:
       enterUtr(Yes)
       approveApplicant()
       agreeStandards()
-      checkYourAnswers(email, ProvideDetails)
+      checkYourAnswers(email, ProvideNinoUtrDetails)
+      confirmationPage()
 
   object ProvidePartialMemberDetails:
     def runFlow(): Unit =
@@ -68,7 +59,8 @@ object ProvideDetailsFlow:
       enterUtr(No)
       approveApplicant()
       agreeStandards()
-      checkYourAnswers(email, DoNotProvideDetails)
+      checkYourAnswers(email, DoNotProvideNinoUtrDetails)
+      confirmationPage()
 
   object UtrAndNinoFromHmrc:
 
@@ -80,8 +72,24 @@ object ProvideDetailsFlow:
       val email = enterEmailAddress(stubData)
       approveApplicant()
       agreeStandards()
-      checkYourAnswers(email, AlreadyKnown)
+      checkYourAnswers(email, NinoUtrAlreadyKnown)
+      confirmationPage()
 
+  object RunToCheckYourAnswers:
+
+    def runFlow(): StubbedSignInData =
+      startJourney()
+      val stubData = stubbedSignIn()
+      enterName()
+      enterTelephoneNumber()
+      val email = enterEmailAddress(stubData)
+      enterNino(Yes)
+      enterUtr(Yes)
+      approveApplicant()
+      agreeStandards()
+      checkYourAnswers(email, RunToCya)
+      stubData
+  
   def startJourney(): Unit =
     ProvideDetailsEntryPage.open()
     ProvideDetailsEntryPage.assertPageIsDisplayed()
@@ -164,22 +172,33 @@ object ProvideDetailsFlow:
     CheckYourAnswersPage.assertSummaryRow("Email address", email)
 
     variant match
-      case JourneyType.ProvideDetails =>
+      case JourneyType.ProvideNinoUtrDetails =>
+        CheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "Yes")
+        CheckYourAnswersPage.assertSummaryRow("National Insurance number", "AB123456C")
+        CheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
+        CheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567890")
+        CheckYourAnswersPage.clickContinue()
+
+      case JourneyType.DoNotProvideNinoUtrDetails =>
+        CheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "No")
+        CheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
+        CheckYourAnswersPage.assertSummaryRowNotPresent("National Insurance number")
+        CheckYourAnswersPage.assertSummaryRowNotPresent("Self Assessment Unique Taxpayer Reference")
+        CheckYourAnswersPage.clickContinue()
+
+      case JourneyType.NinoUtrAlreadyKnown =>
+        CheckYourAnswersPage.assertSummaryRowNotPresent("Do you have a National Insurance number?")
+        CheckYourAnswersPage.assertSummaryRowNotPresent("National Insurance number")
+        CheckYourAnswersPage.assertSummaryRowNotPresent("Do you have a Self Assessment Unique Taxpayer Reference?")
+        CheckYourAnswersPage.assertSummaryRowNotPresent("Self Assessment Unique Taxpayer Reference")
+        CheckYourAnswersPage.clickContinue()
+
+      case JourneyType.RunToCya =>
         CheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "Yes")
         CheckYourAnswersPage.assertSummaryRow("National Insurance number", "AB123456C")
         CheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
         CheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567890")
 
-      case JourneyType.DoNotProvideDetails =>
-        CheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "No")
-        CheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
-        CheckYourAnswersPage.assertSummaryRowNotPresent("National Insurance number")
-        CheckYourAnswersPage.assertSummaryRowNotPresent("Self Assessment Unique Taxpayer Reference")
-
-      case JourneyType.AlreadyKnown =>
-        CheckYourAnswersPage.assertSummaryRowNotPresent("Do you have a National Insurance number?")
-        CheckYourAnswersPage.assertSummaryRowNotPresent("National Insurance number")
-        CheckYourAnswersPage.assertSummaryRowNotPresent("Do you have a Self Assessment Unique Taxpayer Reference?")
-        CheckYourAnswersPage.assertSummaryRowNotPresent("Self Assessment Unique Taxpayer Reference")
-
-    CheckYourAnswersPage.clickContinue()
+  def confirmationPage(): Unit =
+    ConfirmationPage.assertPageIsDisplayed()
+    ConfirmationPage.verifyConfirmationTitle()

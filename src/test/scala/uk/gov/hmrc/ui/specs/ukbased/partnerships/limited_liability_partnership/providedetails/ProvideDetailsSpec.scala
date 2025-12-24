@@ -19,9 +19,9 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberEmailAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.{AreTheseYourDetailsPage, CheckYourAnswersPage, ConfirmYourEmailPage, MemberEmailAddressPage, MemberNiNumberPage, MemberTelephoneNumberPage, MemberUtrPage, WhatIsYourNamePage}
 import uk.gov.hmrc.ui.specs.BaseSpec
+import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 class ProvideDetailsSpec
 extends BaseSpec:
@@ -64,3 +64,83 @@ extends BaseSpec:
       ConfirmYourEmailPage.clickChangeEmailAddress()
       ProvideDetailsFlow.enterEmailAddress(stubData: StubbedSignInData)
       ProvideDetailsFlow.approveApplicant()
+      
+    Scenario("Change details from CYA", HappyPath):
+
+      val stubbedSignInData = ProvideDetailsFlow
+        .RunToCheckYourAnswers
+        .runFlow()
+
+      //change Name
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.clickChangeFor("Name")
+      WhatIsYourNamePage.assertPageIsDisplayed()
+      WhatIsYourNamePage.enterFirstName("Jane")
+      WhatIsYourNamePage.enterLastName("Lasso")
+      WhatIsYourNamePage.clickContinue()
+      AreTheseYourDetailsPage.assertPageIsDisplayed()
+      AreTheseYourDetailsPage.selectYes()
+      AreTheseYourDetailsPage.clickContinue()
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Name", "LASSO, Jane")
+
+      //change Telephone number
+      CheckYourAnswersPage.clickChangeFor("Telephone number")
+      MemberTelephoneNumberPage.assertPageIsDisplayed()
+      MemberTelephoneNumberPage.enterTelephoneNumber("07888888888")
+      MemberTelephoneNumberPage.clickContinue()
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Telephone number", "07888888888")
+
+      //change Email address
+      CheckYourAnswersPage.clickChangeFor("Email address")
+      MemberEmailAddressPage.assertPageIsDisplayed()
+      val newEmail = MemberEmailAddressPage.enterEmailAddress("@newtest.com")
+      MemberEmailAddressPage.clickContinue()
+      EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+      EmailVerificationTestOnlyPage.clickContinue()
+      // Get a fresh passcode using the SAME session
+      val passcode = PasscodeHelper.getPasscode(
+        stubbedSignInData.bearerToken,
+        stubbedSignInData.sessionId,
+        expectedEmail = Some(newEmail)
+      )
+      ConfirmYourEmailPage.assertPageIsDisplayed()
+      ConfirmYourEmailPage.enterConfirmationCode(passcode)
+      ConfirmYourEmailPage.clickContinue()
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
+
+      //change National Insurance number
+      CheckYourAnswersPage.clickChangeFor("National Insurance number")
+      MemberNiNumberPage.assertPageIsDisplayed()
+      MemberNiNumberPage.enterNino("AA000000A")
+      MemberNiNumberPage.clickContinue()
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("National Insurance number", "AA000000A")
+
+      //remove National Insurance number
+      CheckYourAnswersPage.clickChangeFor("Do you have a National Insurance number?")
+      MemberNiNumberPage.assertPageIsDisplayed()
+      MemberNiNumberPage.selectNo()
+      MemberNiNumberPage.clickContinue()
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "No")
+      CheckYourAnswersPage.assertSummaryRowNotPresent("National Insurance number")
+
+      //change Self Assessment Unique Taxpayer Reference number
+      CheckYourAnswersPage.clickChangeFor("Do you have a Self Assessment Unique Taxpayer Reference?")
+      MemberUtrPage.assertPageIsDisplayed()
+      MemberUtrPage.enterUtr("0987654321")
+      MemberUtrPage.clickContinue()
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "0987654321")
+
+      //remove Self Assessment Unique Taxpayer Reference number
+      CheckYourAnswersPage.clickChangeFor("Self Assessment Unique Taxpayer Reference")
+      MemberUtrPage.assertPageIsDisplayed()
+      MemberUtrPage.selectNo()
+      MemberUtrPage.clickContinue()
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
+      CheckYourAnswersPage.assertSummaryRowNotPresent("Self Assessment Unique Taxpayer Reference")

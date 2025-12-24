@@ -34,5 +34,5 @@ extends BasePage:
   private val firstNameField = By.id("firstName")
   private val lastNameField = By.id("lastName")
 
-  def enterFirstName(): Unit = sendKeys(firstNameField, "Bob")
-  def enterLastName(): Unit = sendKeys(lastNameField, "Smith")
+  def enterFirstName(firstName: String = "Bob"): Unit = sendKeys(firstNameField, firstName)
+  def enterLastName(lastName: String = "Smith"): Unit = sendKeys(lastNameField, lastName)

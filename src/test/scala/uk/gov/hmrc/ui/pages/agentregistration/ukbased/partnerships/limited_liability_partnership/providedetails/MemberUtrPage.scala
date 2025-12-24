@@ -37,4 +37,4 @@ extends BasePage:
 
   def selectNo(): Unit = click(noRadio)
 
-  def enterUtr(): Unit = sendKeys(ninoField, "1234567890")
+  def enterUtr(utr: String = "1234567890"): Unit = sendKeys(ninoField, utr)
