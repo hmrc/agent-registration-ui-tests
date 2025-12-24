@@ -142,7 +142,7 @@ object ProvideDetailsFlow:
       case ProvideDetail.Yes =>
         MemberUtrPage.selectYes()
         MemberUtrPage.enterUtr()
-      case ProvideDetail.Yes => MemberUtrPage.selectNo()
+      case ProvideDetail.No => MemberUtrPage.selectNo()
     MemberUtrPage.clickContinue()
 
   def approveApplicant(): Unit =
