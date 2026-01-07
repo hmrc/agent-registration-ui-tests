@@ -25,6 +25,7 @@ import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liabi
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.HowIsYourBusinessSetUpPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.IsYourAgentBusinessBasedInTheUKPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.SignInWithAgentAccountPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.UserRolePage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.WhatTypeOfPartnershipPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 
@@ -60,6 +61,10 @@ object BusinessDetailsFlow:
     WhatTypeOfPartnershipPage.assertPageIsDisplayed()
     WhatTypeOfPartnershipPage.selectLimitedLiabilityPartnership()
     WhatTypeOfPartnershipPage.clickContinue()
+
+    UserRolePage.assertPageIsDisplayed()
+    UserRolePage.selectAuthorised()
+    UserRolePage.clickContinue()
 
     HmrcOnlineServicesAccountPage.assertPageIsDisplayed()
 

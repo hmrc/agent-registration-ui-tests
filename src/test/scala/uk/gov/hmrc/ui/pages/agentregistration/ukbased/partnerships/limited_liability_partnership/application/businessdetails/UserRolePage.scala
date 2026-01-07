@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object MulitpleNameMatchesPage
-extends BasePage {
+object UserRolePage
+extends BasePage:
 
-  override val path: String = "/agent-registration/apply/applicant/member-name-match"
+  override val path: String = "/agent-registration/apply/about-your-business/user-role"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  private val firstMatchRadio = By.id("companiesHouseOfficer")
-  private val secondMatchRadio = By.id("companiesHouseOfficer-2")
+  private val hasRole = By.id("userRole") // can be owner, director, partner or member
+  private val Authorised = By.id("userRole-2")
 
-  def selectFirstMatch(): Unit = click(firstMatchRadio)
-  def selectSecondMatch(): Unit = click(secondMatchRadio)
-
-}
+  def selectHasRole(): Unit = click(hasRole)
+  def selectAuthorised(): Unit = click(Authorised)

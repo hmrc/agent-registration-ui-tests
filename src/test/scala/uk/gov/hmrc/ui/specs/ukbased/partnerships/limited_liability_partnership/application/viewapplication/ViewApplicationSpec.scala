@@ -38,7 +38,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -63,11 +62,11 @@ extends BaseSpec:
         .runFlow()
       ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
       ViewApplicationPage.assertSummaryRow("Business type", "Limited liability partnership")
-      ViewApplicationPage.assertSummaryRow("Company name", "Test Partnership LLP")
-      ViewApplicationPage.assertSummaryRow("Member of the limited liability partnership", "Yes")
-      ViewApplicationPage.assertSummaryRow("Name", "Tester, John Ian")
+      ViewApplicationPage.assertSummaryRow("Are you a member of the limited liability partnership?", "No, but I’m authorised by them to set up this account")
+      ViewApplicationPage.assertSummaryRow("Company name", "Test Partnership")
+      ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
       ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
-      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test Partnership LLP")
+      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test Partnership")
       ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
       ViewApplicationPage.assertSummaryRow("Correspondence address", "23 Great Portland Street\nLondon\nW1 1AQ\nUnited Kingdom")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")

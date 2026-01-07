@@ -19,69 +19,38 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.AreTheseYourDetailsPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.AreYouAMemberOfTheLllpPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ApplicantNamePage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ConfirmYourEmailPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.EmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.MemberNamePage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.MulitpleNameMatchesPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.TelephoneNumberPage
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 object ContactDetailsFlow {
 
-  object WhenMultiNameMatch:
-    def runFlow(stubData: StubbedSignInData): Unit = addContactDetails(stubData, multiNameMatch = true)
-  object WhenOnlyOneNameMatch:
-
-    def runFlow(stubData: StubbedSignInData): Unit = addContactDetails(stubData, multiNameMatch = false)
-    def runFlowUntilCyaPage(stubData: StubbedSignInData): Unit = addContactDetailsUntilCyaPage(stubData)
+  def runFlow(stubData: StubbedSignInData): Unit = {
+    addContactDetails(stubData)
+  }
 
   private def addContactDetails(
-    stubData: StubbedSignInData,
-    multiNameMatch: Boolean
+    stubData: StubbedSignInData
   ): Unit = {
-    addContactDetailsUntilCyaPage(stubData, multiNameMatch)
+    addContactDetailsUntilCyaPage(stubData)
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
   }
 
-  private def addContactDetailsUntilCyaPage(
-    stubData: StubbedSignInData,
-    multiNameMatch: Boolean = false
+  def addContactDetailsUntilCyaPage(
+    stubData: StubbedSignInData
   ): Unit = {
-    // confirm member of llp
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertContactDetailsStatus(expectedStatus = "Incomplete")
     TaskListPage.clickOnApplicantContactDetailsLink()
 
-    AreYouAMemberOfTheLllpPage.assertPageIsDisplayed()
-    AreYouAMemberOfTheLllpPage.selectYes()
-    AreYouAMemberOfTheLllpPage.clickContinue()
-
-    // enter name
-    MemberNamePage.assertPageIsDisplayed()
-    MemberNamePage.enterFirstName()
-    // Enter surname based on multiNameMatch flag
-    if (multiNameMatch) {
-      MemberNamePage.enterLastName("Tester")
-      MemberNamePage.clickContinue()
-
-      MulitpleNameMatchesPage.assertPageIsDisplayed()
-      MulitpleNameMatchesPage.selectSecondMatch()
-      MulitpleNameMatchesPage.clickContinue()
-    }
-    else {
-      MemberNamePage.enterLastName("Smith")
-      MemberNamePage.clickContinue()
-
-      // confirm name matching result for single match
-      AreTheseYourDetailsPage.assertPageIsDisplayed()
-      AreTheseYourDetailsPage.selectYes()
-      AreTheseYourDetailsPage.clickContinue()
-    }
+    ApplicantNamePage.assertPageIsDisplayed()
+    ApplicantNamePage.enterFullName("John Ian Tester")
+    ApplicantNamePage.clickContinue()
 
     // enter telephone number
     TelephoneNumberPage.assertPageIsDisplayed()
@@ -103,13 +72,7 @@ object ContactDetailsFlow {
     ConfirmYourEmailPage.clickContinue()
 
     CheckYourAnswersPage.assertPageIsDisplayed()
-    CheckYourAnswersPage.assertSummaryRow("Member of the limited liability partnership", "Yes")
-    if (!multiNameMatch) {
-      CheckYourAnswersPage.assertSummaryRow("Name", "SMITH, Jane")
-    }
-    else {
-      CheckYourAnswersPage.assertSummaryRow("Name", "Tester, John Ian")
-    }
+    CheckYourAnswersPage.assertSummaryRow("Name", "John Ian Tester")
     CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
     CheckYourAnswersPage.assertSummaryRow("Email address", email)
   }

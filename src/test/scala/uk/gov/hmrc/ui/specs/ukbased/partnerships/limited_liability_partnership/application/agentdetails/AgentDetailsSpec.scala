@@ -46,7 +46,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -61,7 +60,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -76,7 +74,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow.startJourney()
@@ -100,7 +97,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -125,7 +121,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -150,7 +145,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -188,7 +182,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -220,7 +213,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Correspondence address", "4 Privet Drive\nLittle Whinging\nGB")
 
-      //additional check that manually entered address is cached when returning to WhatCorrespondenceAddressPage
+      // additional check that manually entered address is cached when returning to WhatCorrespondenceAddressPage
       CheckYourAnswersPage.clickChangeFor("Correspondence address")
       WhatCorrespondenceAddressPage.assertPageIsDisplayed()
       WhatCorrespondenceAddressPage.assertAddressYouProvidedRadioIsSelected()
