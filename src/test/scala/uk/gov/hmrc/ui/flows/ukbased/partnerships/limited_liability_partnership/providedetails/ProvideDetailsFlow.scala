@@ -18,11 +18,26 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.JourneyType.{DoNotProvideNinoUtrDetails, NinoUtrAlreadyKnown, ProvideNinoUtrDetails, RunToCya}
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.ProvideDetail.{No, Yes}
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.JourneyType.DoNotProvideNinoUtrDetails
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.JourneyType.NinoUtrAlreadyKnown
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.JourneyType.ProvideNinoUtrDetails
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.JourneyType.RunToCya
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.ProvideDetail.No
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow.ProvideDetail.Yes
 import uk.gov.hmrc.ui.pages.agentregistration.ProvideDetailsEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.{AgentStandardsPage, ApproveApplicantPage, AreTheseYourDetailsPage, CheckYourAnswersPage, ConfirmYourEmailPage, ConfirmationPage, MemberEmailAddressPage, MemberNiNumberPage, MemberTelephoneNumberPage, MemberUtrPage, ProvideDetailsStartPage, WhatIsYourNamePage}
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AgentStandardsPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ApproveApplicantPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AreTheseYourDetailsPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmationPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberEmailAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberNiNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberTelephoneNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberUtrPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsStartPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.WhatIsYourNamePage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
@@ -30,7 +45,7 @@ object ProvideDetailsFlow:
 
   enum JourneyType:
     case ProvideNinoUtrDetails, DoNotProvideNinoUtrDetails, NinoUtrAlreadyKnown, RunToCya
-    
+
   enum ProvideDetail:
     case Yes, No
 
@@ -89,7 +104,7 @@ object ProvideDetailsFlow:
       agreeStandards()
       checkYourAnswers(email, RunToCya)
       stubData
-  
+
   def startJourney(): Unit =
     ProvideDetailsEntryPage.open()
     ProvideDetailsEntryPage.assertPageIsDisplayed()

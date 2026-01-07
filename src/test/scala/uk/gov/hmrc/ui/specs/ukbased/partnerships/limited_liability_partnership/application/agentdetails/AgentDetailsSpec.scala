@@ -219,3 +219,8 @@ extends BaseSpec:
 
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Correspondence address", "4 Privet Drive\nLittle Whinging\nGB")
+
+      //additional check that manually entered address is cached when returning to WhatCorrespondenceAddressPage
+      CheckYourAnswersPage.clickChangeFor("Correspondence address")
+      WhatCorrespondenceAddressPage.assertPageIsDisplayed()
+      WhatCorrespondenceAddressPage.assertAddressYouProvidedRadioIsSelected()
