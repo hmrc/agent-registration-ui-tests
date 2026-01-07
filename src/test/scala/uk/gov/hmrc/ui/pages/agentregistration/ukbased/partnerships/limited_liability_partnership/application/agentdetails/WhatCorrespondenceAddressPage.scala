@@ -31,9 +31,11 @@ extends BasePage:
 
   private val addressCompaniesHouseProvidedRadio = By.id("agentCorrespondenceAddress")
   private val addressHMRCProvidedRadio = By.id("agentCorrespondenceAddress-2")
+  private val addressYourProvidedRadio = By.id("agentCorrespondenceAddress-3")
   private val somethingElseRadio = By.id("agentCorrespondenceAddress-4")
 
   def selectAddressCompaniesHouseProvided(): Unit = click(addressCompaniesHouseProvidedRadio)
   def selectAddressHMRCProvided(): Unit = click(addressHMRCProvidedRadio)
   def selectSomethingElse(): Unit = click(somethingElseRadio)
   def assertAddressCompaniesHouseProvidedRadioIsSelected(): Unit = isSelected(addressCompaniesHouseProvidedRadio) shouldBe true
+  def assertAddressYouProvidedRadioIsSelected(): Unit = isSelected(addressYourProvidedRadio) shouldBe true

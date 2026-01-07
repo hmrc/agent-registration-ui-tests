@@ -31,5 +31,4 @@ extends BasePage:
 
   private val confirmationTitle = cssSelector("h1.govuk-panel__title")
 
-  def verifyConfirmationTitle(expected: String = "You have finished this process"): Unit =
-    getText(confirmationTitle) shouldBe expected
+  def verifyConfirmationTitle(expected: String = "You have finished this process"): Unit = getText(confirmationTitle) shouldBe expected
