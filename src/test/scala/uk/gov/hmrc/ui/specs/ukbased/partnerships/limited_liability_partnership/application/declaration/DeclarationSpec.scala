@@ -35,7 +35,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow

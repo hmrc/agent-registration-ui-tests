@@ -54,7 +54,7 @@ object AgentDetailsFlow:
       selectTelephoneNumber(AgentDetailOption.YouProvided)
       selectEmailAddress(AgentDetailOption.YouProvided)
       selectCorrespondenceAddress(AgentDetailOption.CompaniesHouseProvided)
-      verifyCheckYourAnswers(expectedName = "Test Partnership LLP", expectedNumber = "07777777777")
+      verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "07777777777")
       completeCheckYourAnswers()
 
   object WhenUsingCustomValues:
@@ -74,7 +74,7 @@ object AgentDetailsFlow:
       selectTelephoneNumber(AgentDetailOption.YouProvided)
       selectEmailAddress(AgentDetailOption.YouProvided)
       selectCorrespondenceAddress(AgentDetailOption.CompaniesHouseProvided)
-      verifyCheckYourAnswers(expectedName = "Test Partnership LLP", expectedNumber = "07777777777")
+      verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "07777777777")
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()

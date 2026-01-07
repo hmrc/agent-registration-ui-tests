@@ -22,7 +22,6 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.flows
 import uk.gov.hmrc.ui.pages
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.*
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.PasscodeHelper
@@ -31,63 +30,6 @@ class ContactDetailsSpec
 extends BaseSpec:
 
   Feature("Complete Contact Details section"):
-    Scenario("The Companies House responds with multiple name matches for the applicant's name query", HappyPath):
-
-      val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .WhenMultiNameMatch
-        .runFlow(stubbedSignInData)
-      TaskListPage.assertContactDetailsStatus("Completed")
-
-    Scenario("The Companies House responds with one exact match for the applicant's name query", HappyPath):
-
-      val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .WhenMultiNameMatch
-        .runFlow(stubbedSignInData)
-      TaskListPage.assertContactDetailsStatus("Completed")
-
-    Scenario("The Companies House responds with no matches for the applicant's name query", HappyPath):
-      pending
-      val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
-        .runFlow()
-
-      // TODO actual test here
-
-      TaskListPage.assertContactDetailsStatus("Completed")
-
-    Scenario("Change Member Status from CYA page", HappyPath):
-
-      val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
-        .runFlow()
-      ContactDetailsFlow
-        .WhenOnlyOneNameMatch
-        .runFlowUntilCyaPage(stubbedSignInData)
-
-      CheckYourAnswersPage.clickChangeFor("Member of the limited liability partnership")
-
-      AreYouAMemberOfTheLllpPage.assertPageIsDisplayed()
-      AreYouAMemberOfTheLllpPage.selectNo()
-      AreYouAMemberOfTheLllpPage.clickContinue()
-
-      ApplicantNamePage.assertPageIsDisplayed()
-      ApplicantNamePage.enterFullName("John Smith")
-      ApplicantNamePage.clickContinue()
-
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow(
-        "Member of the limited liability partnership",
-        "No, but I’m authorised by them to set up this account"
-      )
-      CheckYourAnswersPage.assertSummaryRow("Name", "John Smith")
 
     Scenario("Change Name from CYA page", HappyPath):
 
@@ -95,22 +37,16 @@ extends BaseSpec:
         .WhenHasNoOnlineAgentAccount
         .runFlow()
       ContactDetailsFlow
-        .WhenOnlyOneNameMatch
-        .runFlowUntilCyaPage(stubbedSignInData)
+        .addContactDetailsUntilCyaPage(stubbedSignInData)
 
       CheckYourAnswersPage.clickChangeFor("Name")
 
-      MemberNamePage.assertPageIsDisplayed()
-      MemberNamePage.enterFirstName()
-      MemberNamePage.enterLastName("Jones")
-      MemberNamePage.clickContinue()
-
-      AreTheseYourDetailsPage.assertPageIsDisplayed()
-      AreTheseYourDetailsPage.selectYes()
-      AreTheseYourDetailsPage.clickContinue()
+      ApplicantNamePage.assertPageIsDisplayed()
+      ApplicantNamePage.enterFullName("John Jones")
+      ApplicantNamePage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Name", "JONES, Jane")
+      CheckYourAnswersPage.assertSummaryRow("Name", "John Jones")
 
     Scenario("Change Email address from CYA page", HappyPath):
 
@@ -118,8 +54,7 @@ extends BaseSpec:
         .WhenHasNoOnlineAgentAccount
         .runFlow()
       ContactDetailsFlow
-        .WhenOnlyOneNameMatch
-        .runFlowUntilCyaPage(stubbedSignInData)
+        .addContactDetailsUntilCyaPage(stubbedSignInData)
 
       CheckYourAnswersPage.clickChangeFor("Email address")
 
@@ -149,8 +84,7 @@ extends BaseSpec:
         .WhenHasNoOnlineAgentAccount
         .runFlow()
       ContactDetailsFlow
-        .WhenOnlyOneNameMatch
-        .runFlowUntilCyaPage(stubbedSignInData)
+        .addContactDetailsUntilCyaPage(stubbedSignInData)
 
       CheckYourAnswersPage.clickChangeFor("Telephone number")
 

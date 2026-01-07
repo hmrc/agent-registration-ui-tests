@@ -40,7 +40,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -59,7 +58,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -78,7 +76,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -106,7 +103,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -136,7 +132,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -160,7 +155,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
@@ -184,7 +178,6 @@ extends BaseSpec:
         .runFlow()
 
       ContactDetailsFlow
-        .WhenMultiNameMatch
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
