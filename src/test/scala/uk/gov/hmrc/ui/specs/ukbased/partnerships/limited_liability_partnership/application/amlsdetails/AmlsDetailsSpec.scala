@@ -169,7 +169,7 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Virus.txt")
       EvidenceOfAmlSupervisionPage.clickContinue()
-      EvidenceOfAmlSupervisionPage.assertErrorMessage("The file upload has failed. Try uploading another file.")
+      EvidenceOfAmlSupervisionPage.assertErrorMessage("A virus has been detected in your uploaded file, try uploading another file.")
 
     Scenario("Upload evidence file in invalid format", HappyPath):
 
