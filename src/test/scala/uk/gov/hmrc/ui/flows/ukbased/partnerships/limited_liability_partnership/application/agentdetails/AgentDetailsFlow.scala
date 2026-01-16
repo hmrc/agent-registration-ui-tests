@@ -22,7 +22,6 @@ import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liabi
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.ConfirmYourEmailPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressConfirmPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressCountryPickerPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressLookupPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressSelectPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatBusinessNamePage
@@ -148,9 +147,6 @@ object AgentDetailsFlow:
       case AgentDetailOption.Custom(value) =>
         WhatCorrespondenceAddressPage.selectSomethingElse()
         WhatCorrespondenceAddressPage.clickContinue()
-        LookupAddressCountryPickerPage.assertPageIsDisplayed()
-        LookupAddressCountryPickerPage.enterCountry()
-        LookupAddressCountryPickerPage.clickContinue()
         LookupAddressLookupPage.assertPageIsDisplayed()
         LookupAddressLookupPage.enterPostcode()
         LookupAddressLookupPage.clickContinue()

@@ -33,6 +33,8 @@ extends BasePage:
 
   private val addressLineOneField = By.id("line1")
   private val townOrCityField = By.id("town")
+  private val postcodeField = By.id("postcode")
 
   def enterAddressLineOne(road: String): Unit = sendKeys(addressLineOneField, road)
   def enterTown(town: String): Unit = sendKeys(townOrCityField, town)
+  def enterPostcode(postcode: String): Unit = sendKeys(postcodeField, postcode)

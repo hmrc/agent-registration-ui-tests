@@ -25,7 +25,6 @@ import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liabi
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.ConfirmYourEmailPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressConfirmPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressCountryPickerPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressEditPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressLookupPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatBusinessNamePage
@@ -195,23 +194,21 @@ extends BaseSpec:
       WhatCorrespondenceAddressPage.selectSomethingElse()
       WhatCorrespondenceAddressPage.clickContinue()
 
-      LookupAddressCountryPickerPage.assertPageIsDisplayed()
-      LookupAddressCountryPickerPage.enterCountry()
-      LookupAddressCountryPickerPage.clickContinue()
-
       LookupAddressLookupPage.assertPageIsDisplayed()
       LookupAddressLookupPage.clickAddressManually()
 
       LookupAddressEditPage.assertPageIsDisplayed()
       LookupAddressEditPage.enterAddressLineOne("4 Privet Drive")
       LookupAddressEditPage.enterTown("Little Whinging")
+      LookupAddressEditPage.enterPostcode("AA1 1AA")
+
       LookupAddressEditPage.clickContinue()
 
       LookupAddressConfirmPage.assertPageIsDisplayed()
       LookupAddressConfirmPage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Correspondence address", "4 Privet Drive\nLittle Whinging\nGB")
+      CheckYourAnswersPage.assertSummaryRow("Correspondence address", "4 Privet Drive\nLittle Whinging\nAA1 1AA\nGB")
 
       // additional check that manually entered address is cached when returning to WhatCorrespondenceAddressPage
       CheckYourAnswersPage.clickChangeFor("Correspondence address")
