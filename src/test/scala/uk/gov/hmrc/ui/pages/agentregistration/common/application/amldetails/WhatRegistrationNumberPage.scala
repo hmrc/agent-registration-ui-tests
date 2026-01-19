@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails
 
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.BaseCheckYourAnswersPage
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object CheckYourAnswersPage
-extends BaseCheckYourAnswersPage:
+object WhatRegistrationNumberPage
+extends BasePage:
 
-  override val path: String = "/agent-registration/provide-details/check-your-answers"
+  override val path: String = "/agent-registration/apply/anti-money-laundering/registration-number"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl should include(url)
+
+  private val registrationNumberField = By.id("amlsRegistrationNumber")
+
+  def enterRegistrationNumber(regNum: String = "XAML00000123456"): Unit = sendKeys(registrationNumberField, regNum)

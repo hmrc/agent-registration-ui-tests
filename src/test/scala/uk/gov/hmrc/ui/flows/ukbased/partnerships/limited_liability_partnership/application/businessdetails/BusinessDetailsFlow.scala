@@ -18,70 +18,119 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.CompanyStatus.Blocked
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.CompanyStatus.Ok
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.CreateYourAgentAccountPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.HmrcOnlineServicesAccountPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.HowIsYourBusinessSetUpPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.IsYourAgentBusinessBasedInTheUKPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.SignInWithAgentAccountPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.UserRolePage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.businessdetails.WhatTypeOfPartnershipPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CannotRegisterPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CreateYourAgentAccountPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.HmrcOnlineServicesAccountPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.HowIsYourBusinessSetUpPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.IsYourAgentBusinessBasedInTheUKPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.SignInWithAgentAccountPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.UserRolePage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.WhatTypeOfPartnershipPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 
 /** Flow for completing the Business Details section of an agent registration application.
   *
-  * As reflected in the package structure, this object handles the flow for:
-  *   - agent type: UK-based
-  *   - business type: Limited Liability Partnership (LLP)
-  *   - an applicant making an initial application
+  * UK-based -> LLP -> initial application
   */
 object BusinessDetailsFlow:
 
-  object WhenHasOnlineAgentAccount:
-    def runFlow(): StubbedSignInData = completeBusinessDetailsSection(hasOnlineAgentsAccount = true)
+  enum OnlineAgentsAccount:
+    case HasOnlineAgentAccount, NoOnlineAgentAccount
 
-  object WhenHasNoOnlineAgentAccount:
-    def runFlow(): StubbedSignInData = completeBusinessDetailsSection(hasOnlineAgentsAccount = false)
+  enum AgencyStatus:
+    case Ok, Blocked
 
-  /** Completes the Business Details section
-    */
-  private def completeBusinessDetailsSection(hasOnlineAgentsAccount: Boolean): StubbedSignInData =
+  // --- Public "journeys" (like ProvideDetailsFlow objects) ---
 
+  object HasOnlineAgentAccount:
+    def runFlow(): StubbedSignInData =
+      startJourney()
+      selectUkBased()
+      selectPartnershipBusinessSetup()
+      selectLimitedLiabilityPartnership()
+      selectAuthorisedUserRole()
+      answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
+      proceedToGovernmentGateway()
+      val stubData = stubbedSignIn(AgencyStatus.Ok)
+      landOnTaskList()
+      stubData
+
+  object HasNoOnlineAccount:
+    def runFlow(): StubbedSignInData =
+      startJourney()
+      selectUkBased()
+      selectPartnershipBusinessSetup()
+      selectLimitedLiabilityPartnership()
+      selectAuthorisedUserRole()
+      answerOnlineServicesAccount(OnlineAgentsAccount.NoOnlineAgentAccount)
+      proceedToGovernmentGateway()
+      val stubData = stubbedSignIn(AgencyStatus.Ok)
+      landOnTaskList()
+      stubData
+
+  object HasBlockingStatus:
+    def runFlow(): Unit =
+      startJourney()
+      selectUkBased()
+      selectPartnershipBusinessSetup()
+      selectLimitedLiabilityPartnership()
+      selectAuthorisedUserRole()
+      answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
+      proceedToGovernmentGateway()
+      stubbedSignIn(AgencyStatus.Blocked)
+      landOnCannotRegisterPage()
+
+  // --- Granular steps (each page gets a function) ---
+
+  def startJourney(): Unit =
     ApplyEntryPage.open()
     IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
 
+  def selectUkBased(): Unit =
     IsYourAgentBusinessBasedInTheUKPage.selectYes()
     IsYourAgentBusinessBasedInTheUKPage.clickContinue()
-
     HowIsYourBusinessSetUpPage.assertPageIsDisplayed()
+
+  def selectPartnershipBusinessSetup(): Unit =
     HowIsYourBusinessSetUpPage.selectATypeOfPartnership()
     HowIsYourBusinessSetUpPage.clickContinue()
-
     WhatTypeOfPartnershipPage.assertPageIsDisplayed()
+
+  def selectLimitedLiabilityPartnership(): Unit =
     WhatTypeOfPartnershipPage.selectLimitedLiabilityPartnership()
     WhatTypeOfPartnershipPage.clickContinue()
-
     UserRolePage.assertPageIsDisplayed()
+
+  def selectAuthorisedUserRole(): Unit =
     UserRolePage.selectAuthorised()
     UserRolePage.clickContinue()
-
     HmrcOnlineServicesAccountPage.assertPageIsDisplayed()
 
-    if hasOnlineAgentsAccount
-    then
-      HmrcOnlineServicesAccountPage.selectYes()
-      HmrcOnlineServicesAccountPage.clickContinue()
-      SignInWithAgentAccountPage.assertPageIsDisplayed()
-      SignInWithAgentAccountPage.clickContinue()
-    else
-      HmrcOnlineServicesAccountPage.selectNo()
-      HmrcOnlineServicesAccountPage.clickContinue()
-      CreateYourAgentAccountPage.assertPageIsDisplayed()
-      CreateYourAgentAccountPage.clickContinue()
+  def answerOnlineServicesAccount(answer: OnlineAgentsAccount): Unit =
+    answer match
+      case OnlineAgentsAccount.HasOnlineAgentAccount =>
+        HmrcOnlineServicesAccountPage.selectYes()
+        HmrcOnlineServicesAccountPage.clickContinue()
+        SignInWithAgentAccountPage.assertPageIsDisplayed()
+        SignInWithAgentAccountPage.clickContinue()
 
-    GovernmentGatewaySignInPage.assertPageIsDisplayed()
-    val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForAgent()
-    TaskListPage.assertPageIsDisplayed()
+      case OnlineAgentsAccount.NoOnlineAgentAccount =>
+        HmrcOnlineServicesAccountPage.selectNo()
+        HmrcOnlineServicesAccountPage.clickContinue()
+        CreateYourAgentAccountPage.assertPageIsDisplayed()
+        CreateYourAgentAccountPage.clickContinue()
 
-    stubbedSignInData
+  def proceedToGovernmentGateway(): Unit = GovernmentGatewaySignInPage.assertPageIsDisplayed()
+
+  def stubbedSignIn(status: AgencyStatus): StubbedSignInData =
+    status match
+      case AgencyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok)
+      case AgencyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked)
+
+  def landOnTaskList(): Unit = TaskListPage.assertPageIsDisplayed()
+
+  def landOnCannotRegisterPage(): Unit = CannotRegisterPage.assertPageIsDisplayed()

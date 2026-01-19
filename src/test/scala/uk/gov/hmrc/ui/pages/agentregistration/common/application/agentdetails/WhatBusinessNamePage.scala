@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.stubs
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object GrsDataSetupPage
-extends BasePage {
+object WhatBusinessNamePage
+extends BasePage:
 
-  override val path: String = "/agent-registration/test-only/grs-stub/"
+  override val path: String = "/agent-registration/apply/agent-details/business-name"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl should startWith(url)
+    getCurrentUrl shouldBe url
 
-  private val companyNumberField = By.id("companyNumber")
+  private val existingNameRadio = By.id("agentBusinessName")
+  private val somethingElseRadio = By.id("agentBusinessName-2")
+  private val otherBusinessNameField = By.id("otherAgentBusinessName")
 
-  def enterCompanyNumber(): Unit = sendKeys(companyNumberField, "87654321")
-
-}
+  def selectExistingName(): Unit = click(existingNameRadio)
+  def selectSomethingElse(): Unit = click(somethingElseRadio)
+  def enterCustomName(name: String): Unit = sendKeys(otherBusinessNameField, name)
+  def assertExistingNameRadioIsSelected(): Unit = isSelected(existingNameRadio) shouldBe true

@@ -14,23 +14,29 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.stubs
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object GrsDataSetupPage
+object HowIsYourBusinessSetUpPage
 extends BasePage {
 
-  override val path: String = "/agent-registration/test-only/grs-stub/"
+  override val path: String = "/agent-registration/apply/about-your-business/business-type"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl should startWith(url)
+    getCurrentUrl shouldBe url
 
-  private val companyNumberField = By.id("companyNumber")
+  private val soleTraderRadio = By.id("businessType")
+  private val limitedCompany = By.id("businessType-2")
+  private val aTypeOfPartnership = By.id("businessType-3")
+  private val somethingElse = By.id("businessType-4")
 
-  def enterCompanyNumber(): Unit = sendKeys(companyNumberField, "87654321")
+  def selectSoleTrader(): Unit = click(soleTraderRadio)
+  def selectLimitedCompany(): Unit = click(limitedCompany)
+  def selectATypeOfPartnership(): Unit = click(aTypeOfPartnership)
+  def selectSomethingElse(): Unit = click(somethingElse)
 
 }

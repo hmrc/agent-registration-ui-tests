@@ -20,18 +20,17 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails.AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.ConfirmYourEmailPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressConfirmPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressCountryPickerPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressEditPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressLookupPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatBusinessNamePage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatCorrespondenceAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatEmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatTelephoneNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.ConfirmYourEmailPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.LookupAddressConfirmPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.LookupAddressEditPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.LookupAddressLookupPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatBusinessNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatCorrespondenceAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatEmailAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatTelephoneNumberPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
@@ -42,7 +41,7 @@ extends BaseSpec:
     Scenario("User selects existing details", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
 
       ContactDetailsFlow
@@ -56,7 +55,7 @@ extends BaseSpec:
     Scenario("User enters all custom values", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
 
       ContactDetailsFlow
@@ -70,7 +69,7 @@ extends BaseSpec:
     Scenario("User mixes provided and custom options", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
 
       ContactDetailsFlow
@@ -93,7 +92,7 @@ extends BaseSpec:
     Scenario("Change Business Name from Check Your Answers page", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
 
       ContactDetailsFlow
@@ -117,7 +116,7 @@ extends BaseSpec:
     Scenario("Change Telephone Number from Check Your Answers page", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
 
       ContactDetailsFlow
@@ -141,7 +140,7 @@ extends BaseSpec:
     Scenario("Change Email Address from Check Your Answers page", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
 
       ContactDetailsFlow
@@ -178,7 +177,7 @@ extends BaseSpec:
     Scenario("Change Correspondence Address from Check Your Answers page", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
 
       ContactDetailsFlow
@@ -195,15 +194,12 @@ extends BaseSpec:
       WhatCorrespondenceAddressPage.selectSomethingElse()
       WhatCorrespondenceAddressPage.clickContinue()
 
-      LookupAddressCountryPickerPage.assertPageIsDisplayed()
-      LookupAddressCountryPickerPage.enterCountry()
-      LookupAddressCountryPickerPage.clickContinue()
-
       LookupAddressLookupPage.assertPageIsDisplayed()
       LookupAddressLookupPage.clickAddressManually()
 
       LookupAddressEditPage.assertPageIsDisplayed()
       LookupAddressEditPage.enterAddressLineOne("4 Privet Drive")
+      LookupAddressEditPage.enterPostcode("AA1 1AA")
       LookupAddressEditPage.enterTown("Little Whinging")
       LookupAddressEditPage.clickContinue()
 
@@ -211,7 +207,7 @@ extends BaseSpec:
       LookupAddressConfirmPage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Correspondence address", "4 Privet Drive\nLittle Whinging\nGB")
+      CheckYourAnswersPage.assertSummaryRow("Correspondence address", "4 Privet Drive\nLittle Whinging\nAA1 1AA\nGB")
 
       // additional check that manually entered address is cached when returning to WhatCorrespondenceAddressPage
       CheckYourAnswersPage.clickChangeFor("Correspondence address")

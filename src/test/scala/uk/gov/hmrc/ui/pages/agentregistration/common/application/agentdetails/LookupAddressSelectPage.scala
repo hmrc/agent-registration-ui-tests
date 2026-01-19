@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails
 
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.BaseCheckYourAnswersPage
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object CheckYourAnswersPage
-extends BaseCheckYourAnswersPage:
+object LookupAddressSelectPage
+extends BasePage:
 
-  override val path: String = "/agent-registration/provide-details/check-your-answers"
-  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+  override val path: String = "/lookup-address"
+  override val baseUrl: String = AppConfig.baseUrlCountryPicker
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    val currentUrl = getCurrentUrl
+    currentUrl should include(url)
+    currentUrl should include("/select?postcode")
+
+  private val addressResultRadio = By.id("addressId")
+
+  def selectAddress(): Unit = click(addressResultRadio)

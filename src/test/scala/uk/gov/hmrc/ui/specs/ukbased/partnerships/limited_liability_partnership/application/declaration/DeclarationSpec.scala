@@ -31,7 +31,7 @@ extends BaseSpec:
     Scenario("User accepts the declaration", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
 
       ContactDetailsFlow

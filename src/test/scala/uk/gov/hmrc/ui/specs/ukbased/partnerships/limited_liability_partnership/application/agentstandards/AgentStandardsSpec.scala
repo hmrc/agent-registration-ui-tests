@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class AgentStandardsSpec
@@ -31,7 +31,7 @@ extends BaseSpec:
     Scenario("User agrees to HMRC's standards for agents", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
 
       ContactDetailsFlow

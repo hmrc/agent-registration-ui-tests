@@ -14,23 +14,36 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.stubs
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object GrsDataSetupPage
-extends BasePage {
+import java.nio.file.Paths
 
-  override val path: String = "/agent-registration/test-only/grs-stub/"
+object EvidenceOfAmlSupervisionPage
+extends BasePage:
+
+  override val path: String = "/agent-registration/apply/anti-money-laundering/evidence"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl should startWith(url)
+    getCurrentUrl shouldBe url
 
-  private val companyNumberField = By.id("companyNumber")
+  private val fileInput = By.id("fileToUpload")
+  private val uploadErrorMessageText = By.id("fileToUpload-error")
 
-  def enterCompanyNumber(): Unit = sendKeys(companyNumberField, "87654321")
+  def uploadFileFromResources(fileName: String): Unit =
+    val path =
+      Paths
+        .get(s"src/test/resources/test-files/$fileName")
+        .toAbsolutePath
+        .toString
 
-}
+    sendKeys(fileInput, path)
+
+  def assertErrorMessage(expected: String): Unit = eventually:
+    val error = getElementBy(uploadErrorMessageText)
+    error.isDisplayed shouldBe true
+    error.getText.replace("Error:", "").trim shouldBe expected

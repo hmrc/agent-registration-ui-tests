@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.stubs
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object GrsDataSetupPage
-extends BasePage {
+object LookupAddressLookupPage
+extends BasePage:
 
-  override val path: String = "/agent-registration/test-only/grs-stub/"
-  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+  override val path: String = "/lookup-address"
+  override val baseUrl: String = AppConfig.baseUrlCountryPicker
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl should startWith(url)
+    val currentUrl = getCurrentUrl
+    currentUrl should include(url)
+    currentUrl should include("/lookup")
 
-  private val companyNumberField = By.id("companyNumber")
+  private val postcodeField = By.id("postcode")
+  private val enterAddressManuallyLink = By.id("manualAddress")
 
-  def enterCompanyNumber(): Unit = sendKeys(companyNumberField, "87654321")
-
-}
+  def enterPostcode(): Unit = sendKeys(postcodeField, "ZZ9Z 9TT")
+  def clickAddressManually(): Unit = click(enterAddressManuallyLink)

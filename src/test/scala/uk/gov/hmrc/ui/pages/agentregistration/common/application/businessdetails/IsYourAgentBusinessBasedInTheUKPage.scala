@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails
 
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.BaseCheckYourAnswersPage
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object CheckYourAnswersPage
-extends BaseCheckYourAnswersPage:
+object IsYourAgentBusinessBasedInTheUKPage
+extends BasePage:
 
-  override val path: String = "/agent-registration/provide-details/check-your-answers"
+  override val path: String = "/agent-registration/apply/about-your-business/agent-type"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
+
+  private val yesRadio = By.id("agentType")
+  private val noRadio = By.id("agentType-2")
+
+  def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit = click(noRadio)

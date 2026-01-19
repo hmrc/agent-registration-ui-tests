@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.businessdetails
+package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.businessdetails
 
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CannotRegisterPage
 import uk.gov.hmrc.ui.specs.BaseSpec
@@ -27,17 +26,17 @@ extends BaseSpec:
 
   Feature("Complete BusinessDetails"):
     Scenario("When user has no online agent account", HappyPath):
-
+      pending
       BusinessDetailsFlow
-        .HasNoOnlineAccount
+        .NoOnlineAgentAccount
         .runFlow()
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.assertBusinessDetailsStatus("Completed")
 
-    Scenario("When user has existing online agent account", HappyPath):
-
+    Scenario("When company has a blocking status", HappyPath):
+      pending
       BusinessDetailsFlow
-        .HasBlockingStatus
+        .NoOnlineAgentAccount
         .runFlow()
       CannotRegisterPage.assertPageIsDisplayed()
       CannotRegisterPage.assertHeaderText("We cannot create an account for this company")

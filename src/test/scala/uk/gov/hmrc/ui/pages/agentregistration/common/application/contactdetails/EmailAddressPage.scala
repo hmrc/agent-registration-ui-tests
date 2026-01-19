@@ -14,13 +14,28 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails
 
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.BaseCheckYourAnswersPage
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
+import uk.gov.hmrc.ui.utils.RandomData
 
-object CheckYourAnswersPage
-extends BaseCheckYourAnswersPage:
+object EmailAddressPage
+extends BasePage {
 
-  override val path: String = "/agent-registration/provide-details/check-your-answers"
+  override val path: String = "/agent-registration/apply/applicant/email-address"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
+
+  private val emailAddressField = By.id("emailAddress")
+
+  def enterEmailAddress(suffix: String = "@test.com"): String = {
+    val value = RandomData.email(suffix)
+    sendKeys(emailAddressField, value)
+    value
+  }
+
+}
