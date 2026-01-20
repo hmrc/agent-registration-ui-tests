@@ -29,8 +29,8 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  private val yesRadio = By.id("memberApproveAgentApplication")
-  private val noRadio = By.id("memberApproveAgentApplication-2")
+  private val yesRadio = By.id("individualApproveAgentApplication")
+  private val noRadio = By.id("individualApproveAgentApplication-2")
 
   def selectYes(): Unit = click(yesRadio)
   def selectNo(): Unit = click(noRadio)

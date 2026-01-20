@@ -19,21 +19,16 @@ package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liab
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
-import uk.gov.hmrc.ui.utils.RandomData
 
-object MemberEmailAddressPage
+object IndivdualTelephoneNumberPage
 extends BasePage:
 
-  override val path: String = "/agent-registration/provide-details/email-address"
+  override val path: String = "/agent-registration/provide-details/telephone-number"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  private val emailAddressField = By.id("memberEmailAddress")
+  private val telephoneNumberField = By.id("individualTelephoneNumber")
 
-  def enterEmailAddress(suffix: String = "@test.com"): String = {
-    val value = RandomData.email(suffix)
-    sendKeys(emailAddressField, value)
-    value
-  }
+  def enterTelephoneNumber(telephoneNumber: String = "07777777777"): Unit = sendKeys(telephoneNumberField, telephoneNumber)

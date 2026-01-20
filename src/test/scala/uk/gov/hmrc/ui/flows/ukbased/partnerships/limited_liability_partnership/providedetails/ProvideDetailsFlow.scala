@@ -32,10 +32,10 @@ import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liabi
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmationPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberEmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberNiNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberTelephoneNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberUtrPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.individualEmailAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualNiNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndivdualTelephoneNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualUtrPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsStartPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.WhatIsYourNamePage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
@@ -49,7 +49,7 @@ object ProvideDetailsFlow:
   enum ProvideDetail:
     case Yes, No
 
-  object ProvideFullMemberDetails:
+  object ProvideFullIndividualDetails:
     def runFlow(): Unit =
       startJourney()
       val stubData = stubbedSignIn()
@@ -63,7 +63,7 @@ object ProvideDetailsFlow:
       checkYourAnswers(email, ProvideNinoUtrDetails)
       confirmationPage()
 
-  object ProvidePartialMemberDetails:
+  object ProvidePartialIndividualDetails:
     def runFlow(): Unit =
       startJourney()
       val stubData = stubbedSignIn()
@@ -133,14 +133,14 @@ object ProvideDetailsFlow:
     AreTheseYourDetailsPage.clickContinue()
 
   def enterTelephoneNumber(): Unit =
-    MemberTelephoneNumberPage.assertPageIsDisplayed()
-    MemberTelephoneNumberPage.enterTelephoneNumber()
-    MemberTelephoneNumberPage.clickContinue()
+    IndivdualTelephoneNumberPage.assertPageIsDisplayed()
+    IndivdualTelephoneNumberPage.enterTelephoneNumber()
+    IndivdualTelephoneNumberPage.clickContinue()
 
   def enterEmailAddress(stubData: StubbedSignInData): String =
-    MemberEmailAddressPage.assertPageIsDisplayed()
-    val email = MemberEmailAddressPage.enterEmailAddress()
-    MemberEmailAddressPage.clickContinue()
+    individualEmailAddressPage.assertPageIsDisplayed()
+    val email = individualEmailAddressPage.enterEmailAddress()
+    individualEmailAddressPage.clickContinue()
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
     EmailVerificationTestOnlyPage.clickContinue()
     // confirm email by providing confirmation code
@@ -151,22 +151,22 @@ object ProvideDetailsFlow:
     email
 
   def enterNino(details: ProvideDetail): Unit =
-    MemberNiNumberPage.assertPageIsDisplayed()
+    IndividualNiNumberPage.assertPageIsDisplayed()
     details match
       case ProvideDetail.Yes =>
-        MemberNiNumberPage.selectYes()
-        MemberNiNumberPage.enterNino()
-      case ProvideDetail.No => MemberNiNumberPage.selectNo()
-    MemberNiNumberPage.clickContinue()
+        IndividualNiNumberPage.selectYes()
+        IndividualNiNumberPage.enterNino()
+      case ProvideDetail.No => IndividualNiNumberPage.selectNo()
+    IndividualNiNumberPage.clickContinue()
 
   def enterUtr(details: ProvideDetail): Unit =
-    MemberUtrPage.assertPageIsDisplayed()
+    IndividualUtrPage.assertPageIsDisplayed()
     details match
       case ProvideDetail.Yes =>
-        MemberUtrPage.selectYes()
-        MemberUtrPage.enterUtr()
-      case ProvideDetail.No => MemberUtrPage.selectNo()
-    MemberUtrPage.clickContinue()
+        IndividualUtrPage.selectYes()
+        IndividualUtrPage.enterUtr()
+      case ProvideDetail.No => IndividualUtrPage.selectNo()
+    IndividualUtrPage.clickContinue()
 
   def approveApplicant(): Unit =
     ApproveApplicantPage.assertPageIsDisplayed()

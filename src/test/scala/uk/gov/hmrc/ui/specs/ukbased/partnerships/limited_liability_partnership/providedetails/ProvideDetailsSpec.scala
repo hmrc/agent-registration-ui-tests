@@ -22,10 +22,10 @@ import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyP
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AreTheseYourDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberEmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberNiNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberTelephoneNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.MemberUtrPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.individualEmailAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualNiNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndivdualTelephoneNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualUtrPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.WhatIsYourNamePage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.PasscodeHelper
@@ -33,17 +33,17 @@ import uk.gov.hmrc.ui.utils.PasscodeHelper
 class ProvideDetailsSpec
 extends BaseSpec:
 
-  Feature("Complete provide member details section"):
-    Scenario("User provides member details with Nino and Utr", HappyPath):
+  Feature("Complete provide individual details section"):
+    Scenario("User provides individual details with Nino and Utr", HappyPath):
 
       ProvideDetailsFlow
-        .ProvideFullMemberDetails
+        .ProvideFullIndividualDetails
         .runFlow()
 
-    Scenario("User provides member details WITHOUT Nino and Utr", HappyPath):
+    Scenario("User provides individual details WITHOUT Nino and Utr", HappyPath):
 
       ProvideDetailsFlow
-        .ProvidePartialMemberDetails
+        .ProvidePartialIndividualDetails
         .runFlow()
 
     Scenario("Nino and Utr details retrieved from HMRC", HappyPath):
@@ -58,9 +58,9 @@ extends BaseSpec:
       val stubData = ProvideDetailsFlow.stubbedSignIn(hasUtr = true)
       ProvideDetailsFlow.enterName()
       ProvideDetailsFlow.enterTelephoneNumber()
-      MemberEmailAddressPage.assertPageIsDisplayed()
-      MemberEmailAddressPage.enterEmailAddress()
-      MemberEmailAddressPage.clickContinue()
+      individualEmailAddressPage.assertPageIsDisplayed()
+      individualEmailAddressPage.enterEmailAddress()
+      individualEmailAddressPage.clickContinue()
       EmailVerificationTestOnlyPage.assertPageIsDisplayed()
       EmailVerificationTestOnlyPage.clickContinue()
       ConfirmYourEmailPage.assertPageIsDisplayed()
@@ -93,17 +93,17 @@ extends BaseSpec:
 
       // change Telephone number
       CheckYourAnswersPage.clickChangeFor("Telephone number")
-      MemberTelephoneNumberPage.assertPageIsDisplayed()
-      MemberTelephoneNumberPage.enterTelephoneNumber("07888888888")
-      MemberTelephoneNumberPage.clickContinue()
+      IndivdualTelephoneNumberPage.assertPageIsDisplayed()
+      IndivdualTelephoneNumberPage.enterTelephoneNumber("07888888888")
+      IndivdualTelephoneNumberPage.clickContinue()
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "07888888888")
 
       // change Email address
       CheckYourAnswersPage.clickChangeFor("Email address")
-      MemberEmailAddressPage.assertPageIsDisplayed()
-      val newEmail = MemberEmailAddressPage.enterEmailAddress("@newtest.com")
-      MemberEmailAddressPage.clickContinue()
+      individualEmailAddressPage.assertPageIsDisplayed()
+      val newEmail = individualEmailAddressPage.enterEmailAddress("@newtest.com")
+      individualEmailAddressPage.clickContinue()
       EmailVerificationTestOnlyPage.assertPageIsDisplayed()
       EmailVerificationTestOnlyPage.clickContinue()
       // Get a fresh passcode using the SAME session
@@ -120,34 +120,34 @@ extends BaseSpec:
 
       // change National Insurance number
       CheckYourAnswersPage.clickChangeFor("National Insurance number")
-      MemberNiNumberPage.assertPageIsDisplayed()
-      MemberNiNumberPage.enterNino("AA000000A")
-      MemberNiNumberPage.clickContinue()
+      IndividualNiNumberPage.assertPageIsDisplayed()
+      IndividualNiNumberPage.enterNino("AA000000A")
+      IndividualNiNumberPage.clickContinue()
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("National Insurance number", "AA000000A")
 
       // remove National Insurance number
       CheckYourAnswersPage.clickChangeFor("Do you have a National Insurance number?")
-      MemberNiNumberPage.assertPageIsDisplayed()
-      MemberNiNumberPage.selectNo()
-      MemberNiNumberPage.clickContinue()
+      IndividualNiNumberPage.assertPageIsDisplayed()
+      IndividualNiNumberPage.selectNo()
+      IndividualNiNumberPage.clickContinue()
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "No")
       CheckYourAnswersPage.assertSummaryRowNotPresent("National Insurance number")
 
       // change Self Assessment Unique Taxpayer Reference number
       CheckYourAnswersPage.clickChangeFor("Do you have a Self Assessment Unique Taxpayer Reference?")
-      MemberUtrPage.assertPageIsDisplayed()
-      MemberUtrPage.enterUtr("0987654321")
-      MemberUtrPage.clickContinue()
+      IndividualUtrPage.assertPageIsDisplayed()
+      IndividualUtrPage.enterUtr("0987654321")
+      IndividualUtrPage.clickContinue()
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "0987654321")
 
       // remove Self Assessment Unique Taxpayer Reference number
       CheckYourAnswersPage.clickChangeFor("Self Assessment Unique Taxpayer Reference")
-      MemberUtrPage.assertPageIsDisplayed()
-      MemberUtrPage.selectNo()
-      MemberUtrPage.clickContinue()
+      IndividualUtrPage.assertPageIsDisplayed()
+      IndividualUtrPage.selectNo()
+      IndividualUtrPage.clickContinue()
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
       CheckYourAnswersPage.assertSummaryRowNotPresent("Self Assessment Unique Taxpayer Reference")
