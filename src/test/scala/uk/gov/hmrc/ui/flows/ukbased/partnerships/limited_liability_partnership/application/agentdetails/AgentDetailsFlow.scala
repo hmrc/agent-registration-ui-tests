@@ -17,17 +17,18 @@
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails
 
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.ConfirmYourEmailPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.LookupAddressConfirmPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.LookupAddressLookupPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.LookupAddressSelectPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatBusinessNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatCorrespondenceAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatEmailAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatTelephoneNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.ConfirmYourEmailPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressConfirmPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressLookupPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.LookupAddressSelectPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatBusinessNamePage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatCorrespondenceAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatEmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentdetails.WhatTelephoneNumberPage
+
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 object AgentDetailsFlow:

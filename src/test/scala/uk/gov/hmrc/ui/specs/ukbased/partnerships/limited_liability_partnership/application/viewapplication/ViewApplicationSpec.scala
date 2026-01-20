@@ -23,8 +23,8 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.viewapplication.ViewApplicationFlow
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.ViewApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ViewApplicationSpec
@@ -34,7 +34,7 @@ extends BaseSpec:
     Scenario("User reviews application details", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
 
       ContactDetailsFlow

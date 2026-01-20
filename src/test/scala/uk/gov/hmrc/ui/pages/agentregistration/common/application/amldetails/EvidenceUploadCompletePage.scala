@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.viewapplication
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails
 
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 
-object ViewApplicationFlow:
+object EvidenceUploadCompletePage
+extends BasePage:
 
-  object ViewApplication:
+  override val path: String = "/agent-registration/apply/anti-money-laundering/evidence/upload-result"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
-    def runFlow(): Unit = startJourney()
-
-  def startJourney(): Unit = ViewApplicationPage.assertPageIsDisplayed()
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url

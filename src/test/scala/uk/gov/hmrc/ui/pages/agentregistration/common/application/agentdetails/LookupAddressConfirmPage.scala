@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.viewapplication
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails
 
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 
-object ViewApplicationFlow:
+object LookupAddressConfirmPage
+extends BasePage:
 
-  object ViewApplication:
+  override val path: String = "/lookup-address"
+  override val baseUrl: String = AppConfig.baseUrlCountryPicker
 
-    def runFlow(): Unit = startJourney()
-
-  def startJourney(): Unit = ViewApplicationPage.assertPageIsDisplayed()
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    val currentUrl = getCurrentUrl
+    currentUrl should include(url)
+    currentUrl should include("/confirm")

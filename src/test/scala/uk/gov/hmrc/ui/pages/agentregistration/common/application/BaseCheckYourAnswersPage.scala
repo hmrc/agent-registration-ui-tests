@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.stubs
+package uk.gov.hmrc.ui.pages.agentregistration.common.application
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
-import uk.gov.hmrc.ui.utils.AppConfig
 
-object GrsDataSetupPage
-extends BasePage {
+abstract class BaseCheckYourAnswersPage
+extends BasePage:
 
-  override val path: String = "/agent-registration/test-only/grs-stub/"
-  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+  // Common helpers
+  protected def changeLinkLocatorFor(keyText: String): By = By.xpath(
+    "//div[contains(@class,'govuk-summary-list__row')]" +
+      s"[normalize-space(.//dt[contains(@class,'govuk-summary-list__key')])='$keyText']" +
+      "//dd[contains(@class,'govuk-summary-list__actions')]//a"
+  )
 
-  inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl should startWith(url)
+  def clickChangeFor(keyText: String): Unit = click(changeLinkLocatorFor(keyText))
 
-  private val companyNumberField = By.id("companyNumber")
-
-  def enterCompanyNumber(): Unit = sendKeys(companyNumberField, "87654321")
-
-}
+  inline def assertPageIsDisplayed(): Unit = eventually {
+    getCurrentUrl shouldBe url
+  }

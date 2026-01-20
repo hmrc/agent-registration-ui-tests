@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentstandards
 
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.agentstandards.AgentStandardsPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentstandards.AgentStandardsPage
 
 object AgentStandardsFlow:
 

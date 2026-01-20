@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails
 
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.BaseCheckYourAnswersPage
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object CheckYourAnswersPage
-extends BaseCheckYourAnswersPage:
+object CannotRegisterPage
+extends BasePage:
 
-  override val path: String = "/agent-registration/provide-details/check-your-answers"
+  override val path: String = "/agent-registration/apply/cannot-register-company-or-partnership"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl should startWith(url)
+
+  private val heading = By.tagName("h1")
+
+  def assertHeaderText(expectedHeader: String): Unit =
+    val h1Text = getText(heading)
+    h1Text shouldBe expectedHeader

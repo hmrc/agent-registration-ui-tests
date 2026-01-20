@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails
 
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.BaseCheckYourAnswersPage
+import org.openqa.selenium.By
+import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object CheckYourAnswersPage
-extends BaseCheckYourAnswersPage:
+object TelephoneNumberPage
+extends BasePage() {
 
-  override val path: String = "/agent-registration/provide-details/check-your-answers"
+  override val path: String = "/agent-registration/apply/applicant/telephone-number"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url
+
+  private val telephoneNumberField = By.id("telephoneNumber")
+
+  def enterTelephoneNumber(telephoneNumber: String = "07777777777"): Unit = sendKeys(telephoneNumberField, telephoneNumber)
+
+}

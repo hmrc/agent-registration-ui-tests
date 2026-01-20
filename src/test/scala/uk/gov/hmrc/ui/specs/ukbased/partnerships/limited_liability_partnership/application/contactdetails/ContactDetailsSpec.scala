@@ -21,8 +21,12 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.a
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows
 import uk.gov.hmrc.ui.pages
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.ApplicantNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.ConfirmYourEmailPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.EmailAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.TelephoneNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.application.contactdetails.*
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
@@ -34,7 +38,7 @@ extends BaseSpec:
     Scenario("Change Name from CYA page", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
@@ -51,7 +55,7 @@ extends BaseSpec:
     Scenario("Change Email address from CYA page", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
@@ -81,7 +85,7 @@ extends BaseSpec:
     Scenario("Change Telephone number from CYA page", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
-        .WhenHasNoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
