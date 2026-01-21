@@ -72,6 +72,7 @@ object ProvideDetailsFlow:
       enterName()
       enterTelephoneNumber()
       val email = enterEmailAddress(stubData)
+      enterDateOfBirth
       enterNino(No)
       enterUtr(No)
       approveApplicant()
