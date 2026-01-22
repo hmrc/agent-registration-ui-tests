@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.businessdetails
 
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CannotRegisterPage

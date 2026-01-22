@@ -16,67 +16,111 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails
 
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow
+import StubbedSignInFlow.CompanyStatus.Blocked
+import StubbedSignInFlow.CompanyStatus.Ok
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag
+import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow.Deceased.False
+import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow.Deceased.True
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CreateYourAgentAccountPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.HmrcOnlineServicesAccountPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.HowIsYourBusinessSetUpPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.IsYourAgentBusinessBasedInTheUKPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.SignInWithAgentAccountPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.UserRolePage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.*
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.businessdetails.AreYouTheBusinessOwnerPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.businessdetails.CannotConfirmIdentityPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 
 /** Flow for completing the Business Details section of an agent registration application.
   *
-  * As reflected in the package structure, this object handles the flow for:
-  *   - agent type: UK-based
-  *   - business type: Limited Liability Partnership (LLP)
-  *   - an applicant making an initial application
+  * UK-based -> LLP -> initial application
   */
 object BusinessDetailsFlow:
 
+  enum OnlineAgentsAccount:
+    case HasOnlineAgentAccount, NoOnlineAgentAccount
+
+  enum Deceased:
+    case True, False
+
+  // --- Public "journeys" (like ProvideDetailsFlow objects) ---
+
   object HasOnlineAgentAccount:
-    def runFlow(): StubbedSignInData = completeBusinessDetailsSection(hasOnlineAgentsAccount = true)
+    def runFlow(): StubbedSignInData =
+      startJourney()
+      selectUkBased()
+      selectSoleTraderBusinessSetup()
+      confirmIfBusinessOwner()
+      answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
+      proceedToGovernmentGateway()
+      val stubData = stubbedSignIn(Deceased.False)
+      landOnTaskList()
+      stubData
 
-  object NoOnlineAgentAccount:
-    def runFlow(): StubbedSignInData = completeBusinessDetailsSection(hasOnlineAgentsAccount = false)
+  object HasNoOnlineAccount:
+    def runFlow(): StubbedSignInData =
+      startJourney()
+      selectUkBased()
+      selectSoleTraderBusinessSetup()
+      confirmIfBusinessOwner()
+      answerOnlineServicesAccount(OnlineAgentsAccount.NoOnlineAgentAccount)
+      proceedToGovernmentGateway()
+      val stubData = stubbedSignIn(Deceased.False)
+      landOnTaskList()
+      stubData
 
-  /** Completes the Business Details section
-    */
-  private def completeBusinessDetailsSection(hasOnlineAgentsAccount: Boolean): StubbedSignInData =
+  object IsDeceased:
+    def runFlow(): Unit =
+      startJourney()
+      selectUkBased()
+      selectSoleTraderBusinessSetup()
+      confirmIfBusinessOwner()
+      answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
+      proceedToGovernmentGateway()
+      stubbedSignIn(Deceased.True)
+      landOnCannotConfirmIdentityPage()
 
-    ApplyEntryPage.open()
+  // --- Granular steps (each page gets a function) ---
+
+  def startJourney(): Unit = ApplyEntryPage.open()
+
+  def selectUkBased(): Unit =
     IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
-
     IsYourAgentBusinessBasedInTheUKPage.selectYes()
     IsYourAgentBusinessBasedInTheUKPage.clickContinue()
 
+  def selectSoleTraderBusinessSetup(): Unit =
     HowIsYourBusinessSetUpPage.assertPageIsDisplayed()
     HowIsYourBusinessSetUpPage.selectSoleTrader()
     HowIsYourBusinessSetUpPage.clickContinue()
 
-    UserRolePage.assertPageIsDisplayed()
-    UserRolePage.selectAuthorised()
-    UserRolePage.clickContinue()
+  def confirmIfBusinessOwner(): Unit =
+    AreYouTheBusinessOwnerPage.assertPageIsDisplayed()
+    AreYouTheBusinessOwnerPage.selectYes()
+    AreYouTheBusinessOwnerPage.clickContinue()
 
-    HmrcOnlineServicesAccountPage.assertPageIsDisplayed()
+  def answerOnlineServicesAccount(answer: OnlineAgentsAccount): Unit =
+    answer match
+      case OnlineAgentsAccount.HasOnlineAgentAccount =>
+        HmrcOnlineServicesAccountPage.assertPageIsDisplayed()
+        HmrcOnlineServicesAccountPage.selectYes()
+        HmrcOnlineServicesAccountPage.clickContinue()
+        SignInWithAgentAccountPage.assertPageIsDisplayed()
+        SignInWithAgentAccountPage.clickContinue()
 
-    if hasOnlineAgentsAccount
-    then
-      HmrcOnlineServicesAccountPage.selectYes()
-      HmrcOnlineServicesAccountPage.clickContinue()
-      SignInWithAgentAccountPage.assertPageIsDisplayed()
-      SignInWithAgentAccountPage.clickContinue()
-    else
-      HmrcOnlineServicesAccountPage.selectNo()
-      HmrcOnlineServicesAccountPage.clickContinue()
-      CreateYourAgentAccountPage.assertPageIsDisplayed()
-      CreateYourAgentAccountPage.clickContinue()
+      case OnlineAgentsAccount.NoOnlineAgentAccount =>
+        HmrcOnlineServicesAccountPage.assertPageIsDisplayed()
+        HmrcOnlineServicesAccountPage.selectNo()
+        HmrcOnlineServicesAccountPage.clickContinue()
+        CreateYourAgentAccountPage.assertPageIsDisplayed()
+        CreateYourAgentAccountPage.clickContinue()
 
-    GovernmentGatewaySignInPage.assertPageIsDisplayed()
-    val stubbedSignInData: StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForAgent()
-    TaskListPage.assertPageIsDisplayed()
+  def proceedToGovernmentGateway(): Unit = GovernmentGatewaySignInPage.assertPageIsDisplayed()
 
-    stubbedSignInData
+  def stubbedSignIn(status: Deceased): StubbedSignInData =
+    status match
+      case True => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(deceasedFlag = DeceasedFlag.True)
+      case False => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(deceasedFlag = DeceasedFlag.False)
+
+  def landOnTaskList(): Unit = TaskListPage.assertPageIsDisplayed()
+
+  def landOnCannotConfirmIdentityPage(): Unit = CannotConfirmIdentityPage.assertPageIsDisplayed()

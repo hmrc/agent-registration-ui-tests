@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.stubs
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.businessdetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object GrsDataSetupPage
-extends BasePage {
+object CannotConfirmIdentityPage
+extends BasePage:
 
-  override val path: String = "/agent-registration/test-only/grs-stub/"
+  override val path: String = "/agent-registration/apply/cannot-confirm-identity"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should startWith(url)
 
-  private val companyNumberField = By.id("companyNumber")
-  private val deceasedCheckbox = By.id("deceased")
+  private val heading = By.tagName("h1")
 
-  def enterCompanyNumber(): Unit = sendKeys(companyNumberField, "87654321")
-  def checkDeceasedCheckbox(): Unit = selectCheckbox(deceasedCheckbox)
-
-}
+  def assertHeaderText(expectedHeader: String): Unit =
+    val h1Text = getText(heading)
+    h1Text shouldBe expectedHeader

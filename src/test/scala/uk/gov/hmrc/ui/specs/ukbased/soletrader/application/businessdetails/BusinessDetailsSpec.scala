@@ -19,6 +19,7 @@ package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.businessdetails
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CannotRegisterPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.businessdetails.CannotConfirmIdentityPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class BusinessDetailsSpec
@@ -26,17 +27,17 @@ extends BaseSpec:
 
   Feature("Complete BusinessDetails"):
     Scenario("When user has no online agent account", HappyPath):
-      pending
+
       BusinessDetailsFlow
-        .NoOnlineAgentAccount
+        .HasNoOnlineAccount
         .runFlow()
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.assertBusinessDetailsStatus("Completed")
 
     Scenario("When company has a blocking status", HappyPath):
-      pending
+
       BusinessDetailsFlow
-        .NoOnlineAgentAccount
+        .IsDeceased
         .runFlow()
-      CannotRegisterPage.assertPageIsDisplayed()
-      CannotRegisterPage.assertHeaderText("We cannot create an account for this company")
+      CannotConfirmIdentityPage.assertPageIsDisplayed()
+      CannotConfirmIdentityPage.assertHeaderText("Get in touch to confirm your details")

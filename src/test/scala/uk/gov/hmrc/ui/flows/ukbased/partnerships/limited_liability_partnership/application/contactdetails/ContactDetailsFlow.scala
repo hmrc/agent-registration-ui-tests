@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.contactdetails
 
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.ApplicantNamePage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.CheckYourAnswersPage
