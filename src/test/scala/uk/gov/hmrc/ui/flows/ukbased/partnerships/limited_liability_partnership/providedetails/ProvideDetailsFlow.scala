@@ -35,6 +35,7 @@ import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liabi
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.individualEmailAddressPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualNiNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndivdualTelephoneNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualDateOfBirthPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualUtrPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsStartPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.WhatIsYourNamePage
@@ -56,6 +57,7 @@ object ProvideDetailsFlow:
       enterName()
       enterTelephoneNumber()
       val email = enterEmailAddress(stubData)
+      enterDateOfBirth
       enterNino(Yes)
       enterUtr(Yes)
       approveApplicant()
@@ -70,6 +72,7 @@ object ProvideDetailsFlow:
       enterName()
       enterTelephoneNumber()
       val email = enterEmailAddress(stubData)
+      enterDateOfBirth
       enterNino(No)
       enterUtr(No)
       approveApplicant()
@@ -98,6 +101,7 @@ object ProvideDetailsFlow:
       enterName()
       enterTelephoneNumber()
       val email = enterEmailAddress(stubData)
+      enterDateOfBirth
       enterNino(Yes)
       enterUtr(Yes)
       approveApplicant()
@@ -149,6 +153,13 @@ object ProvideDetailsFlow:
     ConfirmYourEmailPage.enterConfirmationCode(passcode)
     ConfirmYourEmailPage.clickContinue()
     email
+
+  def enterDateOfBirth: Unit =
+    IndividualDateOfBirthPage.assertPageIsDisplayed()
+    IndividualDateOfBirthPage.enterDay()
+    IndividualDateOfBirthPage.enterMonth()
+    IndividualDateOfBirthPage.enterYear()
+    IndividualDateOfBirthPage.clickContinue()
 
   def enterNino(details: ProvideDetail): Unit =
     IndividualNiNumberPage.assertPageIsDisplayed()
