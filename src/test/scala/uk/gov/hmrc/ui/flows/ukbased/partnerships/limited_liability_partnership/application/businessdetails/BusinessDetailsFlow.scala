@@ -16,20 +16,13 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails
 
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInData
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.CompanyStatus.Blocked
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.CompanyStatus.Ok
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow
+import StubbedSignInFlow.CompanyStatus.Blocked
+import StubbedSignInFlow.CompanyStatus.Ok
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CannotRegisterPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CreateYourAgentAccountPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.HmrcOnlineServicesAccountPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.HowIsYourBusinessSetUpPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.IsYourAgentBusinessBasedInTheUKPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.SignInWithAgentAccountPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.UserRolePage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.WhatTypeOfPartnershipPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.*
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 
 /** Flow for completing the Business Details section of an agent registration application.

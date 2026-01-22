@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership
+package uk.gov.hmrc.ui.flows.common.application
 
 final case class StubbedSignInData(
   username: String,

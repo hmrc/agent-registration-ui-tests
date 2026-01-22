@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.stubs
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.businessdetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object GrsDataSetupPage
-extends BasePage {
+object AreYouTheBusinessOwnerPage
+extends BasePage:
 
-  override val path: String = "/agent-registration/test-only/grs-stub/"
+  override val path: String = "/agent-registration/apply/about-your-business/user-role"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl should startWith(url)
+    getCurrentUrl shouldBe url
 
-  private val companyNumberField = By.id("companyNumber")
-  private val deceasedCheckbox = By.id("deceased")
+  private val yesRadio = By.id("userRole")
+  private val noRadio = By.id("userRole-2")
 
-  def enterCompanyNumber(): Unit = sendKeys(companyNumberField, "87654321")
-  def checkDeceasedCheckbox(): Unit = selectCheckbox(deceasedCheckbox)
-
-}
+  def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit = click(noRadio)

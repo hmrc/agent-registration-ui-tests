@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership
+package uk.gov.hmrc.ui.flows.common.application
 
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.JourneyType.Agent
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.JourneyType.Individual
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.StubbedSignInFlow.JourneyType.IndividualWithUtr
+import StubbedSignInFlow.CompanyStatus.Ok
+import StubbedSignInFlow.DeceasedFlag.False
+import StubbedSignInFlow.DeceasedFlag.True
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Agent
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Individual
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.IndividualWithUtr
 import uk.gov.hmrc.ui.pages.*
 import uk.gov.hmrc.ui.pages.stubs.*
 
@@ -31,10 +34,14 @@ object StubbedSignInFlow:
   enum CompanyStatus:
     case Ok, Blocked
 
+  enum DeceasedFlag:
+    case True, False
+
   /** Public entry point—keeps all logic in one place. */
   def signInAndDataSetupViaStubs(
     journey: JourneyType,
-    companyStatus: CompanyStatus = CompanyStatus.Ok
+    companyStatus: CompanyStatus = Ok,
+    deceasedFlag: DeceasedFlag = False
   ): StubbedSignInData =
 
     // 1) Government Gateway sign-in
@@ -45,7 +52,7 @@ object StubbedSignInFlow:
 
     // 3) Configure user on stubs (journey-specific)
     journey match
-      case JourneyType.Agent => configureForAgent(companyStatus)
+      case JourneyType.Agent => configureForAgent(companyStatus, deceasedFlag)
 
       case JourneyType.Individual => configureForIndividual(hasUtr = false)
 
@@ -60,8 +67,13 @@ object StubbedSignInFlow:
   // --- Convenience wrappers for callers that know the journey ---
 
   def signInAndDataSetupViaStubsForAgent(
-    companyStatus: CompanyStatus = CompanyStatus.Ok
-  ): StubbedSignInData = signInAndDataSetupViaStubs(Agent, companyStatus)
+    companyStatus: CompanyStatus = Ok,
+    deceasedFlag: DeceasedFlag = False
+  ): StubbedSignInData = signInAndDataSetupViaStubs(
+    Agent,
+    companyStatus,
+    deceasedFlag
+  )
 
   def signInAndDataSetupViaStubsForIndividual(): StubbedSignInData = signInAndDataSetupViaStubs(Individual)
 
@@ -85,11 +97,14 @@ object StubbedSignInFlow:
     AgentExternalStubUserPage.clickBrowserBack()
     (bearerToken, sessionId)
 
-  private def configureForAgent(companyStatus: CompanyStatus): Unit =
+  private def configureForAgent(
+    companyStatus: CompanyStatus,
+    deceasedFlag: DeceasedFlag
+  ): Unit =
     selectAffinityGroupAgent()
     selectNoEnrolmentAndContinue()
     continueFromConfigureUser()
-    configureGrs(companyStatus) // <-- NEW fork lives here, right where it matters
+    configureGrs(companyStatus, deceasedFlag)
 
   private def configureForIndividual(hasUtr: Boolean): Unit =
     selectAffinityGroupIndividual()
@@ -114,13 +129,21 @@ object StubbedSignInFlow:
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
     AgentExternalStubConfigureUserPage.clickContinue()
 
-  private def configureGrs(companyStatus: CompanyStatus): Unit =
+  private def configureGrs(
+    companyStatus: CompanyStatus,
+    deceasedFlag: DeceasedFlag
+  ): Unit =
     GrsDataSetupPage.assertPageIsDisplayed()
 
     companyStatus match
       case CompanyStatus.Ok => ()
 
       case CompanyStatus.Blocked => GrsDataSetupPage.enterCompanyNumber()
+
+    deceasedFlag match
+      case DeceasedFlag.True => GrsDataSetupPage.checkDeceasedCheckbox()
+
+      case DeceasedFlag.False => ()
 
     GrsDataSetupPage.clickContinue()
 
