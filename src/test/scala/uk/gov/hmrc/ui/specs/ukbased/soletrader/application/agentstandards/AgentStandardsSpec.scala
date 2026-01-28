@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.declaration
+package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.agentstandards
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
@@ -22,15 +22,15 @@ import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
-class DeclarationSpec
+class AgentStandardsSpec
 extends BaseSpec:
 
-  Feature("Complete declaration section"):
-    Scenario("User accepts the declaration", HappyPath):
+  Feature("Complete HMRC standards for agents section"):
+    Scenario("User agrees to HMRC's standards for agents", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -41,7 +41,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -49,8 +49,7 @@ extends BaseSpec:
 
       AgentStandardsFlow
         .AgreeToMeetStandards
-        .runFlow(LLP)
+        .runFlow(SoleTrader)
 
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(LLP)
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.assertHmrcStandardsForAgentsStatus("Completed")

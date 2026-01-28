@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.agentdetails
+package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.agentdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import AgentDetailsFlow.AgentDetailOption
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.ConfirmYourEmailPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.LookupAddressConfirmPage
@@ -33,6 +32,7 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.Wh
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatCorrespondenceAddressPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatEmailAddressPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatTelephoneNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
@@ -51,7 +51,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario("User enters all custom values", HappyPath):
@@ -81,7 +81,7 @@ extends BaseSpec:
       AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom LLP"))
       AgentDetailsFlow.selectTelephoneNumber(AgentDetailOption.HmrcProvided)
       AgentDetailsFlow.selectEmailAddress(AgentDetailOption.Custom("@newtest.com"), Some(stubbedSignInData))
-      AgentDetailsFlow.selectCorrespondenceAddress(AgentDetailOption.CompaniesHouseProvided)
+      AgentDetailsFlow.selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
 
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom LLP")
@@ -102,7 +102,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       CheckYourAnswersPage.clickChangeFor("Name shown to clients")
 
@@ -126,7 +126,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       CheckYourAnswersPage.clickChangeFor("Telephone number")
 
@@ -150,7 +150,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       CheckYourAnswersPage.clickChangeFor("Email address")
 
@@ -187,7 +187,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       CheckYourAnswersPage.clickChangeFor("Correspondence address")
 

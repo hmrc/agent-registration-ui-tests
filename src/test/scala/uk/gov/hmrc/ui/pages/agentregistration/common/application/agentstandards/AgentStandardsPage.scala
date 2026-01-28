@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.common.application.agentstandards
 
+import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
@@ -27,3 +28,13 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
+
+  private val soleTraderAgreement: String = "I agree that I, Test User, will meet the standard when working on behalf of clients."
+
+  private val partnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
+
+  private val bodyParas: By = By.id("main-content")
+
+  def assertSoleTraderTextDisplayed(): Unit = getText(bodyParas) should include(soleTraderAgreement)
+
+  def assertPartnershipTextDisplayed(): Unit = getText(bodyParas) should include(partnershipAgreement)
