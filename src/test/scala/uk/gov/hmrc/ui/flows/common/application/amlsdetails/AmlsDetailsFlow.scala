@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.amlsdetails
+package uk.gov.hmrc.ui.flows.common.application.amlsdetails
 
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.EvidenceOfAmlSupervisionPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.EvidenceUploadCompletePage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatRegistrationNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatSupervisoryBodyPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhenDoesSupervisionRunOutPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.*
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

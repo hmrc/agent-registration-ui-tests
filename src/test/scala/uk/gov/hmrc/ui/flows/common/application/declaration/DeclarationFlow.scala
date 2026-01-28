@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.declaration
+package uk.gov.hmrc.ui.flows.common.application.declaration
 
+import uk.gov.hmrc.ui.domain.BusinessType
+import BusinessType.*
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.declaration.DeclarationPage
@@ -24,9 +26,9 @@ object DeclarationFlow:
 
   object AcceptDeclaration:
 
-    def runFlow(): Unit =
+    def runFlow(businessType: BusinessType): Unit =
       startJourney()
-      clickAcceptAndSave()
+      clickAcceptAndSave(businessType)
       completeJourney()
 
   def startJourney(): Unit =
@@ -34,8 +36,11 @@ object DeclarationFlow:
     TaskListPage.assertDeclarationStatus("Incomplete")
     TaskListPage.clickOnDeclarationLink()
 
-  def clickAcceptAndSave(): Unit =
+  def clickAcceptAndSave(businessType: BusinessType): Unit =
     DeclarationPage.assertPageIsDisplayed()
+    businessType match
+      case SoleTrader => DeclarationPage.assertAuthorisedByTextNotDisplayed()
+      case LLP => DeclarationPage.assertAuthorisedByTextDisplayed()
     DeclarationPage.clickContinue()
 
   def completeJourney(): Unit =

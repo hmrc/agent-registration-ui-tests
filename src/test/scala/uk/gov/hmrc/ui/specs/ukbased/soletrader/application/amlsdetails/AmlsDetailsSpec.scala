@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.amlsdetails
+package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.amlsdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
@@ -23,7 +23,7 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import AmlsDetailsFlow.AmlsDetailsOption
 import AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.EvidenceOfAmlSupervisionPage
@@ -46,7 +46,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -64,7 +64,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       AmlsDetailsFlow
         .WhenNonHmrcSupervisoryBody
@@ -82,7 +82,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -109,7 +109,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -138,7 +138,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -161,7 +161,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -184,7 +184,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)

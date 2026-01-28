@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.viewapplication
+package uk.gov.hmrc.ui.domain
 
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
-
-object ViewApplicationFlow:
-
-  object ViewApplication:
-
-    def runFlow(): Unit = startJourney()
-
-  def startJourney(): Unit = ViewApplicationPage.assertPageIsDisplayed()
+enum BusinessType:
+  case LLP, SoleTrader

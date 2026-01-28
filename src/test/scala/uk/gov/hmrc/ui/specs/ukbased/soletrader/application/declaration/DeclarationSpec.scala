@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.declaration
+package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.declaration
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
@@ -23,7 +23,7 @@ import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class DeclarationSpec
@@ -41,7 +41,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -49,8 +49,8 @@ extends BaseSpec:
 
       AgentStandardsFlow
         .AgreeToMeetStandards
-        .runFlow(LLP)
+        .runFlow(SoleTrader)
 
       DeclarationFlow
         .AcceptDeclaration
-        .runFlow(LLP)
+        .runFlow(SoleTrader)

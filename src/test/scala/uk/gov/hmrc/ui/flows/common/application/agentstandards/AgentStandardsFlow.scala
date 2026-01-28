@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentstandards
+package uk.gov.hmrc.ui.flows.common.application.agentstandards
 
+import uk.gov.hmrc.ui.domain.BusinessType
+import BusinessType.*
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentstandards.AgentStandardsPage
 
@@ -23,15 +25,18 @@ object AgentStandardsFlow:
 
   object AgreeToMeetStandards:
 
-    def runFlow(): Unit =
+    def runFlow(businessType: BusinessType): Unit =
       startJourney()
-      clickAgreeAndSave()
+      clickAgreeAndSave(businessType)
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertHmrcStandardsForAgentsStatus("Incomplete")
     TaskListPage.clickOnHmrcStandardsForAgentsLink()
 
-  def clickAgreeAndSave(): Unit =
+  def clickAgreeAndSave(businessType: BusinessType): Unit =
     AgentStandardsPage.assertPageIsDisplayed()
+    businessType match
+      case SoleTrader => AgentStandardsPage.assertSoleTraderTextDisplayed()
+      case LLP => AgentStandardsPage.assertPartnershipTextDisplayed()
     AgentStandardsPage.clickContinue()
