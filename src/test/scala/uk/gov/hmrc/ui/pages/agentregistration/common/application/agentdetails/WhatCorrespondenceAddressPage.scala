@@ -28,28 +28,23 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
-
-  // private val addressCompaniesHouseProvidedRadio = By.id("agentCorrespondenceAddress")
-  // private val addressHMRCProvidedRadio = By.id("agentCorrespondenceAddress-2")
-//  private val addressYouProvidedRadio = By.id("agentCorrespondenceAddress-3")
-  // private val somethingElseRadio = By.id("agentCorrespondenceAddress-4")
-
-  private def addressCompaniesHouseProvidedRadio = By.xpath(
+  
+  private val addressCompaniesHouseProvidedRadio = By.xpath(
     s"//div[contains(@class,'govuk-radios__hint')][normalize-space() = 'This is your Companies House registered office address.']" +
       "/ancestor::div[contains(@class,'govuk-radios__item')][1]" +
       "//input[contains(@class,'govuk-radios__input')]"
   )
-  private def addressHMRCProvidedRadio = By.xpath(
+  private val addressHMRCProvidedRadio = By.xpath(
     s"//div[contains(@class,'govuk-radios__hint')][normalize-space() = 'This is the address HMRC has in your business record.']" +
       "/ancestor::div[contains(@class,'govuk-radios__item')][1]" +
       "//input[contains(@class,'govuk-radios__input')]"
   )
-  private def addressYouProvidedRadio = By.xpath(
+  private val addressYouProvidedRadio = By.xpath(
     s"//div[contains(@class,'govuk-radios__hint')][normalize-space() = 'This is the address you have given us.']" +
       "/ancestor::div[contains(@class,'govuk-radios__item')][1]" +
       "//input[contains(@class,'govuk-radios__input')]"
   )
-  private def somethingElseRadio = By.xpath("//label[contains(@class,'govuk-radios__label')][normalize-space()='Something else']")
+  private val somethingElseRadio = By.xpath("//label[contains(@class,'govuk-radios__label')][normalize-space()='Something else']")
 
   def selectAddressCompaniesHouseProvided(): Unit = click(addressCompaniesHouseProvidedRadio)
   def selectAddressHMRCProvided(): Unit = click(addressHMRCProvidedRadio)
