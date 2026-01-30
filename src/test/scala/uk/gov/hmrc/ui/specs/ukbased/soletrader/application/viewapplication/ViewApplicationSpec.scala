@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.viewapplication
+package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.viewapplication
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
@@ -24,7 +24,7 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
@@ -44,7 +44,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(stubbedSignInData, SoleTrader)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -52,25 +52,26 @@ extends BaseSpec:
 
       AgentStandardsFlow
         .AgreeToMeetStandards
-        .runFlow(LLP)
+        .runFlow(SoleTrader)
 
       DeclarationFlow
         .AcceptDeclaration
-        .runFlow(LLP)
+        .runFlow(BusinessType.SoleTrader)
       ApplicationSubmittedPage.clickViewOrPrintLink()
 
       ViewApplicationFlow
         .ViewApplication
         .runFlow()
       ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
-      ViewApplicationPage.assertSummaryRow("Business type", "Limited liability partnership")
-      ViewApplicationPage.assertSummaryRow("Are you a member of the limited liability partnership?", "No, but I’m authorised by them to set up this account")
-      ViewApplicationPage.assertSummaryRow("Company name", "Test Partnership")
+      ViewApplicationPage.assertSummaryRow("Business type", "Sole trader")
+      ViewApplicationPage.assertSummaryRow("Are you the owner of the business?", "Yes")
+      ViewApplicationPage.assertSummaryRow("Company name", "Test User")
+      ViewApplicationPage.assertSummaryRowPresent("Unique taxpayer reference")
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
       ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
-      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test Partnership")
+      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test User")
       ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
-      ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Test Street\nTest Area\nAA1 1AA\nGB")
+      ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Test Street\nTest Area\nTE1 1ST\nGB")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")
       ViewApplicationPage.assertSummaryRow("Agreed to meet the HMRC standard for agents", "Yes")

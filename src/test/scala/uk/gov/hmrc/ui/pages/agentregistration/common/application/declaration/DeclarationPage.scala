@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.common.application.declaration
 
+import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
@@ -27,3 +28,10 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
+
+  private val firstSentence: String = "I am authorised by Test Partnership to apply for an agent services account with HMRC."
+
+  private val bodyParas: By = By.id("main-content")
+
+  def assertAuthorisedByTextDisplayed(): Unit = getText(bodyParas) should include(firstSentence)
+  def assertAuthorisedByTextNotDisplayed(): Unit = getText(bodyParas) shouldNot include(firstSentence)

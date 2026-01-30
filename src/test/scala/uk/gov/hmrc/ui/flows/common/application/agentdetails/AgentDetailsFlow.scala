@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.agentdetails
+package uk.gov.hmrc.ui.flows.common.application.agentdetails
 
+import uk.gov.hmrc.ui.domain.BusinessType
+import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.ConfirmYourEmailPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.LookupAddressConfirmPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.LookupAddressLookupPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.LookupAddressSelectPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatBusinessNamePage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatCorrespondenceAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatEmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.WhatTelephoneNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 object AgentDetailsFlow:
@@ -48,13 +41,18 @@ object AgentDetailsFlow:
     extends AgentDetailOption
 
   object WhenUsingProvidedOptions:
-    def runFlow(stubData: StubbedSignInData): Unit =
+    def runFlow(
+      stubData: StubbedSignInData,
+      businessType: BusinessType
+    ): Unit =
       startJourney()
       selectBusinessName(AgentDetailOption.HmrcProvided)
       selectTelephoneNumber(AgentDetailOption.YouProvided)
       selectEmailAddress(AgentDetailOption.YouProvided)
-      selectCorrespondenceAddress(AgentDetailOption.CompaniesHouseProvided)
-      verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "07777777777")
+      selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
+      businessType match
+        case SoleTrader => verifyCheckYourAnswers(expectedName = "Test User", expectedNumber = "07777777777")
+        case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "07777777777")
       completeCheckYourAnswers()
 
   object WhenUsingCustomValues:
@@ -68,13 +66,18 @@ object AgentDetailsFlow:
       completeCheckYourAnswers()
 
   object runToCheckYourAnswers:
-    def runFlow(stubData: StubbedSignInData): Unit =
+    def runFlow(
+      stubData: StubbedSignInData,
+      businessType: BusinessType
+    ): Unit =
       startJourney()
       selectBusinessName(AgentDetailOption.HmrcProvided)
       selectTelephoneNumber(AgentDetailOption.YouProvided)
       selectEmailAddress(AgentDetailOption.YouProvided)
-      selectCorrespondenceAddress(AgentDetailOption.CompaniesHouseProvided)
-      verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "07777777777")
+      selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
+      businessType match
+        case SoleTrader => verifyCheckYourAnswers(expectedName = "Test User", expectedNumber = "07777777777")
+        case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "07777777777")
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()
