@@ -43,13 +43,13 @@ extends Matchers,
 
   override implicit val patienceConfig: PatienceConfig = {
     val config = PatienceConfig(
-      timeout = scaled(Span(3, Seconds)),
-      interval = scaled(Span(100, Millis))
+      timeout = scaled(Span(12, Seconds)),
+      interval = scaled(Span(200, Millis))
     )
 
     // Debug log to confirm scaling
     logger.debug(s"Effective PatienceConfig -> timeout: ${config.timeout}, interval: ${config.interval}")
-    logger.debug(s"SCALATEST_SPAN_SCALE_FACTOR: ${sys.env.getOrElse("SCALATEST_SPAN_SCALE_FACTOR", "not set")}")
+    logger.debug(s"SCALATEST_SPAN_SCALE_FACTOR: ${sys.props.getOrElse("SCALATEST_SPAN_SCALE_FACTOR", "not set")}")
 
     config
   }

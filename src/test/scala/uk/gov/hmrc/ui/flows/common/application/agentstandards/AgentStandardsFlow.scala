@@ -39,4 +39,5 @@ object AgentStandardsFlow:
     businessType match
       case SoleTrader => AgentStandardsPage.assertSoleTraderTextDisplayed()
       case LLP => AgentStandardsPage.assertPartnershipTextDisplayed()
+      case GeneralPartnership => AgentStandardsPage.assertGeneralPartnershipDisplayed()
     AgentStandardsPage.clickContinue()
