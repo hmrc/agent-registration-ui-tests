@@ -39,8 +39,9 @@ object DeclarationFlow:
   def clickAcceptAndSave(businessType: BusinessType): Unit =
     DeclarationPage.assertPageIsDisplayed()
     businessType match
-      case SoleTrader => DeclarationPage.assertAuthorisedByTextNotDisplayed()
-      case LLP => DeclarationPage.assertAuthorisedByTextDisplayed()
+      case SoleTrader => DeclarationPage.assertNoAuthorisedByTextDisplayed()
+      case LLP => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
+      case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
     DeclarationPage.clickContinue()
 
   def completeJourney(): Unit =

@@ -28,7 +28,7 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
-  
+
   private val addressCompaniesHouseProvidedRadio = By.xpath(
     s"//div[contains(@class,'govuk-radios__hint')][normalize-space() = 'This is your Companies House registered office address.']" +
       "/ancestor::div[contains(@class,'govuk-radios__item')][1]" +
