@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails
+package uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application
 
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Blocked
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
+import uk.gov.hmrc.ui.flows.common.application.{StubbedSignInData, StubbedSignInFlow}
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.{Blocked, Ok}
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.*

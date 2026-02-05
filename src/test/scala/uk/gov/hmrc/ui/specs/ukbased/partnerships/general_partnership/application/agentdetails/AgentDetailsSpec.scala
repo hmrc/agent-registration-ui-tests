@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage

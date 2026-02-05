@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.general_partnership.application.businessdetails
 
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CannotRegisterPage
 import uk.gov.hmrc.ui.specs.BaseSpec
