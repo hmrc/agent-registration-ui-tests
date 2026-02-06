@@ -21,6 +21,7 @@ import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebElement
+import org.scalactic.Prettifier.default
 import uk.gov.hmrc.selenium.webdriver.Driver
 import uk.gov.hmrc.ui.utils.RichMatchers.*
 
