@@ -42,7 +42,7 @@ object AgentDetailsFlow:
 
   object WhenUsingProvidedOptions:
     def runFlow(
-      stubData: StubbedSignInData,
+//      stubData: StubbedSignInData,
       businessType: BusinessType
     ): Unit =
       startJourney()
@@ -51,9 +51,9 @@ object AgentDetailsFlow:
       selectEmailAddress(AgentDetailOption.YouProvided)
       selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
       businessType match
-        case SoleTrader => verifyCheckYourAnswers(expectedName = "Test User", expectedNumber = "07777777777")
-        case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "07777777777")
-        case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "07777777777")
+        case SoleTrader => verifyCheckYourAnswers(expectedName = "Test User", expectedNumber = "(+44) 10794554342")
+        case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
+        case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
       completeCheckYourAnswers()
 
   object WhenUsingCustomValues:
@@ -68,7 +68,7 @@ object AgentDetailsFlow:
 
   object runToCheckYourAnswers:
     def runFlow(
-      stubData: StubbedSignInData,
+//      stubData: StubbedSignInData,
       businessType: BusinessType
     ): Unit =
       startJourney()
@@ -77,9 +77,9 @@ object AgentDetailsFlow:
       selectEmailAddress(AgentDetailOption.YouProvided)
       selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
       businessType match
-        case SoleTrader => verifyCheckYourAnswers(expectedName = "Test User", expectedNumber = "07777777777")
-        case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "07777777777")
-        case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "07777777777")
+        case SoleTrader => verifyCheckYourAnswers(expectedName = "Test User", expectedNumber = "(+44) 10794554342")
+        case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
+        case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()

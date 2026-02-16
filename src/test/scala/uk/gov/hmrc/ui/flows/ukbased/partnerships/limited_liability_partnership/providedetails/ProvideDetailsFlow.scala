@@ -194,7 +194,7 @@ object ProvideDetailsFlow:
   ): Unit =
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Name", "SMITH, Jane")
-    CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+    CheckYourAnswersPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
     CheckYourAnswersPage.assertSummaryRow("Email address", email)
 
     variant match

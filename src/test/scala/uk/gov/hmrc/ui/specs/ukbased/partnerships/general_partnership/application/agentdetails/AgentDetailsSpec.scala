@@ -43,7 +43,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario("User enters all custom values", HappyPath):
@@ -94,7 +94,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       CheckYourAnswersPage.clickChangeFor("Name shown to clients")
 
@@ -118,7 +118,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       CheckYourAnswersPage.clickChangeFor("Telephone number")
 
@@ -142,7 +142,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       CheckYourAnswersPage.clickChangeFor("Email address")
 
@@ -179,7 +179,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       CheckYourAnswersPage.clickChangeFor("Correspondence address")
 

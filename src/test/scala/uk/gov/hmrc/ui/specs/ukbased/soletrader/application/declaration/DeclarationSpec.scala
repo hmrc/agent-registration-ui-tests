@@ -41,7 +41,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, SoleTrader)
+        .runFlow(SoleTrader)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody

@@ -69,7 +69,7 @@ object ContactDetailsFlow {
 
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Name", "John Ian Tester")
-    CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+    CheckYourAnswersPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
     CheckYourAnswersPage.assertSummaryRow("Email address", email)
   }
 

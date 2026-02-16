@@ -18,8 +18,6 @@ package uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails
 
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow
-import StubbedSignInFlow.CompanyStatus.Blocked
-import StubbedSignInFlow.CompanyStatus.Ok
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow.Deceased.False
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow.Deceased.True
