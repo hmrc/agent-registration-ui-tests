@@ -169,7 +169,7 @@ object ProvideDetailsFlow:
         IndividualNiNumberPage.enterNino()
       case ProvideDetail.No =>
         IndividualNiNumberPage.selectNo()
-        IndividualNiNumberPage.clickContinue()
+    IndividualNiNumberPage.clickContinue()
 
   def enterUtr(details: ProvideDetail): Unit =
     IndividualUtrPage.assertPageIsDisplayed()
@@ -177,9 +177,9 @@ object ProvideDetailsFlow:
       case ProvideDetail.Yes =>
         IndividualUtrPage.selectYes()
         IndividualUtrPage.enterUtr()
-      case ProvideDetail.No => 
+      case ProvideDetail.No =>
         IndividualUtrPage.selectNo()
-        IndividualUtrPage.clickContinue()
+    IndividualUtrPage.clickContinue()
 
   def approveApplicant(): Unit =
     ApproveApplicantPage.assertPageIsDisplayed()
