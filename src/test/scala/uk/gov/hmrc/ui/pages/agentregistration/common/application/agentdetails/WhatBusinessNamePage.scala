@@ -20,8 +20,6 @@ import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-import java.nio.file.Files
-
 object WhatBusinessNamePage
 extends BasePage:
 

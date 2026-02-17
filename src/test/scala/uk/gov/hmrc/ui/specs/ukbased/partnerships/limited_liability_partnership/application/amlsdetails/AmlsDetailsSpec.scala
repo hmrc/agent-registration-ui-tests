@@ -23,6 +23,8 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import AmlsDetailsFlow.AmlsDetailsOption
 import AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.CheckYourAnswersPage
@@ -46,7 +48,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(LLP)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -55,16 +57,9 @@ extends BaseSpec:
 
     Scenario("User selects non-HMRC Supervisory Body", HappyPath):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails)
 
       AmlsDetailsFlow
         .WhenNonHmrcSupervisoryBody
@@ -73,16 +68,9 @@ extends BaseSpec:
 
     Scenario("Changes Registration Number from CYA page", HappyPath):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -100,16 +88,9 @@ extends BaseSpec:
 
     Scenario("Changes Supervisory Body from CYA page", HappyPath):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -129,16 +110,9 @@ extends BaseSpec:
 
     Scenario("Upload evidence file exceeding 5MB in size", HappyPath):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -152,16 +126,9 @@ extends BaseSpec:
 
     Scenario("Upload evidence file with virus", HappyPath):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -175,16 +142,9 @@ extends BaseSpec:
 
     Scenario("Upload evidence file in invalid format", HappyPath):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)

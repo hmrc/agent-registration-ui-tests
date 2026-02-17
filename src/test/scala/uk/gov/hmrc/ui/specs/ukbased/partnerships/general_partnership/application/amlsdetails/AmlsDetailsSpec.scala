@@ -46,7 +46,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -64,7 +64,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       AmlsDetailsFlow
         .WhenNonHmrcSupervisoryBody
@@ -82,7 +82,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -109,7 +109,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -138,7 +138,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -161,7 +161,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -184,7 +184,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, GeneralPartnership)
+        .runFlow(GeneralPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)

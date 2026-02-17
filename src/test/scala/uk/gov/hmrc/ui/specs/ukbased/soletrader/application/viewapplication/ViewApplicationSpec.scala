@@ -44,7 +44,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, SoleTrader)
+        .runFlow(SoleTrader)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -68,9 +68,9 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("Company name", "Test User")
       ViewApplicationPage.assertSummaryRowPresent("Unique taxpayer reference")
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
-      ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
+      ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
       ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test User")
-      ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
+      ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
       ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Test Street\nTest Area\nTE1 1ST\nGB")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")

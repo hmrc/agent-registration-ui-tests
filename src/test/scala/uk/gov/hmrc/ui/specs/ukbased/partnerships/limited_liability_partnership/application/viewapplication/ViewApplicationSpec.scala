@@ -44,7 +44,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(LLP)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -67,9 +67,9 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("Are you a member of the limited liability partnership?", "No, but I’m authorised by them to set up this account")
       ViewApplicationPage.assertSummaryRow("Company name", "Test Partnership")
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
-      ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
+      ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
       ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test Partnership")
-      ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
+      ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
       ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Test Street\nTest Area\nAA1 1AA\nGB")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")

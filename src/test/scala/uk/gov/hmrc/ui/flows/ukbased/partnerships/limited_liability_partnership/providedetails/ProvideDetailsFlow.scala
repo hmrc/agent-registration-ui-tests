@@ -57,7 +57,7 @@ object ProvideDetailsFlow:
       enterName()
       enterTelephoneNumber()
       val email = enterEmailAddress(stubData)
-      enterDateOfBirth
+      enterDateOfBirth()
       enterNino(Yes)
       enterUtr(Yes)
       approveApplicant()
@@ -72,7 +72,7 @@ object ProvideDetailsFlow:
       enterName()
       enterTelephoneNumber()
       val email = enterEmailAddress(stubData)
-      enterDateOfBirth
+      enterDateOfBirth()
       enterNino(No)
       enterUtr(No)
       approveApplicant()
@@ -101,7 +101,7 @@ object ProvideDetailsFlow:
       enterName()
       enterTelephoneNumber()
       val email = enterEmailAddress(stubData)
-      enterDateOfBirth
+      enterDateOfBirth()
       enterNino(Yes)
       enterUtr(Yes)
       approveApplicant()
@@ -154,7 +154,7 @@ object ProvideDetailsFlow:
     ConfirmYourEmailPage.clickContinue()
     email
 
-  def enterDateOfBirth: Unit =
+  def enterDateOfBirth(): Unit =
     IndividualDateOfBirthPage.assertPageIsDisplayed()
     IndividualDateOfBirthPage.enterDay()
     IndividualDateOfBirthPage.enterMonth()
@@ -167,7 +167,8 @@ object ProvideDetailsFlow:
       case ProvideDetail.Yes =>
         IndividualNiNumberPage.selectYes()
         IndividualNiNumberPage.enterNino()
-      case ProvideDetail.No => IndividualNiNumberPage.selectNo()
+      case ProvideDetail.No =>
+        IndividualNiNumberPage.selectNo()
     IndividualNiNumberPage.clickContinue()
 
   def enterUtr(details: ProvideDetail): Unit =
@@ -176,7 +177,8 @@ object ProvideDetailsFlow:
       case ProvideDetail.Yes =>
         IndividualUtrPage.selectYes()
         IndividualUtrPage.enterUtr()
-      case ProvideDetail.No => IndividualUtrPage.selectNo()
+      case ProvideDetail.No =>
+        IndividualUtrPage.selectNo()
     IndividualUtrPage.clickContinue()
 
   def approveApplicant(): Unit =
@@ -194,7 +196,7 @@ object ProvideDetailsFlow:
   ): Unit =
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Name", "SMITH, Jane")
-    CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+    CheckYourAnswersPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
     CheckYourAnswersPage.assertSummaryRow("Email address", email)
 
     variant match

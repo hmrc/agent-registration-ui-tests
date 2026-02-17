@@ -17,9 +17,6 @@
 package uk.gov.hmrc.ui.pages.agentregistration.common.application.declaration
 
 import org.openqa.selenium.By
-import uk.gov.hmrc.ui.domain.BusinessType
-import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
-import uk.gov.hmrc.ui.domain.BusinessType.LLP
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 

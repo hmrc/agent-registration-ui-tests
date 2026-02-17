@@ -18,7 +18,6 @@ package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.businessdetails
 
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CannotRegisterPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.businessdetails.CannotConfirmIdentityPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 

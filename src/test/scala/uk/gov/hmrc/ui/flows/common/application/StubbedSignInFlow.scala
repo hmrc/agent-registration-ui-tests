@@ -18,7 +18,6 @@ package uk.gov.hmrc.ui.flows.common.application
 
 import StubbedSignInFlow.CompanyStatus.Ok
 import StubbedSignInFlow.DeceasedFlag.False
-import StubbedSignInFlow.DeceasedFlag.True
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Agent
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Individual
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.IndividualWithUtr
@@ -37,11 +36,15 @@ object StubbedSignInFlow:
   enum DeceasedFlag:
     case True, False
 
+  enum FastForwardFlag:
+    case True, False
+
   /** Public entry point—keeps all logic in one place. */
   def signInAndDataSetupViaStubs(
     journey: JourneyType,
     companyStatus: CompanyStatus = Ok,
-    deceasedFlag: DeceasedFlag = False
+    deceasedFlag: DeceasedFlag = False,
+    fastForwardFlag: FastForwardFlag = FastForwardFlag.False
   ): StubbedSignInData =
 
     // 1) Government Gateway sign-in
@@ -52,7 +55,12 @@ object StubbedSignInFlow:
 
     // 3) Configure user on stubs (journey-specific)
     journey match
-      case JourneyType.Agent => configureForAgent(companyStatus, deceasedFlag)
+      case JourneyType.Agent =>
+        configureForAgent(
+          companyStatus,
+          deceasedFlag,
+          fastForwardFlag
+        )
 
       case JourneyType.Individual => configureForIndividual(hasUtr = false)
 
@@ -99,12 +107,15 @@ object StubbedSignInFlow:
 
   private def configureForAgent(
     companyStatus: CompanyStatus,
-    deceasedFlag: DeceasedFlag
+    deceasedFlag: DeceasedFlag,
+    isFastForward: FastForwardFlag
   ): Unit =
     selectAffinityGroupAgent()
     selectNoEnrolmentAndContinue()
     continueFromConfigureUser()
-    configureGrs(companyStatus, deceasedFlag)
+    isFastForward match
+      case FastForwardFlag.False => configureGrs(companyStatus, deceasedFlag)
+      case FastForwardFlag.True =>
 
   private def configureForIndividual(hasUtr: Boolean): Unit =
     selectAffinityGroupIndividual()

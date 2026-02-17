@@ -51,7 +51,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, SoleTrader)
+        .runFlow(SoleTrader)
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario("User enters all custom values", HappyPath):
@@ -102,7 +102,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, SoleTrader)
+        .runFlow(SoleTrader)
 
       CheckYourAnswersPage.clickChangeFor("Name shown to clients")
 
@@ -126,7 +126,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, SoleTrader)
+        .runFlow(SoleTrader)
 
       CheckYourAnswersPage.clickChangeFor("Telephone number")
 
@@ -150,7 +150,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, SoleTrader)
+        .runFlow(SoleTrader)
 
       CheckYourAnswersPage.clickChangeFor("Email address")
 
@@ -187,7 +187,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, SoleTrader)
+        .runFlow(SoleTrader)
 
       CheckYourAnswersPage.clickChangeFor("Correspondence address")
 

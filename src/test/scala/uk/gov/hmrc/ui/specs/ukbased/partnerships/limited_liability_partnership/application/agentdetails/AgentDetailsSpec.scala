@@ -21,6 +21,8 @@ import BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import AgentDetailsFlow.AgentDetailOption
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
@@ -39,7 +41,7 @@ import uk.gov.hmrc.ui.utils.PasscodeHelper
 class AgentDetailsSpec
 extends BaseSpec:
 
-  Feature("Complete Business details section"):
+  Feature("Complete Agent details section"):
     Scenario("User selects existing details", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
@@ -51,7 +53,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(LLP)
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario("User enters all custom values", HappyPath):
@@ -93,17 +95,14 @@ extends BaseSpec:
 
     Scenario("Change Business Name from Check Your Answers page", HappyPath):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails)
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.clickOnAgentServicesAccountDetailsLink()
 
-      AgentDetailsFlow
-        .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LLP)
-
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Name shown to clients")
 
       WhatBusinessNamePage.assertPageIsDisplayed()
@@ -126,7 +125,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(LLP)
 
       CheckYourAnswersPage.clickChangeFor("Telephone number")
 
@@ -150,7 +149,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LLP)
+        .runFlow(LLP)
 
       CheckYourAnswersPage.clickChangeFor("Email address")
 
@@ -178,21 +177,18 @@ extends BaseSpec:
 
     Scenario("Change Correspondence Address from Check Your Answers page", HappyPath):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails)
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.clickOnAgentServicesAccountDetailsLink()
 
-      AgentDetailsFlow
-        .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LLP)
-
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Correspondence address")
 
       WhatCorrespondenceAddressPage.assertPageIsDisplayed()
-      WhatCorrespondenceAddressPage.assertAddressHmrcProvidedRadioIsSelected()
+      WhatCorrespondenceAddressPage.assertAddressCompaniesHouseProvidedRadioIsSelected()
       WhatCorrespondenceAddressPage.selectSomethingElse()
       WhatCorrespondenceAddressPage.clickContinue()
 
