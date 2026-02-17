@@ -57,7 +57,7 @@ object ProvideDetailsFlow:
       enterName()
       enterTelephoneNumber()
       val email = enterEmailAddress(stubData)
-      enterDateOfBirth
+      enterDateOfBirth()
       enterNino(Yes)
       enterUtr(Yes)
       approveApplicant()
@@ -72,7 +72,7 @@ object ProvideDetailsFlow:
       enterName()
       enterTelephoneNumber()
       val email = enterEmailAddress(stubData)
-      enterDateOfBirth
+      enterDateOfBirth()
       enterNino(No)
       enterUtr(No)
       approveApplicant()
@@ -101,7 +101,7 @@ object ProvideDetailsFlow:
       enterName()
       enterTelephoneNumber()
       val email = enterEmailAddress(stubData)
-      enterDateOfBirth
+      enterDateOfBirth()
       enterNino(Yes)
       enterUtr(Yes)
       approveApplicant()
@@ -154,7 +154,7 @@ object ProvideDetailsFlow:
     ConfirmYourEmailPage.clickContinue()
     email
 
-  def enterDateOfBirth: Unit =
+  def enterDateOfBirth(): Unit =
     IndividualDateOfBirthPage.assertPageIsDisplayed()
     IndividualDateOfBirthPage.enterDay()
     IndividualDateOfBirthPage.enterMonth()
@@ -167,8 +167,9 @@ object ProvideDetailsFlow:
       case ProvideDetail.Yes =>
         IndividualNiNumberPage.selectYes()
         IndividualNiNumberPage.enterNino()
-      case ProvideDetail.No => IndividualNiNumberPage.selectNo()
-    IndividualNiNumberPage.clickContinue()
+      case ProvideDetail.No =>
+        IndividualNiNumberPage.selectNo()
+        IndividualNiNumberPage.clickContinue()
 
   def enterUtr(details: ProvideDetail): Unit =
     IndividualUtrPage.assertPageIsDisplayed()
@@ -176,8 +177,9 @@ object ProvideDetailsFlow:
       case ProvideDetail.Yes =>
         IndividualUtrPage.selectYes()
         IndividualUtrPage.enterUtr()
-      case ProvideDetail.No => IndividualUtrPage.selectNo()
-    IndividualUtrPage.clickContinue()
+      case ProvideDetail.No => 
+        IndividualUtrPage.selectNo()
+        IndividualUtrPage.clickContinue()
 
   def approveApplicant(): Unit =
     ApproveApplicantPage.assertPageIsDisplayed()
