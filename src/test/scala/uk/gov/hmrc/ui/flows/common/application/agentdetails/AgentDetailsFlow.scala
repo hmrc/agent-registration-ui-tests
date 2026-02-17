@@ -42,7 +42,6 @@ object AgentDetailsFlow:
 
   object WhenUsingProvidedOptions:
     def runFlow(
-//      stubData: StubbedSignInData,
       businessType: BusinessType
     ): Unit =
       startJourney()
@@ -68,7 +67,6 @@ object AgentDetailsFlow:
 
   object runToCheckYourAnswers:
     def runFlow(
-//      stubData: StubbedSignInData,
       businessType: BusinessType
     ): Unit =
       startJourney()

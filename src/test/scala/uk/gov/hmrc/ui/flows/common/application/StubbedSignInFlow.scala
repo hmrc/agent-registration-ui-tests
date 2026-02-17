@@ -55,12 +55,7 @@ object StubbedSignInFlow:
 
     // 3) Configure user on stubs (journey-specific)
     journey match
-      case JourneyType.Agent =>
-        configureForAgent(
-          companyStatus,
-          deceasedFlag,
-          fastForwardFlag
-        )
+      case JourneyType.Agent => configureForAgent(companyStatus, deceasedFlag, fastForwardFlag)
 
       case JourneyType.Individual => configureForIndividual(hasUtr = false)
 
