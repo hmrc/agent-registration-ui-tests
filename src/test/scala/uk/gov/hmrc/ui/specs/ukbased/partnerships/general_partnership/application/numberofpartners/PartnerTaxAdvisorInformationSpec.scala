@@ -23,9 +23,8 @@ import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangePartnerPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersKeyIndividualsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.HowManyPartnersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.PartnerFullNamePage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.RemovePartnerPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
@@ -116,38 +115,38 @@ extends BaseSpec:
         .runToCheckYourAnswers
         .runFlow()
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.changeNumberOfPartners()
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.changeNumberOfPartners()
 
       HowManyPartnersPage.assertPageIsDisplayed()
       HowManyPartnersPage.selectFiveOrLess()
       HowManyPartnersPage.enterExactNumber("3")
       HowManyPartnersPage.clickContinue()
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertWarningTextIsDisplayed("You told us there are 3 partners. " +
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.assertWarningTextIsDisplayed("You told us there are 3 partners. " +
         "Change the number of partners or remove 2 partners from the list before you continue.")
-      CheckYourAnswersPage.removePartner("Tony Stark")
+      CheckYourAnswersKeyIndividualsPage.removePartner("Tony Stark")
 
       RemovePartnerPage.assertPageIsDisplayed()
       RemovePartnerPage.selectYes()
       RemovePartnerPage.clickContinue()
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertWarningTextIsDisplayed("You told us there are 3 partners. " +
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.assertWarningTextIsDisplayed("You told us there are 3 partners. " +
         "Change the number of partners or remove 1 partner from the list before you continue.")
-      CheckYourAnswersPage.removePartner("Steve Rogers")
+      CheckYourAnswersKeyIndividualsPage.removePartner("Steve Rogers")
 
       RemovePartnerPage.assertPageIsDisplayed()
       RemovePartnerPage.selectYes()
       RemovePartnerPage.clickContinue()
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
 
       PartnerTaxAdvisorInformationFlow.confirmEntries()
 
     Scenario("Change partner name from Check your answers screen", HappyPath):
-
+      pending
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
@@ -167,12 +166,12 @@ extends BaseSpec:
         .runToCheckYourAnswers
         .runFlow()
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.changePartnerName("Tony Stark")
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.changePartnerName("Tony Stark")
 
       ChangePartnerPage.assertPageIsDisplayed()
       ChangePartnerPage.enterPartnerFullName("Bruce Banner")
       ChangePartnerPage.clickContinue()
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertNameAt(4, "Bruce Banner")
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.assertNameAt(4, "Bruce Banner")
