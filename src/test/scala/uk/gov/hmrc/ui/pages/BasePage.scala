@@ -63,6 +63,27 @@ extends PageObject:
     }
   }
 
+  def assertNameAt(
+    index0: Int,
+    expectedName: String
+  ): Unit = {
+    require(index0 >= 0, s"index0 must be >= 0, but was $index0")
+    val index1 = index0 + 1 // XPath is 1-based
+
+    val keyCellAtIndex = By.xpath(
+      s"""(
+         |  //dl[contains(@class,'govuk-summary-list')]
+         |    //div[contains(@class,'govuk-summary-list__row')]
+         |      //dt[contains(@class,'govuk-summary-list__key')]
+         |)[$index1]""".stripMargin
+    )
+
+    val actual = getText(keyCellAtIndex).trim
+    withClue(s"Name at row index $index0: ") {
+      actual shouldBe expectedName
+    }
+  }
+
   def assertSummaryRowNotPresent(key: String): Unit = eventually:
     findElementBy(valueLocatorFor(key)) shouldBe None
 
