@@ -19,9 +19,7 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow.NumberOfPartners.FiveOrLess
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow.NumberOfPartners.SixOrMore
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.HowManyPartnersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.PartnerFullNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{CheckYourAnswersKeyIndividualsPage, CheckYourAnswersPage, HowManyPartnersPage, PartnerFullNamePage, UnofficialPartnersPage}
 
 object PartnerTaxAdvisorInformationFlow:
 
@@ -105,8 +103,8 @@ object PartnerTaxAdvisorInformationFlow:
     PartnerFullNamePage.clickContinue()
 
   def enterAdditionalPartnerName(name: String): Unit =
-    CheckYourAnswersPage.assertPageIsDisplayed()
-    CheckYourAnswersPage.clickContinue()
+    CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+    CheckYourAnswersKeyIndividualsPage.clickContinue()
     PartnerFullNamePage.assertPageIsDisplayed()
     PartnerFullNamePage.enterPartnerFullName(name)
     PartnerFullNamePage.clickContinue()
@@ -116,10 +114,15 @@ object PartnerTaxAdvisorInformationFlow:
     names.tail.foreach(enterAdditionalPartnerName)
 
   def checkYourAnswers(expectedNames: List[String]): Unit =
-    CheckYourAnswersPage.assertPageIsDisplayed()
-    expectedNames.zipWithIndex.foreach { case (name, idx) => CheckYourAnswersPage.assertNameAt(idx, name) }
+    CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+    expectedNames.zipWithIndex.foreach { case (name, idx) => CheckYourAnswersKeyIndividualsPage.assertNameAt(idx, name) }
 
   def confirmEntries(): Unit =
+    CheckYourAnswersKeyIndividualsPage.clickContinue()
+    UnofficialPartnersPage.assertPageIsDisplayed()
+    UnofficialPartnersPage.selectNo()
+    UnofficialPartnersPage.clickContinue()
+    CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertPartnerTaxAdvisorInformationStatus("Completed")
