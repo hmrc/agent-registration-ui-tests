@@ -42,6 +42,7 @@ object DeclarationFlow:
       case SoleTrader => DeclarationPage.assertNoAuthorisedByTextDisplayed()
       case LLP => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
       case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
+      case LimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
     DeclarationPage.clickContinue()
 
   def completeJourney(): Unit =
