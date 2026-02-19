@@ -19,10 +19,21 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow.NumberOfPartners.FiveOrLess
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow.NumberOfPartners.SixOrMore
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.HowManyPartnersPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.PartnerFullNamePage
 
 object PartnerTaxAdvisorInformationFlow:
+
+  private val allNames = List(
+    "Bobby Boucher",
+    "Sonny Koufax",
+    "Jack Burton",
+    "Steve Rogers",
+    "Tony Stark",
+    "Natasha Romanov",
+    "Carol Danvers"
+  )
 
   enum NumberOfPartners:
 
@@ -39,23 +50,41 @@ object PartnerTaxAdvisorInformationFlow:
   object FiveOrLessPartners:
 
     def runFlow(): Unit =
+      val names = allNames.take(3)
       startJourney()
       enterNumberOfPartners("3", FiveOrLess)
-      enterPartnerName("Bobby Boucher")
+      enterPartners(names)
+      checkYourAnswers(names)
+      confirmEntries()
 
   object SixOrMorePartners:
 
     def runFlow(): Unit =
+      val names = allNames
       startJourney()
       enterNumberOfPartners("7", SixOrMore)
-      enterPartnerName("Bobby Boucher")
+      enterPartners(names)
+      checkYourAnswers(names)
+      confirmEntries()
 
   object SixOrMorePartnersAlt: // alternate flow where there are 6 or more partners but less than 6 with tax authority
 
     def runFlow(): Unit =
+      val names = allNames.take(5)
       startJourney()
       enterNumberOfPartners("3", SixOrMore)
-      enterPartnerName("Bobby Boucher")
+      enterPartners(names)
+      checkYourAnswers(names)
+      confirmEntries()
+
+  object runToCheckYourAnswers:
+
+    def runFlow(): Unit =
+      val names = allNames.take(5)
+      startJourney()
+      enterNumberOfPartners("3", SixOrMore)
+      enterPartners(names)
+      checkYourAnswers(names)
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()
@@ -70,9 +99,27 @@ object PartnerTaxAdvisorInformationFlow:
     totalNum.selectOnPage(n)
     HowManyPartnersPage.clickContinue()
 
-  def enterPartnerName(name: String): Unit =
+  def enterFirstPartnerName(name: String): Unit =
     PartnerFullNamePage.assertPageIsDisplayed()
     PartnerFullNamePage.enterPartnerFullName(name)
     PartnerFullNamePage.clickContinue()
 
-  // TODO add rest of this journey once available
+  def enterAdditionalPartnerName(name: String): Unit =
+    CheckYourAnswersPage.assertPageIsDisplayed()
+    CheckYourAnswersPage.clickContinue()
+    PartnerFullNamePage.assertPageIsDisplayed()
+    PartnerFullNamePage.enterPartnerFullName(name)
+    PartnerFullNamePage.clickContinue()
+
+  def enterPartners(names: List[String]): Unit =
+    enterFirstPartnerName(names.head)
+    names.tail.foreach(enterAdditionalPartnerName)
+
+  def checkYourAnswers(expectedNames: List[String]): Unit =
+    CheckYourAnswersPage.assertPageIsDisplayed()
+    expectedNames.zipWithIndex.foreach { case (name, idx) => CheckYourAnswersPage.assertNameAt(idx, name) }
+
+  def confirmEntries(): Unit =
+    CheckYourAnswersPage.clickContinue()
+    TaskListPage.assertPageIsDisplayed()
+    TaskListPage.assertPartnerTaxAdvisorInformationStatus("Completed")

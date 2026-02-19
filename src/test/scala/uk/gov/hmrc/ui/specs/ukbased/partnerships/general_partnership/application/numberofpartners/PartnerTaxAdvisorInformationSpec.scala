@@ -22,6 +22,11 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangePartnerPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.HowManyPartnersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.PartnerFullNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.RemovePartnerPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class PartnerTaxAdvisorInformationSpec
@@ -29,7 +34,6 @@ extends BaseSpec:
 
   Feature("Complete Partner and Tax Advisor information section"):
     Scenario("Partnership has 5 or less partners", HappyPath):
-
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
@@ -90,3 +94,85 @@ extends BaseSpec:
       PartnerTaxAdvisorInformationFlow
         .SixOrMorePartnersAlt
         .runFlow()
+
+    Scenario("Change number of partners from Check your answers screen", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(GeneralPartnership)
+
+      AmlsDetailsFlow
+        .WhenHmrcAreSupervisoryBody
+        .runFlow()
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswers
+        .runFlow()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.changeNumberOfPartners()
+
+      HowManyPartnersPage.assertPageIsDisplayed()
+      HowManyPartnersPage.selectFiveOrLess()
+      HowManyPartnersPage.enterExactNumber("3")
+      HowManyPartnersPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertWarningTextIsDisplayed("You told us there are 3 partners. " +
+        "Change the number of partners or remove 2 partners from the list before you continue.")
+      CheckYourAnswersPage.removePartner("Tony Stark")
+
+      RemovePartnerPage.assertPageIsDisplayed()
+      RemovePartnerPage.selectYes()
+      RemovePartnerPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertWarningTextIsDisplayed("You told us there are 3 partners. " +
+        "Change the number of partners or remove 1 partner from the list before you continue.")
+      CheckYourAnswersPage.removePartner("Steve Rogers")
+
+      RemovePartnerPage.assertPageIsDisplayed()
+      RemovePartnerPage.selectYes()
+      RemovePartnerPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+
+      PartnerTaxAdvisorInformationFlow.confirmEntries()
+
+    Scenario("Change partner name from Check your answers screen", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(GeneralPartnership)
+
+      AmlsDetailsFlow
+        .WhenHmrcAreSupervisoryBody
+        .runFlow()
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswers
+        .runFlow()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.changePartnerName("Tony Stark")
+
+      ChangePartnerPage.assertPageIsDisplayed()
+      ChangePartnerPage.enterPartnerFullName("Bruce Banner")
+      ChangePartnerPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertNameAt(4, "Bruce Banner")
