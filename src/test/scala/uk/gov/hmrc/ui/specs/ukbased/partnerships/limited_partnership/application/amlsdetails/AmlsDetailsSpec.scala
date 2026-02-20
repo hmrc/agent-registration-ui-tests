@@ -23,9 +23,12 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.{CheckYourAnswersPage, EvidenceOfAmlSupervisionPage, WhatRegistrationNumberPage, WhatSupervisoryBodyPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.EvidenceOfAmlSupervisionPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatRegistrationNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatSupervisoryBodyPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class AmlsDetailsSpec
@@ -43,7 +46,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -61,7 +64,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       AmlsDetailsFlow
         .WhenNonHmrcSupervisoryBody
@@ -79,7 +82,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -106,7 +109,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -135,7 +138,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -158,7 +161,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -181,7 +184,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)

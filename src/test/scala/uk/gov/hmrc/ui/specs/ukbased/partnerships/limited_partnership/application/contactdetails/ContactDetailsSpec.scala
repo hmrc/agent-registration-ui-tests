@@ -17,8 +17,9 @@
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_partnership.application.contactdetails
 
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
-import uk.gov.hmrc.ui.{flows, pages}
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows
+import uk.gov.hmrc.ui.pages
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.specs.BaseSpec

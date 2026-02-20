@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership
 
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.{Blocked, Ok}
-import uk.gov.hmrc.ui.flows.common.application.{StubbedSignInData, StubbedSignInFlow}
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Blocked
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.*
@@ -42,7 +44,7 @@ object BusinessDetailsFlow:
       startJourney()
       selectUkBased()
       selectPartnershipBusinessSetup()
-      selectGeneralPartnership()
+      selectLimitedLiabilityPartnership()
       selectAuthorisedUserRole()
       answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
       proceedToGovernmentGateway()
@@ -55,7 +57,7 @@ object BusinessDetailsFlow:
       startJourney()
       selectUkBased()
       selectPartnershipBusinessSetup()
-      selectGeneralPartnership()
+      selectLimitedLiabilityPartnership()
       selectAuthorisedUserRole()
       answerOnlineServicesAccount(OnlineAgentsAccount.NoOnlineAgentAccount)
       proceedToGovernmentGateway()
@@ -68,7 +70,7 @@ object BusinessDetailsFlow:
       startJourney()
       selectUkBased()
       selectPartnershipBusinessSetup()
-      selectGeneralPartnership()
+      selectLimitedLiabilityPartnership()
       selectAuthorisedUserRole()
       answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
       proceedToGovernmentGateway()
@@ -91,8 +93,8 @@ object BusinessDetailsFlow:
     HowIsYourBusinessSetUpPage.clickContinue()
     WhatTypeOfPartnershipPage.assertPageIsDisplayed()
 
-  def selectGeneralPartnership(): Unit =
-    WhatTypeOfPartnershipPage.selectGeneralPartnership()
+  def selectLimitedLiabilityPartnership(): Unit =
+    WhatTypeOfPartnershipPage.selectLimitedPartnership()
     WhatTypeOfPartnershipPage.clickContinue()
     UserRolePage.assertPageIsDisplayed()
 

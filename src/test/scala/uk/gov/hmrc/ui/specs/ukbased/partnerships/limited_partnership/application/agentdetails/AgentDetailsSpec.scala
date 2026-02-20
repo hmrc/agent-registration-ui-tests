@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
@@ -43,7 +43,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario("User enters all custom values", HappyPath):
@@ -76,7 +76,7 @@ extends BaseSpec:
       AgentDetailsFlow.selectCorrespondenceAddress(AgentDetailOption.CompaniesHouseProvided)
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom LLP")
+      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom Limited Partnership")
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "01234567890")
       CheckYourAnswersPage.clickContinue()
 
@@ -94,7 +94,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       CheckYourAnswersPage.clickChangeFor("Name shown to clients")
 
@@ -118,7 +118,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       CheckYourAnswersPage.clickChangeFor("Telephone number")
 
@@ -142,7 +142,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       CheckYourAnswersPage.clickChangeFor("Email address")
 
@@ -179,7 +179,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       CheckYourAnswersPage.clickChangeFor("Correspondence address")
 

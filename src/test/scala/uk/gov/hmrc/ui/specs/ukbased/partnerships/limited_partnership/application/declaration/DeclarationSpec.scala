@@ -17,13 +17,13 @@
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_partnership.application.declaration
 
 import uk.gov.hmrc.ui.domain.BusinessType
-import uk.gov.hmrc.ui.domain.BusinessType.*
+import BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership.BusinessDetailsFlow
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class DeclarationSpec
@@ -41,7 +41,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody

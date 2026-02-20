@@ -53,7 +53,7 @@ object AgentDetailsFlow:
         case SoleTrader => verifyCheckYourAnswers(expectedName = "Test User", expectedNumber = "(+44) 10794554342")
         case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
         case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
-        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Limited Partnership", expectedNumber = "07777777777")
+        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
       completeCheckYourAnswers()
 
   object WhenUsingCustomValues:
@@ -79,7 +79,7 @@ object AgentDetailsFlow:
         case SoleTrader => verifyCheckYourAnswers(expectedName = "Test User", expectedNumber = "(+44) 10794554342")
         case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
         case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
-        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Limited Partnership", expectedNumber = "07777777777")
+        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()

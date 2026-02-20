@@ -24,8 +24,9 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.{ApplicationSubmittedPage, ViewApplicationPage}
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership.BusinessDetailsFlow
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ViewApplicationSpec
@@ -43,7 +44,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(stubbedSignInData, LimitedPartnership)
+        .runFlow(LimitedPartnership)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -62,13 +63,13 @@ extends BaseSpec:
         .ViewApplication
         .runFlow()
       ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
-      ViewApplicationPage.assertSummaryRow("Business type", "Limited liability partnership")
-      ViewApplicationPage.assertSummaryRow("Are you a member of the limited liability partnership?", "No, but I’m authorised by them to set up this account")
-      ViewApplicationPage.assertSummaryRow("Company name", "Test Partnership")
+      ViewApplicationPage.assertSummaryRow("Business type", "Limited partnership")
+      ViewApplicationPage.assertSummaryRow("Are you a partner in the business?", "No, but I’m authorised by them to set up this account")
+      ViewApplicationPage.assertSummaryRow("Partnership name", "Test Partnership")
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
-      ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
+      ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
       ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test Partnership")
-      ViewApplicationPage.assertSummaryRow("Telephone number", "07777777777")
+      ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
       ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Test Street\nTest Area\nAA1 1AA\nGB")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")
