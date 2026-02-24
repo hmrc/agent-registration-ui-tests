@@ -24,3 +24,9 @@ extends BaseCheckYourAnswersPage:
 
   override val path: String = "/agent-registration/apply/list-details/check-your-answers"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  def changeNumberOfPartners(): Unit = clickChangeFor("Number of partners")
+  def changePartnerNames(): Unit = clickChangeFor("Partner names")
+  def changeUnofficialPartners(): Unit = clickChangeFor("Unofficial partners")
+  def changeUnofficialPartnerName(): Unit = clickChangeFor("Unofficial partner name")
+
