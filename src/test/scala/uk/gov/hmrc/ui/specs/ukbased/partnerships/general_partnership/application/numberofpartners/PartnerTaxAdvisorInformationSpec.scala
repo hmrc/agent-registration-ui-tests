@@ -22,10 +22,7 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangePartnerPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersKeyIndividualsPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.HowManyPartnersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.RemovePartnerPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{ChangeOtherRelevantIndividualPage, ChangePartnerPage, CheckYourAnswersKeyIndividualsPage, CheckYourAnswersOtherIndividualsPage, CheckYourAnswersPage, HowManyPartnersPage, OtherRelevantIndividualPage, RemovePartnerPage, UnofficialPartnersPage}
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class PartnerTaxAdvisorInformationSpec
@@ -112,7 +109,7 @@ extends BaseSpec:
         .runFlow()
 
       PartnerTaxAdvisorInformationFlow
-        .runToCheckYourAnswers
+        .runToCheckYourAnswersOfficialPartners
         .runFlow()
 
       CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
@@ -142,11 +139,93 @@ extends BaseSpec:
       RemovePartnerPage.clickContinue()
 
       CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.clickContinue()
 
-      PartnerTaxAdvisorInformationFlow.confirmEntries()
+      PartnerTaxAdvisorInformationFlow.noUnofficialPartners()
 
     Scenario("Change partner name from Check your answers screen", HappyPath):
-      pending
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(GeneralPartnership)
+
+      AmlsDetailsFlow
+        .WhenHmrcAreSupervisoryBody
+        .runFlow()
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswersOfficialPartners
+        .runFlow()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.changePartnerName("Tony Stark")
+
+      ChangePartnerPage.assertPageIsDisplayed()
+      ChangePartnerPage.enterPartnerFullName("Bruce Banner")
+      ChangePartnerPage.clickContinue()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.assertNameAt(4, "Bruce Banner")
+
+    Scenario("Add Unofficial Partners", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(GeneralPartnership)
+
+      AmlsDetailsFlow
+        .WhenHmrcAreSupervisoryBody
+        .runFlow()
+
+      PartnerTaxAdvisorInformationFlow
+        .WithUnofficialPartners
+        .runFlow()
+
+    Scenario("Change unofficial partners from Check Your Answers", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(GeneralPartnership)
+
+      AmlsDetailsFlow
+        .WhenHmrcAreSupervisoryBody
+        .runFlow()
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswersUnofficialPartners
+        .runFlow()
+
+      CheckYourAnswersOtherIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersOtherIndividualsPage.changePartnerName("Bruce Wayne")
+
+      OtherRelevantIndividualPage.enterPartnerFullName("Dick Grayson")
+      OtherRelevantIndividualPage.clickContinue()
+
+      CheckYourAnswersOtherIndividualsPage.assertNameAt(0, "Dick Grayson")
+
+    Scenario("Change unofficial partners boolean from Check Your Answers", HappyPath):
+
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
@@ -166,12 +245,136 @@ extends BaseSpec:
         .runToCheckYourAnswers
         .runFlow()
 
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Unofficial partners", "Yes")
+      CheckYourAnswersPage.changeUnofficialPartners()
+
+      UnofficialPartnersPage.assertPageIsDisplayed()
+      UnofficialPartnersPage.selectNo()
+      UnofficialPartnersPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Unofficial partners", "No")
+      CheckYourAnswersPage.assertSummaryRowNotPresent("Unofficial partner name")
+
+    Scenario("Change number of partners from final Check Your Answers", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(GeneralPartnership)
+
+      AmlsDetailsFlow
+        .WhenHmrcAreSupervisoryBody
+        .runFlow()
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswers
+        .runFlow()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Number of partners", "3")
+      CheckYourAnswersPage.changeNumberOfPartners()
+
+      HowManyPartnersPage.assertPageIsDisplayed()
+      HowManyPartnersPage.selectFiveOrLess()
+      HowManyPartnersPage.enterExactNumber("2")
+      HowManyPartnersPage.clickContinue()
+
       CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
-      CheckYourAnswersKeyIndividualsPage.changePartnerName("Tony Stark")
+      CheckYourAnswersKeyIndividualsPage.assertWarningTextIsDisplayed("You told us there are 2 partners. " +
+        "Change the number of partners or remove 1 partner from the list before you continue.")
+      CheckYourAnswersKeyIndividualsPage.removePartner("Jack Burton")
+
+      RemovePartnerPage.assertPageIsDisplayed()
+      RemovePartnerPage.selectYes()
+      RemovePartnerPage.clickContinue()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Number of partners", "2")
+
+    Scenario("Change partner name from final Check Your Answers", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(GeneralPartnership)
+
+      AmlsDetailsFlow
+        .WhenHmrcAreSupervisoryBody
+        .runFlow()
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswers
+        .runFlow()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.changePartnerNames()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.changePartnerName("Jack Burton")
 
       ChangePartnerPage.assertPageIsDisplayed()
-      ChangePartnerPage.enterPartnerFullName("Bruce Banner")
+      ChangePartnerPage.enterPartnerFullName("Peter Parker")
       ChangePartnerPage.clickContinue()
 
       CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
-      CheckYourAnswersKeyIndividualsPage.assertNameAt(4, "Bruce Banner")
+      CheckYourAnswersKeyIndividualsPage.assertNameAt(2, "Peter Parker")
+      CheckYourAnswersKeyIndividualsPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Partner names", "Bobby Boucher\nSonny Koufax\nPeter Parker")
+
+    Scenario("Change unofficial partner name from final Check Your Answers", HappyPath):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow()
+
+      ContactDetailsFlow
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(GeneralPartnership)
+
+      AmlsDetailsFlow
+        .WhenHmrcAreSupervisoryBody
+        .runFlow()
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswers
+        .runFlow()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.changeUnofficialPartnerName()
+
+      CheckYourAnswersOtherIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersOtherIndividualsPage.changePartnerName("Bruce Wayne")
+
+      ChangeOtherRelevantIndividualPage.assertPageIsDisplayed()
+      ChangeOtherRelevantIndividualPage.enterPartnerFullName("Dick Grayson")
+      ChangeOtherRelevantIndividualPage.clickContinue()
+
+      CheckYourAnswersOtherIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersOtherIndividualsPage.assertNameAt(0, "Dick Grayson")
+      CheckYourAnswersOtherIndividualsPage.selectNo()
+      CheckYourAnswersOtherIndividualsPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Unofficial partner name", "Dick Grayson\nClark Kent\nDiana Prince")

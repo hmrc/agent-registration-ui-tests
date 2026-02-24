@@ -19,15 +19,11 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow.NumberOfPartners.FiveOrLess
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow.NumberOfPartners.SixOrMore
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersKeyIndividualsPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.HowManyPartnersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.PartnerFullNamePage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.UnofficialPartnersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{CheckYourAnswersKeyIndividualsPage, CheckYourAnswersOtherIndividualsPage, CheckYourAnswersPage, HowManyPartnersPage, OtherRelevantIndividualPage, PartnerFullNamePage, UnofficialPartnersPage}
 
 object PartnerTaxAdvisorInformationFlow:
 
-  private val allNames = List(
+  private val allPartnerNames = List(
     "Bobby Boucher",
     "Sonny Koufax",
     "Jack Burton",
@@ -35,6 +31,12 @@ object PartnerTaxAdvisorInformationFlow:
     "Tony Stark",
     "Natasha Romanov",
     "Carol Danvers"
+  )
+
+  private val allUnofficialPartnerNames = List(
+    "Bruce Wayne",
+    "Clark Kent",
+    "Diana Prince"
   )
 
   enum NumberOfPartners:
@@ -51,42 +53,81 @@ object PartnerTaxAdvisorInformationFlow:
 
   object FiveOrLessPartners:
 
-    def runFlow(): Unit =
-      val names = allNames.take(3)
+    def runFlow(): Unit = // flow where there are 5 or less partners and all are known to tax authority
+      val names = allPartnerNames.take(3)
       startJourney()
       enterNumberOfPartners("3", FiveOrLess)
       enterPartners(names)
-      checkYourAnswers(names)
-      confirmEntries()
+      checkYourAnswersKeyIndividuals(names)
+      noUnofficialPartners()
+      checkYourAnswersNoUnofficial("3", names, "No")
 
-  object SixOrMorePartners:
+  object SixOrMorePartners: // flow where there are 6 or more partners and all are known to tax authority
 
     def runFlow(): Unit =
-      val names = allNames
+      val names = allPartnerNames
       startJourney()
       enterNumberOfPartners("7", SixOrMore)
       enterPartners(names)
-      checkYourAnswers(names)
-      confirmEntries()
+      checkYourAnswersKeyIndividuals(names)
+      noUnofficialPartners()
+      checkYourAnswersNoUnofficial("7", names, "No")
 
   object SixOrMorePartnersAlt: // alternate flow where there are 6 or more partners but less than 6 with tax authority
 
     def runFlow(): Unit =
-      val names = allNames.take(5)
+      val names = allPartnerNames.take(5)
       startJourney()
       enterNumberOfPartners("3", SixOrMore)
       enterPartners(names)
-      checkYourAnswers(names)
-      confirmEntries()
+      checkYourAnswersKeyIndividuals(names)
+      noUnofficialPartners()
+      checkYourAnswersNoUnofficial("5", names, "No")
 
-  object runToCheckYourAnswers:
+  object WithUnofficialPartners: // flow where there are partners and unofficial partners
 
     def runFlow(): Unit =
-      val names = allNames.take(5)
+      val names = allPartnerNames.take(3)
+      val uNames = allUnofficialPartnerNames.take(3)
+      startJourney()
+      enterNumberOfPartners("3", FiveOrLess)
+      enterPartners(names)
+      checkYourAnswersKeyIndividuals(names)
+      addUnofficialPartners(uNames)
+      checkYourAnswersOtherIndividuals(uNames)
+      checkYourAnswersWithUnofficial("3", names, "Yes", uNames)
+      completeJourney()
+
+  object runToCheckYourAnswersOfficialPartners: // flow to get to the official partners check your answers page for testing the change scenarios
+
+    def runFlow(): Unit =
+      val names = allPartnerNames.take(5)
       startJourney()
       enterNumberOfPartners("3", SixOrMore)
       enterPartners(names)
-      checkYourAnswers(names)
+
+  object runToCheckYourAnswersUnofficialPartners:// flow to get to the unofficial partners check your answers page for testing the change scenarios
+
+    def runFlow(): Unit =
+      val names = allPartnerNames.take(3)
+      val uNames = allUnofficialPartnerNames.take(3)
+      startJourney()
+      enterNumberOfPartners("3", FiveOrLess)
+      enterPartners(names)
+      checkYourAnswersKeyIndividuals(names)
+      addUnofficialPartners(uNames)
+
+  object runToCheckYourAnswers: // flow to get to the final check your answers page for testing the change scenarios
+
+    def runFlow(): Unit =
+      val names = allPartnerNames.take(3)
+      val uNames = allUnofficialPartnerNames.take(3)
+      startJourney()
+      enterNumberOfPartners("3", FiveOrLess)
+      enterPartners(names)
+      checkYourAnswersKeyIndividuals(names)
+      addUnofficialPartners(uNames)
+      checkYourAnswersOtherIndividuals(uNames)
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()
@@ -101,6 +142,10 @@ object PartnerTaxAdvisorInformationFlow:
     totalNum.selectOnPage(n)
     HowManyPartnersPage.clickContinue()
 
+  def enterPartners(names: List[String]): Unit =
+    enterFirstPartnerName(names.head)
+    names.tail.foreach(enterAdditionalPartnerName)
+
   def enterFirstPartnerName(name: String): Unit =
     PartnerFullNamePage.assertPageIsDisplayed()
     PartnerFullNamePage.enterPartnerFullName(name)
@@ -113,20 +158,63 @@ object PartnerTaxAdvisorInformationFlow:
     PartnerFullNamePage.enterPartnerFullName(name)
     PartnerFullNamePage.clickContinue()
 
-  def enterPartners(names: List[String]): Unit =
-    enterFirstPartnerName(names.head)
-    names.tail.foreach(enterAdditionalPartnerName)
-
-  def checkYourAnswers(expectedNames: List[String]): Unit =
-    CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
-    expectedNames.zipWithIndex.foreach { case (name, idx) => CheckYourAnswersKeyIndividualsPage.assertNameAt(idx, name) }
-
-  def confirmEntries(): Unit =
-    CheckYourAnswersKeyIndividualsPage.clickContinue()
+  def noUnofficialPartners(): Unit =
     UnofficialPartnersPage.assertPageIsDisplayed()
     UnofficialPartnersPage.selectNo()
     UnofficialPartnersPage.clickContinue()
+
+  def addUnofficialPartners(uNames: List[String]): Unit =
+    UnofficialPartnersPage.assertPageIsDisplayed()
+    UnofficialPartnersPage.selectYes()
+    UnofficialPartnersPage.clickContinue()
+    OtherRelevantIndividualPage.assertPageIsDisplayed()
+    enterUnofficialPartners(uNames)
+
+  def enterUnofficialPartners(names: List[String]): Unit =
+    enterFirstUnofficialPartnerName(names.head)
+    names.tail.foreach(enterAdditionalUnofficialPartnerName)
+
+  def enterFirstUnofficialPartnerName(name: String): Unit =
+    OtherRelevantIndividualPage.assertPageIsDisplayed()
+    OtherRelevantIndividualPage.enterPartnerFullName(name)
+    OtherRelevantIndividualPage.clickContinue()
+
+  def enterAdditionalUnofficialPartnerName(name: String): Unit =
+    CheckYourAnswersOtherIndividualsPage.assertPageIsDisplayed()
+    CheckYourAnswersOtherIndividualsPage.selectYes()
+    CheckYourAnswersKeyIndividualsPage.clickContinue()
+    OtherRelevantIndividualPage.assertPageIsDisplayed()
+    OtherRelevantIndividualPage.enterPartnerFullName(name)
+    OtherRelevantIndividualPage.clickContinue()
+
+  def checkYourAnswersKeyIndividuals(expectedNames: List[String]): Unit =
+    CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+    expectedNames.zipWithIndex.foreach { case (name, idx) => CheckYourAnswersKeyIndividualsPage.assertNameAt(idx, name) }
+    CheckYourAnswersKeyIndividualsPage.clickContinue()
+
+  def checkYourAnswersOtherIndividuals(expectedNames: List[String]): Unit =
+    CheckYourAnswersOtherIndividualsPage.assertPageIsDisplayed()
+    expectedNames.zipWithIndex.foreach { case (name, idx) => CheckYourAnswersOtherIndividualsPage.assertNameAt(idx, name) }
+    CheckYourAnswersOtherIndividualsPage.selectNo()
+    CheckYourAnswersOtherIndividualsPage.clickContinue()
+
+  def checkYourAnswersWithUnofficial(partNum: String, names: List[String], unofficialPart: String, uNames: List[String]): Unit =
     CheckYourAnswersPage.assertPageIsDisplayed()
+    CheckYourAnswersPage.assertSummaryRow("Number of partners", partNum)
+    CheckYourAnswersPage.assertSummaryRow("Partner names", names.mkString("\n"))
+    CheckYourAnswersPage.assertSummaryRow("Unofficial partners", unofficialPart)
+    CheckYourAnswersPage.assertSummaryRow("Unofficial partner name", uNames.mkString("\n"))
+
+  def checkYourAnswersNoUnofficial(partNum: String, names: List[String], unofficialPart: String): Unit =
+    CheckYourAnswersPage.assertPageIsDisplayed()
+    CheckYourAnswersPage.assertSummaryRow("Number of partners", partNum)
+    CheckYourAnswersPage.assertSummaryRow("Partner names", names.mkString("\n"))
+    CheckYourAnswersPage.assertSummaryRow("Unofficial partners", unofficialPart)
+    CheckYourAnswersPage.clickContinue()
+    TaskListPage.assertPageIsDisplayed()
+    TaskListPage.assertPartnerTaxAdvisorInformationStatus("Completed")
+
+  def completeJourney(): Unit =
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertPartnerTaxAdvisorInformationStatus("Completed")
