@@ -22,7 +22,15 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{ChangeOtherRelevantIndividualPage, ChangePartnerPage, CheckYourAnswersKeyIndividualsPage, CheckYourAnswersOtherIndividualsPage, CheckYourAnswersPage, HowManyPartnersPage, OtherRelevantIndividualPage, RemovePartnerPage, UnofficialPartnersPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangeOtherRelevantIndividualPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangePartnerPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersKeyIndividualsPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersOtherIndividualsPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.HowManyPartnersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.OtherRelevantIndividualPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.RemovePartnerPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.HasOtherRelevantTaxAdvisersPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class PartnerTaxAdvisorInformationSpec
@@ -195,7 +203,7 @@ extends BaseSpec:
         .WithUnofficialPartners
         .runFlow()
 
-    Scenario("Change unofficial partners from Check Your Answers", HappyPath):
+    Scenario("Change other relevant tax advisers from Check Your Answers", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -224,7 +232,7 @@ extends BaseSpec:
 
       CheckYourAnswersOtherIndividualsPage.assertNameAt(0, "Dick Grayson")
 
-    Scenario("Change unofficial partners boolean from Check Your Answers", HappyPath):
+    Scenario("Change has other relevant tax advisers boolean from Check Your Answers", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -246,16 +254,16 @@ extends BaseSpec:
         .runFlow()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Unofficial partners", "Yes")
+      CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", "Yes")
       CheckYourAnswersPage.changeUnofficialPartners()
 
-      UnofficialPartnersPage.assertPageIsDisplayed()
-      UnofficialPartnersPage.selectNo()
-      UnofficialPartnersPage.clickContinue()
+      HasOtherRelevantTaxAdvisersPage.assertPageIsDisplayed()
+      HasOtherRelevantTaxAdvisersPage.selectNo()
+      HasOtherRelevantTaxAdvisersPage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Unofficial partners", "No")
-      CheckYourAnswersPage.assertSummaryRowNotPresent("Unofficial partner name")
+      CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", "No")
+      CheckYourAnswersPage.assertSummaryRowNotPresent("Other relevant tax adviser names")
 
     Scenario("Change number of partners from final Check Your Answers", HappyPath):
 
@@ -340,7 +348,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Partner names", "Bobby Boucher\nSonny Koufax\nPeter Parker")
 
-    Scenario("Change unofficial partner name from final Check Your Answers", HappyPath):
+    Scenario("Change other relevant tax adviser name from final Check Your Answers", HappyPath):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -377,4 +385,4 @@ extends BaseSpec:
       CheckYourAnswersOtherIndividualsPage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Unofficial partner name", "Dick Grayson\nClark Kent\nDiana Prince")
+      CheckYourAnswersPage.assertSummaryRow("Other relevant tax adviser names", "Dick Grayson\nClark Kent\nDiana Prince")

@@ -20,7 +20,7 @@ import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object UnofficialPartnersPage
+object HasOtherRelevantTaxAdvisersPage
 extends BasePage:
 
   override val path: String = "/agent-registration/apply/list-details/how-many-other-individuals"
