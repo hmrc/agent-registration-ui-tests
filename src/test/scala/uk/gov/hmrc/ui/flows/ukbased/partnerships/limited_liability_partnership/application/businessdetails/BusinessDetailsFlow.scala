@@ -106,12 +106,14 @@ object BusinessDetailsFlow:
   def answerOnlineServicesAccount(answer: OnlineAgentsAccount): Unit =
     answer match
       case OnlineAgentsAccount.HasOnlineAgentAccount =>
+        HmrcOnlineServicesAccountPage.assertPageIsDisplayed()
         HmrcOnlineServicesAccountPage.selectYes()
         HmrcOnlineServicesAccountPage.clickContinue()
         SignInWithAgentAccountPage.assertPageIsDisplayed()
         SignInWithAgentAccountPage.clickContinue()
 
       case OnlineAgentsAccount.NoOnlineAgentAccount =>
+        HmrcOnlineServicesAccountPage.assertPageIsDisplayed()
         HmrcOnlineServicesAccountPage.selectNo()
         HmrcOnlineServicesAccountPage.clickContinue()
         CreateYourAgentAccountPage.assertPageIsDisplayed()
