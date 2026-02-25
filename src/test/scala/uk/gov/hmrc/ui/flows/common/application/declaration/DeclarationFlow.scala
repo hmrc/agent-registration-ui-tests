@@ -43,6 +43,7 @@ object DeclarationFlow:
       case LLP => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
       case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
       case LimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
+      case LimitedCompany => DeclarationPage.assertAuthorisedByTextDisplayed("Test Company Ltd")
     DeclarationPage.clickContinue()
 
   def completeJourney(): Unit =

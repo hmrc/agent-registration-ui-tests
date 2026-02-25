@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership
+package uk.gov.hmrc.ui.flows.ukbased.limited_company
 
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Blocked
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.{Blocked, Ok}
+import uk.gov.hmrc.ui.flows.common.application.{StubbedSignInData, StubbedSignInFlow}
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.*
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.limited_company.businessdetails.AreYouADirectorOfTheLimitedCompanyPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 
 /** Flow for completing the Business Details section of an agent registration application.
   *
-  * UK-based -> LLP -> initial application
+  * UK-based -> Limited Company -> initial application
   */
 object BusinessDetailsFlow:
 
   enum OnlineAgentsAccount:
     case HasOnlineAgentAccount, NoOnlineAgentAccount
 
-  enum AgencyStatus:
+  enum CompanyStatus:
     case Ok, Blocked
 
   // --- Public "journeys" (like ProvideDetailsFlow objects) ---
@@ -43,12 +42,11 @@ object BusinessDetailsFlow:
     def runFlow(): StubbedSignInData =
       startJourney()
       selectUkBased()
-      selectPartnershipBusinessSetup()
-      selectLimitedPartnership()
-      selectAuthorisedUserRole()
+      selectLimitedCompanySetup()
+      confirmIfDirectorOfLimitedCompany()
       answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
       proceedToGovernmentGateway()
-      val stubData = stubbedSignIn(AgencyStatus.Ok)
+      val stubData = stubbedSignIn(CompanyStatus.Ok)
       landOnTaskList()
       stubData
 
@@ -56,12 +54,11 @@ object BusinessDetailsFlow:
     def runFlow(): StubbedSignInData =
       startJourney()
       selectUkBased()
-      selectPartnershipBusinessSetup()
-      selectLimitedPartnership()
-      selectAuthorisedUserRole()
+      selectLimitedCompanySetup()
+      confirmIfDirectorOfLimitedCompany()
       answerOnlineServicesAccount(OnlineAgentsAccount.NoOnlineAgentAccount)
       proceedToGovernmentGateway()
-      val stubData = stubbedSignIn(AgencyStatus.Ok)
+      val stubData = stubbedSignIn(CompanyStatus.Ok)
       landOnTaskList()
       stubData
 
@@ -69,12 +66,11 @@ object BusinessDetailsFlow:
     def runFlow(): Unit =
       startJourney()
       selectUkBased()
-      selectPartnershipBusinessSetup()
-      selectLimitedPartnership()
-      selectAuthorisedUserRole()
+      selectLimitedCompanySetup()
+      confirmIfDirectorOfLimitedCompany()
       answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
       proceedToGovernmentGateway()
-      stubbedSignIn(AgencyStatus.Blocked)
+      stubbedSignIn(CompanyStatus.Blocked)
       landOnCannotRegisterPage()
 
   // --- Granular steps (each page gets a function) ---
@@ -88,20 +84,15 @@ object BusinessDetailsFlow:
     IsYourAgentBusinessBasedInTheUKPage.clickContinue()
     HowIsYourBusinessSetUpPage.assertPageIsDisplayed()
 
-  def selectPartnershipBusinessSetup(): Unit =
-    HowIsYourBusinessSetUpPage.selectATypeOfPartnership()
+  def selectLimitedCompanySetup(): Unit =
+    HowIsYourBusinessSetUpPage.assertPageIsDisplayed()
+    HowIsYourBusinessSetUpPage.selectLimitedCompany()
     HowIsYourBusinessSetUpPage.clickContinue()
-    WhatTypeOfPartnershipPage.assertPageIsDisplayed()
 
-  def selectLimitedPartnership(): Unit =
-    WhatTypeOfPartnershipPage.selectLimitedPartnership()
-    WhatTypeOfPartnershipPage.clickContinue()
-    UserRolePage.assertPageIsDisplayed()
-
-  def selectAuthorisedUserRole(): Unit =
-    UserRolePage.selectAuthorised()
-    UserRolePage.clickContinue()
-    HmrcOnlineServicesAccountPage.assertPageIsDisplayed()
+  def confirmIfDirectorOfLimitedCompany(): Unit =
+    AreYouADirectorOfTheLimitedCompanyPage.assertPageIsDisplayed()
+    AreYouADirectorOfTheLimitedCompanyPage.selectYes()
+    AreYouADirectorOfTheLimitedCompanyPage.clickContinue()
 
   def answerOnlineServicesAccount(answer: OnlineAgentsAccount): Unit =
     answer match
@@ -121,10 +112,10 @@ object BusinessDetailsFlow:
 
   def proceedToGovernmentGateway(): Unit = GovernmentGatewaySignInPage.assertPageIsDisplayed()
 
-  def stubbedSignIn(status: AgencyStatus): StubbedSignInData =
+  def stubbedSignIn(status: CompanyStatus): StubbedSignInData =
     status match
-      case AgencyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok)
-      case AgencyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked)
+      case CompanyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok)
+      case CompanyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked)
 
   def landOnTaskList(): Unit = TaskListPage.assertPageIsDisplayed()
 
