@@ -22,7 +22,15 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{ChangeOtherRelevantIndividualPage, ChangePartnerPage, CheckYourAnswersKeyIndividualsPage, CheckYourAnswersOtherIndividualsPage, CheckYourAnswersPage, HowManyPartnersPage, OtherRelevantIndividualPage, RemovePartnerPage, HasOtherRelevantTaxAdvisersPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangeOtherRelevantIndividualPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangePartnerPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersKeyIndividualsPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersOtherIndividualsPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.HowManyPartnersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.OtherRelevantIndividualPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.RemovePartnerPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.HasOtherRelevantTaxAdvisersPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class PartnerTaxAdvisorInformationSpec
