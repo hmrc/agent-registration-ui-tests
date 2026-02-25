@@ -27,6 +27,6 @@ extends BaseCheckYourAnswersPage:
 
   def changeNumberOfPartners(): Unit = clickChangeFor("Number of partners")
   def changePartnerNames(): Unit = clickChangeFor("Partner names")
-  def changeUnofficialPartners(): Unit = clickChangeFor("Unofficial partners")
-  def changeUnofficialPartnerName(): Unit = clickChangeFor("Unofficial partner name")
+  def changeUnofficialPartners(): Unit = clickChangeFor("Other relevant tax advisers")
+  def changeUnofficialPartnerName(): Unit = clickChangeFor("Other relevant tax advisers names")
 

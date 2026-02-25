@@ -19,7 +19,7 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow.NumberOfPartners.FiveOrLess
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow.NumberOfPartners.SixOrMore
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{CheckYourAnswersKeyIndividualsPage, CheckYourAnswersOtherIndividualsPage, CheckYourAnswersPage, HowManyPartnersPage, OtherRelevantIndividualPage, PartnerFullNamePage, UnofficialPartnersPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{CheckYourAnswersKeyIndividualsPage, CheckYourAnswersOtherIndividualsPage, CheckYourAnswersPage, HowManyPartnersPage, OtherRelevantIndividualPage, PartnerFullNamePage, HasOtherRelevantTaxAdvisersPage}
 
 object PartnerTaxAdvisorInformationFlow:
 
@@ -159,14 +159,14 @@ object PartnerTaxAdvisorInformationFlow:
     PartnerFullNamePage.clickContinue()
 
   def noUnofficialPartners(): Unit =
-    UnofficialPartnersPage.assertPageIsDisplayed()
-    UnofficialPartnersPage.selectNo()
-    UnofficialPartnersPage.clickContinue()
+    HasOtherRelevantTaxAdvisersPage.assertPageIsDisplayed()
+    HasOtherRelevantTaxAdvisersPage.selectNo()
+    HasOtherRelevantTaxAdvisersPage.clickContinue()
 
   def addUnofficialPartners(uNames: List[String]): Unit =
-    UnofficialPartnersPage.assertPageIsDisplayed()
-    UnofficialPartnersPage.selectYes()
-    UnofficialPartnersPage.clickContinue()
+    HasOtherRelevantTaxAdvisersPage.assertPageIsDisplayed()
+    HasOtherRelevantTaxAdvisersPage.selectYes()
+    HasOtherRelevantTaxAdvisersPage.clickContinue()
     OtherRelevantIndividualPage.assertPageIsDisplayed()
     enterUnofficialPartners(uNames)
 
@@ -202,14 +202,14 @@ object PartnerTaxAdvisorInformationFlow:
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Number of partners", partNum)
     CheckYourAnswersPage.assertSummaryRow("Partner names", names.mkString("\n"))
-    CheckYourAnswersPage.assertSummaryRow("Unofficial partners", unofficialPart)
-    CheckYourAnswersPage.assertSummaryRow("Unofficial partner name", uNames.mkString("\n"))
+    CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", unofficialPart)
+    CheckYourAnswersPage.assertSummaryRow("Other relevant tax adviser names", uNames.mkString("\n"))
 
   def checkYourAnswersNoUnofficial(partNum: String, names: List[String], unofficialPart: String): Unit =
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Number of partners", partNum)
     CheckYourAnswersPage.assertSummaryRow("Partner names", names.mkString("\n"))
-    CheckYourAnswersPage.assertSummaryRow("Unofficial partners", unofficialPart)
+    CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", unofficialPart)
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertPartnerTaxAdvisorInformationStatus("Completed")

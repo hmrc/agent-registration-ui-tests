@@ -14,6 +14,6 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  private val unofficialPartnerFullNameField = By.id("individualName")
+  private val unofficialPartnerFullNameField = By.id("otherRelevantIndividualName")
 
   def enterPartnerFullName(name: String): Unit = sendKeys(unofficialPartnerFullNameField, name)
