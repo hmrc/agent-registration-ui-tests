@@ -29,6 +29,6 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should startWith(url)
 
-  private val partnerFullNameField = By.id("individualName")
+  private val partnerFullNameField = By.id("otherRelevantIndividualName")
 
   def enterPartnerFullName(name: String): Unit = sendKeys(partnerFullNameField, name)
