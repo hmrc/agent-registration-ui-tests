@@ -25,7 +25,8 @@ import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.limited_company.BusinessDetailsFlow
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.{ApplicationSubmittedPage, ViewApplicationPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ViewApplicationSpec

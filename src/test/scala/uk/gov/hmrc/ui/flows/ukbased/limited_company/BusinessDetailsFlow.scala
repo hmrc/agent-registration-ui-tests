@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.limited_company
 
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.{Blocked, Ok}
-import uk.gov.hmrc.ui.flows.common.application.{StubbedSignInData, StubbedSignInFlow}
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Blocked
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.*
@@ -75,14 +77,12 @@ object BusinessDetailsFlow:
 
   // --- Granular steps (each page gets a function) ---
 
-  def startJourney(): Unit =
-    ApplyEntryPage.open()
-    IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
+  def startJourney(): Unit = ApplyEntryPage.open()
 
   def selectUkBased(): Unit =
+    IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
     IsYourAgentBusinessBasedInTheUKPage.selectYes()
     IsYourAgentBusinessBasedInTheUKPage.clickContinue()
-    HowIsYourBusinessSetUpPage.assertPageIsDisplayed()
 
   def selectLimitedCompanySetup(): Unit =
     HowIsYourBusinessSetUpPage.assertPageIsDisplayed()

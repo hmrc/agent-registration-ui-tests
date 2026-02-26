@@ -79,29 +79,27 @@ object BusinessDetailsFlow:
 
   // --- Granular steps (each page gets a function) ---
 
-  def startJourney(): Unit =
-    ApplyEntryPage.open()
-    IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
+  def startJourney(): Unit = ApplyEntryPage.open()
 
   def selectUkBased(): Unit =
+    IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
     IsYourAgentBusinessBasedInTheUKPage.selectYes()
     IsYourAgentBusinessBasedInTheUKPage.clickContinue()
-    HowIsYourBusinessSetUpPage.assertPageIsDisplayed()
 
   def selectPartnershipBusinessSetup(): Unit =
+    HowIsYourBusinessSetUpPage.assertPageIsDisplayed()
     HowIsYourBusinessSetUpPage.selectATypeOfPartnership()
     HowIsYourBusinessSetUpPage.clickContinue()
-    WhatTypeOfPartnershipPage.assertPageIsDisplayed()
 
   def selectLimitedLiabilityPartnership(): Unit =
+    WhatTypeOfPartnershipPage.assertPageIsDisplayed()
     WhatTypeOfPartnershipPage.selectLimitedLiabilityPartnership()
     WhatTypeOfPartnershipPage.clickContinue()
-    UserRolePage.assertPageIsDisplayed()
 
   def selectAuthorisedUserRole(): Unit =
+    UserRolePage.assertPageIsDisplayed()
     UserRolePage.selectAuthorised()
     UserRolePage.clickContinue()
-    HmrcOnlineServicesAccountPage.assertPageIsDisplayed()
 
   def answerOnlineServicesAccount(answer: OnlineAgentsAccount): Unit =
     answer match
