@@ -30,7 +30,10 @@ class DeclarationSpec
 extends BaseSpec:
 
   Feature("Complete declaration section"):
-    Scenario("User accepts the declaration", HappyPath):
+    Scenario(
+      "User accepts the declaration",
+      TagLimitedLiabilityPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

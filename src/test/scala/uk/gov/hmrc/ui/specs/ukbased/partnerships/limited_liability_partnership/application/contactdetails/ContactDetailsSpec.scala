@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-package uk
-  .gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.contactdetails
+package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.contactdetails
 
 import uk.gov.hmrc.ui.flows
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
@@ -35,7 +34,10 @@ extends BaseSpec:
 
   Feature("Complete Contact Details section"):
 
-    Scenario("Change Name from CYA page", HappyPath):
+    Scenario(
+      "Change Name from CYA page",
+      TagLimitedLiabilityPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -52,7 +54,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Name", "John Jones")
 
-    Scenario("Change Email address from CYA page", HappyPath):
+    Scenario(
+      "Change Email address from CYA page",
+      TagLimitedLiabilityPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -82,7 +87,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
 
-    Scenario("Change Telephone number from CYA page", HappyPath):
+    Scenario(
+      "Change Telephone number from CYA page",
+      TagLimitedLiabilityPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

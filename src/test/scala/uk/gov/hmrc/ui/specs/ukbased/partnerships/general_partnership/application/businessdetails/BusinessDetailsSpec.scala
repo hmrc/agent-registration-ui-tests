@@ -24,7 +24,10 @@ class BusinessDetailsSpec
 extends BaseSpec:
 
   Feature("Complete BusinessDetails"):
-    Scenario("When user has no online agent account", HappyPath):
+    Scenario(
+      "When user has no online agent account",
+      TagGeneralPartnership
+    ):
 
       BusinessDetailsFlow
         .HasNoOnlineAccount

@@ -34,25 +34,37 @@ class ProvideDetailsSpec
 extends BaseSpec:
 
   Feature("Complete provide individual details section"):
-    Scenario("User provides individual details with Nino and Utr", HappyPath):
+    Scenario(
+      "User provides individual details with Nino and Utr",
+      TagProvideDetails
+    ):
       pending
       ProvideDetailsFlow
         .ProvideFullIndividualDetails
         .runFlow()
 
-    Scenario("User provides individual details WITHOUT Nino and Utr", HappyPath):
+    Scenario(
+      "User provides individual details WITHOUT Nino and Utr",
+      TagProvideDetails
+    ):
       pending
       ProvideDetailsFlow
         .ProvidePartialIndividualDetails
         .runFlow()
 
-    Scenario("Nino and Utr details retrieved from HMRC", HappyPath):
+    Scenario(
+      "Nino and Utr details retrieved from HMRC",
+      TagProvideDetails
+    ):
       pending
       ProvideDetailsFlow
         .UtrAndNinoFromHmrc
         .runFlow()
 
-    Scenario("Locked email", HappyPath):
+    Scenario(
+      "Locked email",
+      TagProvideDetails
+    ):
       pending
       ProvideDetailsFlow.startJourney()
       val stubData = ProvideDetailsFlow.stubbedSignIn(hasUtr = true)
@@ -72,7 +84,10 @@ extends BaseSpec:
       ProvideDetailsFlow.enterEmailAddress(stubData: StubbedSignInData)
       ProvideDetailsFlow.approveApplicant()
 
-    Scenario("Change details from CYA", HappyPath):
+    Scenario(
+      "Change details from CYA",
+      TagProvideDetails
+    ):
       pending
       val stubbedSignInData = ProvideDetailsFlow
         .RunToCheckYourAnswers

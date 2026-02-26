@@ -42,7 +42,10 @@ class AgentDetailsSpec
 extends BaseSpec:
 
   Feature("Complete Agent details section"):
-    Scenario("User selects existing details", HappyPath):
+    Scenario(
+      "User selects existing details",
+      TagLimitedLiabilityPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -56,7 +59,10 @@ extends BaseSpec:
         .runFlow(LLP)
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
-    Scenario("User enters all custom values", HappyPath):
+    Scenario(
+      "User enters all custom values",
+      TagLimitedLiabilityPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -70,7 +76,10 @@ extends BaseSpec:
         .runFlow(stubbedSignInData)
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
-    Scenario("User mixes provided and custom options", HappyPath):
+    Scenario(
+      "User mixes provided and custom options",
+      TagLimitedLiabilityPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -93,7 +102,10 @@ extends BaseSpec:
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
-    Scenario("Change Business Name from Check Your Answers page", HappyPath):
+    Scenario(
+      "Change Business Name from Check Your Answers page",
+      TagLimitedLiabilityPartnership
+    ):
 
       FastForwardLinks
         .FastForward
@@ -114,7 +126,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "Updated LLP Name")
 
-    Scenario("Change Telephone Number from Check Your Answers page", HappyPath):
+    Scenario(
+      "Change Telephone Number from Check Your Answers page",
+      TagLimitedLiabilityPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -138,7 +153,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777799999")
 
-    Scenario("Change Email Address from Check Your Answers page", HappyPath):
+    Scenario(
+      "Change Email Address from Check Your Answers page",
+      TagLimitedLiabilityPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -175,7 +193,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
 
-    Scenario("Change Correspondence Address from Check Your Answers page", HappyPath):
+    Scenario(
+      "Change Correspondence Address from Check Your Answers page",
+      TagLimitedLiabilityPartnership
+    ):
 
       FastForwardLinks
         .FastForward

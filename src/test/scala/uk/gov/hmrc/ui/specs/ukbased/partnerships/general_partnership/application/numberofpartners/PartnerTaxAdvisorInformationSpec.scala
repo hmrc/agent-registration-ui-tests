@@ -37,7 +37,10 @@ class PartnerTaxAdvisorInformationSpec
 extends BaseSpec:
 
   Feature("Complete Partner and Tax Advisor information section"):
-    Scenario("Partnership has 5 or less partners", HappyPath):
+    Scenario(
+      "Partnership has 5 or less partners",
+      TagGeneralPartnership
+    ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
@@ -57,7 +60,10 @@ extends BaseSpec:
         .FiveOrLessPartners
         .runFlow()
 
-    Scenario("Partnership has 6 or more partners", HappyPath):
+    Scenario(
+      "Partnership has 6 or more partners",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -78,7 +84,10 @@ extends BaseSpec:
         .SixOrMorePartners
         .runFlow()
 
-    Scenario("Partnership has 6 more partners but less than 6 with tax authority", HappyPath):
+    Scenario(
+      "Partnership has 6 more partners but less than 6 with tax authority",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -99,7 +108,10 @@ extends BaseSpec:
         .SixOrMorePartnersAlt
         .runFlow()
 
-    Scenario("Change number of partners from Check your answers screen", HappyPath):
+    Scenario(
+      "Change number of partners from Check your answers screen",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -151,7 +163,10 @@ extends BaseSpec:
 
       PartnerTaxAdvisorInformationFlow.noUnofficialPartners()
 
-    Scenario("Change partner name from Check your answers screen", HappyPath):
+    Scenario(
+      "Change partner name from Check your answers screen",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -182,7 +197,10 @@ extends BaseSpec:
       CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
       CheckYourAnswersKeyIndividualsPage.assertNameAt(4, "Bruce Banner")
 
-    Scenario("Add Unofficial Partners", HappyPath):
+    Scenario(
+      "Add Unofficial Partners",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -203,7 +221,10 @@ extends BaseSpec:
         .WithUnofficialPartners
         .runFlow()
 
-    Scenario("Change other relevant tax advisers from Check Your Answers", HappyPath):
+    Scenario(
+      "Change other relevant tax advisers from Check Your Answers",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -232,7 +253,10 @@ extends BaseSpec:
 
       CheckYourAnswersOtherIndividualsPage.assertNameAt(0, "Dick Grayson")
 
-    Scenario("Change has other relevant tax advisers boolean from Check Your Answers", HappyPath):
+    Scenario(
+      "Change has other relevant tax advisers boolean from Check Your Answers",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -265,7 +289,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", "No")
       CheckYourAnswersPage.assertSummaryRowNotPresent("Other relevant tax adviser names")
 
-    Scenario("Change number of partners from final Check Your Answers", HappyPath):
+    Scenario(
+      "Change number of partners from final Check Your Answers",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -310,7 +337,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Number of partners", "2")
 
-    Scenario("Change partner name from final Check Your Answers", HappyPath):
+    Scenario(
+      "Change partner name from final Check Your Answers",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -348,7 +378,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Partner names", "Bobby Boucher\nSonny Koufax\nPeter Parker")
 
-    Scenario("Change other relevant tax adviser name from final Check Your Answers", HappyPath):
+    Scenario(
+      "Change other relevant tax adviser name from final Check Your Answers",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

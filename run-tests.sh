@@ -3,26 +3,31 @@
 set -euo pipefail
 set -x
 
-# -------- Register object-store token (self-contained UI test repo) --------
-# Requires: .setup-object-store.sh and .object-store-token.json
 echo "Running object-store setup..."
 bash setup-object-store.sh
 
 BROWSER=${1:-chrome}
+TAGS=${2:-}
 HEADLESS=${3:-true}
 LOGGING=${4:-true}
 
-# Set span scale factor for Jenkins so scalatest PatienceConfig is more patient
 if [ -n "${JENKINS_HOME:-}" ]; then
   export SCALATEST_SPAN_SCALE_FACTOR=5.0
-  echo "Running on Jenkins - setting SCALATEST_SPAN_SCALE_FACTOR to 5.0 (timeouts will be 5x longer)"
+  echo "Running on Jenkins - setting SCALATEST_SPAN_SCALE_FACTOR to 5.0"
+fi
+
+TAGS_ARG=""
+if [ -n "${TAGS}" ]; then
+  TAGS_ARG="-Dtags=${TAGS}"
+  echo "Running tests with tag filter: ${TAGS}"
+else
+  echo "Running full test suite (no tag filter)"
 fi
 
 sbt \
-  clean \
-  -Dbrowser="${BROWSER:=chrome}" \
-  -Dbrowser.option.headless=${HEADLESS:=true} \
+  -Dbrowser="${BROWSER}" \
+  -Dbrowser.option.headless="${HEADLESS}" \
   -Dbrowser.logging="${LOGGING}" \
-  -Dscalatest.scalingFactor=${SCALATEST_SPAN_SCALE_FACTOR:-1.0} \
-  test \
-  testReport
+  -Dscalatest.scalingFactor="${SCALATEST_SPAN_SCALE_FACTOR:-1.0}" \
+  ${TAGS_ARG} \
+  "clean; test; testReport"
