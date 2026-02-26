@@ -37,7 +37,10 @@ class AmlsDetailsSpec
 extends BaseSpec:
 
   Feature("Complete Anti-money laundering section"):
-    Scenario("User selects HMRC as their Supervisory Body", HappyPath):
+    Scenario(
+      "User selects HMRC as their Supervisory Body",
+      TagLimitedLiabilityPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -55,7 +58,10 @@ extends BaseSpec:
         .runFlow()
       TaskListPage.assertAmlsDetailsStatus("Completed")
 
-    Scenario("User selects non-HMRC Supervisory Body", HappyPath):
+    Scenario(
+      "User selects non-HMRC Supervisory Body",
+      TagLimitedLiabilityPartnership
+    ):
 
       FastForwardLinks
         .FastForward
@@ -66,7 +72,10 @@ extends BaseSpec:
         .runFlow()
       TaskListPage.assertAmlsDetailsStatus("Completed")
 
-    Scenario("Changes Registration Number from CYA page", HappyPath):
+    Scenario(
+      "Changes Registration Number from CYA page",
+      TagLimitedLiabilityPartnership
+    ):
 
       FastForwardLinks
         .FastForward
@@ -86,7 +95,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000111111")
 
-    Scenario("Changes Supervisory Body from CYA page", HappyPath):
+    Scenario(
+      "Changes Supervisory Body from CYA page",
+      TagLimitedLiabilityPartnership
+    ):
 
       FastForwardLinks
         .FastForward
@@ -108,7 +120,10 @@ extends BaseSpec:
       AmlsDetailsFlow.uploadSupervisionEvidence()
       AmlsDetailsFlow.checkYourAnswersExpanded()
 
-    Scenario("Upload evidence file exceeding 5MB in size", HappyPath):
+    Scenario(
+      "Upload evidence file exceeding 5MB in size",
+      TagLimitedLiabilityPartnership
+    ):
 
       FastForwardLinks
         .FastForward
@@ -124,7 +139,10 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.clickContinue()
       EvidenceOfAmlSupervisionPage.assertErrorMessage("The selected file must not be larger than 5MB")
 
-    Scenario("Upload evidence file with virus", HappyPath):
+    Scenario(
+      "Upload evidence file with virus",
+      TagLimitedLiabilityPartnership
+    ):
 
       FastForwardLinks
         .FastForward
@@ -140,7 +158,10 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.clickContinue()
       EvidenceOfAmlSupervisionPage.assertErrorMessage("A virus has been detected in your uploaded file, try uploading another file.")
 
-    Scenario("Upload evidence file in invalid format", HappyPath):
+    Scenario(
+      "Upload evidence file in invalid format",
+      TagLimitedLiabilityPartnership
+    ):
 
       FastForwardLinks
         .FastForward

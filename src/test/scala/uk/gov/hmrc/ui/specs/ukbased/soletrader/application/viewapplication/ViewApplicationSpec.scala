@@ -33,7 +33,10 @@ class ViewApplicationSpec
 extends BaseSpec:
 
   Feature("View application after first stage"):
-    Scenario("User reviews application details", HappyPath):
+    Scenario(
+      "User reviews application details",
+      TagSoleTrader
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

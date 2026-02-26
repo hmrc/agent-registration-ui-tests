@@ -30,7 +30,10 @@ extends BaseSpec:
 
   Feature("Complete Contact Details section"):
 
-    Scenario("Change Name from CYA page", HappyPath):
+    Scenario(
+      "Change Name from CYA page",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -47,7 +50,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Name", "John Jones")
 
-    Scenario("Change Email address from CYA page", HappyPath):
+    Scenario(
+      "Change Email address from CYA page",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -77,7 +83,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
 
-    Scenario("Change Telephone number from CYA page", HappyPath):
+    Scenario(
+      "Change Telephone number from CYA page",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

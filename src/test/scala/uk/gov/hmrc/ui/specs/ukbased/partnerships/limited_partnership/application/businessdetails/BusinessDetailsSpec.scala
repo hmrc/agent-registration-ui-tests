@@ -25,7 +25,10 @@ class BusinessDetailsSpec
 extends BaseSpec:
 
   Feature("Complete BusinessDetails"):
-    Scenario("When user has no online agent account", HappyPath):
+    Scenario(
+      "When user has no online agent account",
+      TagLimitedPartnership
+    ):
 
       BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -33,7 +36,10 @@ extends BaseSpec:
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.assertBusinessDetailsStatus("Completed")
 
-    Scenario("When user has existing online agent account", HappyPath):
+    Scenario(
+      "When user has existing online agent account",
+      TagLimitedPartnership
+    ):
 
       BusinessDetailsFlow
         .HasBlockingStatus

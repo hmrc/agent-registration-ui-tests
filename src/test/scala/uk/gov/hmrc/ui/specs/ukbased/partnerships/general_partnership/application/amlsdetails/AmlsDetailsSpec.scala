@@ -35,7 +35,10 @@ class AmlsDetailsSpec
 extends BaseSpec:
 
   Feature("Complete Anti-money laundering section"):
-    Scenario("User selects HMRC as their Supervisory Body", HappyPath):
+    Scenario(
+      "User selects HMRC as their Supervisory Body",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -53,7 +56,10 @@ extends BaseSpec:
         .runFlow()
       TaskListPage.assertAmlsDetailsStatus("Completed")
 
-    Scenario("User selects non-HMRC Supervisory Body", HappyPath):
+    Scenario(
+      "User selects non-HMRC Supervisory Body",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -71,7 +77,10 @@ extends BaseSpec:
         .runFlow()
       TaskListPage.assertAmlsDetailsStatus("Completed")
 
-    Scenario("Changes Registration Number from CYA page", HappyPath):
+    Scenario(
+      "Changes Registration Number from CYA page",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -98,7 +107,10 @@ extends BaseSpec:
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000111111")
 
-    Scenario("Changes Supervisory Body from CYA page", HappyPath):
+    Scenario(
+      "Changes Supervisory Body from CYA page",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -127,7 +139,10 @@ extends BaseSpec:
       AmlsDetailsFlow.uploadSupervisionEvidence()
       AmlsDetailsFlow.checkYourAnswersExpanded()
 
-    Scenario("Upload evidence file exceeding 5MB in size", HappyPath):
+    Scenario(
+      "Upload evidence file exceeding 5MB in size",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -150,7 +165,10 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.clickContinue()
       EvidenceOfAmlSupervisionPage.assertErrorMessage("The selected file must not be larger than 5MB")
 
-    Scenario("Upload evidence file with virus", HappyPath):
+    Scenario(
+      "Upload evidence file with virus",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -173,7 +191,10 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.clickContinue()
       EvidenceOfAmlSupervisionPage.assertErrorMessage("A virus has been detected in your uploaded file, try uploading another file.")
 
-    Scenario("Upload evidence file in invalid format", HappyPath):
+    Scenario(
+      "Upload evidence file in invalid format",
+      TagGeneralPartnership
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

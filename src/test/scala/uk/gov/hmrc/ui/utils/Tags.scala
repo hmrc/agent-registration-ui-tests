@@ -18,10 +18,16 @@ package uk.gov.hmrc.ui.utils
 
 import org.scalatest.Tag
 object Tags:
-
-  object Smoke
-  extends Tag("Smoke")
-  object HappyPath
-  extends Tag("HappyPath")
-  object Wip
-  extends Tag("Wip")
+  
+  object TagLimitedCompany
+  extends Tag("LimitedCompany")
+  object TagSoleTrader
+  extends Tag("SoleTrader")
+  object TagGeneralPartnership
+  extends Tag("GeneralPartnership")
+  object TagLimitedLiabilityPartnership
+  extends Tag("LimitedLiabilityPartnership")
+  object TagLimitedPartnership
+  extends Tag("LimitedPartnership")
+  object TagProvideDetails
+  extends Tag("ProvideDetails")
