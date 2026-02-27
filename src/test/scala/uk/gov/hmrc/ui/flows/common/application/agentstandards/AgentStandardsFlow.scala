@@ -42,4 +42,5 @@ object AgentStandardsFlow:
       case GeneralPartnership => AgentStandardsPage.assertGeneralPartnershipDisplayed()
       case LimitedPartnership => AgentStandardsPage.assertPartnershipTextDisplayed()
       case LimitedCompany => AgentStandardsPage.assertLimitedCompanyTextDisplayed()
+      case ScottishLimitedPartnership => AgentStandardsPage.assertPartnershipTextDisplayed()
     AgentStandardsPage.clickContinue()
