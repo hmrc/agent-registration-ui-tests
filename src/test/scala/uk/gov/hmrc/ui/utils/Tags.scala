@@ -18,7 +18,7 @@ package uk.gov.hmrc.ui.utils
 
 import org.scalatest.Tag
 object Tags:
-  
+
   object TagLimitedCompany
   extends Tag("LimitedCompany")
   object TagSoleTrader
