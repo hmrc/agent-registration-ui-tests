@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.flows.common.application
 
+import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AmlsDetails
@@ -36,15 +37,19 @@ object FastForwardLinks:
     case BusinessDetails, AgentDetails, ContactDetails, AmlsDetails, AgentStandards, Declaration
 
   object FastForward:
-    def runFlow(applicationProgress: ApplicationProgress): Unit = {
+    def runFlow(
+      applicationProgress: ApplicationProgress,
+      businessType: BusinessType
+    ): StubbedSignInData = {
       startJourney()
-      signInAndDataSetupViaStubs(
+      val stubbedSignInData = signInAndDataSetupViaStubs(
         Agent,
         Ok,
         False,
         True
       )
-      selectFastForwardLink(applicationProgress)
+      selectFastForwardLink(applicationProgress, businessType)
+      stubbedSignInData
     }
 
   def startJourney(): Unit =
@@ -52,34 +57,37 @@ object FastForwardLinks:
     FastForwardLinksPage.assertPageIsDisplayed()
     FastForwardLinksPage.clickLogIn()
 
-  def selectFastForwardLink(applicationProgress: ApplicationProgress): Unit =
+  def selectFastForwardLink(
+    applicationProgress: ApplicationProgress,
+    businessType: BusinessType
+  ): Unit =
     applicationProgress match
       case BusinessDetails =>
-        FastForwardLinksPage.clickAboutYourBusinessLink()
+        FastForwardLinksPage.clickAboutYourBusinessLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertBusinessDetailsStatus("Completed")
-        TaskListPage.assertAgentServicesAccountDetailsStatus("Incomplete")
+        TaskListPage.assertContactDetailsStatus("Incomplete")
       case ContactDetails =>
-        FastForwardLinksPage.clickContactDetailsLink()
+        FastForwardLinksPage.clickContactDetailsLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertContactDetailsStatus("Completed")
         TaskListPage.assertAgentServicesAccountDetailsStatus("Incomplete")
       case AgentDetails =>
-        FastForwardLinksPage.clickAgentDetailsLink()
+        FastForwardLinksPage.clickAgentDetailsLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
         TaskListPage.assertAmlsDetailsStatus("Incomplete")
       case AmlsDetails =>
-        FastForwardLinksPage.clickAmlsDetailsLink()
+        FastForwardLinksPage.clickAmlsDetailsLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertAmlsDetailsStatus("Completed")
         TaskListPage.assertHmrcStandardsForAgentsStatus("Incomplete")
       case AgentStandards =>
-        FastForwardLinksPage.clickAgentStandardsLink()
+        FastForwardLinksPage.clickAgentStandardsLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertHmrcStandardsForAgentsStatus("Completed")
         TaskListPage.assertDeclarationStatus("Incomplete")
       case Declaration =>
-        FastForwardLinksPage.clickDeclarationLink()
+        FastForwardLinksPage.clickDeclarationLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertDeclarationStatus("Completed")

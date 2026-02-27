@@ -18,12 +18,11 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.general_partnership.applicatio
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.EvidenceOfAmlSupervisionPage
@@ -40,16 +39,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, GeneralPartnership)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -61,37 +53,22 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, GeneralPartnership)
 
       AmlsDetailsFlow
         .WhenNonHmrcSupervisoryBody
         .runFlow()
       TaskListPage.assertAmlsDetailsStatus("Completed")
-
     Scenario(
       "Changes Registration Number from CYA page",
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, GeneralPartnership)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -112,16 +89,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, GeneralPartnership)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -144,16 +114,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, GeneralPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -170,16 +133,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, GeneralPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -196,16 +152,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, GeneralPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)

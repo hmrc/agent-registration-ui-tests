@@ -65,7 +65,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails)
+        .runFlow(AgentDetails, LLP)
 
       AmlsDetailsFlow
         .WhenNonHmrcSupervisoryBody
@@ -79,7 +79,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails)
+        .runFlow(AgentDetails, LLP)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -102,7 +102,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails)
+        .runFlow(AgentDetails, LLP)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -127,7 +127,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails)
+        .runFlow(AgentDetails, LLP)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -146,7 +146,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails)
+        .runFlow(AgentDetails, LLP)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -165,7 +165,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails)
+        .runFlow(AgentDetails, LLP)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)

@@ -23,6 +23,7 @@ import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
@@ -81,12 +82,15 @@ extends BaseSpec:
       TagLimitedLiabilityPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+//      val stubbedSignInData = BusinessDetailsFlow
+//        .HasNoOnlineAccount
+//        .runFlow()
+//
+//      ContactDetailsFlow
+//        .runFlow(stubbedSignInData)
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, LLP)
 
       AgentDetailsFlow.startJourney()
       AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom LLP"))
@@ -109,7 +113,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails)
+        .runFlow(AgentDetails, LLP)
 
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.clickOnAgentServicesAccountDetailsLink()
@@ -200,7 +204,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails)
+        .runFlow(AgentDetails, LLP)
 
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.clickOnAgentServicesAccountDetailsLink()

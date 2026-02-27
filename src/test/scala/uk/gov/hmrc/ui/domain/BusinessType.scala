@@ -17,4 +17,4 @@
 package uk.gov.hmrc.ui.domain
 
 enum BusinessType:
-  case LLP, SoleTrader, GeneralPartnership, LimitedPartnership, LimitedCompany
+  case LLP, SoleTrader, GeneralPartnership, LimitedPartnership, LimitedCompany, ScottishPartnership, ScottishLimitedPartnership
