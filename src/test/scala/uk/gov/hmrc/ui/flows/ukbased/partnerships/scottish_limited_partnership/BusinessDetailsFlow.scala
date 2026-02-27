@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership
+package uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership
 
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Blocked
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
@@ -27,7 +27,7 @@ import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 
 /** Flow for completing the Business Details section of an agent registration application.
   *
-  * UK-based -> ScottishLimitedPartnership -> initial application
+  * UK-based -> LLP -> initial application
   */
 object BusinessDetailsFlow:
 
@@ -44,7 +44,7 @@ object BusinessDetailsFlow:
       startJourney()
       selectUkBased()
       selectPartnershipBusinessSetup()
-      selectLimitedPartnership()
+      selectScottishLimitedPartnership()
       selectAuthorisedUserRole()
       answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
       proceedToGovernmentGateway()
@@ -57,7 +57,7 @@ object BusinessDetailsFlow:
       startJourney()
       selectUkBased()
       selectPartnershipBusinessSetup()
-      selectLimitedPartnership()
+      selectScottishLimitedPartnership()
       selectAuthorisedUserRole()
       answerOnlineServicesAccount(OnlineAgentsAccount.NoOnlineAgentAccount)
       proceedToGovernmentGateway()
@@ -70,7 +70,7 @@ object BusinessDetailsFlow:
       startJourney()
       selectUkBased()
       selectPartnershipBusinessSetup()
-      selectLimitedPartnership()
+      selectScottishLimitedPartnership()
       selectAuthorisedUserRole()
       answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
       proceedToGovernmentGateway()
@@ -91,9 +91,9 @@ object BusinessDetailsFlow:
     HowIsYourBusinessSetUpPage.selectATypeOfPartnership()
     HowIsYourBusinessSetUpPage.clickContinue()
 
-  def selectLimitedPartnership(): Unit =
+  def selectScottishLimitedPartnership(): Unit =
     WhatTypeOfPartnershipPage.assertPageIsDisplayed()
-    WhatTypeOfPartnershipPage.selectLimitedPartnership()
+    WhatTypeOfPartnershipPage.selectScottishLimitedLiabilityPartnership()
     WhatTypeOfPartnershipPage.clickContinue()
 
   def selectAuthorisedUserRole(): Unit =
