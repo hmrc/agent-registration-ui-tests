@@ -19,12 +19,6 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.general_partnership.applicatio
 import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AmlsDetails
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.FastForward
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangeOtherRelevantIndividualPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangePartnerPage
