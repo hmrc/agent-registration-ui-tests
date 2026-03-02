@@ -17,6 +17,8 @@
 package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.fastforwardlinks
 
 import org.openqa.selenium.By
+import uk.gov.hmrc.ui.domain.BusinessType
+import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.pages.EntryPage
 import uk.gov.hmrc.ui.pages.PageObject.click
 import uk.gov.hmrc.ui.pages.PageObject.getCurrentUrl
@@ -34,17 +36,34 @@ extends EntryPage:
     getCurrentUrl shouldBe url
 
   private val logInLink = By.linkText("Log In")
-  private val aboutYourBusinessLink = By.linkText("About your business")
-  private val contactDetailsLink = By.linkText("Applicant Contact Details")
-  private val agentDetailsLink = By.linkText("Agent services account details")
-  private val amlsDetailsLink = By.linkText("Anti-money laundering supervision details")
-  private val agentStandardsLink = By.linkText("HMRC standard for agents")
-  private val declarationLink = By.linkText("Declaration")
+
+  private def sectionHeading(businessType: BusinessType): String =
+    businessType match
+      case LLP => "Limited Liability Partnership"
+      case GeneralPartnership => "General Partnership"
+      case ScottishPartnership => "Scottish Partnership"
+      case SoleTrader => "Sole trader"
+      case LimitedPartnership => "Limited Partnership"
+      case LimitedCompany => "Limited Company"
+      case ScottishLimitedPartnership => "Scottish Limited Partnership"
+
+  private def linkInSection(
+    businessType: BusinessType,
+    linkText: String
+  ): By = By.xpath(
+    s"//h2[normalize-space()='${sectionHeading(businessType)}']/following-sibling::ul[1]//a[normalize-space()='$linkText']"
+  )
 
   def clickLogIn(): Unit = click(logInLink)
-  def clickAboutYourBusinessLink(): Unit = click(aboutYourBusinessLink)
-  def clickContactDetailsLink(): Unit = click(contactDetailsLink)
-  def clickAgentDetailsLink(): Unit = click(agentDetailsLink)
-  def clickAmlsDetailsLink(): Unit = click(amlsDetailsLink)
-  def clickAgentStandardsLink(): Unit = click(agentStandardsLink)
-  def clickDeclarationLink(): Unit = click(declarationLink)
+
+  def clickAboutYourBusinessLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "About your business"))
+
+  def clickContactDetailsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Applicant Contact Details"))
+
+  def clickAgentDetailsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Agent services account details"))
+
+  def clickAmlsDetailsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Anti-money laundering supervision details"))
+
+  def clickAgentStandardsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "HMRC standard for agents"))
+
+  def clickDeclarationLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Declaration"))

@@ -18,10 +18,11 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.general_partnership.applicatio
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow.AgentDetailOption
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
@@ -37,12 +38,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, GeneralPartnership)
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
@@ -54,12 +52,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, GeneralPartnership)
 
       AgentDetailsFlow
         .WhenUsingCustomValues
@@ -71,12 +66,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, GeneralPartnership)
 
       AgentDetailsFlow.startJourney()
       AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom LLP"))
@@ -97,17 +89,15 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, GeneralPartnership)
 
       AgentDetailsFlow
         .runToCheckYourAnswers
         .runFlow(GeneralPartnership)
 
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Name shown to clients")
 
       WhatBusinessNamePage.assertPageIsDisplayed()
@@ -124,17 +114,14 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, GeneralPartnership)
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.clickOnAgentServicesAccountDetailsLink()
 
-      AgentDetailsFlow
-        .runToCheckYourAnswers
-        .runFlow(GeneralPartnership)
-
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Telephone number")
 
       WhatTelephoneNumberPage.assertPageIsDisplayed()
@@ -151,17 +138,14 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, GeneralPartnership)
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.clickOnAgentServicesAccountDetailsLink()
 
-      AgentDetailsFlow
-        .runToCheckYourAnswers
-        .runFlow(GeneralPartnership)
-
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Email address")
 
       WhatEmailAddressPage.assertPageIsDisplayed()
@@ -191,17 +175,15 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, GeneralPartnership)
 
       AgentDetailsFlow
         .runToCheckYourAnswers
         .runFlow(GeneralPartnership)
 
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Correspondence address")
 
       WhatCorrespondenceAddressPage.assertPageIsDisplayed()

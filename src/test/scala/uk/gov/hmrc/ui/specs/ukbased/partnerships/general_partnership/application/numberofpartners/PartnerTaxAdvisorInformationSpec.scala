@@ -17,6 +17,10 @@
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.general_partnership.application.numberofpartners
 
 import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AmlsDetails
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.FastForward
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
@@ -41,20 +45,9 @@ extends BaseSpec:
       "Partnership has 5 or less partners",
       TagGeneralPartnership
     ):
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .FiveOrLessPartners
@@ -65,20 +58,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .SixOrMorePartners
@@ -89,20 +71,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .SixOrMorePartnersAlt
@@ -113,20 +84,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .runToCheckYourAnswersOfficialPartners
@@ -168,20 +128,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .runToCheckYourAnswersOfficialPartners
@@ -202,20 +151,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .WithUnofficialPartners
@@ -226,20 +164,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .runToCheckYourAnswersUnofficialPartners
@@ -258,20 +185,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .runToCheckYourAnswers
@@ -294,20 +210,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .runToCheckYourAnswers
@@ -342,20 +247,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .runToCheckYourAnswers
@@ -383,20 +277,9 @@ extends BaseSpec:
       TagGeneralPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .runToCheckYourAnswers
