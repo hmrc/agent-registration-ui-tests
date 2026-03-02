@@ -81,10 +81,10 @@ extends BaseSpec:
       "User mixes provided and custom options",
       TagLimitedLiabilityPartnership
     ):
-      
+
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlow(ContactDetails, LLP)
+        .runFlowWithStubData(ContactDetails, LLP)
 
       AgentDetailsFlow.startJourney()
       AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom LLP"))

@@ -28,8 +28,11 @@ import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag.Fa
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.FastForwardFlag.True
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Agent
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.signInAndDataSetupViaStubs
+import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.fastforwardlinks.FastForwardLinksPage
+import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
+import uk.gov.hmrc.ui.utils.AppConfig
 
 object FastForwardLinks:
 
@@ -37,11 +40,23 @@ object FastForwardLinks:
     case BusinessDetails, AgentDetails, ContactDetails, AmlsDetails, AgentStandards, Declaration
 
   object FastForward:
+
+    /** Use when the test does not need the bearer token / session ID. Navigates directly to the fast-forward page, skipping the stub sign-in screens entirely.
+      */
     def runFlow(
       applicationProgress: ApplicationProgress,
       businessType: BusinessType
+    ): Unit = {
+      startJourneyDirect()
+      selectFastForwardLink(applicationProgress, businessType)
+    }
+
+    /** Use when the test needs the bearer token / session ID (e.g. email verification). */
+    def runFlowWithStubData(
+      applicationProgress: ApplicationProgress,
+      businessType: BusinessType
     ): StubbedSignInData = {
-      startJourney()
+      startJourneyViaStubs()
       val stubbedSignInData = signInAndDataSetupViaStubs(
         Agent,
         Ok,
@@ -52,10 +67,17 @@ object FastForwardLinks:
       stubbedSignInData
     }
 
-  def startJourney(): Unit =
+  def startJourneyViaStubs(): Unit =
+    val continueUrl = AppConfig.baseUrlAgentRegistrationFrontend + FastForwardLinksPage.path
+    val signInUrl =
+      AppConfig.baseUrlGovernmentGateway +
+        s"/bas-gateway/sign-in?continue_url=$continueUrl&origin=agent-registration-frontend&affinityGroup=agent"
+    PageObject.get(signInUrl)
+    GovernmentGatewaySignInPage.assertPageIsDisplayed()
+
+  def startJourneyDirect(): Unit =
     FastForwardLinksPage.open()
     FastForwardLinksPage.assertPageIsDisplayed()
-    FastForwardLinksPage.clickLogIn()
 
   def selectFastForwardLink(
     applicationProgress: ApplicationProgress,
