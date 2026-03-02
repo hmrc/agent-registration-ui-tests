@@ -81,13 +81,7 @@ extends BaseSpec:
       "User mixes provided and custom options",
       TagLimitedLiabilityPartnership
     ):
-
-//      val stubbedSignInData = BusinessDetailsFlow
-//        .HasNoOnlineAccount
-//        .runFlow()
-//
-//      ContactDetailsFlow
-//        .runFlow(stubbedSignInData)
+      
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlow(ContactDetails, LLP)
