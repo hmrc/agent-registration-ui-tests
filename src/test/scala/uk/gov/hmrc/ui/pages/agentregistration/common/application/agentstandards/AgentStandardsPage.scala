@@ -39,6 +39,10 @@ extends BasePage:
 
   private val limitedCompanyAgreement: String = "I agree that Test Company Ltd will meet the standard when working on behalf of clients."
 
+  private val scottishLimitedPartnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
+
+  private val scottishPartnershipAgreement: String = "I agree that Electronicsson Group will meet the standard when working on behalf of clients."
+
   private val bodyParas: By = By.id("main-content")
 
   def assertSoleTraderTextDisplayed(): Unit = getText(bodyParas) should include(soleTraderAgreement)
@@ -47,6 +51,10 @@ extends BasePage:
 
   def assertGeneralPartnershipDisplayed(): Unit = getText(bodyParas) should include(generalPartnershipAgreement)
 
-  def assertLimitedPartnershipDisplayed(): Unit = getText(bodyParas) should include(limiedPartnershipAgreement)
+  def assertLimitedPartnershipTextDisplayed(): Unit = getText(bodyParas) should include(limiedPartnershipAgreement)
 
   def assertLimitedCompanyTextDisplayed(): Unit = getText(bodyParas) should include(limitedCompanyAgreement)
+
+  def assertScottishLimitedPartnershipTextDisplayed(): Unit = getText(bodyParas) should include(scottishLimitedPartnershipAgreement)
+
+  def assertScottishPartnershipTextDisplayed(): Unit = getText(bodyParas) should include(scottishPartnershipAgreement)

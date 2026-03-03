@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_limited_partnership.application.amlsdetails
+package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.application.amlsdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
@@ -24,10 +24,7 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.EvidenceOfAmlSupervisionPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatRegistrationNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatSupervisoryBodyPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.{CheckYourAnswersPage, EvidenceOfAmlSupervisionPage, WhatRegistrationNumberPage, WhatSupervisoryBodyPage}
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class AmlsDetailsSpec
@@ -36,12 +33,11 @@ extends BaseSpec:
   Feature("Complete Anti-money laundering section"):
     Scenario(
       "User selects HMRC as their Supervisory Body",
-      TagScottishLimitedPartnership
+      TagScottishPartnership
     ):
-
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, ScottishLimitedPartnership)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -50,12 +46,12 @@ extends BaseSpec:
 
     Scenario(
       "User selects non-HMRC Supervisory Body",
-      TagScottishLimitedPartnership
+      TagScottishPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, ScottishLimitedPartnership)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow
         .WhenNonHmrcSupervisoryBody
@@ -69,7 +65,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, ScottishLimitedPartnership)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -92,7 +88,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, ScottishLimitedPartnership)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -117,7 +113,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, ScottishLimitedPartnership)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -136,7 +132,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, ScottishLimitedPartnership)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -155,7 +151,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, ScottishLimitedPartnership)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
