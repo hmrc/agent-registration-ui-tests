@@ -23,6 +23,8 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import AmlsDetailsFlow.AmlsDetailsOption
 import AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.CheckYourAnswersPage
@@ -40,16 +42,9 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(SoleTrader)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, SoleTrader)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -61,16 +56,9 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(SoleTrader)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, SoleTrader)
 
       AmlsDetailsFlow
         .WhenNonHmrcSupervisoryBody
@@ -82,16 +70,9 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(SoleTrader)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, SoleTrader)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -112,16 +93,9 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(SoleTrader)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, SoleTrader)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -144,16 +118,9 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(SoleTrader)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, SoleTrader)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -170,16 +137,9 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(SoleTrader)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, SoleTrader)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -196,16 +156,9 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(SoleTrader)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, SoleTrader)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)

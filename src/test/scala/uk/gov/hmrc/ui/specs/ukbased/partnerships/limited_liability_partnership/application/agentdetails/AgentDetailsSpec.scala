@@ -87,13 +87,13 @@ extends BaseSpec:
         .runFlowWithStubData(ContactDetails, LLP)
 
       AgentDetailsFlow.startJourney()
-      AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom LLP"))
+      AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom Company"))
       AgentDetailsFlow.selectTelephoneNumber(AgentDetailOption.HmrcProvided)
       AgentDetailsFlow.selectEmailAddress(AgentDetailOption.Custom("@newtest.com"), Some(stubbedSignInData))
       AgentDetailsFlow.selectCorrespondenceAddress(AgentDetailOption.CompaniesHouseProvided)
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom LLP")
+      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom Company")
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "01234567890")
       CheckYourAnswersPage.clickContinue()
 

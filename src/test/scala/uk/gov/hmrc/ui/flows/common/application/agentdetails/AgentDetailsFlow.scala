@@ -50,7 +50,7 @@ object AgentDetailsFlow:
       selectEmailAddress(AgentDetailOption.YouProvided)
       selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
       businessType match
-        case SoleTrader => verifyCheckYourAnswers(expectedName = "Test User", expectedNumber = "(+44) 10794554342")
+        case SoleTrader => verifyCheckYourAnswers(expectedName = "ST Name ST Lastname", expectedNumber = "(+44) 10794554342")
         case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
         case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
         case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
@@ -61,11 +61,11 @@ object AgentDetailsFlow:
   object WhenUsingCustomValues:
     def runFlow(stubData: StubbedSignInData): Unit =
       startJourney()
-      selectBusinessName(AgentDetailOption.Custom("My Custom LLP"))
+      selectBusinessName(AgentDetailOption.Custom("My Custom Company"))
       selectTelephoneNumber(AgentDetailOption.Custom("07777788888"))
       selectEmailAddress(AgentDetailOption.Custom("@newtest.com"), Some(stubData))
       selectCorrespondenceAddress(AgentDetailOption.Custom(""))
-      verifyCheckYourAnswers(expectedName = "My Custom LLP", expectedNumber = "07777788888")
+      verifyCheckYourAnswers(expectedName = "My Custom Company", expectedNumber = "07777788888")
       completeCheckYourAnswers()
 
   object runToCheckYourAnswers:
@@ -78,7 +78,7 @@ object AgentDetailsFlow:
       selectEmailAddress(AgentDetailOption.YouProvided)
       selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
       businessType match
-        case SoleTrader => verifyCheckYourAnswers(expectedName = "Test User", expectedNumber = "(+44) 10794554342")
+        case SoleTrader => verifyCheckYourAnswers(expectedName = "ST Name ST Lastname", expectedNumber = "(+44) 10794554342")
         case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
         case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
         case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")

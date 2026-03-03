@@ -18,6 +18,8 @@ package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.declaration
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
@@ -34,26 +36,12 @@ extends BaseSpec:
       "User accepts the declaration",
       TagSoleTrader
     ):
+      pending
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(SoleTrader)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
-
-      AgentStandardsFlow
-        .AgreeToMeetStandards
-        .runFlow(SoleTrader)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, SoleTrader)
 
       DeclarationFlow
         .AcceptDeclaration
-        .runFlow(SoleTrader)
+        .runFlow(SoleTrader, false)

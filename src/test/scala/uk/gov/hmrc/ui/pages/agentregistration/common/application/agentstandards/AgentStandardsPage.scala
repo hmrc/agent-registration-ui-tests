@@ -29,24 +29,34 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
 
-  private val soleTraderAgreement: String = "I agree that I, Test User, will meet the standard when working on behalf of clients."
+  val defaultSoleTraderName: String = "ST Name ST Lastname"
+
+  private def soleTraderAgreement(name: String): String = s"I agree that $name will meet the standard when working on behalf of clients."
+
+  private def soleTraderOwnerAgreement(name: String): String = s"I agree that I, $name, will meet the standard when working on behalf of clients."
 
   private val partnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
 
   private val generalPartnershipAgreement: String = "I agree that Electronicsson Group will meet the standard when working on behalf of clients."
 
-  private val limiedPartnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
+  private val limitedPartnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
 
   private val limitedCompanyAgreement: String = "I agree that Test Company Ltd will meet the standard when working on behalf of clients."
 
   private val bodyParas: By = By.id("main-content")
 
-  def assertSoleTraderTextDisplayed(): Unit = getText(bodyParas) should include(soleTraderAgreement)
+  def assertSoleTraderTextDisplayed(
+    owner: Boolean,
+    name: String = defaultSoleTraderName
+  ): Unit =
+    if owner
+    then getText(bodyParas) should include(soleTraderOwnerAgreement(name))
+    else getText(bodyParas) should include(soleTraderAgreement(name))
 
   def assertPartnershipTextDisplayed(): Unit = getText(bodyParas) should include(partnershipAgreement)
 
   def assertGeneralPartnershipDisplayed(): Unit = getText(bodyParas) should include(generalPartnershipAgreement)
 
-  def assertLimitedPartnershipDisplayed(): Unit = getText(bodyParas) should include(limiedPartnershipAgreement)
+  def assertLimitedPartnershipDisplayed(): Unit = getText(bodyParas) should include(limitedPartnershipAgreement)
 
   def assertLimitedCompanyTextDisplayed(): Unit = getText(bodyParas) should include(limitedCompanyAgreement)
