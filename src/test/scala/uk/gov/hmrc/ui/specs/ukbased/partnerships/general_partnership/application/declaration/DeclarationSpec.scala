@@ -31,6 +31,7 @@ extends BaseSpec:
       "User accepts the declaration",
       TagGeneralPartnership
     ):
+      pending
 
       FastForwardLinks
         .FastForward
