@@ -36,7 +36,7 @@ extends BaseSpec:
       FastForwardLinks
         .FastForward
         .runFlow(AmlsDetails, ScottishPartnership)
-      
+
       AgentStandardsFlow
         .AgreeToMeetStandards
         .runFlow(ScottishPartnership)

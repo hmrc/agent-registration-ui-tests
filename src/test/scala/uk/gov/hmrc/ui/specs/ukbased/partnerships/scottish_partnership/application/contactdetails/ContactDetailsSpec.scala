@@ -20,7 +20,8 @@ import uk.gov.hmrc.ui.domain.BusinessType.ScottishPartnership
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.BusinessDetails
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.{flows, pages}
+import uk.gov.hmrc.ui.flows
+import uk.gov.hmrc.ui.pages
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.specs.BaseSpec
@@ -39,7 +40,7 @@ extends BaseSpec:
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlowWithStubData(BusinessDetails, ScottishPartnership)
-      
+
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 
@@ -59,7 +60,7 @@ extends BaseSpec:
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlowWithStubData(BusinessDetails, ScottishPartnership)
-      
+
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 

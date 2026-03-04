@@ -19,7 +19,8 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.applicati
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.{AgentDetails, ContactDetails}
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
@@ -198,7 +199,7 @@ extends BaseSpec:
 
       LookupAddressConfirmPage.assertPageIsDisplayed()
       LookupAddressConfirmPage.clickContinue()
-      
+
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Correspondence address", "4 Privet Drive\nLittle Whinging\nAA1 1AA\nGB")
 
