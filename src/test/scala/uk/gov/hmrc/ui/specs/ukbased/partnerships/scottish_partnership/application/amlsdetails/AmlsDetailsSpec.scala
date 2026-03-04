@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.amlsdetails
+package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.application.amlsdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
-import BusinessType.*
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import AmlsDetailsFlow.AmlsDetailsOption
-import AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
+import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
+import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption
+import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.EvidenceOfAmlSupervisionPage
@@ -36,12 +36,11 @@ extends BaseSpec:
   Feature("Complete Anti-money laundering section"):
     Scenario(
       "User selects HMRC as their Supervisory Body",
-      TagSoleTrader
+      TagScottishPartnership
     ):
-
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, SoleTrader)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -50,12 +49,12 @@ extends BaseSpec:
 
     Scenario(
       "User selects non-HMRC Supervisory Body",
-      TagSoleTrader
+      TagScottishPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, SoleTrader)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow
         .WhenNonHmrcSupervisoryBody
@@ -64,12 +63,12 @@ extends BaseSpec:
 
     Scenario(
       "Changes Registration Number from CYA page",
-      TagSoleTrader
+      TagScottishLimitedPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, SoleTrader)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -87,12 +86,12 @@ extends BaseSpec:
 
     Scenario(
       "Changes Supervisory Body from CYA page",
-      TagSoleTrader
+      TagScottishLimitedPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, SoleTrader)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow
         .RunToCheckYourAnswers
@@ -112,12 +111,12 @@ extends BaseSpec:
 
     Scenario(
       "Upload evidence file exceeding 5MB in size",
-      TagSoleTrader
+      TagScottishLimitedPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, SoleTrader)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -131,12 +130,12 @@ extends BaseSpec:
 
     Scenario(
       "Upload evidence file with virus",
-      TagSoleTrader
+      TagScottishLimitedPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, SoleTrader)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
@@ -150,12 +149,12 @@ extends BaseSpec:
 
     Scenario(
       "Upload evidence file in invalid format",
-      TagSoleTrader
+      TagScottishLimitedPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, SoleTrader)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)

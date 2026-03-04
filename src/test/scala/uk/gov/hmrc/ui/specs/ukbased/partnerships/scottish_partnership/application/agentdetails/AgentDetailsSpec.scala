@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_limited_partnership.application.agentdetails
+package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.application.agentdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
@@ -23,8 +23,6 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgr
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow.AgentDetailOption
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
@@ -37,29 +35,26 @@ extends BaseSpec:
   Feature("Complete Business details section"):
     Scenario(
       "User selects existing details",
-      TagScottishLimitedPartnership
+      TagScottishPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, ScottishPartnership)
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(ScottishLimitedPartnership)
+        .runFlow(ScottishPartnership)
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario(
       "User enters all custom values",
-      TagScottishLimitedPartnership
+      TagScottishPartnership
     ):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(ContactDetails, ScottishLimitedPartnership)
+        .runFlowWithStubData(ContactDetails, ScottishPartnership)
 
       AgentDetailsFlow
         .WhenUsingCustomValues
@@ -68,21 +63,21 @@ extends BaseSpec:
 
     Scenario(
       "User mixes provided and custom options",
-      TagScottishLimitedPartnership
+      TagScottishPartnership
     ):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(ContactDetails, ScottishLimitedPartnership)
+        .runFlowWithStubData(ContactDetails, ScottishPartnership)
 
       AgentDetailsFlow.startJourney()
-      AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom Scottish Limited Partnership"))
+      AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom Scottish Partnership"))
       AgentDetailsFlow.selectTelephoneNumber(AgentDetailOption.HmrcProvided)
       AgentDetailsFlow.selectEmailAddress(AgentDetailOption.Custom("@newtest.com"), Some(stubbedSignInData))
-      AgentDetailsFlow.selectCorrespondenceAddress(AgentDetailOption.CompaniesHouseProvided)
+      AgentDetailsFlow.selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom Scottish Limited Partnership")
+      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom Scottish Partnership")
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "01234567890")
       CheckYourAnswersPage.clickContinue()
 
@@ -91,36 +86,36 @@ extends BaseSpec:
 
     Scenario(
       "Change Business Name from Check Your Answers page",
-      TagScottishLimitedPartnership
+      TagScottishPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(ContactDetails, ScottishLimitedPartnership)
+        .runFlow(ContactDetails, ScottishPartnership)
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(ScottishLimitedPartnership)
+        .runFlow(ScottishPartnership)
 
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Name shown to clients")
 
       WhatBusinessNamePage.assertPageIsDisplayed()
       WhatBusinessNamePage.assertExistingNameRadioIsSelected()
       WhatBusinessNamePage.selectSomethingElse()
-      WhatBusinessNamePage.enterCustomName("Updated SLP Name")
+      WhatBusinessNamePage.enterCustomName("Updated SP Name")
       WhatBusinessNamePage.clickContinue()
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "Updated SLP Name")
+      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "Updated SP Name")
 
     Scenario(
       "Change Telephone Number from Check Your Answers page",
-      TagScottishLimitedPartnership
+      TagScottishPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, ScottishLimitedPartnership)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.clickOnAgentServicesAccountDetailsLink()
@@ -134,17 +129,16 @@ extends BaseSpec:
       WhatTelephoneNumberPage.enterOtherTelephoneNumber("07777799999")
       WhatTelephoneNumberPage.clickContinue()
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777799999")
 
     Scenario(
       "Change Email Address from Check Your Answers page",
-      TagScottishLimitedPartnership
+      TagScottishPartnership
     ):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(AgentDetails, ScottishLimitedPartnership)
+        .runFlowWithStubData(AgentDetails, ScottishPartnership)
 
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.clickOnAgentServicesAccountDetailsLink()
@@ -171,21 +165,20 @@ extends BaseSpec:
       ConfirmYourEmailPage.enterConfirmationCode(passcode)
       ConfirmYourEmailPage.clickContinue()
 
-      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
 
     Scenario(
       "Change Correspondence Address from Check Your Answers page",
-      TagScottishLimitedPartnership
+      TagScottishPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(ContactDetails, ScottishLimitedPartnership)
+        .runFlow(ContactDetails, ScottishPartnership)
 
       AgentDetailsFlow
         .runToCheckYourAnswers
-        .runFlow(ScottishLimitedPartnership)
+        .runFlow(ScottishPartnership)
 
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Correspondence address")

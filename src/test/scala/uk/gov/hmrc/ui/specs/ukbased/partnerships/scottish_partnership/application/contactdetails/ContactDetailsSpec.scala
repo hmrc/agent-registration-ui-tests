@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.contactdetails
+package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.application.contactdetails
 
-import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
-import uk.gov.hmrc.ui.flows
+import uk.gov.hmrc.ui.domain.BusinessType.ScottishPartnership
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.BusinessDetails
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
+import uk.gov.hmrc.ui.flows
 import uk.gov.hmrc.ui.pages
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.ApplicantNamePage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.ConfirmYourEmailPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.EmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.TelephoneNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.PasscodeHelper
@@ -38,12 +34,12 @@ extends BaseSpec:
 
     Scenario(
       "Change Name from CYA page",
-      TagSoleTrader
+      TagScottishPartnership
     ):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(BusinessDetails, SoleTrader)
+        .runFlowWithStubData(BusinessDetails, ScottishPartnership)
 
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
@@ -59,12 +55,11 @@ extends BaseSpec:
 
     Scenario(
       "Change Email address from CYA page",
-      TagSoleTrader
+      TagScottishLimitedPartnership
     ):
-
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(BusinessDetails, SoleTrader)
+        .runFlowWithStubData(BusinessDetails, ScottishPartnership)
 
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
@@ -93,13 +88,12 @@ extends BaseSpec:
 
     Scenario(
       "Change Telephone number from CYA page",
-      TagSoleTrader
+      TagScottishLimitedPartnership
     ):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(BusinessDetails, SoleTrader)
-
+        .runFlowWithStubData(BusinessDetails, ScottishPartnership)
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 

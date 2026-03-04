@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_limited_partnership.application.declaration
+package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.application.declaration
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
@@ -23,7 +23,7 @@ import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_partnership.BusinessDetailsFlow
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class DeclarationSpec
@@ -32,10 +32,9 @@ extends BaseSpec:
   Feature("Complete declaration section"):
     Scenario(
       "User accepts the declaration",
-      TagScottishLimitedPartnership
+      TagScottishPartnership
     ):
       pending
-
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
@@ -45,7 +44,7 @@ extends BaseSpec:
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
-        .runFlow(ScottishLimitedPartnership)
+        .runFlow(ScottishPartnership)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -53,8 +52,8 @@ extends BaseSpec:
 
       AgentStandardsFlow
         .AgreeToMeetStandards
-        .runFlow(ScottishLimitedPartnership)
+        .runFlow(ScottishPartnership)
 
       DeclarationFlow
         .AcceptDeclaration
-        .runFlow(ScottishLimitedPartnership)
+        .runFlow(ScottishPartnership)

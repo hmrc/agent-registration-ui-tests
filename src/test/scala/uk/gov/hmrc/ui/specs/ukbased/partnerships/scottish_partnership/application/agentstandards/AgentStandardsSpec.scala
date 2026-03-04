@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.agentstandards
+package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.application.agentstandards
 
 import uk.gov.hmrc.ui.domain.BusinessType
-import BusinessType.*
+import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AmlsDetails
 import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
@@ -30,16 +30,16 @@ extends BaseSpec:
   Feature("Complete HMRC standards for agents section"):
     Scenario(
       "User agrees to HMRC's standards for agents",
-      TagSoleTrader
+      TagScottishPartnership
     ):
 
       FastForwardLinks
         .FastForward
-        .runFlow(AmlsDetails, SoleTrader)
+        .runFlow(AmlsDetails, ScottishPartnership)
 
       AgentStandardsFlow
         .AgreeToMeetStandards
-        .runFlow(SoleTrader, false)
+        .runFlow(ScottishPartnership)
 
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.assertHmrcStandardsForAgentsStatus("Completed")
