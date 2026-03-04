@@ -18,6 +18,8 @@ package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.agentstandards
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AmlsDetails
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
@@ -35,24 +37,13 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(SoleTrader)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AmlsDetails, SoleTrader)
 
       AgentStandardsFlow
         .AgreeToMeetStandards
-        .runFlow(SoleTrader)
+        .runFlow(SoleTrader, false)
 
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.assertHmrcStandardsForAgentsStatus("Completed")

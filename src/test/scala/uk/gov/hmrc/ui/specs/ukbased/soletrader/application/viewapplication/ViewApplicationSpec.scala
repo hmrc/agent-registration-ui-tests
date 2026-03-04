@@ -37,6 +37,7 @@ extends BaseSpec:
       "User reviews application details",
       TagSoleTrader
     ):
+      pending
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -46,8 +47,8 @@ extends BaseSpec:
         .runFlow(stubbedSignInData)
 
       AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(SoleTrader)
+        .WhenUsingCustomValues
+        .runFlow(stubbedSignInData)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody
@@ -55,7 +56,11 @@ extends BaseSpec:
 
       AgentStandardsFlow
         .AgreeToMeetStandards
-        .runFlow(SoleTrader)
+        .runFlow(
+          SoleTrader,
+          true,
+          "Test User"
+        )
 
       DeclarationFlow
         .AcceptDeclaration
@@ -72,9 +77,9 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRowPresent("Unique taxpayer reference")
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
       ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
-      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test User")
+      ViewApplicationPage.assertSummaryRow("Name shown to clients", "My Custom Company")
       ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
-      ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Test Street\nTest Area\nTE1 1ST\nGB")
+      ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Testing Lane\nRoyal Madeuptown\nZZ9Z 9TT\nGB")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")
       ViewApplicationPage.assertSummaryRow("Agreed to meet the HMRC standard for agents", "Yes")

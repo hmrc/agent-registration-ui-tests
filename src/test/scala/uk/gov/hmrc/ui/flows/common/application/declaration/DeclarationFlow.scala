@@ -26,9 +26,12 @@ object DeclarationFlow:
 
   object AcceptDeclaration:
 
-    def runFlow(businessType: BusinessType): Unit =
+    def runFlow(
+      businessType: BusinessType,
+      soleTraderOwner: Boolean = true
+    ): Unit =
       startJourney()
-      clickAcceptAndSave(businessType)
+      clickAcceptAndSave(businessType, soleTraderOwner)
       completeJourney()
 
   def startJourney(): Unit =
@@ -36,10 +39,14 @@ object DeclarationFlow:
     TaskListPage.assertDeclarationStatus("Incomplete")
     TaskListPage.clickOnDeclarationLink()
 
-  def clickAcceptAndSave(businessType: BusinessType): Unit =
+  def clickAcceptAndSave(
+    businessType: BusinessType,
+    soleTraderOwner: Boolean
+  ): Unit =
     DeclarationPage.assertPageIsDisplayed()
     businessType match
-      case SoleTrader => DeclarationPage.assertNoAuthorisedByTextDisplayed()
+      case SoleTrader =>
+        if soleTraderOwner then DeclarationPage.assertNoAuthorisedByTextDisplayed() else DeclarationPage.assertAuthorisedByTextDisplayed("ST Name ST Lastname")
       case LLP => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
       case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
       case LimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")

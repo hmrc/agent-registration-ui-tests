@@ -25,19 +25,31 @@ object AgentStandardsFlow:
 
   object AgreeToMeetStandards:
 
-    def runFlow(businessType: BusinessType): Unit =
+    def runFlow(
+      businessType: BusinessType,
+      soleTraderOwner: Boolean = true,
+      soleTraderName: String = AgentStandardsPage.defaultSoleTraderName
+    ): Unit =
       startJourney()
-      clickAgreeAndSave(businessType)
+      clickAgreeAndSave(
+        businessType,
+        soleTraderOwner,
+        soleTraderName
+      )
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertHmrcStandardsForAgentsStatus("Incomplete")
     TaskListPage.clickOnHmrcStandardsForAgentsLink()
 
-  def clickAgreeAndSave(businessType: BusinessType): Unit =
+  def clickAgreeAndSave(
+    businessType: BusinessType,
+    soleTraderOwner: Boolean,
+    soleTraderName: String = AgentStandardsPage.defaultSoleTraderName
+  ): Unit =
     AgentStandardsPage.assertPageIsDisplayed()
     businessType match
-      case SoleTrader => AgentStandardsPage.assertSoleTraderTextDisplayed()
+      case SoleTrader => AgentStandardsPage.assertSoleTraderTextDisplayed(soleTraderOwner, soleTraderName)
       case LLP => AgentStandardsPage.assertPartnershipTextDisplayed()
       case GeneralPartnership => AgentStandardsPage.assertGeneralPartnershipDisplayed()
       case LimitedPartnership => AgentStandardsPage.assertLimitedPartnershipTextDisplayed()

@@ -18,6 +18,9 @@ package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.agentdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
@@ -45,12 +48,9 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, SoleTrader)
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
@@ -62,12 +62,9 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(ContactDetails, SoleTrader)
 
       AgentDetailsFlow
         .WhenUsingCustomValues
@@ -79,21 +76,18 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(ContactDetails, SoleTrader)
 
       AgentDetailsFlow.startJourney()
-      AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom LLP"))
+      AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom Company"))
       AgentDetailsFlow.selectTelephoneNumber(AgentDetailOption.HmrcProvided)
       AgentDetailsFlow.selectEmailAddress(AgentDetailOption.Custom("@newtest.com"), Some(stubbedSignInData))
       AgentDetailsFlow.selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom LLP")
+      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "My Custom Company")
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "01234567890")
       CheckYourAnswersPage.clickContinue()
 
@@ -105,12 +99,9 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, SoleTrader)
 
       AgentDetailsFlow
         .runToCheckYourAnswers
@@ -121,28 +112,25 @@ extends BaseSpec:
       WhatBusinessNamePage.assertPageIsDisplayed()
       WhatBusinessNamePage.assertExistingNameRadioIsSelected()
       WhatBusinessNamePage.selectSomethingElse()
-      WhatBusinessNamePage.enterCustomName("Updated LLP Name")
+      WhatBusinessNamePage.enterCustomName("Updated Sole Trader Name")
       WhatBusinessNamePage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "Updated LLP Name")
+      CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "Updated Sole Trader Name")
 
     Scenario(
       "Change Telephone Number from Check Your Answers page",
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, SoleTrader)
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.clickOnAgentServicesAccountDetailsLink()
 
-      AgentDetailsFlow
-        .runToCheckYourAnswers
-        .runFlow(SoleTrader)
-
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Telephone number")
 
       WhatTelephoneNumberPage.assertPageIsDisplayed()
@@ -159,17 +147,14 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(AgentDetails, SoleTrader)
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.clickOnAgentServicesAccountDetailsLink()
 
-      AgentDetailsFlow
-        .runToCheckYourAnswers
-        .runFlow(SoleTrader)
-
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Email address")
 
       WhatEmailAddressPage.assertPageIsDisplayed()
@@ -199,17 +184,15 @@ extends BaseSpec:
       TagSoleTrader
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, SoleTrader)
 
       AgentDetailsFlow
         .runToCheckYourAnswers
         .runFlow(SoleTrader)
 
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Correspondence address")
 
       WhatCorrespondenceAddressPage.assertPageIsDisplayed()

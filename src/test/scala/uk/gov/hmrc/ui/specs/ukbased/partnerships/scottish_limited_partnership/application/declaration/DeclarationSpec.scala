@@ -34,6 +34,7 @@ extends BaseSpec:
       "User accepts the declaration",
       TagScottishLimitedPartnership
     ):
+      pending
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

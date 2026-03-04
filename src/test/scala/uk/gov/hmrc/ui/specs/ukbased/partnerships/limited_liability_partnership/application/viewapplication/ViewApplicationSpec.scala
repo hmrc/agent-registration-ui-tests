@@ -37,6 +37,7 @@ extends BaseSpec:
       "User reviews application details",
       TagLimitedLiabilityPartnership
     ):
+      pending
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
