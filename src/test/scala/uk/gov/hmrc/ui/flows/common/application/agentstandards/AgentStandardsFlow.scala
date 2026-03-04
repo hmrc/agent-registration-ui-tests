@@ -52,7 +52,7 @@ object AgentStandardsFlow:
       case SoleTrader => AgentStandardsPage.assertSoleTraderTextDisplayed(soleTraderOwner, soleTraderName)
       case LLP => AgentStandardsPage.assertPartnershipTextDisplayed()
       case GeneralPartnership => AgentStandardsPage.assertGeneralPartnershipDisplayed()
-      case LimitedPartnership => AgentStandardsPage.assertLimitedPartnershipTextDisplayed()
+      case LimitedPartnership => AgentStandardsPage.assertLimitedPartnershipDisplayed()
       case LimitedCompany => AgentStandardsPage.assertLimitedCompanyTextDisplayed()
       case ScottishLimitedPartnership => AgentStandardsPage.assertScottishLimitedPartnershipTextDisplayed()
       case ScottishPartnership => AgentStandardsPage.assertScottishPartnershipTextDisplayed()
