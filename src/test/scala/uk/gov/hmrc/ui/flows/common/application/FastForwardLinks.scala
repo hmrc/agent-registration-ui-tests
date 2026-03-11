@@ -20,12 +20,9 @@ import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AmlsDetails
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AskPartnersAndAdvisorsToSignIn
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.BusinessDetails
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.CheckProvidedDetails
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.PartnersAndAdvisors
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag.False
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.FastForwardFlag.True

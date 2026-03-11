@@ -16,9 +16,11 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.limited_company.application.contactdetails
 
+import uk.gov.hmrc.ui.domain.BusinessType.LimitedCompany
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.limited_company.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.BusinessDetails
 import uk.gov.hmrc.ui.pages
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
@@ -34,10 +36,10 @@ extends BaseSpec:
       "Change Name from CYA page",
       TagLimitedCompany
     ):
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(BusinessDetails, LimitedCompany)
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 
@@ -55,9 +57,10 @@ extends BaseSpec:
       TagLimitedCompany
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(BusinessDetails, LimitedCompany)
+
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 
@@ -88,9 +91,10 @@ extends BaseSpec:
       TagLimitedCompany
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(BusinessDetails, LimitedCompany)
+
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 

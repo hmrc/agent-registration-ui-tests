@@ -18,6 +18,9 @@ package uk.gov.hmrc.ui.specs.ukbased.limited_company.application.agentdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
@@ -54,12 +57,9 @@ extends BaseSpec:
       TagLimitedCompany
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(ContactDetails, LimitedCompany)
 
       AgentDetailsFlow
         .WhenUsingCustomValues
@@ -71,12 +71,9 @@ extends BaseSpec:
       TagLimitedCompany
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(ContactDetails, LimitedCompany)
 
       AgentDetailsFlow.startJourney()
       AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom Limited Company"))
@@ -108,6 +105,7 @@ extends BaseSpec:
         .runToCheckYourAnswers
         .runFlow(LimitedCompany)
 
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Name shown to clients")
 
       WhatBusinessNamePage.assertPageIsDisplayed()
@@ -124,17 +122,14 @@ extends BaseSpec:
       TagLimitedCompany
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, LimitedCompany)
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.clickOnAgentServicesAccountDetailsLink()
 
-      AgentDetailsFlow
-        .runToCheckYourAnswers
-        .runFlow(LimitedCompany)
-
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Telephone number")
 
       WhatTelephoneNumberPage.assertPageIsDisplayed()
@@ -151,17 +146,14 @@ extends BaseSpec:
       TagLimitedCompany
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(AgentDetails, LimitedCompany)
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.clickOnAgentServicesAccountDetailsLink()
 
-      AgentDetailsFlow
-        .runToCheckYourAnswers
-        .runFlow(LimitedCompany)
-
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Email address")
 
       WhatEmailAddressPage.assertPageIsDisplayed()
@@ -202,6 +194,7 @@ extends BaseSpec:
         .runToCheckYourAnswers
         .runFlow(LimitedCompany)
 
+      CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.clickChangeFor("Correspondence address")
 
       WhatCorrespondenceAddressPage.assertPageIsDisplayed()
