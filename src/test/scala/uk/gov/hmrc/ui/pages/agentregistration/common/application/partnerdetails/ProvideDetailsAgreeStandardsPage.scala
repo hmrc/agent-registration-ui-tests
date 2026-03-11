@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.common.application
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails
 
-final case class StubbedSignInData(
-  username: String,
-  planetId: String,
-  bearerToken: String,
-  sessionId: String
-)
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
+
+object ProvideDetailsAgreeStandardsPage
+extends BasePage:
+
+  override val path: String = "/agent-registration/provide-details/agree-standard/"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl should include(url)

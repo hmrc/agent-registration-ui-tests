@@ -152,6 +152,21 @@ object PartnerTaxAdvisorInformationFlow:
       addUnofficialPartners(uNames)
       checkYourAnswersOtherIndividuals(uNames)
 
+  object singlePartner: // flow where there is only one partner
+
+    def runFlow(): Unit =
+      val names = allPartnerNames.take(1)
+      startJourney()
+      enterNumberOfPartners("1", FiveOrLess)
+      enterPartners(names)
+      checkYourAnswersKeyIndividuals(names)
+      noUnofficialPartners()
+      checkYourAnswersNoUnofficial(
+        "1",
+        names,
+        "No"
+      )
+
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertPartnerTaxAdvisorInformationStatus("Incomplete")
@@ -245,6 +260,8 @@ object PartnerTaxAdvisorInformationFlow:
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertPartnerTaxAdvisorInformationStatus("Completed")
+    TaskListPage.assertAskPartnersAndAdvisorsToSignInStatus("Incomplete")
+    TaskListPage.assertCheckProvidedDetailsStatus("Cannot start yet")
 
   def completeJourney(): Unit =
     CheckYourAnswersPage.clickContinue()

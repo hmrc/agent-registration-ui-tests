@@ -37,7 +37,7 @@ extends BasePage {
 
   def selectAffinityGroupIndividual(): Unit = click(affinityGroupIndividualRadio)
   def selectAffinityGroupAgent(): Unit = click(affinityGroupAgentRadio)
-  def selectEnrolmentNone(): Unit = selectByValue(enrolmentDropdown, "none")
+  def selectEnrolment(enrolment: String = "none"): Unit = selectByValue(enrolmentDropdown, enrolment)
   def selectCurrentUserLink(): Unit = click(currentUserLink)
 
 }
