@@ -48,7 +48,7 @@ object StubbedSignInFlow:
   ): StubbedSignInData =
 
     // 1) Government Gateway sign-in
-    val username = governmentGatewaySignIn()
+    val (username, planetId) = governmentGatewaySignIn()
 
     // 2) Capture bearer token + session
     val (bearerToken, sessionId) = captureBearerTokenAndSession()
@@ -68,6 +68,7 @@ object StubbedSignInFlow:
 
     StubbedSignInData(
       username,
+      planetId,
       bearerToken,
       sessionId
     )
@@ -89,12 +90,12 @@ object StubbedSignInFlow:
 
   // --- Granular steps (so you can fork cleanly) ---
 
-  private def governmentGatewaySignIn(): String =
+  private def governmentGatewaySignIn(): (String, String) =
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
     val username = GovernmentGatewaySignInPage.enterRandomUsername()
-    GovernmentGatewaySignInPage.enterRandomPlanetId()
+    val planetId = GovernmentGatewaySignInPage.enterRandomPlanetId()
     GovernmentGatewaySignInPage.clickContinue()
-    username
+    (username, planetId)
 
   private def captureBearerTokenAndSession(): (String, String) =
     AgentExternalStubCreateUserPage.assertPageIsDisplayed()
@@ -133,7 +134,7 @@ object StubbedSignInFlow:
   private def selectAffinityGroupIndividual(): Unit = AgentExternalStubCreateUserPage.selectAffinityGroupIndividual()
 
   private def selectNoEnrolmentAndContinue(): Unit =
-    AgentExternalStubCreateUserPage.selectEnrolmentNone()
+    AgentExternalStubCreateUserPage.selectEnrolment()
     AgentExternalStubCreateUserPage.clickContinue()
 
   private def continueFromConfigureUser(): Unit =

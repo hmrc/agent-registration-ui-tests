@@ -39,7 +39,7 @@ extends BaseSpec:
       "Partnership has 5 or less partners",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)
@@ -52,7 +52,7 @@ extends BaseSpec:
       "Partnership has 6 or more partners",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)
@@ -65,7 +65,7 @@ extends BaseSpec:
       "Partnership has 6 more partners but less than 6 with tax authority",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)
@@ -78,7 +78,7 @@ extends BaseSpec:
       "Change number of partners from Check your answers screen",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)
@@ -122,7 +122,7 @@ extends BaseSpec:
       "Change partner name from Check your answers screen",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)
@@ -145,7 +145,7 @@ extends BaseSpec:
       "Add Unofficial Partners",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)
@@ -158,7 +158,7 @@ extends BaseSpec:
       "Change other relevant tax advisers from Check Your Answers",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)
@@ -179,7 +179,7 @@ extends BaseSpec:
       "Change has other relevant tax advisers boolean from Check Your Answers",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)
@@ -204,7 +204,7 @@ extends BaseSpec:
       "Change number of partners from final Check Your Answers",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)
@@ -241,7 +241,7 @@ extends BaseSpec:
       "Change partner name from final Check Your Answers",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)
@@ -271,7 +271,7 @@ extends BaseSpec:
       "Change other relevant tax adviser name from final Check Your Answers",
       TagGeneralPartnership
     ):
-      pending
+
       FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, GeneralPartnership)

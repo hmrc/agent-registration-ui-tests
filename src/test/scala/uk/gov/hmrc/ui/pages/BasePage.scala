@@ -56,7 +56,7 @@ extends PageObject:
   def assertSummaryRow(
     key: String,
     expectedValue: String
-  ): Unit = {
+  ): Unit = eventually {
     val actual = getSummaryValueFor(key)
     withClue(s"For summary key '$key': ") {
       actual shouldBe expectedValue

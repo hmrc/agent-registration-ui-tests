@@ -51,4 +51,7 @@ extends BasePage {
     value
   }
 
+  def enterKnownPlanetId(planet: String): Unit = sendKeys(planetId, planet)
+  def enterKnownUserId(user: String): Unit = sendKeys(usernameId, user)
+
 }
