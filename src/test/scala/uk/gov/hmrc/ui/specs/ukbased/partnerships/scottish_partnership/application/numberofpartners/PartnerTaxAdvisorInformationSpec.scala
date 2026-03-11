@@ -1,0 +1,293 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.application.numberofpartners
+
+import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
+import uk.gov.hmrc.ui.domain.BusinessType.ScottishLimitedPartnership
+import uk.gov.hmrc.ui.domain.BusinessType.ScottishPartnership
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
+import uk.gov.hmrc.ui.specs.BaseSpec
+
+class PartnerTaxAdvisorInformationSpec
+extends BaseSpec:
+
+  Feature("Complete Partner and Tax Advisor information section"):
+    Scenario(
+      "Partnership has 5 or less partners",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .FiveOrLessPartners
+        .runFlow()
+
+    Scenario(
+      "Partnership has 6 or more partners",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .SixOrMorePartners
+        .runFlow()
+
+    Scenario(
+      "Partnership has 6 more partners but less than 6 with tax authority",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .SixOrMorePartnersAlt
+        .runFlow()
+
+    Scenario(
+      "Change number of partners from Check your answers screen",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswersOfficialPartners
+        .runFlow()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.changeNumberOfPartners()
+
+      HowManyPartnersPage.assertPageIsDisplayed()
+      HowManyPartnersPage.selectFiveOrLess()
+      HowManyPartnersPage.enterExactNumber("3")
+      HowManyPartnersPage.clickContinue()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.assertWarningTextIsDisplayed("You told us there are 3 partners. " +
+        "Change the number of partners or remove 2 partners from the list before you continue.")
+      CheckYourAnswersKeyIndividualsPage.removePartner("Tony Stark")
+
+      RemovePartnerPage.assertPageIsDisplayed()
+      RemovePartnerPage.selectYes()
+      RemovePartnerPage.clickContinue()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.assertWarningTextIsDisplayed("You told us there are 3 partners. " +
+        "Change the number of partners or remove 1 partner from the list before you continue.")
+      CheckYourAnswersKeyIndividualsPage.removePartner("Steve Rogers")
+
+      RemovePartnerPage.assertPageIsDisplayed()
+      RemovePartnerPage.selectYes()
+      RemovePartnerPage.clickContinue()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.clickContinue()
+
+      PartnerTaxAdvisorInformationFlow.noUnofficialPartners()
+
+    Scenario(
+      "Change partner name from Check your answers screen",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswersOfficialPartners
+        .runFlow()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.changePartnerName("Tony Stark")
+
+      ChangePartnerPage.assertPageIsDisplayed()
+      ChangePartnerPage.enterPartnerFullName("Bruce Banner")
+      ChangePartnerPage.clickContinue()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.assertNameAt(4, "Bruce Banner")
+
+    Scenario(
+      "Add Unofficial Partners",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .WithUnofficialPartners
+        .runFlow()
+
+    Scenario(
+      "Change other relevant tax advisers from Check Your Answers",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswersUnofficialPartners
+        .runFlow()
+
+      CheckYourAnswersOtherIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersOtherIndividualsPage.changePartnerName("Bruce Wayne")
+
+      OtherRelevantIndividualPage.enterPartnerFullName("Dick Grayson")
+      OtherRelevantIndividualPage.clickContinue()
+
+      CheckYourAnswersOtherIndividualsPage.assertNameAt(0, "Dick Grayson")
+
+    Scenario(
+      "Change has other relevant tax advisers boolean from Check Your Answers",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswers
+        .runFlow()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", "Yes")
+      CheckYourAnswersPage.changeUnofficialPartners()
+
+      HasOtherRelevantTaxAdvisersPage.assertPageIsDisplayed()
+      HasOtherRelevantTaxAdvisersPage.selectNo()
+      HasOtherRelevantTaxAdvisersPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", "No")
+      CheckYourAnswersPage.assertSummaryRowNotPresent("Other relevant tax adviser names")
+
+    Scenario(
+      "Change number of partners from final Check Your Answers",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswers
+        .runFlow()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Number of partners", "3")
+      CheckYourAnswersPage.changeNumberOfPartners()
+
+      HowManyPartnersPage.assertPageIsDisplayed()
+      HowManyPartnersPage.selectFiveOrLess()
+      HowManyPartnersPage.enterExactNumber("2")
+      HowManyPartnersPage.clickContinue()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.assertWarningTextIsDisplayed("You told us there are 2 partners. " +
+        "Change the number of partners or remove 1 partner from the list before you continue.")
+      CheckYourAnswersKeyIndividualsPage.removePartner("Jack Burton")
+
+      RemovePartnerPage.assertPageIsDisplayed()
+      RemovePartnerPage.selectYes()
+      RemovePartnerPage.clickContinue()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Number of partners", "2")
+
+    Scenario(
+      "Change partner name from final Check Your Answers",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswers
+        .runFlow()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.changePartnerNames()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.changePartnerName("Jack Burton")
+
+      ChangePartnerPage.assertPageIsDisplayed()
+      ChangePartnerPage.enterPartnerFullName("Peter Parker")
+      ChangePartnerPage.clickContinue()
+
+      CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersKeyIndividualsPage.assertNameAt(2, "Peter Parker")
+      CheckYourAnswersKeyIndividualsPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Partner names", "Bobby Boucher\nSonny Koufax\nPeter Parker")
+
+    Scenario(
+      "Change other relevant tax adviser name from final Check Your Answers",
+      TagScottishPartnership
+    ):
+
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .runToCheckYourAnswers
+        .runFlow()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.changeUnofficialPartnerName()
+
+      CheckYourAnswersOtherIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersOtherIndividualsPage.changePartnerName("Bruce Wayne")
+
+      ChangeOtherRelevantIndividualPage.assertPageIsDisplayed()
+      ChangeOtherRelevantIndividualPage.enterPartnerFullName("Dick Grayson")
+      ChangeOtherRelevantIndividualPage.clickContinue()
+
+      CheckYourAnswersOtherIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersOtherIndividualsPage.assertNameAt(0, "Dick Grayson")
+      CheckYourAnswersOtherIndividualsPage.selectNo()
+      CheckYourAnswersOtherIndividualsPage.clickContinue()
+
+      CheckYourAnswersPage.assertPageIsDisplayed()
+      CheckYourAnswersPage.assertSummaryRow("Other relevant tax adviser names", "Dick Grayson\nClark Kent\nDiana Prince")
