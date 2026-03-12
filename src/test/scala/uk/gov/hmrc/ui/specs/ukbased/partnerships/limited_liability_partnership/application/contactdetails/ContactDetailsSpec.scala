@@ -16,7 +16,10 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.contactdetails
 
+import uk.gov.hmrc.ui.domain.BusinessType.LLP
 import uk.gov.hmrc.ui.flows
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.BusinessDetails
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages
@@ -39,9 +42,10 @@ extends BaseSpec:
       TagLimitedLiabilityPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(BusinessDetails, LLP)
+
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 
@@ -59,9 +63,10 @@ extends BaseSpec:
       TagLimitedLiabilityPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(BusinessDetails, LLP)
+
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 
@@ -92,9 +97,10 @@ extends BaseSpec:
       TagLimitedLiabilityPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(BusinessDetails, LLP)
+
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 

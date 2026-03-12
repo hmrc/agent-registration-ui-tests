@@ -23,8 +23,6 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgr
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow.AgentDetailOption
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.limited_company.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
@@ -40,12 +38,9 @@ extends BaseSpec:
       TagLimitedCompany
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, LimitedCompany)
 
       AgentDetailsFlow
         .WhenUsingProvidedOptions
@@ -94,12 +89,9 @@ extends BaseSpec:
       TagLimitedCompany
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, LimitedCompany)
 
       AgentDetailsFlow
         .runToCheckYourAnswers
@@ -183,12 +175,9 @@ extends BaseSpec:
       TagLimitedCompany
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      FastForwardLinks
+        .FastForward
+        .runFlow(ContactDetails, LimitedCompany)
 
       AgentDetailsFlow
         .runToCheckYourAnswers

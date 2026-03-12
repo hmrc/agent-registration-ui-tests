@@ -42,16 +42,9 @@ extends BaseSpec:
       TagLimitedLiabilityPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(LLP)
+      FastForwardLinks
+        .FastForward
+        .runFlow(AgentDetails, LLP)
 
       AmlsDetailsFlow
         .WhenHmrcAreSupervisoryBody

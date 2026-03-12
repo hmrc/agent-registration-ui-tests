@@ -35,13 +35,13 @@ extends BasePage:
 
   private def soleTraderOwnerAgreement(name: String): String = s"I agree that I, $name, will meet the standard when working on behalf of clients."
 
-  private val partnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
+  private val partnershipAgreement: String = "I agree that Test Company Name will meet the standard when working on behalf of clients."
 
   private val generalPartnershipAgreement: String = "I agree that Electronicsson Group will meet the standard when working on behalf of clients."
 
-  private val limitedPartnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
+  private val limitedPartnershipAgreement: String = "I agree that Test Company Name will meet the standard when working on behalf of clients."
 
-  private val limitedCompanyAgreement: String = "I agree that Test Company Ltd will meet the standard when working on behalf of clients."
+  private val limitedCompanyAgreement: String = "I agree that Test Company Name will meet the standard when working on behalf of clients."
 
   private val scottishLimitedPartnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
 
