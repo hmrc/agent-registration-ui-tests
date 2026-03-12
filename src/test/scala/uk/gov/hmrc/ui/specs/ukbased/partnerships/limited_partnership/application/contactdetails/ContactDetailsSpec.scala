@@ -16,9 +16,11 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_partnership.application.contactdetails
 
+import uk.gov.hmrc.ui.domain.BusinessType.LimitedPartnership
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.BusinessDetails
 import uk.gov.hmrc.ui.pages
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
@@ -35,9 +37,10 @@ extends BaseSpec:
       TagLimitedPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(BusinessDetails, LimitedPartnership)
+
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 
@@ -55,9 +58,10 @@ extends BaseSpec:
       TagLimitedPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(BusinessDetails, LimitedPartnership)
+
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 
@@ -88,9 +92,10 @@ extends BaseSpec:
       TagLimitedPartnership
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlowWithStubData(BusinessDetails, LimitedPartnership)
+
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
 

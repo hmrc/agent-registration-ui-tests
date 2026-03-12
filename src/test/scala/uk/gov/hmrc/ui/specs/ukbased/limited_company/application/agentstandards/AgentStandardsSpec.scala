@@ -18,11 +18,9 @@ package uk.gov.hmrc.ui.specs.ukbased.limited_company.application.agentstandards
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AmlsDetails
 import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.limited_company.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
@@ -34,21 +32,9 @@ extends BaseSpec:
       "User agrees to HMRC's standards for agents",
       TagLimitedCompany
     ):
-
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(LimitedCompany)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
+      FastForwardLinks
+        .FastForward
+        .runFlow(AmlsDetails, LimitedCompany)
 
       AgentStandardsFlow
         .AgreeToMeetStandards
