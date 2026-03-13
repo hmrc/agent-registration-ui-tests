@@ -39,7 +39,7 @@ extends BaseSpec:
 
       AgentStandardsFlow
         .AgreeToMeetStandards
-        .runFlow(SoleTrader, false)
+        .runFlow(SoleTrader)
 
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.assertHmrcStandardsForAgentsStatus("Completed")
