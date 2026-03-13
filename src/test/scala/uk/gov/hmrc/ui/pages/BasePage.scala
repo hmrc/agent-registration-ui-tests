@@ -51,7 +51,9 @@ extends PageObject:
       "//dd[contains(@class,'govuk-summary-list__value')]"
   )
 
-  def getSummaryValueFor(keyText: String): String = getText(valueLocatorFor(keyText)).trim
+  def getSummaryValueFor(keyText: String): String = eventually {
+    getText(valueLocatorFor(keyText)).trim
+  }
 
   def assertSummaryRow(
     key: String,
@@ -66,7 +68,7 @@ extends PageObject:
   def assertNameAt(
     index0: Int,
     expectedName: String
-  ): Unit = {
+  ): Unit = eventually {
     require(index0 >= 0, s"index0 must be >= 0, but was $index0")
     val index1 = index0 + 1 // XPath is 1-based
 
