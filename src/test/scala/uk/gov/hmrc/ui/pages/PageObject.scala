@@ -46,12 +46,13 @@ extends PageObject
 trait PageObject:
 
   inline def findElementBy(locator: By): Option[WebElement] = eventually:
-    Try(Driver.instance.findElement(locator))
-      .toOption
-  inline def getElementBy(locator: By): WebElement =
+    Try(Driver.instance.findElement(locator)).toOption
+
+  inline def getElementBy(locator: By): WebElement = eventually {
     findElementBy(locator) match
-      case None => fail(s"Element not found: $locator")
-      case Some(value) => value
+      case None => throw new org.openqa.selenium.NoSuchElementException(s"Element not found: $locator")
+      case Some(e) => e
+  }
 
   inline def findElementsBy(locator: By): Seq[WebElement] = eventually:
     Driver
