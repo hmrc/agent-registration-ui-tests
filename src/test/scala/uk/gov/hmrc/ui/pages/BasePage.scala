@@ -51,15 +51,13 @@ extends PageObject:
       "//dd[contains(@class,'govuk-summary-list__value')]"
   )
 
-  def getSummaryValueFor(keyText: String): String = eventually {
-    getText(valueLocatorFor(keyText)).trim
-  }
+  def getSummaryValueFor(keyText: String): String = getText(valueLocatorFor(keyText)).trim
 
   def assertSummaryRow(
     key: String,
     expectedValue: String
   ): Unit = eventually {
-    val actual = getSummaryValueFor(key)
+    val actual = getText(valueLocatorFor(key)).trim
     withClue(s"For summary key '$key': ") {
       actual shouldBe expectedValue
     }
