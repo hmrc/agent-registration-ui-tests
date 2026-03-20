@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.application.numberofpartners
 
-import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
 import uk.gov.hmrc.ui.domain.BusinessType.ScottishPartnership
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.providedetails.ProvideIndividualDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.providedetails.ProvideIndividualDetailsFlow.listProgress.partial
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
+import ProvideIndividualDetailsFlow.listProgress.complete
+import ProvideIndividualDetailsFlow.listProgress.partial
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.specs.BaseSpec
 
@@ -42,7 +41,11 @@ extends BaseSpec:
 
       ProvideIndividualDetailsFlow
         .ProvideIndividualDetails
-        .runFlow(stubbedSignInData, complete)
+        .runFlow(
+          stubbedSignInData,
+          complete,
+          ScottishPartnership
+        )
 
     Scenario("Multiple partners partially completed list", TagGeneralPartnership):
 
@@ -56,4 +59,8 @@ extends BaseSpec:
 
       ProvideIndividualDetailsFlow
         .ProvideIndividualDetails
-        .runFlow(stubbedSignInData, partial)
+        .runFlow(
+          stubbedSignInData,
+          partial,
+          ScottishPartnership
+        )

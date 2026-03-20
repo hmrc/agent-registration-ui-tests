@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.providedetails
+package uk.gov.hmrc.ui.flows.common.application.providedetails
 
+import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
@@ -32,6 +33,8 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ProvideDetailsUtrPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.SignInAndConfirmDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.proveyouridentity.ProveYourIdentityPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.proveyouridentity.YouHaveProvenYourIdentityPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubCreateUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubUserPage
@@ -49,12 +52,13 @@ object ProvideIndividualDetailsFlow:
   object ProvideIndividualDetails:
     def runFlow(
       stubData: StubbedSignInData,
-      progress: listProgress
+      progress: listProgress,
+      businessType: BusinessType
     ): Unit =
       val link = getProvideDetailsLink
       signOut()
       PageObject.get(link)
-      val (bearerToken, sessionId) = signIn(stubData.planetId)
+      val (bearerToken, sessionId) = signIn(stubData.planetId, businessType)
       confirmDetails()
       provideTelephoneNumber()
       provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
@@ -64,10 +68,29 @@ object ProvideIndividualDetailsFlow:
       checkYourAnswers()
       finishAndSignOut()
       PageObject.get("http://localhost:22201/agent-registration/apply/task-list")
-      returnToTasklist(stubData)
+      returnToApplication(stubData)
       progress match
         case listProgress.complete => checkPartnerListProgressComplete()
         case listProgress.partial => checkPartnerListProgressPartial()
+
+  object ProvideIndividualDetailsSoleTrader:
+    def runFlow(
+      stubData: StubbedSignInData,
+      progress: listProgress
+    ): Unit =
+      startJourney()
+      val (bearerToken, sessionId) = signIn(stubData.planetId, BusinessType.SoleTrader)
+      confirmDetails()
+      provideUtr()
+      identityProvenConfirmation()
+      returnToApplication(stubData)
+      checkProveYourIdentityProgressComplete()
+
+  def startJourney(): Unit =
+    TaskListPage.assertPageIsDisplayed()
+    TaskListPage.clickOnProveYourIdentityLink()
+    ProveYourIdentityPage.assertPageIsDisplayed()
+    ProveYourIdentityPage.clickContinue()
 
   def getProvideDetailsLink: String =
     TaskListPage.assertPageIsDisplayed()
@@ -81,9 +104,13 @@ object ProvideIndividualDetailsFlow:
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.clickSignOutLink()
 
-  def signIn(planet: String): (String, String) =
-    SignInAndConfirmDetailsPage.assertPageIsDisplayed()
-    SignInAndConfirmDetailsPage.clickContinue()
+  def signIn(
+    planet: String,
+    businessType: BusinessType
+  ): (String, String) =
+    if businessType != BusinessType.SoleTrader then
+      SignInAndConfirmDetailsPage.assertPageIsDisplayed()
+      SignInAndConfirmDetailsPage.clickContinue()
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
     GovernmentGatewaySignInPage.enterRandomUsername()
     GovernmentGatewaySignInPage.enterKnownPlanetId(planet)
@@ -99,7 +126,7 @@ object ProvideIndividualDetailsFlow:
     AgentExternalStubCreateUserPage.selectEnrolment("HMRC-PT")
     AgentExternalStubCreateUserPage.clickContinue()
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
-    AgentExternalStubConfigureUserPage.enterName("Bobby Boucher")
+    AgentExternalStubConfigureUserPage.enterName("ST Name ST Lastname")
     AgentExternalStubConfigureUserPage.clickContinue()
     (bearerToken, sessionId)
 
@@ -154,21 +181,31 @@ object ProvideIndividualDetailsFlow:
     ProvideDetailsConfirmationPage.assertPageIsDisplayed()
     ProvideDetailsConfirmationPage.clickFinishAndSignOut()
 
-  def returnToTasklist(stubData: StubbedSignInData): Unit =
+  def returnToApplication(stubData: StubbedSignInData): Unit =
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
     GovernmentGatewaySignInPage.enterKnownUserId(stubData.username)
     GovernmentGatewaySignInPage.enterKnownPlanetId(stubData.planetId)
     GovernmentGatewaySignInPage.clickContinue()
-    TaskListPage.assertPageIsDisplayed()
 
   def checkPartnerListProgressComplete(): Unit =
+    TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertAskPartnersAndAdvisorsToSignInStatus("Completed")
     TaskListPage.assertCheckProvidedDetailsStatus("Completed")
 
   def checkPartnerListProgressPartial(): Unit =
+    TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertAskPartnersAndAdvisorsToSignInStatus("Completed")
     TaskListPage.assertCheckProvidedDetailsStatus("Incomplete")
     TaskListPage.clickCheckProvidedDetailsLink()
     CheckWhoProvidedDetailsPage.assertPageIsDisplayed()
     CheckWhoProvidedDetailsPage.detailsProvided("Bobby Boucher") shouldBe "Yes"
     CheckWhoProvidedDetailsPage.detailsProvided("Sonny Koufax") shouldBe "No"
+
+  def identityProvenConfirmation(): Unit =
+    YouHaveProvenYourIdentityPage.assertPageIsDisplayed()
+    YouHaveProvenYourIdentityPage.assertConfirmationTextDisplayed()
+    YouHaveProvenYourIdentityPage.clickReturnToApplicationLink()
+
+  def checkProveYourIdentityProgressComplete(): Unit =
+    TaskListPage.assertPageIsDisplayed()
+    TaskListPage.assertProveYourIdentityStatus("Completed")

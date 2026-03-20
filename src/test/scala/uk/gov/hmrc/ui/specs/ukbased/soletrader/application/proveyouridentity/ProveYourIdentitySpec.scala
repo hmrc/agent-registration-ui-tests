@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.declaration
+package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.proveyouridentity
 
-import uk.gov.hmrc.ui.domain.BusinessType
-import BusinessType.*
+import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.specs.BaseSpec
 
-class DeclarationSpec
+class ProveYourIdentitySpec
 extends BaseSpec:
 
-  Feature("Complete declaration section"):
-    Scenario(
-      "User accepts the declaration",
-      TagSoleTrader
-    ):
-      pending
+  Feature("Provide your identity"):
+    Scenario("Applicant signs in and provides their details", TagSoleTrader):
+
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlowWithStubData(AgentStandards, SoleTrader)
@@ -40,7 +35,3 @@ extends BaseSpec:
       ProvideIndividualDetailsFlow
         .ProvideIndividualDetailsSoleTrader
         .runFlow(stubbedSignInData, ProvideIndividualDetailsFlow.listProgress.complete)
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(SoleTrader, false)
