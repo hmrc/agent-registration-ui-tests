@@ -22,3 +22,4 @@ object AppConfig:
   val baseUrlExternalStubs: String = "http://localhost:9099"
   val baseUrlCountryPicker: String = "http://localhost:9028"
   val baseUrlGovernmentGateway: String = baseUrlExternalStubs
+  val baseUrlAgentRegistrationRisking: String = "http://localhost:22203"

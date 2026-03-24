@@ -34,4 +34,8 @@ extends BaseSpec:
 
       ProvideIndividualDetailsFlow
         .ProvideIndividualDetailsSoleTrader
-        .runFlow(stubbedSignInData, ProvideIndividualDetailsFlow.listProgress.complete)
+        .runFlow(
+          stubbedSignInData,
+          ProvideIndividualDetailsFlow.listProgress.complete,
+          fastForwardUsed = true
+        ): Unit

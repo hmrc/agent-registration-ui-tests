@@ -23,6 +23,7 @@ import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
@@ -37,7 +38,6 @@ extends BaseSpec:
       "User reviews application details",
       TagSoleTrader
     ):
-      pending
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -62,6 +62,10 @@ extends BaseSpec:
           "Test User"
         )
 
+      ProvideIndividualDetailsFlow
+        .ProvideIndividualDetailsSoleTrader
+        .runFlow(stubbedSignInData, ProvideIndividualDetailsFlow.listProgress.complete)
+
       DeclarationFlow
         .AcceptDeclaration
         .runFlow(BusinessType.SoleTrader)
@@ -73,12 +77,20 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
       ViewApplicationPage.assertSummaryRow("Business type", "Sole trader")
       ViewApplicationPage.assertSummaryRow("Are you the owner of the business?", "Yes")
-      ViewApplicationPage.assertSummaryRow("Company name", "Test User")
+      ViewApplicationPage.assertSummaryRow("Sole trader name", "Test User")
       ViewApplicationPage.assertSummaryRowPresent("Unique taxpayer reference")
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
-      ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
+      ViewApplicationPage.assertSummaryRow(
+        "Telephone number",
+        "(+44) 10794554342",
+        occurrence = 1
+      )
       ViewApplicationPage.assertSummaryRow("Name shown to clients", "My Custom Company")
-      ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
+      ViewApplicationPage.assertSummaryRow(
+        "Telephone number",
+        "07777788888",
+        occurrence = 2
+      )
       ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Testing Lane\nRoyal Madeuptown\nZZ9Z 9TT\nGB")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")

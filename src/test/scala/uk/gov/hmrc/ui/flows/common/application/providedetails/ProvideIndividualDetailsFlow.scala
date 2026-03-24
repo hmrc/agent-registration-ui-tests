@@ -17,6 +17,7 @@
 package uk.gov.hmrc.ui.flows.common.application.providedetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
+import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
@@ -58,7 +59,11 @@ object ProvideIndividualDetailsFlow:
       val link = getProvideDetailsLink
       signOut()
       PageObject.get(link)
-      val (bearerToken, sessionId) = signIn(stubData.planetId, businessType)
+      val (bearerToken, sessionId) = signIn(
+        stubData.planetId,
+        businessType,
+        fastForwardUsed = false
+      )
       confirmDetails()
       provideTelephoneNumber()
       provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
@@ -76,15 +81,21 @@ object ProvideIndividualDetailsFlow:
   object ProvideIndividualDetailsSoleTrader:
     def runFlow(
       stubData: StubbedSignInData,
-      progress: listProgress
-    ): Unit =
+      progress: listProgress,
+      fastForwardUsed: Boolean = false
+    ): StubbedSignInData =
       startJourney()
-      val (bearerToken, sessionId) = signIn(stubData.planetId, BusinessType.SoleTrader)
+      val (bearerToken, sessionId) = signIn(
+        stubData.planetId,
+        BusinessType.SoleTrader,
+        fastForwardUsed
+      )
       confirmDetails()
       provideUtr()
       identityProvenConfirmation()
       returnToApplication(stubData)
       checkProveYourIdentityProgressComplete()
+      stubData.copy(bearerToken = bearerToken, sessionId = sessionId)
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()
@@ -106,7 +117,8 @@ object ProvideIndividualDetailsFlow:
 
   def signIn(
     planet: String,
-    businessType: BusinessType
+    businessType: BusinessType,
+    fastForwardUsed: Boolean
   ): (String, String) =
     if businessType != BusinessType.SoleTrader then
       SignInAndConfirmDetailsPage.assertPageIsDisplayed()
@@ -126,7 +138,13 @@ object ProvideIndividualDetailsFlow:
     AgentExternalStubCreateUserPage.selectEnrolment("HMRC-PT")
     AgentExternalStubCreateUserPage.clickContinue()
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
-    AgentExternalStubConfigureUserPage.enterName("ST Name ST Lastname")
+    if businessType == SoleTrader then
+      if fastForwardUsed then
+        AgentExternalStubConfigureUserPage.enterName("ST Name ST Lastname")
+      else
+        AgentExternalStubConfigureUserPage.enterName("Test User")
+    else
+      AgentExternalStubConfigureUserPage.enterName("Bobby Boucher")
     AgentExternalStubConfigureUserPage.clickContinue()
     (bearerToken, sessionId)
 

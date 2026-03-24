@@ -32,15 +32,22 @@ extends BaseSpec:
       "User accepts the declaration",
       TagSoleTrader
     ):
-      pending
+
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlowWithStubData(AgentStandards, SoleTrader)
 
       ProvideIndividualDetailsFlow
         .ProvideIndividualDetailsSoleTrader
-        .runFlow(stubbedSignInData, ProvideIndividualDetailsFlow.listProgress.complete)
+        .runFlow(
+          stubbedSignInData,
+          ProvideIndividualDetailsFlow.listProgress.complete,
+          fastForwardUsed = true
+        )
 
       DeclarationFlow
         .AcceptDeclaration
-        .runFlow(SoleTrader, false)
+        .runFlow(
+          SoleTrader,
+          fastForwardUsed = true
+        )

@@ -31,12 +31,20 @@ extends BasePage:
 
   private val copyLinkButton = By.cssSelector("button.govuk-button.govuk-button--secondary.copy-to-clipboard")
   private val viewOrPrintLink = By.linkText("View or print your application")
+  private val pageTitle = By.cssSelector("h1.govuk-panel__title")
+  private val panelBody = By.cssSelector("div.govuk-panel__body")
+
   def getCopyLinkButtonText: String = getText(copyLinkButton).trim
-
   def clickCopyLinkButton(): Unit = click(copyLinkButton)
-
   def clickViewOrPrintLink(): Unit = click(viewOrPrintLink)
-
   def assertCopyLinkButtonText(expected: String): Unit = eventually {
     getText(copyLinkButton).trim shouldEqual expected
+  }
+  def assertConfirmationTitle(expected: String): Unit = getText(pageTitle) shouldBe (expected)
+
+  /** Returns the application reference number displayed in the confirmation panel, e.g. "69c161e6a7327af1605a5a92" from "Application reference:
+    * 69c161e6a7327af1605a5a92".
+    */
+  def getApplicationReference: String = eventually {
+    getText(panelBody).trim.split(":").last.trim
   }
