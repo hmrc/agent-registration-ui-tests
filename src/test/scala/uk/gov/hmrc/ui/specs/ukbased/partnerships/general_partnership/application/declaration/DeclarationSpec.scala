@@ -35,7 +35,7 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, GeneralPartnership)
+        .runFlowWithStubData(AgentStandards, GeneralPartnership)
 
       DeclarationFlow
         .AcceptDeclaration

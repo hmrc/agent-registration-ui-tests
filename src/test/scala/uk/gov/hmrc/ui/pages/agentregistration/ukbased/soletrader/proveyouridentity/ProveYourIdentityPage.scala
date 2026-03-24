@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.utils
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.proveyouridentity
 
-object AppConfig:
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.utils.AppConfig
 
-  val baseUrlAgentRegistrationFrontend: String = "http://localhost:22201"
-  val baseUrlExternalStubs: String = "http://localhost:9099"
-  val baseUrlCountryPicker: String = "http://localhost:9028"
-  val baseUrlGovernmentGateway: String = baseUrlExternalStubs
-  val baseUrlAgentRegistrationRisking: String = "http://localhost:22203"
+object ProveYourIdentityPage
+extends BasePage:
+
+  override val path: String = "/agent-registration/apply/list-details/sole-trader"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl shouldBe url

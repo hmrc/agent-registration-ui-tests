@@ -66,4 +66,15 @@ extends EntryPage:
 
   def clickAgentStandardsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "HMRC standard for agents"))
 
+  def clickProveYourIdentityLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Prove your identity"))
+
+  def clickPartnersAndAdvisorsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Partners and other relevant tax advisors"))
+
+  def clickAskPartnersAndAdvisorsToSignInLink(businessType: BusinessType): Unit = click(linkInSection(
+    businessType,
+    "Ask the partners and tax advisors to sign in"
+  ))
+
+  def clickCheckProvidedDetailsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Check who has provided their details"))
+
   def clickDeclarationLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Declaration"))
