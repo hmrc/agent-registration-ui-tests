@@ -35,6 +35,7 @@ extends BasePage:
   def assertAgentServicesAccountDetailsStatus(expectedStatus: String): Unit = getText(agentServicesAccountDetailsStatus) shouldBe expectedStatus
   def assertAmlsDetailsStatus(expectedStatus: String): Unit = getText(amlsDetailsStatus) shouldBe expectedStatus
   def assertHmrcStandardsForAgentsStatus(expectedStatus: String): Unit = getText(hmrcStandardsForAgentsStatus) shouldBe expectedStatus
+  def assertProveYourIdentityStatus(expectedStatus: String): Unit = getText(proveYourIdentityStatus) shouldBe expectedStatus
   def assertPartnersAndAdvisorsStatus(expectedStatus: String): Unit = getText(partnersAndAdvisorsStatus) shouldBe expectedStatus
   def assertAskPartnersAndAdvisorsToSignInStatus(expectedStatus: String): Unit = getText(askPartnersAndAdvisorsToSignInStatus) shouldBe expectedStatus
   def assertCheckProvidedDetailsStatus(expectedStatus: String): Unit = getText(checkProvidedDetailsStatus) shouldBe expectedStatus
@@ -47,6 +48,7 @@ extends BasePage:
   def clickOnAgentServicesAccountDetailsLink(): Unit = click(agentServicesAccountDetailsLink)
   def clickOnAmlsDetailsLink(): Unit = click(amlsDetailsLink)
   def clickOnHmrcStandardsForAgentsLink(): Unit = click(hmrcStandardsForAgentsLink)
+  def clickOnProveYourIdentityLink(): Unit = click(proveYourIdentityLink)
   def clickPartnersAndAdvisorsStatusLink(): Unit = click(partnersAndAdvisorsLink)
   def clickAskPartnersAndAdvisorsToSignInLink(): Unit = click(askPartnersAndAdvisorsToSignInLink)
   def clickCheckProvidedDetailsLink(): Unit = click(checkProvidedDetailsLink)
@@ -61,6 +63,7 @@ extends BasePage:
   private val agentServicesAccountDetailsLink = By.cssSelector("a[aria-describedby='accountDetails-1-status']")
   private val amlsDetailsLink = By.cssSelector("a[aria-describedby='hmrcStandards-1-status']")
   private val hmrcStandardsForAgentsLink = By.cssSelector("a[aria-describedby='hmrcStandards-2-status']")
+  private val proveYourIdentityLink = By.cssSelector("a[aria-describedby='lists-1-status']")
   private val partnersAndAdvisorsLink = By.cssSelector("a[aria-describedby='lists-1-status']")
   private val askPartnersAndAdvisorsToSignInLink = By.cssSelector("a[aria-describedby='lists-2-status']")
   private val checkProvidedDetailsLink = By.cssSelector("a[aria-describedby='lists-3-status']")
@@ -75,6 +78,7 @@ extends BasePage:
   private val agentServicesAccountDetailsStatus = By.id("accountDetails-1-status")
   private val amlsDetailsStatus = By.id("hmrcStandards-1-status")
   private val hmrcStandardsForAgentsStatus = By.id("hmrcStandards-2-status")
+  private val proveYourIdentityStatus = By.id("lists-1-status")
   private val partnersAndAdvisorsStatus = By.id("lists-1-status")
   private val askPartnersAndAdvisorsToSignInStatus = By.id("lists-2-status")
   private val checkProvidedDetailsStatus = By.id("lists-3-status")

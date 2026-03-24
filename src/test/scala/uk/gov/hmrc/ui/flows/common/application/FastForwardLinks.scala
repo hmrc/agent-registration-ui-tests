@@ -20,9 +20,13 @@ import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AmlsDetails
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AskPartnersAndAdvisorsToSignIn
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.BusinessDetails
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.CheckProvidedDetails
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.PartnersAndAdvisors
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ProveYourIdentity
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag.False
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.FastForwardFlag.True
@@ -37,7 +41,7 @@ import uk.gov.hmrc.ui.utils.AppConfig
 object FastForwardLinks:
 
   enum ApplicationProgress:
-    case BusinessDetails, AgentDetails, ContactDetails, AmlsDetails, AgentStandards,
+    case BusinessDetails, AgentDetails, ContactDetails, AmlsDetails, AgentStandards, ProveYourIdentity,
       PartnersAndAdvisors, AskPartnersAndAdvisorsToSignIn, CheckProvidedDetails, Declaration
 
   object FastForward:
@@ -107,27 +111,38 @@ object FastForwardLinks:
         FastForwardLinksPage.clickAboutYourBusinessLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertBusinessDetailsStatus("Completed")
-        TaskListPage.assertContactDetailsStatus("Incomplete")
       case ContactDetails =>
         FastForwardLinksPage.clickContactDetailsLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertContactDetailsStatus("Completed")
-        TaskListPage.assertAgentServicesAccountDetailsStatus("Incomplete")
       case AgentDetails =>
         FastForwardLinksPage.clickAgentDetailsLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
-        TaskListPage.assertAmlsDetailsStatus("Incomplete")
       case AmlsDetails =>
         FastForwardLinksPage.clickAmlsDetailsLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertAmlsDetailsStatus("Completed")
-        TaskListPage.assertHmrcStandardsForAgentsStatus("Incomplete")
       case AgentStandards =>
         FastForwardLinksPage.clickAgentStandardsLink(businessType)
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertHmrcStandardsForAgentsStatus("Completed")
-        TaskListPage.assertPartnersAndAdvisorsStatus("Incomplete")
+      case PartnersAndAdvisors =>
+        FastForwardLinksPage.clickPartnersAndAdvisorsLink(businessType)
+        TaskListPage.assertPageIsDisplayed()
+        TaskListPage.assertPartnersAndAdvisorsStatus("Completed")
+      case AskPartnersAndAdvisorsToSignIn =>
+        FastForwardLinksPage.clickAskPartnersAndAdvisorsToSignInLink(businessType)
+        TaskListPage.assertPageIsDisplayed()
+        TaskListPage.assertAskPartnersAndAdvisorsToSignInStatus("Completed")
+      case CheckProvidedDetails =>
+        FastForwardLinksPage.clickCheckProvidedDetailsLink(businessType)
+        TaskListPage.assertPageIsDisplayed()
+        TaskListPage.assertCheckProvidedDetailsStatus("Completed")
+      case ProveYourIdentity =>
+        FastForwardLinksPage.clickProveYourIdentityLink(businessType)
+        TaskListPage.assertPageIsDisplayed()
+        TaskListPage.assertProveYourIdentityStatus("Completed")
       case Declaration =>
         FastForwardLinksPage.clickDeclarationLink(businessType)
         TaskListPage.assertPageIsDisplayed()

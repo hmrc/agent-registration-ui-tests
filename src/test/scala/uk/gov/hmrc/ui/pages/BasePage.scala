@@ -51,7 +51,23 @@ extends PageObject:
       "//dd[contains(@class,'govuk-summary-list__value')]"
   )
 
+  protected def valueLocatorFor(
+    keyText: String,
+    occurrence: Int
+  ): By =
+    require(occurrence >= 1, s"occurrence must be >= 1, but was $occurrence")
+    By.xpath(
+      s"(//div[contains(@class,'govuk-summary-list__row')]" +
+        s"[normalize-space(.//dt[contains(@class,'govuk-summary-list__key')])='$keyText']" +
+        s"//dd[contains(@class,'govuk-summary-list__value')])[$occurrence]"
+    )
+
   def getSummaryValueFor(keyText: String): String = getText(valueLocatorFor(keyText)).trim
+
+  def getSummaryValueFor(
+    keyText: String,
+    occurrence: Int
+  ): String = getText(valueLocatorFor(keyText, occurrence)).trim
 
   def assertSummaryRow(
     key: String,
@@ -59,6 +75,17 @@ extends PageObject:
   ): Unit = eventually {
     val actual = getText(valueLocatorFor(key)).trim
     withClue(s"For summary key '$key': ") {
+      actual shouldBe expectedValue
+    }
+  }
+
+  def assertSummaryRow(
+    key: String,
+    expectedValue: String,
+    occurrence: Int
+  ): Unit = eventually {
+    val actual = getText(valueLocatorFor(key, occurrence)).trim
+    withClue(s"For summary key '$key' (occurrence $occurrence): ") {
       actual shouldBe expectedValue
     }
   }
