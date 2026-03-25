@@ -82,7 +82,7 @@ object DeclarationFlow:
     businessType match
       case SoleTrader => if fastForwardUsed then assert(providedName == "ST Name ST Lastname") else assert(providedName == "Test User")
       case LLP => assert(providedName == "Test Partnership")
-      case GeneralPartnership => assert(providedName == "TBC")
+      case GeneralPartnership => assert(providedName == "Bobby Boucher")
       case LimitedPartnership => assert(providedName == "TBC")
       case LimitedCompany => assert(providedName == "TBC")
       case ScottishLimitedPartnership => assert(providedName == "TBC")

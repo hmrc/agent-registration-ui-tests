@@ -21,6 +21,9 @@ import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
+import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
+import ProvideIndividualDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class DeclarationSpec
@@ -31,11 +34,22 @@ extends BaseSpec:
       "User accepts the declaration",
       TagGeneralPartnership
     ):
-      pending
 
-      FastForwardLinks
+      val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlowWithStubData(AgentStandards, GeneralPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .singlePartner
+        .runFlow()
+
+      ProvideIndividualDetailsFlow
+        .ProvideIndividualDetails
+        .runFlow(
+          stubbedSignInData,
+          complete,
+          GeneralPartnership
+        )
 
       DeclarationFlow
         .AcceptDeclaration
