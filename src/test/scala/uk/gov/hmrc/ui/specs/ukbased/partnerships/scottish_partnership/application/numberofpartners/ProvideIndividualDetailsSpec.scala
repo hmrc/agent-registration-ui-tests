@@ -22,7 +22,7 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgr
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import ProvideIndividualDetailsFlow.listProgress.complete
 import ProvideIndividualDetailsFlow.listProgress.partial
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ProvideIndividualDetailsSpec

@@ -19,7 +19,7 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.general_partnership.applicatio
 import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.PartnerTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangeOtherRelevantIndividualPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ChangePartnerPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersKeyIndividualsPage

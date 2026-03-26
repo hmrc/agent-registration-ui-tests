@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.general_partnership.application.viewapplication
 
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
@@ -23,6 +24,8 @@ import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
+import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
@@ -37,7 +40,6 @@ extends BaseSpec:
       "User reviews application details",
       TagGeneralPartnership
     ):
-      pending
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -57,6 +59,18 @@ extends BaseSpec:
       AgentStandardsFlow
         .AgreeToMeetStandards
         .runFlow(GeneralPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .singlePartner
+        .runFlow()
+
+      ProvideIndividualDetailsFlow
+        .ProvideIndividualDetails
+        .runFlow(
+          stubbedSignInData,
+          complete,
+          GeneralPartnership
+        )
 
       DeclarationFlow
         .AcceptDeclaration
