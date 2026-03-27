@@ -38,6 +38,7 @@ extends BasePage:
   def assertProveYourIdentityStatus(expectedStatus: String): Unit = getText(proveYourIdentityStatus) shouldBe expectedStatus
   def assertPartnersAndAdvisorsStatus(expectedStatus: String): Unit = getText(partnersAndAdvisorsStatus) shouldBe expectedStatus
   def assertAskPartnersAndAdvisorsToSignInStatus(expectedStatus: String): Unit = getText(askPartnersAndAdvisorsToSignInStatus) shouldBe expectedStatus
+  def assertAskBusinessOwnerToSignInStatus(expectedStatus: String): Unit = getText(askBusinessOwnerToSignInStatus) shouldBe expectedStatus
   def assertCheckProvidedDetailsStatus(expectedStatus: String): Unit = getText(checkProvidedDetailsStatus) shouldBe expectedStatus
   def assertDeclarationStatus(expectedStatus: String): Unit = getText(declarationStatus) shouldBe expectedStatus
   def assertPartnerTaxAdvisorInformationStatus(expectedStatus: String): Unit = getText(partnerTaxAdvisorInformationStatus)
@@ -49,6 +50,7 @@ extends BasePage:
   def clickOnProveYourIdentityLink(): Unit = click(proveYourIdentityLink)
   def clickPartnersAndAdvisorsStatusLink(): Unit = click(partnersAndAdvisorsLink)
   def clickAskPartnersAndAdvisorsToSignInLink(): Unit = click(askPartnersAndAdvisorsToSignInLink)
+  def clickAskBusinessOwnerToSignInLink(): Unit = click(askBusinessOwnerToSignInLink)
   def clickCheckProvidedDetailsLink(): Unit = click(checkProvidedDetailsLink)
   def clickOnDeclarationLink(): Unit = click(declarationLink)
   def clickOnPartnerTaxAdvisorInformationLink(): Unit = click(partnerTaxAdvisorInformationLink)
@@ -62,6 +64,7 @@ extends BasePage:
   private val proveYourIdentityLink = By.cssSelector("a[aria-describedby='lists-1-status']")
   private val partnersAndAdvisorsLink = By.cssSelector("a[aria-describedby='lists-1-status']")
   private val askPartnersAndAdvisorsToSignInLink = By.cssSelector("a[aria-describedby='lists-2-status']")
+  private val askBusinessOwnerToSignInLink = By.cssSelector("a[aria-describedby='lists-1-status']")
   private val checkProvidedDetailsLink = By.cssSelector("a[aria-describedby='lists-3-status']")
   private val declarationLink = By.cssSelector("a[aria-describedby='declaration-1-status']")
   private val partnerTaxAdvisorInformationLink = By.cssSelector("a[aria-describedby='lists-1-status']")
@@ -75,6 +78,7 @@ extends BasePage:
   private val proveYourIdentityStatus = By.id("lists-1-status")
   private val partnersAndAdvisorsStatus = By.id("lists-1-status")
   private val askPartnersAndAdvisorsToSignInStatus = By.id("lists-2-status")
+  private val askBusinessOwnerToSignInStatus = By.id("lists-1-status")
   private val checkProvidedDetailsStatus = By.id("lists-3-status")
   private val declarationStatus = By.id("declaration-1-status")
   private val partnerTaxAdvisorInformationStatus = By.id("lists-1-status")

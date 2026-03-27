@@ -23,6 +23,7 @@ import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ApproveApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskPartnersToSignInPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskSoleTraderToSignInPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckWhoProvidedDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ConfirmYourDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ProvideDetailsAgreeStandardsPage
@@ -84,7 +85,7 @@ object ProvideIndividualDetailsFlow:
       progress: listProgress,
       fastForwardUsed: Boolean = false
     ): StubbedSignInData =
-      startJourney()
+      startJourneySoleTrader()
       val (bearerToken, sessionId) = signIn(
         stubData.planetId,
         BusinessType.SoleTrader,
@@ -97,11 +98,46 @@ object ProvideIndividualDetailsFlow:
       checkProveYourIdentityProgressComplete()
       stubData.copy(bearerToken = bearerToken, sessionId = sessionId)
 
-  def startJourney(): Unit =
+  object ProvideIndividualDetailsSoleTraderOwner:
+    def runFlow(
+      stubData: StubbedSignInData,
+      progress: listProgress,
+      fastForwardUsed: Boolean = false
+    ): StubbedSignInData =
+      val link = startJourneySoleTraderOwner()
+      signOut()
+      PageObject.get(link)
+      val (bearerToken, sessionId) = signIn(
+        stubData.planetId,
+        BusinessType.SoleTrader,
+        fastForwardUsed,
+        isSoleTraderOwner = false
+      )
+      confirmDetails()
+      provideTelephoneNumber()
+      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideUtr()
+      approveApplication()
+      agreeStandards()
+      checkYourAnswers()
+      finishAndSignOut()
+      PageObject.get("http://localhost:22201/agent-registration/apply/task-list")
+      returnToApplication(stubData)
+      checkProveYourIdentityProgressComplete()
+      stubData.copy(bearerToken = bearerToken, sessionId = sessionId)
+
+  def startJourneySoleTrader(): Unit =
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.clickOnProveYourIdentityLink()
     ProveYourIdentityPage.assertPageIsDisplayed()
     ProveYourIdentityPage.clickContinue()
+
+  def startJourneySoleTraderOwner(): String =
+    TaskListPage.clickAskBusinessOwnerToSignInLink()
+    AskSoleTraderToSignInPage.assertPageIsDisplayed()
+    val link = AskSoleTraderToSignInPage.getShareLinkText
+    AskSoleTraderToSignInPage.clickContinue()
+    link
 
   def getProvideDetailsLink: String =
     TaskListPage.assertPageIsDisplayed()
@@ -118,9 +154,10 @@ object ProvideIndividualDetailsFlow:
   def signIn(
     planet: String,
     businessType: BusinessType,
-    fastForwardUsed: Boolean
+    fastForwardUsed: Boolean,
+    isSoleTraderOwner: Boolean = true
   ): (String, String) =
-    if businessType != BusinessType.SoleTrader then
+    if businessType != BusinessType.SoleTrader || !isSoleTraderOwner then
       SignInAndConfirmDetailsPage.assertPageIsDisplayed()
       SignInAndConfirmDetailsPage.clickContinue()
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
