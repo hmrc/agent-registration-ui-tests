@@ -44,7 +44,10 @@ object StubbedSignInFlow:
     journey: JourneyType,
     companyStatus: CompanyStatus = Ok,
     deceasedFlag: DeceasedFlag = False,
-    fastForwardFlag: FastForwardFlag = FastForwardFlag.False
+    fastForwardFlag: FastForwardFlag = FastForwardFlag.False,
+    directorName: Option[String] = None,
+    numberOfDirectors: Option[Int] = None,
+    directorNames: Option[List[String]] = None
   ): StubbedSignInData =
 
     // 1) Government Gateway sign-in
@@ -59,7 +62,10 @@ object StubbedSignInFlow:
         configureForAgent(
           companyStatus,
           deceasedFlag,
-          fastForwardFlag
+          fastForwardFlag,
+          directorName,
+          numberOfDirectors,
+          directorNames
         )
 
       case JourneyType.Individual => configureForIndividual(hasUtr = false)
@@ -77,11 +83,18 @@ object StubbedSignInFlow:
 
   def signInAndDataSetupViaStubsForAgent(
     companyStatus: CompanyStatus = Ok,
-    deceasedFlag: DeceasedFlag = False
+    deceasedFlag: DeceasedFlag = False,
+    directorName: Option[String] = None,
+    numberOfDirectors: Option[Int] = None,
+    directorNames: Option[List[String]] = None
   ): StubbedSignInData = signInAndDataSetupViaStubs(
     Agent,
     companyStatus,
-    deceasedFlag
+    deceasedFlag,
+    FastForwardFlag.False,
+    directorName,
+    numberOfDirectors,
+    directorNames
   )
 
   def signInAndDataSetupViaStubsForIndividual(): StubbedSignInData = signInAndDataSetupViaStubs(Individual)
@@ -109,13 +122,23 @@ object StubbedSignInFlow:
   private def configureForAgent(
     companyStatus: CompanyStatus,
     deceasedFlag: DeceasedFlag,
-    isFastForward: FastForwardFlag
+    isFastForward: FastForwardFlag,
+    directorName: Option[String],
+    numberOfDirectors: Option[Int],
+    directorNames: Option[List[String]]
   ): Unit =
     selectAffinityGroupAgent()
     selectNoEnrolmentAndContinue()
     continueFromConfigureUser()
     isFastForward match
-      case FastForwardFlag.False => configureGrs(companyStatus, deceasedFlag)
+      case FastForwardFlag.False =>
+        configureGrs(
+          companyStatus,
+          deceasedFlag,
+          directorName,
+          numberOfDirectors,
+          directorNames
+        )
       case FastForwardFlag.True =>
 
   private def configureForIndividual(hasUtr: Boolean): Unit =
@@ -143,12 +166,18 @@ object StubbedSignInFlow:
 
   private def configureGrs(
     companyStatus: CompanyStatus,
-    deceasedFlag: DeceasedFlag
+    deceasedFlag: DeceasedFlag,
+    directorName: Option[String],
+    numberOfDirectors: Option[Int],
+    directorNames: Option[List[String]]
   ): Unit =
     GrsDataSetupPage.assertPageIsDisplayed()
 
     companyStatus match
-      case CompanyStatus.Ok => ()
+      case CompanyStatus.Ok =>
+        numberOfDirectors match
+          case Some(n) if n <= 5 => GrsDataSetupPage.enterCompanyNumber("11111111")
+          case _ => GrsDataSetupPage.enterCompanyNumber("11111116")
 
       case CompanyStatus.Blocked => GrsDataSetupPage.enterCompanyNumber()
 
@@ -156,6 +185,11 @@ object StubbedSignInFlow:
       case DeceasedFlag.True => GrsDataSetupPage.checkDeceasedCheckbox()
 
       case DeceasedFlag.False => ()
+
+    // Enter director names - prioritize list over single name
+    directorNames match
+      case Some(names) if names.nonEmpty => GrsDataSetupPage.enterDirectorNames(names)
+      case None => directorName.foreach(name => GrsDataSetupPage.enterDirectorName(name))
 
     GrsDataSetupPage.clickContinue()
 

@@ -31,8 +31,17 @@ extends BasePage {
 
   private val companyNumberField = By.id("companyNumber")
   private val deceasedCheckbox = By.id("deceased")
+  private val nameField = By.id("name") // Add the locator for name field
 
-  def enterCompanyNumber(): Unit = sendKeys(companyNumberField, "87654321")
+  def enterCompanyNumber(companyNumber: String = "87654321"): Unit = sendKeys(companyNumberField, companyNumber)
   def checkDeceasedCheckbox(): Unit = selectCheckbox(deceasedCheckbox)
+
+  // Method to enter director name in the stub (single name)
+  def enterDirectorName(name: String): Unit = sendKeys(nameField, name)
+
+  // Method to enter multiple director names
+  def enterDirectorNames(names: List[String]): Unit =
+    val namesString = names.mkString(", ")
+    sendKeys(nameField, namesString)
 
 }

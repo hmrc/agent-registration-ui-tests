@@ -68,6 +68,24 @@ object FastForwardLinks:
       stubbedSignInData
     }
 
+  /* /** Use when the test needs to specify number of directors for GRS stub data. */
+    def runFlowWithNumberOfDirectors(
+      applicationProgress: ApplicationProgress,
+      businessType: BusinessType,
+      numberOfDirectors: Option[Int]
+    ): Unit = {
+      startJourneyViaStubs()
+      signInAndDataSetupViaStubs(
+        Agent,
+        Ok,
+        False,
+        True,
+        None,
+        numberOfDirectors
+      )
+      selectFastForwardLink(applicationProgress, businessType)
+    }*/
+
   def startJourneyViaStubs(): Unit =
     val continueUrl = AppConfig.baseUrlAgentRegistrationFrontend + FastForwardLinksPage.path
     val signInUrl =

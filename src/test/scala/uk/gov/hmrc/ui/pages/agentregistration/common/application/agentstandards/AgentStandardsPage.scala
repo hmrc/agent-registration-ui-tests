@@ -41,7 +41,7 @@ extends BasePage:
 
   private val limitedPartnershipAgreement: String = "I agree that Test Company Name will meet the standard when working on behalf of clients."
 
-  private val limitedCompanyAgreement: String = "I agree that Test Company Name will meet the standard when working on behalf of clients."
+  private val limitedCompanyAgreement: String = "I agree that Test Company Ltd will meet the standard when working on behalf of clients."
 
   private val scottishLimitedPartnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
 

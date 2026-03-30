@@ -33,5 +33,15 @@ extends BasePage:
     getCurrentUrl shouldBe url
 
   private val unofficialPartnerFullNameField = By.id("otherRelevantIndividualName")
+  private val otherRelevantIndividualNameField = By.id("otherRelevantIndividualName")
 
   def enterPartnerFullName(name: String): Unit = sendKeys(unofficialPartnerFullNameField, name)
+
+  def enterOtherRelevantIndividualName(name: String): Unit = sendKeys(otherRelevantIndividualNameField, name)
+
+  private val yesRadio = By.id("hasOtherRelevantIndividuals")
+  private val noRadio = By.id("hasOtherRelevantIndividuals-2")
+
+  def selectYes(): Unit = click(yesRadio)
+
+  def selectNo(): Unit = click(noRadio)
