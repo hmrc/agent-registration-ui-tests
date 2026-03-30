@@ -46,3 +46,5 @@ extends BaseCheckYourAnswersPage:
 
   def removePartner(name: String): Unit = click(removeLinkFor(name))
   def changePartnerName(name: String): Unit = click(changeLinkFor(name))
+
+  def changeOtherRelevantTaxAdviserName(name: String): Unit = click(changeLinkFor(name))

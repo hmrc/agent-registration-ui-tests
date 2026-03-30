@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.limited_company.application.businessdetails
 
-import uk.gov.hmrc.ui.flows.ukbased.limited_company.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.limited_company.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CannotRegisterPage
 import uk.gov.hmrc.ui.specs.BaseSpec
