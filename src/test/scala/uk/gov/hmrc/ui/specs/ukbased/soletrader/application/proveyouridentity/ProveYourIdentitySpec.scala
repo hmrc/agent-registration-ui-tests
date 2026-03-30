@@ -19,7 +19,12 @@ package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.proveyouridentity
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
+import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
+import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ProveYourIdentitySpec
@@ -38,4 +43,36 @@ extends BaseSpec:
           stubbedSignInData,
           ProvideIndividualDetailsFlow.listProgress.complete,
           fastForwardUsed = true
-        ): Unit
+        )
+
+    Scenario("Applicant is not the sole trader", TagSoleTrader):
+
+      val stubbedSignInData = BusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow(false)
+
+      ContactDetailsFlow
+        .runFlow(stubbedSignInData)
+
+      AgentDetailsFlow
+        .WhenUsingCustomValues
+        .runFlow(stubbedSignInData)
+
+      AmlsDetailsFlow
+        .WhenHmrcAreSupervisoryBody
+        .runFlow()
+
+      AgentStandardsFlow
+        .AgreeToMeetStandards
+        .runFlow(
+          SoleTrader,
+          false,
+          "Test User"
+        )
+
+      ProvideIndividualDetailsFlow
+        .ProvideIndividualDetailsSoleTraderOwner
+        .runFlow(
+          stubbedSignInData,
+          ProvideIndividualDetailsFlow.listProgress.complete
+        )

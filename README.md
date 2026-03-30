@@ -15,7 +15,7 @@ docker run --rm -d -p 27017:27017 --name mongo percona/percona-server-mongodb:6.
 
 ### Agent Registration Services
 
-Start `AGENT_REGISTRATION_ALL` services:
+Start `AGENT_REGISTRATION_STUBBED_GRS` services:
 
 ```bash
 sm2 --start AGENT_REGISTRATION_ALL
