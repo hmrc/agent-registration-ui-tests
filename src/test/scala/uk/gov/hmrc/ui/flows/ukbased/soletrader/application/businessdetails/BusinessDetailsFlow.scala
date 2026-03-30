@@ -43,11 +43,11 @@ object BusinessDetailsFlow:
   // --- Public "journeys" (like ProvideDetailsFlow objects) ---
 
   object HasOnlineAgentAccount:
-    def runFlow(): StubbedSignInData =
+    def runFlow(businessOwner: Boolean = true): StubbedSignInData =
       startJourney()
       selectUkBased()
       selectSoleTraderBusinessSetup()
-      confirmIfBusinessOwner()
+      confirmIfBusinessOwner(businessOwner)
       answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
       proceedToGovernmentGateway()
       val stubData = stubbedSignIn(Deceased.False)
@@ -55,11 +55,11 @@ object BusinessDetailsFlow:
       stubData
 
   object HasNoOnlineAccount:
-    def runFlow(): StubbedSignInData =
+    def runFlow(businessOwner: Boolean = true): StubbedSignInData =
       startJourney()
       selectUkBased()
       selectSoleTraderBusinessSetup()
-      confirmIfBusinessOwner()
+      confirmIfBusinessOwner(businessOwner)
       answerOnlineServicesAccount(OnlineAgentsAccount.NoOnlineAgentAccount)
       proceedToGovernmentGateway()
       val stubData = stubbedSignIn(Deceased.False)
@@ -67,11 +67,11 @@ object BusinessDetailsFlow:
       stubData
 
   object IsDeceased:
-    def runFlow(): Unit =
+    def runFlow(businessOwner: Boolean = true): Unit =
       startJourney()
       selectUkBased()
       selectSoleTraderBusinessSetup()
-      confirmIfBusinessOwner()
+      confirmIfBusinessOwner(businessOwner)
       answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
       proceedToGovernmentGateway()
       stubbedSignIn(Deceased.True)
@@ -91,9 +91,9 @@ object BusinessDetailsFlow:
     HowIsYourBusinessSetUpPage.selectSoleTrader()
     HowIsYourBusinessSetUpPage.clickContinue()
 
-  def confirmIfBusinessOwner(): Unit =
+  def confirmIfBusinessOwner(businessOwner: Boolean): Unit =
     AreYouTheBusinessOwnerPage.assertPageIsDisplayed()
-    AreYouTheBusinessOwnerPage.selectYes()
+    if businessOwner then AreYouTheBusinessOwnerPage.selectYes() else AreYouTheBusinessOwnerPage.selectNo()
     AreYouTheBusinessOwnerPage.clickContinue()
 
   def answerOnlineServicesAccount(answer: OnlineAgentsAccount): Unit =
