@@ -61,7 +61,7 @@ extends BaseSpec:
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
-        .runFlow()
+        .runFlow(Some(6))
 
       ContactDetailsFlow
         .runFlow(stubbedSignInData)
@@ -88,7 +88,7 @@ extends BaseSpec:
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
-        .runFlow()
+        .runFlow(Some(6))
 
       ContactDetailsFlow
         .runFlow(stubbedSignInData)
@@ -134,7 +134,7 @@ extends BaseSpec:
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
-        .runFlow()
+        .runFlow(Some(6))
 
       ContactDetailsFlow
         .runFlow(stubbedSignInData)
@@ -173,7 +173,7 @@ extends BaseSpec:
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
-        .runFlow()
+        .runFlow(Some(6))
 
       ContactDetailsFlow
         .runFlow(stubbedSignInData)
@@ -211,7 +211,7 @@ extends BaseSpec:
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
-        .runFlow()
+        .runFlow(Some(6))
 
       ContactDetailsFlow
         .runFlow(stubbedSignInData)
@@ -279,7 +279,7 @@ extends BaseSpec:
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
-        .runFlow()
+        .runFlow(Some(6))
 
       ContactDetailsFlow
         .runFlow(stubbedSignInData)
@@ -324,7 +324,7 @@ extends BaseSpec:
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
-        .runFlow()
+        .runFlow(Some(6))
 
       ContactDetailsFlow
         .runFlow(stubbedSignInData)
