@@ -57,7 +57,6 @@ object ProvideDirectorDetailsFlow:
       directorName: Option[String] = None,
       allDirectorNames: Option[List[String]] = None
     ): Unit =
-      println(s"🔍 ProvideDirectorDetails.runFlowWithLink called with directorName: $directorName")
       signOut()
       PageObject.get(link)
       val (bearerToken, sessionId) = signIn(stubData.planetId, directorName)
