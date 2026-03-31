@@ -173,14 +173,13 @@ object StubbedSignInFlow:
   ): Unit =
     GrsDataSetupPage.assertPageIsDisplayed()
 
-    companyStatus match
-      case CompanyStatus.Ok =>
-        numberOfDirectors match
-          case Some(n) if n <= 5 => GrsDataSetupPage.enterCompanyNumber("11111111")
-          case _ => GrsDataSetupPage.enterCompanyNumber("11111116")
+    (companyStatus, numberOfDirectors) match
+      case (CompanyStatus.Ok, Some(n)) if n <= 5 => GrsDataSetupPage.enterCompanyNumber("11111111")
+      case (CompanyStatus.Ok, Some(n)) if n >= 6 => GrsDataSetupPage.enterCompanyNumber("11111116")
+      case (CompanyStatus.Ok, None) => ()
+      case (CompanyStatus.Blocked, _) => GrsDataSetupPage.enterCompanyNumber()
 
-      case CompanyStatus.Blocked => GrsDataSetupPage.enterCompanyNumber()
-
+    println(s"DEBUG: numberOfDirectors = $numberOfDirectors")
     deceasedFlag match
       case DeceasedFlag.True => GrsDataSetupPage.checkDeceasedCheckbox()
 
@@ -190,7 +189,7 @@ object StubbedSignInFlow:
     directorNames match
       case Some(names) if names.nonEmpty => GrsDataSetupPage.enterDirectorNames(names)
       case None => directorName.foreach(name => GrsDataSetupPage.enterDirectorName(name))
-
+      case Some(_) => ()
     GrsDataSetupPage.clickContinue()
 
   private def enterUtrEnrolmentData(): Unit =
