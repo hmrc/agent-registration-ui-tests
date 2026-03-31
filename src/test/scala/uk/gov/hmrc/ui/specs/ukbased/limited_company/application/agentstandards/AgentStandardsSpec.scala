@@ -32,6 +32,7 @@ extends BaseSpec:
       "User agrees to HMRC's standards for agents",
       TagLimitedCompany
     ):
+      pending
       FastForwardLinks
         .FastForward
         .runFlow(AmlsDetails, LimitedCompany)

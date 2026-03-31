@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.limited_company
+package uk.gov.hmrc.ui.flows.ukbased.limited_company.application
 
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Blocked
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Blocked
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.*
@@ -41,26 +41,26 @@ object BusinessDetailsFlow:
   // --- Public "journeys" (like ProvideDetailsFlow objects) ---
 
   object HasOnlineAgentAccount:
-    def runFlow(): StubbedSignInData =
+    def runFlow(numberOfDirectors: Option[Int] = None): StubbedSignInData =
       startJourney()
       selectUkBased()
       selectLimitedCompanySetup()
       confirmIfDirectorOfLimitedCompany()
       answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
       proceedToGovernmentGateway()
-      val stubData = stubbedSignIn(CompanyStatus.Ok)
+      val stubData = stubbedSignIn(CompanyStatus.Ok, numberOfDirectors)
       landOnTaskList()
       stubData
 
   object HasNoOnlineAccount:
-    def runFlow(): StubbedSignInData =
+    def runFlow(numberOfDirectors: Option[Int] = None): StubbedSignInData =
       startJourney()
       selectUkBased()
       selectLimitedCompanySetup()
       confirmIfDirectorOfLimitedCompany()
       answerOnlineServicesAccount(OnlineAgentsAccount.NoOnlineAgentAccount)
       proceedToGovernmentGateway()
-      val stubData = stubbedSignIn(CompanyStatus.Ok)
+      val stubData = stubbedSignIn(CompanyStatus.Ok, numberOfDirectors)
       landOnTaskList()
       stubData
 
@@ -112,10 +112,13 @@ object BusinessDetailsFlow:
 
   def proceedToGovernmentGateway(): Unit = GovernmentGatewaySignInPage.assertPageIsDisplayed()
 
-  def stubbedSignIn(status: CompanyStatus): StubbedSignInData =
+  def stubbedSignIn(
+    status: CompanyStatus,
+    numberOfDirectors: Option[Int] = None
+  ): StubbedSignInData =
     status match
-      case CompanyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok)
-      case CompanyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked)
+      case CompanyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok, numberOfDirectors = numberOfDirectors)
+      case CompanyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked, numberOfDirectors = numberOfDirectors)
 
   def landOnTaskList(): Unit = TaskListPage.assertPageIsDisplayed()
 
