@@ -31,10 +31,12 @@ import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.O
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag.False
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.FastForwardFlag.True
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Agent
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.captureBearerTokenAndSession
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.signInAndDataSetupViaStubs
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.fastforwardlinks.FastForwardLinksPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.FastForwardLinksPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.utils.AppConfig
 
@@ -51,25 +53,9 @@ object FastForwardLinks:
     def runFlow(
       applicationProgress: ApplicationProgress,
       businessType: BusinessType
-    ): Unit = {
+    ): StubbedSignInData = {
       startJourneyDirect()
       selectFastForwardLink(applicationProgress, businessType)
-    }
-
-    /** Use when the test needs the bearer token / session ID (e.g. email verification). */
-    def runFlowWithStubData(
-      applicationProgress: ApplicationProgress,
-      businessType: BusinessType
-    ): StubbedSignInData = {
-      startJourneyViaStubs()
-      val stubbedSignInData = signInAndDataSetupViaStubs(
-        Agent,
-        Ok,
-        False,
-        True
-      )
-      selectFastForwardLink(applicationProgress, businessType)
-      stubbedSignInData
     }
 
   def startJourneyViaStubs(): Unit =
@@ -84,48 +70,82 @@ object FastForwardLinks:
     FastForwardLinksPage.open()
     FastForwardLinksPage.assertPageIsDisplayed()
 
+  def logIn(): StubbedSignInData =
+    ShowAgentApplicationPage.assertPageIsDisplayed()
+    ShowAgentApplicationPage.clickLogInLink()
+    val (username, planetId) = ShowAgentApplicationPage.getInternalUserDetails
+    ShowAgentApplicationPage.clickGoToExternalStubLink()
+    val (bearerToken, sessionId) = captureBearerTokenAndSession()
+    ShowAgentApplicationPage.clickGoToTaskListLink()
+    StubbedSignInData(
+      username,
+      planetId,
+      bearerToken,
+      sessionId
+    )
+
   def selectFastForwardLink(
     applicationProgress: ApplicationProgress,
     businessType: BusinessType
-  ): Unit =
+  ): StubbedSignInData =
     applicationProgress match
       case BusinessDetails =>
         FastForwardLinksPage.clickAboutYourBusinessLink(businessType)
+        val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertBusinessDetailsStatus("Completed")
+        stubbedSignInData
       case ContactDetails =>
         FastForwardLinksPage.clickContactDetailsLink(businessType)
+        val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertContactDetailsStatus("Completed")
+        stubbedSignInData
       case AgentDetails =>
         FastForwardLinksPage.clickAgentDetailsLink(businessType)
+        val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
+        stubbedSignInData
       case AmlsDetails =>
         FastForwardLinksPage.clickAmlsDetailsLink(businessType)
+        val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertAmlsDetailsStatus("Completed")
+        stubbedSignInData
       case AgentStandards =>
         FastForwardLinksPage.clickAgentStandardsLink(businessType)
+        val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertHmrcStandardsForAgentsStatus("Completed")
+        stubbedSignInData
       case PartnersAndAdvisors =>
         FastForwardLinksPage.clickPartnersAndAdvisorsLink(businessType)
+        val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertPartnersAndAdvisorsStatus("Completed")
+        stubbedSignInData
       case AskPartnersAndAdvisorsToSignIn =>
         FastForwardLinksPage.clickAskPartnersAndAdvisorsToSignInLink(businessType)
+        val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertAskPartnersAndAdvisorsToSignInStatus("Completed")
+        stubbedSignInData
       case CheckProvidedDetails =>
         FastForwardLinksPage.clickCheckProvidedDetailsLink(businessType)
+        val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertCheckProvidedDetailsStatus("Completed")
+        stubbedSignInData
       case ProveYourIdentity =>
         FastForwardLinksPage.clickProveYourIdentityLink(businessType)
+        val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertProveYourIdentityStatus("Completed")
+        stubbedSignInData
       case Declaration =>
         FastForwardLinksPage.clickDeclarationLink(businessType)
+        val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertDeclarationStatus("Completed")
+        stubbedSignInData

@@ -37,7 +37,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(AgentStandards, GeneralPartnership)
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .singlePartner

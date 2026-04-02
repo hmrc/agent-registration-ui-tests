@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.fastforwardlinks
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.domain.BusinessType

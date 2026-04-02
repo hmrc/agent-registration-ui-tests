@@ -62,7 +62,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(ContactDetails, SoleTrader)
+        .runFlow(ContactDetails, SoleTrader)
 
       AgentDetailsFlow
         .WhenUsingCustomValues
@@ -76,7 +76,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(ContactDetails, SoleTrader)
+        .runFlow(ContactDetails, SoleTrader)
 
       AgentDetailsFlow.startJourney()
       AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom Company"))
@@ -147,7 +147,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(AgentDetails, SoleTrader)
+        .runFlow(AgentDetails, SoleTrader)
 
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.clickOnAgentServicesAccountDetailsLink()
