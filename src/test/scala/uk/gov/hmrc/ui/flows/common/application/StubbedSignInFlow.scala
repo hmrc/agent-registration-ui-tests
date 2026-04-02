@@ -110,7 +110,7 @@ object StubbedSignInFlow:
     GovernmentGatewaySignInPage.clickContinue()
     (username, planetId)
 
-  private def captureBearerTokenAndSession(): (String, String) =
+  def captureBearerTokenAndSession(): (String, String) =
     AgentExternalStubCreateUserPage.assertPageIsDisplayed()
     AgentExternalStubCreateUserPage.selectCurrentUserLink()
     AgentExternalStubUserPage.assertPageIsDisplayed()

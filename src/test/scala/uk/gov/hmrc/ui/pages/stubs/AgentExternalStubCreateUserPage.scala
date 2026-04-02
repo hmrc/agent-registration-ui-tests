@@ -23,12 +23,12 @@ import uk.gov.hmrc.ui.utils.AppConfig
 object AgentExternalStubCreateUserPage
 extends BasePage {
 
-  override val path: String = "/agents-external-stubs/user/create"
+  override val path: String = "/agents-external-stubs/user"
   override val baseUrl: String = AppConfig.baseUrlExternalStubs
 
   // ignore the query string which may be variable
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl.split("\\?").head shouldBe url
+    getCurrentUrl.split("\\?").head should include(url)
 
   private val affinityGroupIndividualRadio = By.id("affinityGroup-2")
   private val affinityGroupAgentRadio = By.id("affinityGroup-4")

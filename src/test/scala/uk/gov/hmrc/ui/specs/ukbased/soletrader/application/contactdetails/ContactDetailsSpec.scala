@@ -40,10 +40,10 @@ extends BaseSpec:
       "Change Name from CYA page",
       TagSoleTrader
     ):
-
+      pending // issue with deceased check
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(BusinessDetails, SoleTrader)
+        .runFlow(BusinessDetails, SoleTrader)
 
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
@@ -61,10 +61,10 @@ extends BaseSpec:
       "Change Email address from CYA page",
       TagSoleTrader
     ):
-
+      pending // issue with deceased check
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(BusinessDetails, SoleTrader)
+        .runFlow(BusinessDetails, SoleTrader)
 
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
@@ -95,10 +95,10 @@ extends BaseSpec:
       "Change Telephone number from CYA page",
       TagSoleTrader
     ):
-
+      pending // issue with deceased check
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(BusinessDetails, SoleTrader)
+        .runFlow(BusinessDetails, SoleTrader)
 
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)

@@ -35,7 +35,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(AgentStandards, SoleTrader)
+        .runFlow(AgentStandards, SoleTrader)
 
       ProvideIndividualDetailsFlow
         .ProvideIndividualDetailsSoleTrader

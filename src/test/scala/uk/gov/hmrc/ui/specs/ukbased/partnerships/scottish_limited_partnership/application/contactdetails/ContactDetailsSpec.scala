@@ -39,7 +39,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(BusinessDetails, ScottishLimitedPartnership)
+        .runFlow(BusinessDetails, ScottishLimitedPartnership)
 
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
@@ -60,7 +60,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(BusinessDetails, ScottishLimitedPartnership)
+        .runFlow(BusinessDetails, ScottishLimitedPartnership)
 
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)
@@ -94,7 +94,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(BusinessDetails, ScottishLimitedPartnership)
+        .runFlow(BusinessDetails, ScottishLimitedPartnership)
 
       ContactDetailsFlow
         .addContactDetailsUntilCyaPage(stubbedSignInData)

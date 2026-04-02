@@ -33,7 +33,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(AgentStandards, ScottishPartnership)
+        .runFlow(AgentStandards, ScottishPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .singlePartner
@@ -51,7 +51,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(AgentStandards, ScottishPartnership)
+        .runFlow(AgentStandards, ScottishPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .FiveOrLessPartners
