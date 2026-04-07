@@ -54,7 +54,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(ContactDetails, ScottishPartnership)
+        .runFlow(ContactDetails, ScottishPartnership)
 
       AgentDetailsFlow
         .WhenUsingCustomValues
@@ -68,7 +68,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(ContactDetails, ScottishPartnership)
+        .runFlow(ContactDetails, ScottishPartnership)
 
       AgentDetailsFlow.startJourney()
       AgentDetailsFlow.selectBusinessName(AgentDetailOption.Custom("My Custom Scottish Partnership"))
@@ -138,7 +138,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlowWithStubData(AgentDetails, ScottishPartnership)
+        .runFlow(AgentDetails, ScottishPartnership)
 
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.clickOnAgentServicesAccountDetailsLink()

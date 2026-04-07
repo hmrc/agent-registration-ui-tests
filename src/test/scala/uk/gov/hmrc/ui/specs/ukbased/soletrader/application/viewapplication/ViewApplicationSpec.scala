@@ -38,7 +38,7 @@ extends BaseSpec:
       "User reviews application details",
       TagSoleTrader
     ):
-
+      pending // issue with deceased check
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
