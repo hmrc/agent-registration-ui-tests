@@ -16,9 +16,15 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.limited_company.application.businessdetails
 
+import uk.gov.hmrc.ui.domain.BusinessType.LimitedCompany
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.BusinessDetails
 import uk.gov.hmrc.ui.flows.ukbased.limited_company.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CannotRegisterPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.IsYourAgentBusinessBasedInTheUKPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.StartAgainConfirmationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class BusinessDetailsSpec
@@ -46,3 +52,29 @@ extends BaseSpec:
         .runFlow()
       CannotRegisterPage.assertPageIsDisplayed()
       CannotRegisterPage.assertHeaderText("We cannot create an account for this company")
+
+  Scenario(
+    "An Applicant completes GRS journey and reviews Business details via enhanced CYA",
+    TagLimitedCompany
+  ):
+
+    FastForwardLinks
+      .FastForward
+      .runFlow(BusinessDetails, LimitedCompany)
+
+    TaskListPage.assertPageIsDisplayed()
+    TaskListPage.assertBusinessDetailsStatus("Completed")
+    TaskListPage.clickOnAboutYourBusinessLink()
+
+    CheckYourAnswersPage.assertPageIsDisplayed()
+    CheckYourAnswersPage.assertChangeLink("Business details")
+    CheckYourAnswersPage.assertSummaryRow("UK-based agent", "Yes")
+    CheckYourAnswersPage.assertSummaryRow("Business type", "Limited company")
+    CheckYourAnswersPage.assertSummaryRow("Are you a director of the limited company?", "No, but I’m authorised by them to set up this account")
+    CheckYourAnswersPage.assertSummaryRow("Company name", "Test Company Name")
+    CheckYourAnswersPage.assertSummaryRow("Unique taxpayer reference", "2202108031")
+    CheckYourAnswersPage.clickOnAssertChangeLink("Business details")
+
+    StartAgainConfirmationPage.assertPageIsDisplayed()
+    StartAgainConfirmationPage.clickContinue()
+    IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()

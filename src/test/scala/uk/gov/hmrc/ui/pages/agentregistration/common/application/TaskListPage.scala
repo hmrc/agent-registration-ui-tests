@@ -45,6 +45,7 @@ extends BasePage:
   def assertAskDirectorsAndTaxAdvisorsToSignInStatus(expectedStatus: String): Unit = getText(askDirectorsAndTaxAdvisorsToSignInStatus) shouldBe expectedStatus
   def assertDirectorTaxAdvisorInformationStatus(expectedStatus: String): Unit = getText(directorTaxAdvisorInformationStatus) shouldBe expectedStatus
   // Click actions
+  def clickOnAboutYourBusinessLink(): Unit = click(yourBusinessLink)
   def clickOnApplicantContactDetailsLink(): Unit = click(contactDetailsLink)
   def clickOnAgentServicesAccountDetailsLink(): Unit = click(agentServicesAccountDetailsLink)
   def clickOnAmlsDetailsLink(): Unit = click(amlsDetailsLink)
@@ -61,6 +62,7 @@ extends BasePage:
   def clickAskDirectorsAndOtherAdvisorsToSignInLink(): Unit = click(askDirectorsAndOtherAdvisorsToSignInLink)
 
   // Link locators
+  private val yourBusinessLink = By.cssSelector("a[aria-describedby='businessDetails-1-status']")
   private val contactDetailsLink = By.cssSelector("a[aria-describedby='contact-1-status']")
   private val agentServicesAccountDetailsLink = By.cssSelector("a[aria-describedby='accountDetails-1-status']")
   private val amlsDetailsLink = By.cssSelector("a[aria-describedby='hmrcStandards-1-status']")
