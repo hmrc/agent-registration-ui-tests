@@ -23,7 +23,7 @@ import uk.gov.hmrc.ui.utils.AppConfig
 object ApplicationSubmittedPage
 extends BasePage:
 
-  override val path: String = "/agent-registration/application-submitted"
+  override val path: String = "/agent-registration/application-status"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
