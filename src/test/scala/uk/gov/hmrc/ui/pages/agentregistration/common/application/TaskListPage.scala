@@ -42,6 +42,7 @@ extends BasePage:
   def assertCheckProvidedDetailsStatus(expectedStatus: String): Unit = getText(checkProvidedDetailsStatus) shouldBe expectedStatus
   def assertDeclarationStatus(expectedStatus: String): Unit = getText(declarationStatus) shouldBe expectedStatus
   def assertPartnerTaxAdvisorInformationStatus(expectedStatus: String): Unit = getText(partnerTaxAdvisorInformationStatus)
+  def assertAskPartnersAndTaxAdvisorsToSignInStatus(expectedStatus: String): Unit = getText(askPartnersAndTaxAdvisorsToSignInStatus) shouldBe expectedStatus
   def assertAskDirectorsAndTaxAdvisorsToSignInStatus(expectedStatus: String): Unit = getText(askDirectorsAndTaxAdvisorsToSignInStatus) shouldBe expectedStatus
   def assertDirectorTaxAdvisorInformationStatus(expectedStatus: String): Unit = getText(directorTaxAdvisorInformationStatus) shouldBe expectedStatus
   // Click actions
@@ -60,6 +61,7 @@ extends BasePage:
   def clickSignOutLink(): Unit = click(signOutLink)
   def clickOnDirectorTaxAdvisorInformationLink(): Unit = click(directorTaxAdvisorInformationLink)
   def clickAskDirectorsAndOtherAdvisorsToSignInLink(): Unit = click(askDirectorsAndOtherAdvisorsToSignInLink)
+  def clickAskPartnersAndOtherAdvisorsToSignInLink(): Unit = click(askPartnersAndOtherAdvisorsToSignInLink)
 
   // Link locators
   private val yourBusinessLink = By.cssSelector("a[aria-describedby='businessDetails-1-status']")
@@ -77,6 +79,7 @@ extends BasePage:
   private val signOutLink = By.linkText("Sign out")
   private val directorTaxAdvisorInformationLink = By.cssSelector("a[aria-describedby='lists-1-status']")
   private val askDirectorsAndOtherAdvisorsToSignInLink = By.cssSelector("a[aria-describedby='lists-2-status']")
+  private val askPartnersAndOtherAdvisorsToSignInLink = By.cssSelector("a[aria-describedby='lists-2-status']")
   // Status locators
   private val contactDetailsStatus = By.id("contact-1-status")
   private val businessDetailsStatus = By.id("businessDetails-1-status")
@@ -90,5 +93,6 @@ extends BasePage:
   private val checkProvidedDetailsStatus = By.id("lists-3-status")
   private val declarationStatus = By.id("declaration-1-status")
   private val partnerTaxAdvisorInformationStatus = By.id("lists-1-status")
+  private val askPartnersAndTaxAdvisorsToSignInStatus = By.id("lists-2-status")
   private val askDirectorsAndTaxAdvisorsToSignInStatus = By.id("lists-2-status")
   private val directorTaxAdvisorInformationStatus = By.id("lists-1-status")
