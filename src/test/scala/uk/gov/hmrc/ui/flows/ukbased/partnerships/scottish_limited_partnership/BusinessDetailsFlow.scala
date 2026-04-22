@@ -124,8 +124,8 @@ object BusinessDetailsFlow:
     numberOfPartners: Option[Int] = None
   ): StubbedSignInData =
     status match
-      case AgencyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok, numberOfPartners = numberOfPartners)
-      case AgencyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked, numberOfPartners = numberOfPartners)
+      case AgencyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok)
+      case AgencyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked)
 
   def landOnTaskList(): Unit = TaskListPage.assertPageIsDisplayed()
 

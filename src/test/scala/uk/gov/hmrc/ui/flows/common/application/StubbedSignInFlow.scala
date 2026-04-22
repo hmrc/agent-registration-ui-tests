@@ -86,7 +86,6 @@ object StubbedSignInFlow:
     deceasedFlag: DeceasedFlag = False,
     directorName: Option[String] = None,
     numberOfDirectors: Option[Int] = None,
-    numberOfPartners: Option[Int] = None,
     directorNames: Option[List[String]] = None
   ): StubbedSignInData = signInAndDataSetupViaStubs(
     Agent,
