@@ -21,7 +21,6 @@ import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.pages.PageObject.click
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersKeyIndividualsPage.getText
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersKeyIndividualsPage.include
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckYourAnswersKeyIndividualsPage.warningText
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object YouHaveAddedDirectorCheckYourAnswerPage

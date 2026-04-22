@@ -16,12 +16,11 @@
 
 package uk.gov.hmrc.ui.flows.common.application
 
-import StubbedSignInFlow.CompanyStatus.Ok
-import StubbedSignInFlow.DeceasedFlag.False
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag.False
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Agent
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Individual
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.IndividualWithUtr
-import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow.NumberOfPartners
 import uk.gov.hmrc.ui.pages.*
 import uk.gov.hmrc.ui.pages.stubs.*
 

@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.application.numberofpartners
 
-import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
-import uk.gov.hmrc.ui.domain.BusinessType.ScottishLimitedPartnership
 import uk.gov.hmrc.ui.domain.BusinessType.ScottishPartnership
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards

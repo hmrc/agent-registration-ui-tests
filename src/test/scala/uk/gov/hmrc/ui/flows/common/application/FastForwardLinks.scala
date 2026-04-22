@@ -17,22 +17,8 @@
 package uk.gov.hmrc.ui.flows.common.application
 
 import uk.gov.hmrc.ui.domain.BusinessType
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AmlsDetails
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AskPartnersAndAdvisorsToSignIn
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.BusinessDetails
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.CheckProvidedDetails
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.PartnersAndAdvisors
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ProveYourIdentity
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag.False
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.FastForwardFlag.True
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Agent
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.*
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.captureBearerTokenAndSession
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.signInAndDataSetupViaStubs
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.FastForwardLinksPage

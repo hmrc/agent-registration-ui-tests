@@ -26,7 +26,6 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.IsYourAgentBusinessBasedInTheUKPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.StartAgainConfirmationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.Tags
 
 class BusinessDetailsSpec
 extends BaseSpec:

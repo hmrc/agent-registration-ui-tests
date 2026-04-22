@@ -16,10 +16,8 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails
 
-import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
-import uk.gov.hmrc.ui.utils.MongoHelper
 
 object StartAgainConfirmationPage
 extends BasePage:
