@@ -24,4 +24,3 @@ extends BaseCheckYourAnswersPage:
 
   override val path: String = "/agent-registration/apply/about-your-business/check-your-answers"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
-

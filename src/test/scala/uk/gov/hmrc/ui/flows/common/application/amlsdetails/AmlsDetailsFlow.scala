@@ -50,7 +50,6 @@ object AmlsDetailsFlow:
       startJourney()
       enterSupervisoryBody(AmlsDetailsOption.NonHmrcSupervisoryBody)
       enterRegistrationNumber()
-      enterSupervisionExpiryDate()
       uploadSupervisionEvidence(evidenceFile)
       checkYourAnswersExpanded()
 
@@ -77,13 +76,6 @@ object AmlsDetailsFlow:
     WhatRegistrationNumberPage.enterRegistrationNumber()
     WhatRegistrationNumberPage.clickContinue()
 
-  def enterSupervisionExpiryDate(): Unit =
-    WhenDoesSupervisionRunOutPage.assertPageIsDisplayed()
-    WhenDoesSupervisionRunOutPage.enterDay()
-    WhenDoesSupervisionRunOutPage.enterMonth()
-    WhenDoesSupervisionRunOutPage.enterYear()
-    WhenDoesSupervisionRunOutPage.clickContinue()
-
   def uploadSupervisionEvidence(fileName: String = evidenceFile): Unit =
     EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
     EvidenceOfAmlSupervisionPage.uploadFileFromResources(fileName)
@@ -101,10 +93,5 @@ object AmlsDetailsFlow:
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Supervisory body", nonHmrcSupervisoryBody)
     CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000123456")
-    CheckYourAnswersPage.assertSummaryRow("Supervision expiry date", formattedDate())
     CheckYourAnswersPage.assertSummaryRow("Evidence of anti-money laundering supervision", "Aml-Evidence.docx")
     CheckYourAnswersPage.clickContinue()
-
-  def formattedDate(): String = nextYearDate.format(
-    DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK)
-  )

@@ -22,7 +22,7 @@ import uk.gov.hmrc.ui.utils.AppConfig
 import uk.gov.hmrc.ui.utils.MongoHelper
 
 object StartAgainConfirmationPage
-  extends BasePage:
+extends BasePage:
 
   override val path: String = "/agent-registration/apply/about-your-business/start-again"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -30,5 +30,3 @@ object StartAgainConfirmationPage
   inline def assertPageIsDisplayed(): Unit = eventually {
     getCurrentUrl shouldBe url
   }
-
-
