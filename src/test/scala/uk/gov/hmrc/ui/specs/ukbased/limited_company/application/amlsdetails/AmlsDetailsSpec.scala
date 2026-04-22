@@ -106,7 +106,6 @@ extends BaseSpec:
       WhatSupervisoryBodyPage.clickContinue()
 
       AmlsDetailsFlow.enterRegistrationNumber()
-      AmlsDetailsFlow.enterSupervisionExpiryDate()
       AmlsDetailsFlow.uploadSupervisionEvidence()
       AmlsDetailsFlow.checkYourAnswersExpanded()
 
@@ -122,7 +121,6 @@ extends BaseSpec:
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
       AmlsDetailsFlow.enterRegistrationNumber()
-      AmlsDetailsFlow.enterSupervisionExpiryDate()
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-plus-5mb.docx")
@@ -141,7 +139,6 @@ extends BaseSpec:
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
       AmlsDetailsFlow.enterRegistrationNumber()
-      AmlsDetailsFlow.enterSupervisionExpiryDate()
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Virus.txt")
@@ -160,7 +157,6 @@ extends BaseSpec:
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
       AmlsDetailsFlow.enterRegistrationNumber()
-      AmlsDetailsFlow.enterSupervisionExpiryDate()
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Invalid-ext..zip")
