@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership
 
+import uk.gov.hmrc.ui.utils.RichMatchers.shouldBe
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.PartnersAndOtherTaxAdvisersCheckYourAnswerPage.clickChangeOtherIndividualTaxAdvisers
@@ -69,11 +70,10 @@ object PartnersTaxAdvisorInformationFlow:
     OtherRelevantIndividualPage.enterOtherRelevantIndividualName(name)
     OtherRelevantIndividualPage.clickContinue()
 
-  // Capture first N partner names from the page
   def captureFirstNPartnerNamesAndSelectCorrect(n: Int): List[String] =
     CheckThisListOfPartnersPage.assertPageIsDisplayed()
     val partnerNames = CheckThisListOfPartnersPage.getFirstNPartnerNames(n)
-    println(s"First $n director names captured: ${partnerNames.mkString(", ")}")
+    partnerNames.length shouldBe n
     CheckThisListOfPartnersPage.selectYes()
     CheckThisListOfPartnersPage.clickContinue()
     partnerNames
@@ -81,7 +81,7 @@ object PartnersTaxAdvisorInformationFlow:
   def checkYourAnswersWithoutRelevantAdviserNames(
     companiesHouseListOfPartnersCorrect: String,
     otherRelevantTaxAdvisers: String
-  ): Unit = {
+  ): Unit =
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Companies House list of partners correct", companiesHouseListOfPartnersCorrect)
     CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", otherRelevantTaxAdvisers)
@@ -90,7 +90,6 @@ object PartnersTaxAdvisorInformationFlow:
     TaskListPage.assertPartnerTaxAdvisorInformationStatus("Completed")
     TaskListPage.assertAskPartnersAndTaxAdvisorsToSignInStatus("Incomplete")
     TaskListPage.assertCheckProvidedDetailsStatus("Cannot start yet")
-  }
 
   object partnersAndOtherTaxAdvisers:
 
@@ -165,7 +164,8 @@ object PartnersTaxAdvisorInformationFlow:
       selectNoOtherRelevantTaxAdvisers()
       checkYourAnswersPartnersAndOtherTaxAdvisers()
 
-  object multiplePartners: // flow where there are two Partners and no other relevant tax advisers - captures the names of the partners to be used in later flows
+  /** Flow where there are two Partners and no other relevant tax advisers - captures the names of the partners to be used in later flows */
+  object multiplePartners:
 
     def runFlow(): List[String] =
       startJourney()

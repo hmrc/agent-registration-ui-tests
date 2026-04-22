@@ -60,8 +60,6 @@ extends BaseSpec:
       // Get the share link once
       val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
 
-      println(s"Share link: $shareLink")
-
       // Sign in first partner (partial - more partner to come)
       ProvidePartnersDetailsFlow
         .ProvidePartnersDetails

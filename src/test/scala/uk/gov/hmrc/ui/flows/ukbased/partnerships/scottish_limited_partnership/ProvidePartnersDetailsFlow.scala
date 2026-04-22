@@ -55,7 +55,7 @@ object ProvidePartnersDetailsFlow:
       agreeStandards()
       checkYourAnswers()
       finishAndSignOut()
-      PageObject.get("http://localhost:22201/agent-registration/apply/task-list")
+      TaskListPage.open()
       returnToTasklist(stubData)
       progress match
         case listProgress.complete => checkPartnersListProgressComplete()
@@ -77,7 +77,6 @@ object ProvidePartnersDetailsFlow:
     planet: String,
     partnerNames: Option[String] = None
   ): (String, String) =
-    println(s"🔍 signIn called with partnerNames: $partnerNames")
     SignInAndConfirmDetailsPage.clickContinue()
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
     GovernmentGatewaySignInPage.enterRandomUsername()
@@ -86,15 +85,14 @@ object ProvidePartnersDetailsFlow:
     AgentExternalStubCreateUserPage.assertPageIsDisplayed()
     AgentExternalStubCreateUserPage.selectCurrentUserLink()
     AgentExternalStubUserPage.assertPageIsDisplayed()
-    val bearerToken = AgentExternalStubUserPage.bearerToken // capture bearer token to use in email verification call
-    val sessionId = AgentExternalStubUserPage.sessionId // capture sessionId to use in email verification call
+    val bearerToken = AgentExternalStubUserPage.bearerToken
+    val sessionId = AgentExternalStubUserPage.sessionId
     AgentExternalStubUserPage.clickBrowserBack()
     AgentExternalStubCreateUserPage.assertPageIsDisplayed()
     AgentExternalStubCreateUserPage.selectAffinityGroupIndividual()
     AgentExternalStubCreateUserPage.selectEnrolment("HMRC-PT")
     AgentExternalStubCreateUserPage.clickContinue()
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
-    // Use captured partner name if provided, otherwise use default
     val nameToUse = partnerNames.getOrElse("Beverly Hills")
     AgentExternalStubConfigureUserPage.enterName(nameToUse)
     AgentExternalStubConfigureUserPage.clickContinue()
@@ -115,11 +113,9 @@ object ProvidePartnersDetailsFlow:
     ProvideDetailsEmailAddressPage.enterEmailAddress()
     ProvideDetailsEmailAddressPage.clickContinue()
 
-    // get email verification code from test only page
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
     EmailVerificationTestOnlyPage.clickContinue()
 
-    // confirm email by providing confirmation code
     val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
     ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
     ProvideDetailsConfirmEmailPage.clickContinue()
@@ -171,14 +167,12 @@ object ProvidePartnersDetailsFlow:
         CheckWhoProvidedDetailsPage.assertPageIsDisplayed()
         CheckWhoProvidedDetailsPage.detailsProvided(names(0)) shouldBe "Yes"
         CheckWhoProvidedDetailsPage.detailsProvided(names(1)) shouldBe "No"
-        // Navigate back to task list for next partner
-        PageObject.get("http://localhost:22201/agent-registration/apply/task-list")
+        TaskListPage.open()
         TaskListPage.assertPageIsDisplayed()
       case _ =>
         TaskListPage.clickCheckProvidedDetailsLink()
         CheckWhoProvidedDetailsPage.assertPageIsDisplayed()
         CheckWhoProvidedDetailsPage.detailsProvided("Steve Austin") shouldBe "Yes"
         CheckWhoProvidedDetailsPage.detailsProvided("Beverly Hills") shouldBe "Yes"
-        // Navigate back to task list for next partner
-        PageObject.get("http://localhost:22201/agent-registration/apply/task-list")
+        TaskListPage.open()
         TaskListPage.assertPageIsDisplayed()

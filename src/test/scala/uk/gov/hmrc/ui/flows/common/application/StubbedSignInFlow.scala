@@ -179,7 +179,6 @@ object StubbedSignInFlow:
       case (CompanyStatus.Ok, None) => ()
       case (CompanyStatus.Blocked, _) => GrsDataSetupPage.enterCompanyNumber()
 
-    println(s"DEBUG: numberOfDirectors = $numberOfDirectors")
     deceasedFlag match
       case DeceasedFlag.True => GrsDataSetupPage.checkDeceasedCheckbox()
 

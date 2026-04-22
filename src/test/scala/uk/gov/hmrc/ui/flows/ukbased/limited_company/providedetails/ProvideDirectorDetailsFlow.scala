@@ -55,7 +55,7 @@ object ProvideDirectorDetailsFlow:
       agreeStandards()
       checkYourAnswers()
       finishAndSignOut()
-      PageObject.get("http://localhost:22201/agent-registration/apply/task-list")
+      TaskListPage.open()
       returnToTasklist(stubData)
       progress match
         case listProgress.complete => checkDirectorListProgressComplete()
@@ -77,7 +77,6 @@ object ProvideDirectorDetailsFlow:
     planet: String,
     directorNames: Option[String] = None
   ): (String, String) =
-    println(s"🔍 signIn called with directorName: $directorNames")
     SignInAndConfirmDetailsPage.clickContinue()
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
     GovernmentGatewaySignInPage.enterRandomUsername()
@@ -172,7 +171,7 @@ object ProvideDirectorDetailsFlow:
         CheckWhoProvidedDetailsPage.detailsProvided(names(0)) shouldBe "Yes"
         CheckWhoProvidedDetailsPage.detailsProvided(names(1)) shouldBe "No"
         // Navigate back to task list for next director
-        PageObject.get("http://localhost:22201/agent-registration/apply/task-list")
+        TaskListPage.open()
         TaskListPage.assertPageIsDisplayed()
       case _ =>
         TaskListPage.clickCheckProvidedDetailsLink()
@@ -180,5 +179,5 @@ object ProvideDirectorDetailsFlow:
         CheckWhoProvidedDetailsPage.detailsProvided("Steve Austin") shouldBe "Yes"
         CheckWhoProvidedDetailsPage.detailsProvided("Beverly Hills") shouldBe "Yes"
         // Navigate back to task list for next director
-        PageObject.get("http://localhost:22201/agent-registration/apply/task-list")
+        TaskListPage.open()
         TaskListPage.assertPageIsDisplayed()

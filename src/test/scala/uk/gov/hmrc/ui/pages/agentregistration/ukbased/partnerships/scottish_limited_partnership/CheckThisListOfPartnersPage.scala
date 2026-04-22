@@ -35,19 +35,10 @@ extends BasePage:
   def selectYes(): Unit = click(yesRadio)
   def selectNo(): Unit = click(noRadio)
 
-  // Capture partner names from the list displayed on the page
   def getPartnerNames: List[String] =
     val partnerNameLocators = By.cssSelector("#main-content > div > div > ul > li")
     findElementsBy(partnerNameLocators).map(_.getText.trim).toList
 
-  // Get the first partner name (most common use case)
-  def getFirstPartnerName: String =
-    val names = getPartnerNames
-    if names.nonEmpty then names.head
-    else throw new NoSuchElementException("No partner names found on the page")
+  def getFirstPartnerName: Option[String] = getPartnerNames.headOption
 
-  // Get the first N partner names
-  def getFirstNPartnerNames(n: Int): List[String] =
-    val names = getPartnerNames
-    if n > names.length then throw new IndexOutOfBoundsException(s"Requested $n partners but only ${names.length} available")
-    names.take(n)
+  def getFirstNPartnerNames(n: Int): List[String] = getPartnerNames.take(n)

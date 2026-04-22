@@ -18,6 +18,7 @@ package uk.gov.hmrc.ui.pages.agentregistration.common.application
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object TaskListPage
@@ -25,6 +26,8 @@ extends BasePage:
 
   override val path: String = "/agent-registration/apply/task-list"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+
+  def open(): Unit = PageObject.get(url)
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url

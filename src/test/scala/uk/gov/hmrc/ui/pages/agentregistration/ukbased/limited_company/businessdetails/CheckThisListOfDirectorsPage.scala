@@ -39,19 +39,10 @@ extends BasePage:
 
   def enterExactNumberOfDirectors(n: String): Unit = sendKeys(exactNumberField, n)
 
-  // Capture director names from the list displayed on the page
-  def getDirectorNames(): List[String] =
+  def getDirectorNames: List[String] =
     val directorNameLocators = By.cssSelector("#main-content > div > div > ul > li")
     findElementsBy(directorNameLocators).map(_.getText.trim).toList
 
-  // Get the first director name (most common use case)
-  def getFirstDirectorName(): String =
-    val names = getDirectorNames()
-    if names.nonEmpty then names.head
-    else throw new NoSuchElementException("No director names found on the page")
+  def getFirstDirectorName: Option[String] = getDirectorNames.headOption
 
-  // Get the first N director names
-  def getFirstNDirectorNames(n: Int): List[String] =
-    val names = getDirectorNames()
-    if n > names.length then throw new IndexOutOfBoundsException(s"Requested $n directors but only ${names.length} available")
-    names.take(n)
+  def getFirstNDirectorNames(n: Int): List[String] = getDirectorNames.take(n)
