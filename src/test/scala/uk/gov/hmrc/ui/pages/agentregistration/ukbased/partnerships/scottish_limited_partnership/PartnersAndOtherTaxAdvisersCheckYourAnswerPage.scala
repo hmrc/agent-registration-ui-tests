@@ -32,7 +32,12 @@ extends BasePage:
 
   private def changeCompaniesHouseListOfPartnersCorrectLink: By = By.xpath("a[href='/agent-registration/apply/list-details/companies-house-officer']")
   private def changeOtherRelevantTaxAdvisersLink: By = By.cssSelector("a[href='/agent-registration/apply/list-details/how-many-other-individuals']")
+  private def changeOtherIndividualTaxAdvisersLink: By = By.cssSelector(
+    "a[href='/agent-registration/apply/list-details/other-relevant-individuals/check-your-answers']"
+  )
 
   def clickChangeCompaniesHouseListOfPartnersCorrect(): Unit = click(changeCompaniesHouseListOfPartnersCorrectLink)
 
   def clickChangeOtherRelevantTaxAdvisers(): Unit = click(changeOtherRelevantTaxAdvisersLink)
+
+  def clickChangeOtherIndividualTaxAdvisers(): Unit = click(changeOtherIndividualTaxAdvisersLink)

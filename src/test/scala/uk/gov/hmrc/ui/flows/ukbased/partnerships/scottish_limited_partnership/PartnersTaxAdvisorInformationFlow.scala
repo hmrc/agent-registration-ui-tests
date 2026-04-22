@@ -18,6 +18,7 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership
 
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.PartnersAndOtherTaxAdvisersCheckYourAnswerPage.clickChangeOtherIndividualTaxAdvisers
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.PartnersAndOtherTaxAdvisersCheckYourAnswerPage.clickChangeOtherRelevantTaxAdvisers
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.CheckThisListOfPartnersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.PartnersAndOtherTaxAdvisersCheckYourAnswerPage
@@ -140,6 +141,27 @@ object PartnersTaxAdvisorInformationFlow:
       checkYourAnswersPartnersAndOtherTaxAdvisers()
       TaskListPage.clickPartnersAndAdvisorsStatusLink()
       clickChangeOtherRelevantTaxAdvisers()
+      selectNoOtherRelevantTaxAdvisers()
+      checkYourAnswersPartnersAndOtherTaxAdvisers()
+
+  object removeOtherRelevantTaxAdvisers:
+
+    def runFlowWithRemoveOtherRelevantTaxAdvisers(): Unit =
+      startJourney()
+      selectListOfPartnersCorrect()
+      selectYesOtherRelevantTaxAdvisers()
+      enterFullNameOfPerson("Bruce Wayne")
+      CheckYourAnswersOtherIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersOtherIndividualsPage.selectNo()
+      HasOtherRelevantTaxAdvisersPage.clickContinue()
+      checkYourAnswersPartnersAndOtherTaxAdvisers()
+      TaskListPage.clickPartnersAndAdvisorsStatusLink()
+      clickChangeOtherIndividualTaxAdvisers()
+      // Remove the existing other individual tax adviser
+      CheckYourAnswersOtherIndividualsPage.assertPageIsDisplayed()
+      CheckYourAnswersOtherIndividualsPage.removePartner("Bruce Wayne")
+      CheckYourAnswersOtherIndividualsPage.selectRemoveYes()
+      HasOtherRelevantTaxAdvisersPage.clickContinue()
       selectNoOtherRelevantTaxAdvisers()
       checkYourAnswersPartnersAndOtherTaxAdvisers()
 

@@ -136,3 +136,30 @@ extends BaseSpec:
       PartnersTaxAdvisorInformationFlow
         .changeNoOtherRelevantTaxAdvisers
         .runFlowWithChangeNoOtherRelevantTaxAdvisers()
+
+  Scenario(
+    "Remove other relevant tax advisers from check your answers page",
+    TagScottishLimitedPartnership
+  ):
+    val stubbedSignInData = BusinessDetailsFlow
+      .HasNoOnlineAccount
+      .runFlow()
+
+    ContactDetailsFlow
+      .runFlow(stubbedSignInData)
+
+    AgentDetailsFlow
+      .WhenUsingProvidedOptions
+      .runFlow(ScottishLimitedPartnership)
+
+    AmlsDetailsFlow
+      .WhenHmrcAreSupervisoryBody
+      .runFlow()
+
+    AgentStandardsFlow
+      .AgreeToMeetStandards
+      .runFlow(ScottishLimitedPartnership)
+
+    PartnersTaxAdvisorInformationFlow
+      .removeOtherRelevantTaxAdvisers
+      .runFlowWithRemoveOtherRelevantTaxAdvisers()
