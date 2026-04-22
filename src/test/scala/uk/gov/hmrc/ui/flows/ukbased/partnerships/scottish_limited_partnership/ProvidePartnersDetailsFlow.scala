@@ -21,7 +21,10 @@ import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.stubs.{AgentExternalStubConfigureUserPage, AgentExternalStubCreateUserPage, AgentExternalStubUserPage, GovernmentGatewaySignInPage}
+import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage
+import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubCreateUserPage
+import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubUserPage
+import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 import uk.gov.hmrc.ui.utils.RichMatchers.shouldBe
 

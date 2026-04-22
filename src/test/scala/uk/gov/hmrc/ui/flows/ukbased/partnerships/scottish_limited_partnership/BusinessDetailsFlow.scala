@@ -120,9 +120,9 @@ object BusinessDetailsFlow:
   def proceedToGovernmentGateway(): Unit = GovernmentGatewaySignInPage.assertPageIsDisplayed()
 
   def stubbedSignIn(
-   status: AgencyStatus, 
-   numberOfPartners: Option[Int] = None
-   ): StubbedSignInData =
+    status: AgencyStatus,
+    numberOfPartners: Option[Int] = None
+  ): StubbedSignInData =
     status match
       case AgencyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok, numberOfPartners = numberOfPartners)
       case AgencyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked, numberOfPartners = numberOfPartners)

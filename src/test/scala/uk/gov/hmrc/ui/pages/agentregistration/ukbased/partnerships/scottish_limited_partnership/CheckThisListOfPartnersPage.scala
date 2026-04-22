@@ -20,8 +20,8 @@ import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object CheckThisListOfPartnersPage 
-  extends BasePage:
+object CheckThisListOfPartnersPage
+extends BasePage:
 
   override val path: String = "/agent-registration/apply/list-details/companies-house-officers"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -29,7 +29,7 @@ object CheckThisListOfPartnersPage
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  private val yesRadio = By.id("isCompaniesHouseOfficersListCorrect") 
+  private val yesRadio = By.id("isCompaniesHouseOfficersListCorrect")
   private val noRadio = By.id("isCompaniesHouseOfficersListCorrect-2")
 
   def selectYes(): Unit = click(yesRadio)

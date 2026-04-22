@@ -19,7 +19,8 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.PartnersAndOtherTaxAdvisersCheckYourAnswerPage.clickChangeOtherRelevantTaxAdvisers
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.{CheckThisListOfPartnersPage, PartnersAndOtherTaxAdvisersCheckYourAnswerPage}
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.CheckThisListOfPartnersPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.PartnersAndOtherTaxAdvisersCheckYourAnswerPage
 
 object PartnersTaxAdvisorInformationFlow:
 
@@ -109,7 +110,6 @@ object PartnersTaxAdvisorInformationFlow:
       CheckYourAnswersOtherIndividualsPage.selectNo()
       HasOtherRelevantTaxAdvisersPage.clickContinue()
       checkYourAnswersPartnersAndOtherTaxAdvisers()
-
 
   object anyMoreTaxAdvisers:
 
