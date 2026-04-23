@@ -29,6 +29,9 @@ extends BaseCheckYourAnswersPage:
   private val yesRadio = By.id("addOtherRelevantIndividuals")
   private val noRadio = By.id("addOtherRelevantIndividuals-2")
 
+  private val removeYesRadio = By.id("removeKeyIndividual")
+  private val removeNoRadio = By.id("removeKeyIndividual-2")
+
   private def removeLinkFor(name: String): By = By.xpath(
     s"""//dt[contains(@class,'govuk-summary-list__key') and contains(normalize-space(.), "$name")]
        |/ancestor::div[contains(@class,'govuk-summary-list__row')][1]
@@ -43,6 +46,9 @@ extends BaseCheckYourAnswersPage:
 
   def selectYes(): Unit = click(yesRadio)
   def selectNo(): Unit = click(noRadio)
+
+  def selectRemoveYes(): Unit = click(removeYesRadio)
+  def selectRemoveNo(): Unit = click(removeNoRadio)
 
   def removePartner(name: String): Unit = click(removeLinkFor(name))
   def changePartnerName(name: String): Unit = click(changeLinkFor(name))

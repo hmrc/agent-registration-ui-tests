@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.ui.flows.common.application
 
-import StubbedSignInFlow.CompanyStatus.Ok
-import StubbedSignInFlow.DeceasedFlag.False
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag.False
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Agent
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Individual
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.IndividualWithUtr
@@ -179,7 +179,6 @@ object StubbedSignInFlow:
       case (CompanyStatus.Ok, None) => ()
       case (CompanyStatus.Blocked, _) => GrsDataSetupPage.enterCompanyNumber()
 
-    println(s"DEBUG: numberOfDirectors = $numberOfDirectors")
     deceasedFlag match
       case DeceasedFlag.True => GrsDataSetupPage.checkDeceasedCheckbox()
 

@@ -53,7 +53,7 @@ object BusinessDetailsFlow:
       stubData
 
   object HasNoOnlineAccount:
-    def runFlow(): StubbedSignInData =
+    def runFlow(numberOfPartners: Option[Int] = None): StubbedSignInData =
       startJourney()
       selectUkBased()
       selectPartnershipBusinessSetup()
@@ -61,7 +61,7 @@ object BusinessDetailsFlow:
       selectAuthorisedUserRole()
       answerOnlineServicesAccount(OnlineAgentsAccount.NoOnlineAgentAccount)
       proceedToGovernmentGateway()
-      val stubData = stubbedSignIn(AgencyStatus.Ok)
+      val stubData = stubbedSignIn(AgencyStatus.Ok, numberOfPartners)
       landOnTaskList()
       stubData
 
@@ -119,7 +119,10 @@ object BusinessDetailsFlow:
 
   def proceedToGovernmentGateway(): Unit = GovernmentGatewaySignInPage.assertPageIsDisplayed()
 
-  def stubbedSignIn(status: AgencyStatus): StubbedSignInData =
+  def stubbedSignIn(
+    status: AgencyStatus,
+    numberOfPartners: Option[Int] = None
+  ): StubbedSignInData =
     status match
       case AgencyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok)
       case AgencyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked)

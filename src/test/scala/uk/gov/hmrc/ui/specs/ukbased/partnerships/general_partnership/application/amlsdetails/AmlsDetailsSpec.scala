@@ -138,7 +138,6 @@ extends BaseSpec:
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
       AmlsDetailsFlow.enterRegistrationNumber()
-      
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Virus.txt")
@@ -157,7 +156,6 @@ extends BaseSpec:
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
       AmlsDetailsFlow.enterRegistrationNumber()
-      
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Invalid-ext..zip")

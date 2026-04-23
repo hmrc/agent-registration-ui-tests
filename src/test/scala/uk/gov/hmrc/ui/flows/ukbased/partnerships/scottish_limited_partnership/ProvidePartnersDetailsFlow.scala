@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.flows.ukbased.limited_company.providedetails
+package uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership
 
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.PageObject
@@ -28,25 +28,25 @@ import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 import uk.gov.hmrc.ui.utils.RichMatchers.shouldBe
 
-object ProvideDirectorDetailsFlow:
+object ProvidePartnersDetailsFlow:
 
   enum listProgress:
 
     case complete
     case partial
 
-  object ProvideDirectorDetails:
+  object ProvidePartnersDetails:
 
     def runFlowWithLink(
       stubData: StubbedSignInData,
       link: String,
       progress: listProgress,
-      directorName: Option[String] = None,
-      allDirectorNames: Option[List[String]] = None
+      partnersName: Option[String] = None,
+      allPartnersNames: Option[List[String]] = None
     ): Unit =
       signOut()
       PageObject.get(link)
-      val (bearerToken, sessionId) = signIn(stubData.planetId, directorName)
+      val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
       confirmDetails()
       provideTelephoneNumber()
       provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
@@ -58,12 +58,12 @@ object ProvideDirectorDetailsFlow:
       TaskListPage.open()
       returnToTasklist(stubData)
       progress match
-        case listProgress.complete => checkDirectorListProgressComplete()
-        case listProgress.partial => checkDirectorListProgressPartial(allDirectorNames)
+        case listProgress.complete => checkPartnersListProgressComplete()
+        case listProgress.partial => checkPartnersListProgressPartial(allPartnersNames)
 
   def getProvideDetailsLink: String =
     TaskListPage.assertPageIsDisplayed()
-    TaskListPage.clickAskDirectorsAndOtherAdvisorsToSignInLink()
+    TaskListPage.clickAskPartnersAndOtherAdvisorsToSignInLink()
     AskPartnersToSignInPage.assertPageIsDisplayed()
     val link = AskPartnersToSignInPage.getShareLinkText
     AskPartnersToSignInPage.clickContinue()
@@ -75,7 +75,7 @@ object ProvideDirectorDetailsFlow:
 
   def signIn(
     planet: String,
-    directorNames: Option[String] = None
+    partnerNames: Option[String] = None
   ): (String, String) =
     SignInAndConfirmDetailsPage.clickContinue()
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
@@ -85,16 +85,15 @@ object ProvideDirectorDetailsFlow:
     AgentExternalStubCreateUserPage.assertPageIsDisplayed()
     AgentExternalStubCreateUserPage.selectCurrentUserLink()
     AgentExternalStubUserPage.assertPageIsDisplayed()
-    val bearerToken = AgentExternalStubUserPage.bearerToken // capture bearer token to use in email verification call
-    val sessionId = AgentExternalStubUserPage.sessionId // capture sessionId to use in email verification call
+    val bearerToken = AgentExternalStubUserPage.bearerToken
+    val sessionId = AgentExternalStubUserPage.sessionId
     AgentExternalStubUserPage.clickBrowserBack()
     AgentExternalStubCreateUserPage.assertPageIsDisplayed()
     AgentExternalStubCreateUserPage.selectAffinityGroupIndividual()
     AgentExternalStubCreateUserPage.selectEnrolment("HMRC-PT")
     AgentExternalStubCreateUserPage.clickContinue()
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
-    // Use captured director name if provided, otherwise use default
-    val nameToUse = directorNames.getOrElse("Beverly Hills")
+    val nameToUse = partnerNames.getOrElse("Beverly Hills")
     AgentExternalStubConfigureUserPage.enterName(nameToUse)
     AgentExternalStubConfigureUserPage.clickContinue()
     (bearerToken, sessionId)
@@ -114,11 +113,9 @@ object ProvideDirectorDetailsFlow:
     ProvideDetailsEmailAddressPage.enterEmailAddress()
     ProvideDetailsEmailAddressPage.clickContinue()
 
-    // get email verification code from test only page
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
     EmailVerificationTestOnlyPage.clickContinue()
 
-    // confirm email by providing confirmation code
     val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
     ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
     ProvideDetailsConfirmEmailPage.clickContinue()
@@ -157,20 +154,19 @@ object ProvideDirectorDetailsFlow:
     GovernmentGatewaySignInPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
 
-  def checkDirectorListProgressComplete(): Unit =
-    TaskListPage.assertAskDirectorsAndTaxAdvisorsToSignInStatus("Completed")
+  def checkPartnersListProgressComplete(): Unit =
+    TaskListPage.assertAskPartnersAndTaxAdvisorsToSignInStatus("Completed")
     TaskListPage.assertCheckProvidedDetailsStatus("Completed")
 
-  def checkDirectorListProgressPartial(allDirectorNames: Option[List[String]] = None): Unit =
-    TaskListPage.assertAskDirectorsAndTaxAdvisorsToSignInStatus("Completed")
+  def checkPartnersListProgressPartial(allPartnerNames: Option[List[String]] = None): Unit =
+    TaskListPage.assertAskPartnersAndTaxAdvisorsToSignInStatus("Completed")
     TaskListPage.assertCheckProvidedDetailsStatus("Incomplete")
-    allDirectorNames match
+    allPartnerNames match
       case Some(names) if names.size >= 2 =>
         TaskListPage.clickCheckProvidedDetailsLink()
         CheckWhoProvidedDetailsPage.assertPageIsDisplayed()
         CheckWhoProvidedDetailsPage.detailsProvided(names(0)) shouldBe "Yes"
         CheckWhoProvidedDetailsPage.detailsProvided(names(1)) shouldBe "No"
-        // Navigate back to task list for next director
         TaskListPage.open()
         TaskListPage.assertPageIsDisplayed()
       case _ =>
@@ -178,6 +174,5 @@ object ProvideDirectorDetailsFlow:
         CheckWhoProvidedDetailsPage.assertPageIsDisplayed()
         CheckWhoProvidedDetailsPage.detailsProvided("Steve Austin") shouldBe "Yes"
         CheckWhoProvidedDetailsPage.detailsProvided("Beverly Hills") shouldBe "Yes"
-        // Navigate back to task list for next director
         TaskListPage.open()
         TaskListPage.assertPageIsDisplayed()

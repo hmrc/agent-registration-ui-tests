@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.limited_company.businessdetails
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object CheckThisListOfDirectorsPage
+object CheckThisListOfPartnersPage
 extends BasePage:
 
   override val path: String = "/agent-registration/apply/list-details/companies-house-officers"
@@ -35,14 +35,10 @@ extends BasePage:
   def selectYes(): Unit = click(yesRadio)
   def selectNo(): Unit = click(noRadio)
 
-  private val exactNumberField = By.id("numberOfOfficersResponsibleForTaxMatters")
+  def getPartnerNames: List[String] =
+    val partnerNameLocators = By.cssSelector("#main-content > div > div > ul > li")
+    findElementsBy(partnerNameLocators).map(_.getText.trim).toList
 
-  def enterExactNumberOfDirectors(n: String): Unit = sendKeys(exactNumberField, n)
+  def getFirstPartnerName: Option[String] = getPartnerNames.headOption
 
-  def getDirectorNames: List[String] =
-    val directorNameLocators = By.cssSelector("#main-content > div > div > ul > li")
-    findElementsBy(directorNameLocators).map(_.getText.trim).toList
-
-  def getFirstDirectorName: Option[String] = getDirectorNames.headOption
-
-  def getFirstNDirectorNames(n: Int): List[String] = getDirectorNames.take(n)
+  def getFirstNPartnerNames(n: Int): List[String] = getPartnerNames.take(n)

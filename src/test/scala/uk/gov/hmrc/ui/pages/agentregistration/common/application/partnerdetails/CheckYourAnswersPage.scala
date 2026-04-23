@@ -32,3 +32,5 @@ extends BaseCheckYourAnswersPage:
   def changeNumberOfDirectors(): Unit = clickChangeFor("Number of directors")
   def changeDirectorNames(): Unit = clickChangeFor("Director names")
   def changeRelevantTaxAdviserNames(): Unit = clickChangeFor("Other relevant tax adviser names")
+  def changeCompaniesHouseListOfPartners(): Unit = clickChangeFor("Companies House list of partners correct")
+  def changeOtherRelevantTaxAdvisers(): Unit = clickChangeFor("Other relevant tax advisers")

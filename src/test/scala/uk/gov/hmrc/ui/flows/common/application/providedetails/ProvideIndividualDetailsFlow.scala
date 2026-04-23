@@ -73,7 +73,7 @@ object ProvideIndividualDetailsFlow:
       agreeStandards()
       checkYourAnswers()
       finishAndSignOut()
-      PageObject.get("http://localhost:22201/agent-registration/apply/task-list")
+      TaskListPage.open()
       returnToApplication(stubData)
       progress match
         case listProgress.complete => checkPartnerListProgressComplete()
@@ -121,7 +121,7 @@ object ProvideIndividualDetailsFlow:
       agreeStandards()
       checkYourAnswers()
       finishAndSignOut()
-      PageObject.get("http://localhost:22201/agent-registration/apply/task-list")
+      TaskListPage.open()
       returnToApplication(stubData)
       checkProveYourIdentityProgressComplete()
       stubData.copy(bearerToken = bearerToken, sessionId = sessionId)

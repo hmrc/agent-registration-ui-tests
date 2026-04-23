@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.limited_company.application
 
+import org.scalactic.Prettifier.default
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.limited_company.businessdetails.CheckThisListOfDirectorsPage
@@ -45,9 +46,10 @@ object DirectorTaxAdvisorInformationFlow:
     "Diana Prince"
   )
 
+  /** flow where there are 5 or less directors and all are known to tax authority */
   object FiveOrLessDirectors:
 
-    def runFlow(): String = // flow where there are 5 or less directors and all are known to tax authority
+    def runFlow(): Option[String] =
       val names = otherRelevantTaxAdvisorsNames.take(2)
       startJourney()
       val directorName = captureDirectorNameAndSelectCorrect()
@@ -61,7 +63,8 @@ object DirectorTaxAdvisorInformationFlow:
       )
       directorName
 
-  object SixOrMoreDirectors: // 6 or more directors and some other tax advisers
+  /** 6 or more directors and some other tax advisers */
+  object SixOrMoreDirectors:
 
     def runFlow(): Unit =
       val names = allDirectorNames.take(5)
@@ -82,7 +85,8 @@ object DirectorTaxAdvisorInformationFlow:
         taxAdviserNames
       )
 
-  object multipleDirectors: // flow where there are two Directors
+  /** flow where there are two Directors */
+  object multipleDirectors:
 
     def runFlow(): List[String] =
       startJourney()
@@ -94,7 +98,8 @@ object DirectorTaxAdvisorInformationFlow:
       )
       directorNames
 
-  object RunToCheckYourAnswersToChangeDirectors: // flow to test to change directors from check your answers page
+  /** flow to test to change directors from check your answers page */
+  object RunToCheckYourAnswersToChangeDirectors:
 
     def runFlow(): Unit =
       val names = allDirectorNames.take(5)
@@ -103,7 +108,8 @@ object DirectorTaxAdvisorInformationFlow:
       enterNumberOfDirectors("5")
       enterFullNameOfDirectors(names, surnames)
 
-  object RunToCheckYourAnswersOtherIndividuals: // for editing other relevant individuals
+  /** for editing other relevant individuals */
+  object RunToCheckYourAnswersOtherIndividuals:
 
     def runFlow(): Unit =
       val names = allDirectorNames.take(5)
@@ -116,7 +122,8 @@ object DirectorTaxAdvisorInformationFlow:
       selectAnyOtherRelevantTaxAdvisers()
       enterOtherRelevantTaxAdvisors(taxAdviserNames)
 
-  object RunToFinalCheckYourAnswers: // flow to get to the final check your answers page for testing the change scenarios
+  /** flow to get to the final check your answers page for testing the change scenarios */
+  object RunToFinalCheckYourAnswers:
 
     def runFlow(): Unit =
       val names = allDirectorNames.take(5)
@@ -140,19 +147,16 @@ object DirectorTaxAdvisorInformationFlow:
     CheckThisListOfDirectorsPage.selectYes()
     CheckThisListOfDirectorsPage.clickContinue()
 
-  // Capture director name from the page and return it for use in stubs
-  def captureDirectorNameAndSelectCorrect(): String =
+  def captureDirectorNameAndSelectCorrect(): Option[String] =
     CheckThisListOfDirectorsPage.assertPageIsDisplayed()
-    val directorName = CheckThisListOfDirectorsPage.getFirstDirectorName()
+    val directorName = CheckThisListOfDirectorsPage.getFirstDirectorName
     CheckThisListOfDirectorsPage.selectYes()
     CheckThisListOfDirectorsPage.clickContinue()
     directorName
 
-  // Capture first N director names from the page
   def captureFirstNDirectorNamesAndSelectCorrect(n: Int): List[String] =
     CheckThisListOfDirectorsPage.assertPageIsDisplayed()
     val directorNames = CheckThisListOfDirectorsPage.getFirstNDirectorNames(n)
-    println(s"First $n director names captured: ${directorNames.mkString(", ")}")
     CheckThisListOfDirectorsPage.selectYes()
     CheckThisListOfDirectorsPage.clickContinue()
     directorNames

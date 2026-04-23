@@ -17,15 +17,12 @@
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.amlsdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
-import BusinessType.*
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import AmlsDetailsFlow.AmlsDetailsOption
-import AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
+import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption
+import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.EvidenceOfAmlSupervisionPage
@@ -109,7 +106,7 @@ extends BaseSpec:
       WhatSupervisoryBodyPage.clickContinue()
 
       AmlsDetailsFlow.enterRegistrationNumber()
-      
+
       AmlsDetailsFlow.uploadSupervisionEvidence()
       AmlsDetailsFlow.checkYourAnswersExpanded()
 
@@ -125,7 +122,6 @@ extends BaseSpec:
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
       AmlsDetailsFlow.enterRegistrationNumber()
-      
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-plus-5mb.docx")
@@ -144,7 +140,6 @@ extends BaseSpec:
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
       AmlsDetailsFlow.enterRegistrationNumber()
-      
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Virus.txt")
@@ -163,7 +158,6 @@ extends BaseSpec:
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
       AmlsDetailsFlow.enterRegistrationNumber()
-      
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Invalid-ext..zip")
