@@ -33,6 +33,7 @@ extends BasePage:
   private val viewOrPrintLink = By.linkText("View or print your application")
   private val pageTitle = By.cssSelector("h1.govuk-panel__title")
   private val panelBody = By.cssSelector("div.govuk-panel__body")
+  private val pageHeading = By.cssSelector("h1.govuk-heading-l")
 
   def getCopyLinkButtonText: String = getText(copyLinkButton).trim
   def clickCopyLinkButton(): Unit = click(copyLinkButton)
@@ -48,3 +49,6 @@ extends BasePage:
   def getApplicationReference: String = eventually {
     getText(panelBody).trim.split(":").last.trim
   }
+
+  def assertPageHeadingContains(applicantName: String): Unit = eventually:
+    getText(pageHeading) should include(s"$applicantName does not meet the registration conditions")
