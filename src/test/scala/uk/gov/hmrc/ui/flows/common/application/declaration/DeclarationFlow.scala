@@ -56,6 +56,23 @@ object DeclarationFlow:
       case ScottishPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
     DeclarationPage.clickContinue()
 
+  def clickAcceptAndSendFromStandardJourney(
+    businessType: BusinessType,
+    soleTraderOwner: Boolean,
+    customBusinessName: String
+  ): Unit =
+    DeclarationPage.assertPageIsDisplayed()
+    businessType match
+      case SoleTrader =>
+        if soleTraderOwner then DeclarationPage.assertNoAuthorisedByTextDisplayed() else DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
+      case LLP => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
+      case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
+      case LimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
+      case LimitedCompany => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
+      case ScottishLimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
+      case ScottishPartnership => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
+    DeclarationPage.clickContinue()
+
   def completeJourney(): Unit =
     ApplicationSubmittedPage.assertPageIsDisplayed()
     ApplicationSubmittedPage.assertConfirmationTitle("You’ve applied for an agent services account")
