@@ -42,7 +42,7 @@ extends BasePage:
     getText(copyLinkButton).trim shouldEqual expected
   }
   def assertConfirmationTitle(expected: String): Unit = getText(pageTitle) shouldBe (expected)
-  
+
   def getApplicationReference: String = eventually {
     getText(panelBody).trim.split(":").last.trim
   }
@@ -57,3 +57,6 @@ extends BasePage:
         source should include(item)
       }
     }
+
+  def assertPageHeadingContains(applicantName: String): Unit = eventually:
+    getText(pageHeading) should include(s"$applicantName does not meet the registration conditions")
