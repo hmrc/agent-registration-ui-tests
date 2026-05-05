@@ -30,11 +30,10 @@ extends BasePage:
     getCurrentUrl should include(url)
 
   private val bodyParas = By.id("main-content")
-  private val returnToApplicationLink = By.linkText("Sign back into your application")
+  private val returnToApplicationLink = By.linkText("Continue your application using your agent sign in details")
 
   def assertConfirmationTextDisplayed(): Unit =
-    getText(bodyParas) should include(s"ou have proven your identity, " +
-      s"you can now use your agent credentials to sign back into your application " +
-      s"and continue the application process.")
+    getText(bodyParas) should include(s"You need to sign back in with your agent sign in " +
+      s"details to continue your application.")
 
   def clickReturnToApplicationLink(): Unit = click(returnToApplicationLink)
