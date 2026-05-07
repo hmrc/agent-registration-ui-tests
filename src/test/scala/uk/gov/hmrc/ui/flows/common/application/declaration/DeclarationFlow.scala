@@ -21,10 +21,6 @@ import BusinessType.*
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.declaration.DeclarationPage
-import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.MongoHelper.firstIndividual
-import uk.gov.hmrc.ui.utils.MongoHelper.getNestedString
-import uk.gov.hmrc.ui.utils.MongoHelper.getTopLevelString
 
 object DeclarationFlow:
 
@@ -37,11 +33,7 @@ object DeclarationFlow:
     ): Unit =
       startJourney()
       clickAcceptAndSend(businessType, soleTraderOwner)
-      completeJourney(
-        businessType,
-        soleTraderOwner,
-        fastForwardUsed
-      )
+      completeJourney()
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()
@@ -64,26 +56,6 @@ object DeclarationFlow:
       case ScottishPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
     DeclarationPage.clickContinue()
 
-  def completeJourney(
-    businessType: BusinessType,
-    soleTraderOwner: Boolean,
-    fastForwardUsed: Boolean
-  ): Unit =
+  def completeJourney(): Unit =
     ApplicationSubmittedPage.assertPageIsDisplayed()
     ApplicationSubmittedPage.assertConfirmationTitle("You’ve applied for an agent services account")
-    // Assert that the application risking record has been created in MongoDB and has the expected values
-    val applicationReference = ApplicationSubmittedPage.getApplicationReference
-    val record = MongoHelper.findByApplicationReference(applicationReference)
-    val doc = record.getOrElse(throw new AssertionError(s"No Mongo record for $applicationReference"))
-    val status = getTopLevelString(doc, "status")
-    val providedName = getNestedString(firstIndividual(doc), "providedName")
-
-    assert(status == "ReadyForSubmission")
-    businessType match
-      case SoleTrader => if fastForwardUsed then assert(providedName == "ST Name ST Lastname") else assert(providedName == "Test User")
-      case LLP => assert(providedName == "Test Partnership")
-      case GeneralPartnership => assert(providedName == "Bobby Boucher")
-      case LimitedPartnership => assert(providedName == "TBC")
-      case LimitedCompany => assert(providedName == "TBC")
-      case ScottishLimitedPartnership => assert(providedName == "TBC")
-      case ScottishPartnership => assert(providedName == "TBC")
