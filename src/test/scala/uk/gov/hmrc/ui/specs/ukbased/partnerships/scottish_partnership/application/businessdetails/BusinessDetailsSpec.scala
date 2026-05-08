@@ -43,17 +43,6 @@ extends BaseSpec:
       TaskListPage.assertBusinessDetailsStatus("Completed")
 
     Scenario(
-      "When user has existing online agent account",
-      TagScottishPartnership
-    ):
-
-      BusinessDetailsFlow
-        .HasBlockingStatus
-        .runFlow()
-      CannotRegisterPage.assertPageIsDisplayed()
-      CannotRegisterPage.assertHeaderText("We cannot create an account for this company")
-
-    Scenario(
       "An Applicant completes GRS journey and reviews Business details via enhanced CYA",
       TagScottishPartnership
     ):

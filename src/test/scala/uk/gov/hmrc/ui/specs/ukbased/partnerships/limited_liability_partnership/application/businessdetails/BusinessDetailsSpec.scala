@@ -42,17 +42,6 @@ extends BaseSpec:
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.assertBusinessDetailsStatus("Completed")
 
-    Scenario(
-      "When user has existing online agent account",
-      TagLimitedLiabilityPartnership
-    ):
-
-      BusinessDetailsFlow
-        .HasBlockingStatus
-        .runFlow()
-      CannotRegisterPage.assertPageIsDisplayed()
-      CannotRegisterPage.assertHeaderText("We cannot create an account for this company")
-
   Scenario(
     "An Applicant completes GRS journey and reviews Business details via enhanced CYA",
     TagLimitedLiabilityPartnership

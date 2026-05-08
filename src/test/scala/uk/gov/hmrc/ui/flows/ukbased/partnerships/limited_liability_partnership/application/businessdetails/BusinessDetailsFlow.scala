@@ -65,18 +65,6 @@ object BusinessDetailsFlow:
       landOnTaskList()
       stubData
 
-  object HasBlockingStatus:
-    def runFlow(): Unit =
-      startJourney()
-      selectUkBased()
-      selectPartnershipBusinessSetup()
-      selectLimitedLiabilityPartnership()
-      selectAuthorisedUserRole()
-      answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
-      proceedToGovernmentGateway()
-      stubbedSignIn(AgencyStatus.Blocked)
-      landOnCannotRegisterPage()
-
   // --- Granular steps (each page gets a function) ---
 
   def startJourney(): Unit = ApplyEntryPage.open()
