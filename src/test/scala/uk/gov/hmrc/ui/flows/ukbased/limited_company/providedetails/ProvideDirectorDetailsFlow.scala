@@ -131,7 +131,6 @@ object ProvideDirectorDetailsFlow:
 
   def approveApplication(): Unit =
     ApproveApplicationPage.assertPageIsDisplayed()
-    ApproveApplicationPage.selectYes()
     ApproveApplicationPage.clickContinue()
 
   def agreeStandards(): Unit =
