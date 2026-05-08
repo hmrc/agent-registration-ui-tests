@@ -40,40 +40,46 @@ extends BaseSpec:
   Feature("Applicant FailedNonFixable List Page"):
     Scenario(
       "Sole Trader Owner sees FailedNonFixable Outcome Page after sign in",
-      TagSoleTrader,
+      TagSoleTrader
     ):
       /** Step 1: Fast-forward to AgentStandards — same starting point as DeclarationSpec
-       */
+        */
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, SoleTrader)
 
       /** Step 2: Prove identity — populates the individuals array in the Mongo record
-       */
+        */
       ProvideIndividualDetailsFlow
         .ProvideIndividualDetailsSoleTrader
-        .runFlow(stubbedSignInData, listProgress.complete, fastForwardUsed = true)
+        .runFlow(
+          stubbedSignInData,
+          listProgress.complete,
+          fastForwardUsed = true
+        )
 
       /** Step 3: Accept declaration — submits the application, creates record with ReadyForSubmission
-       */
+        */
       DeclarationFlow.AcceptDeclaration.runFlow(SoleTrader, fastForwardUsed = true)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
 
-      /** Step 4: Capture reference and verify initial status */
+      /** Step 4: Capture reference and verify document exists */
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      val submittedDoc = MongoHelper
+      MongoHelper
         .findByApplicationReference(applicationReference)
         .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-      MongoHelper.getTopLevelString(submittedDoc, "status") shouldBe "ReadyForSubmission"
 
-      /** Step 5: Simulate the risking service — update status and set failure codess */
-      MongoHelper.updateStatusWithFailures(applicationReference, "FailedNonFixable", MongoHelper.nonFixableFailures)
+      /** Step 5: Simulate the risking service — set riskingFileName and entityRiskingResult on the
+        * application-for-risking record, and individualRiskingResult (empty failures) on each
+        * individual-for-risking record.
+        */
+      MongoHelper.simulateNonFixableRiskingOutcome(applicationReference)
 
-      /** Step 6: Sign in again using the same credentials from step 1.
-       Navigate directly to the application-status page — the frontend reads the updated status from Mongo and shows the outcome page. */
-      val applicationStatusUrl =
-        AppConfig.baseUrlAgentRegistrationFrontend + ApplicationSubmittedPage.path
+      /** Step 6: Sign in again using the same credentials from step 1. Navigate directly to the application-status page — the frontend reads the updated status
+        * from Mongo and shows the outcome page.
+        */
+      val applicationStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + ApplicationSubmittedPage.path
       val signInUrl =
         AppConfig.baseUrlGovernmentGateway +
           s"/bas-gateway/sign-in?continue_url=$applicationStatusUrl&origin=agent-registration-frontend&affinityGroup=agent"
@@ -86,20 +92,17 @@ extends BaseSpec:
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("ST Name ST Lastname")
 
-      /**Step 7: Assert the Mongo record reflects the correct status and failure codes */
+      /** Step 7: Assert the application-for-risking record has the risking fields set correctly */
       val outcomeDoc = MongoHelper
         .findByApplicationReference(applicationReference)
         .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-      MongoHelper.getTopLevelString(outcomeDoc, "status") shouldBe "FailedNonFixable"
-      MongoHelper.getTopLevelString(outcomeDoc, "entityType") shouldBe "SoleTrader"
-      MongoHelper.getFailures(outcomeDoc) should not be empty
-      MongoHelper.getFailures(outcomeDoc).map(f => MongoHelper.getNestedString(f, "type")) should contain allOf (
-        "_3._1", "_3._2", "_4._1", "_4._2", "_7", "_8._1", "_8._5", "_8._6", "_8._7"
-      )
+      MongoHelper.getTopLevelString(outcomeDoc, "riskingFileName") shouldBe "any-old.txt"
+      MongoHelper.getEntityRiskingFailures(outcomeDoc) should not be empty
+      MongoHelper.getEntityRiskingFailures(outcomeDoc).map(f => MongoHelper.getNestedString(f, "type")) should contain("_7")
 
     Scenario(
       "Sole Trader Non-Owner sees FailedNonFixable Outcome Page after sign in",
-      TagSoleTrader,
+      TagSoleTrader
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -130,6 +133,7 @@ extends BaseSpec:
           stubbedSignInData,
           ProvideIndividualDetailsFlow.listProgress.complete
         )
+
       DeclarationFlow
         .AcceptDeclaration
         .runFlow(SoleTrader, soleTraderOwner = false)
@@ -137,20 +141,14 @@ extends BaseSpec:
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertConfirmationTitle("You’ve applied for an agent services account")
 
-      /** Step 4: Capture reference and verify initial status */
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      val submittedDoc = MongoHelper
+      MongoHelper
         .findByApplicationReference(applicationReference)
         .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-      MongoHelper.getTopLevelString(submittedDoc, "status") shouldBe "ReadyForSubmission"
 
-      /** Step 5: Simulate the risking service — update status and set failure codess */
-      MongoHelper.updateStatusWithFailures(applicationReference, "FailedNonFixable", MongoHelper.nonFixableFailures)
+      MongoHelper.simulateNonFixableRiskingOutcome(applicationReference)
 
-      /** Step 6: Sign in again using the same credentials from step 1.
-       * Navigate directly to the application-status page — the frontend reads the updated status from Mongo and shows the outcome page. */
-      val applicationStatusUrl =
-        AppConfig.baseUrlAgentRegistrationFrontend + ApplicationSubmittedPage.path
+      val applicationStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + ApplicationSubmittedPage.path
       val signInUrl =
         AppConfig.baseUrlGovernmentGateway +
           s"/bas-gateway/sign-in?continue_url=$applicationStatusUrl&origin=agent-registration-frontend&affinityGroup=agent"
@@ -163,15 +161,9 @@ extends BaseSpec:
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("Test User")
 
-      /**Step 7: Assert the Mongo record reflects the correct status and failure codes */
       val outcomeDoc = MongoHelper
         .findByApplicationReference(applicationReference)
         .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-      MongoHelper.getTopLevelString(outcomeDoc, "status") shouldBe "FailedNonFixable"
-      MongoHelper.getTopLevelString(outcomeDoc, "entityType") shouldBe "SoleTrader"
-      MongoHelper.getFailures(outcomeDoc) should not be empty
-      MongoHelper.getFailures(outcomeDoc).map(f => MongoHelper.getNestedString(f, "type")) should contain allOf (
-        "_3._1", "_3._2", "_4._1", "_4._2", "_7", "_8._1", "_8._5", "_8._6", "_8._7"
-      )
-
-
+      MongoHelper.getTopLevelString(outcomeDoc, "riskingFileName") shouldBe "any-old.txt"
+      MongoHelper.getEntityRiskingFailures(outcomeDoc) should not be empty
+      MongoHelper.getEntityRiskingFailures(outcomeDoc).map(f => MongoHelper.getNestedString(f, "type")) should contain("_7")

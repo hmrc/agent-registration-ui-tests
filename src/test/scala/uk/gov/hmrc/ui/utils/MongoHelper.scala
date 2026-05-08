@@ -18,7 +18,7 @@ package uk.gov.hmrc.ui.utils
 
 import org.mongodb.scala.*
 import org.mongodb.scala.model.Filters.*
-import org.mongodb.scala.model.Updates.*
+import org.mongodb.scala.model.Updates
 import scala.concurrent.Await
 import scala.concurrent.duration.*
 import org.bson.BsonDocument
@@ -29,6 +29,7 @@ object MongoHelper:
   private val client = MongoClient("mongodb://localhost:27017")
   private val database = client.getDatabase("agent-registration-risking")
   private val collection = database.getCollection("application-for-risking")
+  private val individualsCollection = database.getCollection("individual-for-risking")
 
   def findByApplicationReference(ref: String): Option[Document] =
     val future = collection
@@ -36,7 +37,7 @@ object MongoHelper:
       .first()
       .toFutureOption()
     Await.result(future, 10.seconds)
-
+    
   def getTopLevelString(
     doc: Document,
     field: String
@@ -51,13 +52,64 @@ object MongoHelper:
     .map(_.asString().getValue)
     .getOrElse(throw new AssertionError(s"Field '$field' not found"))
 
-  def firstIndividual(doc: Document): BsonDocument = doc.get("individuals")
+  /*def firstIndividual(doc: Document): BsonDocument = doc.get("individuals")
     .map(_.asArray().getValues.get(0).asDocument())
-    .getOrElse(throw new AssertionError("No individuals found"))
+    .getOrElse(throw new AssertionError("No individuals found"))*/
 
   def getFailures(doc: Document): Seq[BsonDocument] = doc.get("failures")
     .map(_.asArray().getValues.toArray.toSeq.map(_.asInstanceOf[org.bson.BsonValue].asDocument()))
     .getOrElse(throw new AssertionError("Field 'failures' not found"))
+
+  def getEntityRiskingFailures(doc: Document): Seq[BsonDocument] =
+    doc.get("entityRiskingResult")
+      .map(_.asDocument().get("failures").asArray().getValues.toArray.toSeq
+        .map(_.asInstanceOf[org.bson.BsonValue].asDocument()))
+      .getOrElse(throw new AssertionError("Field 'entityRiskingResult' not found"))
+
+  def findIndividualsByApplicationReference(ref: String): Seq[Document] =
+    val future = individualsCollection
+      .find(equal("applicationReference", ref))
+      .toFuture()
+    Await.result(future, 10.seconds)
+
+  /** Simulates the risking service by setting riskingFileName and entityRiskingResult on the
+    * application-for-risking record, and individualRiskingResult (with empty failures) on each
+    * individual-for-risking record. At least one non-fixable failure (_7) is set on the application.
+    * Uses replaceOne to preserve correct Mongo field ordering: ..., isEmailSent, riskingFileName, entityRiskingResult.
+    */
+  def simulateNonFixableRiskingOutcome(applicationReference: String): Unit =
+    val existing = findByApplicationReference(applicationReference)
+      .getOrElse(throw new AssertionError(s"No document found for applicationReference='$applicationReference'"))
+
+    val now = java.time.Instant.now().toString
+    val entityRiskingResult = BsonDocument.parse(s"""{"failures":[{"type":"_7"}],"receivedAt":"$now"}""")
+    val individualRiskingResult = BsonDocument.parse(s"""{"failures":[],"receivedAt":"$now"}""")
+
+    val ordered = Document(
+      "_id"                  -> existing("_id"),
+      "applicationReference" -> existing("applicationReference"),
+      "agentApplication"     -> existing("agentApplication"),
+      "createdAt"            -> existing("createdAt"),
+      "lastUpdatedAt"        -> existing("lastUpdatedAt"),
+      "isSubscribed"         -> existing("isSubscribed"),
+      "isEmailSent"          -> existing("isEmailSent"),
+      "riskingFileName"      -> "any-old.txt",
+      "entityRiskingResult"  -> entityRiskingResult
+    )
+
+    val appFuture = collection
+      .replaceOne(equal("applicationReference", applicationReference), ordered)
+      .toFuture()
+    val appResult = Await.result(appFuture, 10.seconds)
+    assert(appResult.getMatchedCount == 1, s"simulateNonFixableRiskingOutcome: no application matched for '$applicationReference'")
+
+    val indFuture = individualsCollection
+      .updateMany(
+        equal("applicationReference", applicationReference),
+        Updates.set("individualRiskingResult", individualRiskingResult)
+      )
+      .toFuture()
+    Await.result(indFuture, 10.seconds)
 
   /** Simulates the risking service setting status and failure codes on the record. Replaces the entire document to preserve the correct field ordering: ...
     * amlRegNumber, failures, individuals ...

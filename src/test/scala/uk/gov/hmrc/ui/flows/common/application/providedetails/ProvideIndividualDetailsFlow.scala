@@ -21,19 +21,7 @@ import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ApproveApplicationPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskPartnersToSignInPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskSoleTraderToSignInPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckWhoProvidedDetailsPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ConfirmYourDetailsPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ProvideDetailsAgreeStandardsPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ProvideDetailsCheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ProvideDetailsConfirmEmailPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ProvideDetailsConfirmationPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ProvideDetailsEmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ProvideDetailsTelephoneNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ProvideDetailsUtrPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.SignInAndConfirmDetailsPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{ApproveApplicationPage, AskPartnersToSignInPage, AskSoleTraderToSignInPage, CheckWhoProvidedDetailsPage, ConfirmYourDetailsPage, ProvideDetailsAgreeStandardsPage, ProvideDetailsCheckYourAnswersPage, ProvideDetailsConfirmEmailPage, ProvideDetailsConfirmationPage, ProvideDetailsEmailAddressPage, ProvideDetailsTelephoneNumberPage, ProvideDetailsUtrPage, SignInAndConfirmDetailsPage}
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.proveyouridentity.ProveYourIdentityPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.proveyouridentity.YouHaveProvenYourIdentityPage
@@ -214,7 +202,7 @@ object ProvideIndividualDetailsFlow:
     ProvideDetailsUtrPage.selectYes()
     ProvideDetailsUtrPage.enterUtr()
     ProvideDetailsUtrPage.clickContinue()
-
+  
   def approveApplication(): Unit =
     ApproveApplicationPage.assertPageIsDisplayed()
     ApproveApplicationPage.clickContinue()

@@ -16,16 +16,25 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.limited_company.application.outcome
 
-import uk.gov.hmrc.ui.domain.BusinessType.{LimitedCompany, SoleTrader}
+import uk.gov.hmrc.ui.domain.BusinessType.LimitedCompany
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.CheckProvidedDetails
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.{AppConfig, MongoHelper}
+import uk.gov.hmrc.ui.utils.AppConfig
+import uk.gov.hmrc.ui.utils.MongoHelper
 
 class FailedNonFixableOutcomeSpec
+extends BaseSpec:
+
+  Feature("Applicant FailedNonFixable List Page"):
+    Scenario(
+      "Limited Company Director sees FailedNonFixable Outcome Page after sign in",
+      TagLimitedCompany
+    ):
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(CheckProvidedDetails, LimitedCompany)
