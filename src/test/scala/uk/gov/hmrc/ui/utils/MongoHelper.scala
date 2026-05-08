@@ -37,7 +37,7 @@ object MongoHelper:
       .first()
       .toFutureOption()
     Await.result(future, 10.seconds)
-    
+
   def getTopLevelString(
     doc: Document,
     field: String
@@ -52,19 +52,14 @@ object MongoHelper:
     .map(_.asString().getValue)
     .getOrElse(throw new AssertionError(s"Field '$field' not found"))
 
-  /*def firstIndividual(doc: Document): BsonDocument = doc.get("individuals")
-    .map(_.asArray().getValues.get(0).asDocument())
-    .getOrElse(throw new AssertionError("No individuals found"))*/
-
   def getFailures(doc: Document): Seq[BsonDocument] = doc.get("failures")
     .map(_.asArray().getValues.toArray.toSeq.map(_.asInstanceOf[org.bson.BsonValue].asDocument()))
     .getOrElse(throw new AssertionError("Field 'failures' not found"))
 
-  def getEntityRiskingFailures(doc: Document): Seq[BsonDocument] =
-    doc.get("entityRiskingResult")
-      .map(_.asDocument().get("failures").asArray().getValues.toArray.toSeq
-        .map(_.asInstanceOf[org.bson.BsonValue].asDocument()))
-      .getOrElse(throw new AssertionError("Field 'entityRiskingResult' not found"))
+  def getEntityRiskingFailures(doc: Document): Seq[BsonDocument] = doc.get("entityRiskingResult")
+    .map(_.asDocument().get("failures").asArray().getValues.toArray.toSeq
+      .map(_.asInstanceOf[org.bson.BsonValue].asDocument()))
+    .getOrElse(throw new AssertionError("Field 'entityRiskingResult' not found"))
 
   def findIndividualsByApplicationReference(ref: String): Seq[Document] =
     val future = individualsCollection
@@ -72,10 +67,9 @@ object MongoHelper:
       .toFuture()
     Await.result(future, 10.seconds)
 
-  /** Simulates the risking service by setting riskingFileName and entityRiskingResult on the
-    * application-for-risking record, and individualRiskingResult (with empty failures) on each
-    * individual-for-risking record. At least one non-fixable failure (_7) is set on the application.
-    * Uses replaceOne to preserve correct Mongo field ordering: ..., isEmailSent, riskingFileName, entityRiskingResult.
+  /** Simulates the risking service by setting riskingFileName and entityRiskingResult on the application-for-risking record, and individualRiskingResult (with
+    * empty failures) on each individual-for-risking record. At least one non-fixable failure (_7) is set on the application. Uses replaceOne to preserve
+    * correct Mongo field ordering: ..., isEmailSent, riskingFileName, entityRiskingResult.
     */
   def simulateNonFixableRiskingOutcome(applicationReference: String): Unit =
     val existing = findByApplicationReference(applicationReference)
@@ -86,15 +80,15 @@ object MongoHelper:
     val individualRiskingResult = BsonDocument.parse(s"""{"failures":[],"receivedAt":"$now"}""")
 
     val ordered = Document(
-      "_id"                  -> existing("_id"),
+      "_id" -> existing("_id"),
       "applicationReference" -> existing("applicationReference"),
-      "agentApplication"     -> existing("agentApplication"),
-      "createdAt"            -> existing("createdAt"),
-      "lastUpdatedAt"        -> existing("lastUpdatedAt"),
-      "isSubscribed"         -> existing("isSubscribed"),
-      "isEmailSent"          -> existing("isEmailSent"),
-      "riskingFileName"      -> "any-old.txt",
-      "entityRiskingResult"  -> entityRiskingResult
+      "agentApplication" -> existing("agentApplication"),
+      "createdAt" -> existing("createdAt"),
+      "lastUpdatedAt" -> existing("lastUpdatedAt"),
+      "isSubscribed" -> existing("isSubscribed"),
+      "isEmailSent" -> existing("isEmailSent"),
+      "riskingFileName" -> "any-old.txt",
+      "entityRiskingResult" -> entityRiskingResult
     )
 
     val appFuture = collection

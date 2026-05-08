@@ -32,7 +32,11 @@ object DeclarationFlow:
       fastForwardUsed: Boolean = false
     ): Unit =
       startJourney()
-      clickAcceptAndSendFromStandardJourney(businessType, soleTraderOwner, "Test User")
+      clickAcceptAndSend(
+        businessType,
+        soleTraderOwner,
+        fastForwardUsed
+      )
       completeJourney()
 
   def startJourney(): Unit =
@@ -42,35 +46,21 @@ object DeclarationFlow:
 
   def clickAcceptAndSend(
     businessType: BusinessType,
-    soleTraderOwner: Boolean
+    soleTraderOwner: Boolean,
+    fastForwardUsed: Boolean = false
   ): Unit =
     DeclarationPage.assertPageIsDisplayed()
     businessType match
       case SoleTrader =>
-        if soleTraderOwner then DeclarationPage.assertNoAuthorisedByTextDisplayed() else DeclarationPage.assertAuthorisedByTextDisplayed("ST Name ST Lastname")
+        if soleTraderOwner then DeclarationPage.assertNoAuthorisedByTextDisplayed()
+        else if fastForwardUsed then DeclarationPage.assertAuthorisedByTextDisplayed("ST Name ST Lastname")
+        else DeclarationPage.assertAuthorisedByTextDisplayed("Test User")
       case LLP => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
       case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
       case LimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
       case LimitedCompany => DeclarationPage.assertAuthorisedByTextDisplayed("Test Company Ltd")
       case ScottishLimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
       case ScottishPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
-    DeclarationPage.clickContinue()
-
-  def clickAcceptAndSendFromStandardJourney(
-    businessType: BusinessType,
-    soleTraderOwner: Boolean,
-    customBusinessName: String
-  ): Unit =
-    DeclarationPage.assertPageIsDisplayed()
-    businessType match
-      case SoleTrader =>
-        if soleTraderOwner then DeclarationPage.assertNoAuthorisedByTextDisplayed() else DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
-      case LLP => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
-      case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
-      case LimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
-      case LimitedCompany => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
-      case ScottishLimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
-      case ScottishPartnership => DeclarationPage.assertAuthorisedByTextDisplayed(customBusinessName)
     DeclarationPage.clickContinue()
 
   def completeJourney(): Unit =

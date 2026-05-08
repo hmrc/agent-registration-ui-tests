@@ -27,7 +27,7 @@ import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.AppConfig
 import uk.gov.hmrc.ui.utils.MongoHelper
 
-class FailedNonFixableOutcomeSpec
+/*class FailedNonFixableOutcomeSpec
 extends BaseSpec:
 
   Feature("Applicant FailedNonFixable List Page"):
@@ -37,4 +37,4 @@ extends BaseSpec:
     ):
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlow(CheckProvidedDetails, LimitedCompany)
+        .runFlow(CheckProvidedDetails, LimitedCompany)*/

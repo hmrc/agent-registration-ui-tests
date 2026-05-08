@@ -70,9 +70,8 @@ extends BaseSpec:
         .findByApplicationReference(applicationReference)
         .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      /** Step 5: Simulate the risking service — set riskingFileName and entityRiskingResult on the
-        * application-for-risking record, and individualRiskingResult (empty failures) on each
-        * individual-for-risking record.
+      /** Step 5: Simulate the risking service — set riskingFileName and entityRiskingResult on the application-for-risking record, and individualRiskingResult
+        * (empty failures) on each individual-for-risking record.
         */
       MongoHelper.simulateNonFixableRiskingOutcome(applicationReference)
 
