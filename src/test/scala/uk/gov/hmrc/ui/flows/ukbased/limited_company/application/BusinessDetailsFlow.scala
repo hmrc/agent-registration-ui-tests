@@ -64,17 +64,6 @@ object BusinessDetailsFlow:
       landOnTaskList()
       stubData
 
-  object HasBlockingStatus:
-    def runFlow(): Unit =
-      startJourney()
-      selectUkBased()
-      selectLimitedCompanySetup()
-      confirmIfDirectorOfLimitedCompany()
-      answerOnlineServicesAccount(OnlineAgentsAccount.HasOnlineAgentAccount)
-      proceedToGovernmentGateway()
-      stubbedSignIn(CompanyStatus.Blocked)
-      landOnCannotRegisterPage()
-
   // --- Granular steps (each page gets a function) ---
 
   def startJourney(): Unit = ApplyEntryPage.open()
@@ -115,10 +104,7 @@ object BusinessDetailsFlow:
   def stubbedSignIn(
     status: CompanyStatus,
     numberOfDirectors: Option[Int] = None
-  ): StubbedSignInData =
-    status match
-      case CompanyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok, numberOfDirectors = numberOfDirectors)
-      case CompanyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked, numberOfDirectors = numberOfDirectors)
+  ): StubbedSignInData = StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok, numberOfDirectors = numberOfDirectors)
 
   def landOnTaskList(): Unit = TaskListPage.assertPageIsDisplayed()
 
