@@ -19,10 +19,13 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_partnership.applicatio
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.{Declaration, MembersAndOtherRelevantTaxAdvisors2}
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.MembersAndOtherRelevantTaxAdvisors2
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.{complete, partial}
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.{PartnersTaxAdvisorInformationFlow, ProvidePartnersDetailsFlow}
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.complete
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.partial
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.PartnersTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class DeclarationSpec
@@ -31,11 +34,11 @@ extends BaseSpec:
   Feature("Complete declaration section"):
     Scenario(
       "User accepts the declaration link using FF link",
-       TagLimitedPartnership
+      TagLimitedPartnership
     ):
-        FastForwardLinks
-          .FastForward
-          .runFlow(Declaration, LimitedPartnership)
+      FastForwardLinks
+        .FastForward
+        .runFlow(Declaration, LimitedPartnership)
 
     Scenario(
       "User accepts the declaration via Partners and other relevant tax advisers(2) journey using FF link",

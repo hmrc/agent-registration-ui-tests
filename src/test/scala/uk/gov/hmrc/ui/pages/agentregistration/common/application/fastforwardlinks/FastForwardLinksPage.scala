@@ -70,9 +70,15 @@ extends EntryPage:
 
   def clickPartnersAndAdvisorsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Partners and other relevant individuals"))
 
-  def clickMembersAndOtherRelevantTaxAdvisors2Link(businessType: BusinessType): Unit = click(linkInSection(businessType, "Members and other relevant tax advisers (2)"))
+  def clickMembersAndOtherRelevantTaxAdvisors2Link(businessType: BusinessType): Unit = click(linkInSection(
+    businessType,
+    "Members and other relevant tax advisers (2)"
+  ))
 
-  def clickMembersAndOtherRelevantTaxAdvisors6Link(businessType: BusinessType): Unit = click(linkInSection(businessType, "Members and other relevant tax advisers (6)"))
+  def clickMembersAndOtherRelevantTaxAdvisors6Link(businessType: BusinessType): Unit = click(linkInSection(
+    businessType,
+    "Members and other relevant tax advisers (6)"
+  ))
 
   def clickAskPartnersAndAdvisorsToSignInLink(businessType: BusinessType): Unit = click(linkInSection(
     businessType,
