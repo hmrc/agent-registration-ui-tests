@@ -167,7 +167,7 @@ extends BaseSpec:
       YouHaveAddedDirectorCheckYourAnswerPage.assertNameAt(0, "Justine Hills")
 
     Scenario(
-      "Change other relevant tax advisers from Check Your Answers screen",
+      "Change other relevant individuals from Check Your Answers screen",
       TagLimitedCompany
     ):
 
@@ -319,7 +319,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Director names", "Justine Hills\nBeverly Hills\nPauline Austin\nSteve Palmer\nSandra Hills")
 
     Scenario(
-      "Change other relevant tax adviser name from final Check Your Answers",
+      "Change other relevant individual name from final Check Your Answers",
       TagLimitedCompany
     ):
       val stubbedSignInData = BusinessDetailsFlow
@@ -361,4 +361,4 @@ extends BaseSpec:
       CheckYourAnswersOtherIndividualsPage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Other relevant tax adviser names", "Dick Grayson\nClark Kent")
+      CheckYourAnswersPage.assertSummaryRow("Other relevant individual names", "Dick Grayson\nClark Kent")

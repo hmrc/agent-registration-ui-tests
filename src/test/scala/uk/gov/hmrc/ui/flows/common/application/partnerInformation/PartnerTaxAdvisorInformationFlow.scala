@@ -239,8 +239,8 @@ object PartnerTaxAdvisorInformationFlow:
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Number of partners", partNum)
     CheckYourAnswersPage.assertSummaryRow("Partner names", names.mkString("\n"))
-    CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", unofficialPart)
-    CheckYourAnswersPage.assertSummaryRow("Other relevant tax adviser names", uNames.mkString("\n"))
+    CheckYourAnswersPage.assertSummaryRow("Other relevant individuals", unofficialPart)
+    CheckYourAnswersPage.assertSummaryRow("Other relevant individual names", uNames.mkString("\n"))
 
   def checkYourAnswersNoUnofficial(
     partNum: String,
@@ -250,7 +250,7 @@ object PartnerTaxAdvisorInformationFlow:
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Number of partners", partNum)
     CheckYourAnswersPage.assertSummaryRow("Partner names", names.mkString("\n"))
-    CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", unofficialPart)
+    CheckYourAnswersPage.assertSummaryRow("Other relevant individuals", unofficialPart)
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertPartnerTaxAdvisorInformationStatus("Completed")

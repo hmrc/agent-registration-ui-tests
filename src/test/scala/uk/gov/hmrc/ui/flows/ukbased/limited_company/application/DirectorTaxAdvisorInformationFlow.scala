@@ -241,8 +241,8 @@ object DirectorTaxAdvisorInformationFlow:
   ): Unit = {
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Companies House list of directors correct", companiesHouseListOfDirectorsCorrect)
-    CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", otherRelevantTaxAdvisers)
-    CheckYourAnswersPage.assertSummaryRow("Other relevant tax adviser names", names.mkString("\n"))
+    CheckYourAnswersPage.assertSummaryRow("Other relevant individuals", otherRelevantTaxAdvisers)
+    CheckYourAnswersPage.assertSummaryRow("Other relevant individual names", names.mkString("\n"))
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertDirectorTaxAdvisorInformationStatus("Completed")
@@ -256,7 +256,7 @@ object DirectorTaxAdvisorInformationFlow:
   ): Unit = {
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Companies House list of directors correct", companiesHouseListOfDirectorsCorrect)
-    CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", otherRelevantTaxAdvisers)
+    CheckYourAnswersPage.assertSummaryRow("Other relevant individuals", otherRelevantTaxAdvisers)
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertDirectorTaxAdvisorInformationStatus("Completed")
@@ -275,8 +275,8 @@ object DirectorTaxAdvisorInformationFlow:
     CheckYourAnswersPage.assertSummaryRow("Number of directors", directorNum)
     val fullNames = names.zip(surnames).map { case (name, surname) => s"$name $surname" }
     CheckYourAnswersPage.assertSummaryRow("Director names", fullNames.mkString("\n"))
-    CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", otherRelevantTaxAdviser)
-    CheckYourAnswersPage.assertSummaryRow("Other relevant tax adviser names", otherRelevantTaxAdviserNames.mkString("\n"))
+    CheckYourAnswersPage.assertSummaryRow("Other relevant individuals", otherRelevantTaxAdviser)
+    CheckYourAnswersPage.assertSummaryRow("Other relevant individual names", otherRelevantTaxAdviserNames.mkString("\n"))
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertDirectorTaxAdvisorInformationStatus("Completed")

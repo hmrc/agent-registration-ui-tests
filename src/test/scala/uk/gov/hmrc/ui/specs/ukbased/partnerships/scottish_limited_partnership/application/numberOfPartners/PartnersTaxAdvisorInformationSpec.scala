@@ -57,7 +57,7 @@ extends BaseSpec:
         .runFlow()
 
     Scenario(
-      "Partnership has 1 other relevant tax adviser",
+      "Partnership has 1 other relevant individual",
       TagScottishLimitedPartnership
     ):
       val stubbedSignInData = BusinessDetailsFlow
@@ -84,7 +84,7 @@ extends BaseSpec:
         .runFlowWith1OtherRelevantTaxAdvisers()
 
     Scenario(
-      "Partnership has any more relevant tax advisers",
+      "Partnership has any more relevant individuals",
       TagScottishLimitedPartnership
     ):
       val stubbedSignInData = BusinessDetailsFlow
@@ -111,7 +111,7 @@ extends BaseSpec:
         .runFlowWithAnyMoreRelevantTaxAdvisers()
 
     Scenario(
-      "Change other relevant tax advisers from check your answers page",
+      "Change other relevant individuals from check your answers page",
       TagScottishLimitedPartnership
     ):
       val stubbedSignInData = BusinessDetailsFlow
@@ -138,7 +138,7 @@ extends BaseSpec:
         .runFlowWithChangeNoOtherRelevantTaxAdvisers()
 
   Scenario(
-    "Remove other relevant tax advisers from check your answers page",
+    "Remove other relevant individuals from check your answers page",
     TagScottishLimitedPartnership
   ):
     val stubbedSignInData = BusinessDetailsFlow
