@@ -59,6 +59,9 @@ object DeclarationFlow:
       case LLP => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
       case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
       case LimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
+      case LimitedPartnership =>
+        if fastForwardUsed then DeclarationPage.assertAuthorisedByTextDisplayed("Test Company Name")
+        else DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
       case LimitedCompany => DeclarationPage.assertAuthorisedByTextDisplayed("Test Company Ltd")
       case ScottishLimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
       case ScottishPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")

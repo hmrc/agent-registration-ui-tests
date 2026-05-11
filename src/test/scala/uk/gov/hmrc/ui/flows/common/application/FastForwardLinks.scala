@@ -22,8 +22,6 @@ import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.captureBearerTo
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow.completeJourney
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.{ApplicationSubmittedPage, TaskListPage}
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.FastForwardLinksPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
@@ -33,7 +31,8 @@ object FastForwardLinks:
 
   enum ApplicationProgress:
     case BusinessDetails, AgentDetails, ContactDetails, AmlsDetails, AgentStandards, ProveYourIdentity,
-      PartnersAndAdvisors, MembersAndOtherRelevantTaxAdvisors2, MembersAndOtherRelevantTaxAdvisors6, AskPartnersAndAdvisorsToSignIn, CheckProvidedDetails, Declaration
+      PartnersAndAdvisors, MembersAndOtherRelevantTaxAdvisors2, MembersAndOtherRelevantTaxAdvisors6, AskPartnersAndAdvisorsToSignIn, CheckProvidedDetails,
+      Declaration
 
   object FastForward:
 
