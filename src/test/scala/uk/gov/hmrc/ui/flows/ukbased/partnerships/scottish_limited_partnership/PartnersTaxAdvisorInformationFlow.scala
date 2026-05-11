@@ -84,7 +84,7 @@ object PartnersTaxAdvisorInformationFlow:
   ): Unit =
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Companies House list of partners correct", companiesHouseListOfPartnersCorrect)
-    CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", otherRelevantTaxAdvisers)
+    CheckYourAnswersPage.assertSummaryRow("Other relevant individuals", otherRelevantTaxAdvisers)
     CheckYourAnswersPage.clickContinue()
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertPartnerTaxAdvisorInformationStatus("Completed")
@@ -164,7 +164,7 @@ object PartnersTaxAdvisorInformationFlow:
       selectNoOtherRelevantTaxAdvisers()
       checkYourAnswersPartnersAndOtherTaxAdvisers()
 
-  /** Flow where there are two Partners and no other relevant tax advisers - captures the names of the partners to be used in later flows */
+  /** Flow where there are two Partners and no other relevant individuals - captures the names of the partners to be used in later flows */
   object multiplePartners:
 
     def runFlow(): List[String] =

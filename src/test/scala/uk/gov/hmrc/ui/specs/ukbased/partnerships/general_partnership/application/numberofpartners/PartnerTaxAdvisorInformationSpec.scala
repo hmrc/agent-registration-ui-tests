@@ -155,7 +155,7 @@ extends BaseSpec:
         .runFlow()
 
     Scenario(
-      "Change other relevant tax advisers from Check Your Answers",
+      "Change other relevant individuals from Check Your Answers",
       TagGeneralPartnership
     ):
 
@@ -176,7 +176,7 @@ extends BaseSpec:
       CheckYourAnswersOtherIndividualsPage.assertNameAt(0, "Dick Grayson")
 
     Scenario(
-      "Change has other relevant tax advisers boolean from Check Your Answers",
+      "Change has other relevant individuals boolean from Check Your Answers",
       TagGeneralPartnership
     ):
 
@@ -189,7 +189,7 @@ extends BaseSpec:
         .runFlow()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", "Yes")
+      CheckYourAnswersPage.assertSummaryRow("Other relevant individuals", "Yes")
       CheckYourAnswersPage.changeUnofficialPartners()
 
       HasOtherRelevantTaxAdvisersPage.assertPageIsDisplayed()
@@ -197,8 +197,8 @@ extends BaseSpec:
       HasOtherRelevantTaxAdvisersPage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Other relevant tax advisers", "No")
-      CheckYourAnswersPage.assertSummaryRowNotPresent("Other relevant tax adviser names")
+      CheckYourAnswersPage.assertSummaryRow("Other relevant individuals", "No")
+      CheckYourAnswersPage.assertSummaryRowNotPresent("Other relevant individual names")
 
     Scenario(
       "Change number of partners from final Check Your Answers",
@@ -268,7 +268,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Partner names", "Bobby Boucher\nSonny Koufax\nPeter Parker")
 
     Scenario(
-      "Change other relevant tax adviser name from final Check Your Answers",
+      "Change other relevant individual name from final Check Your Answers",
       TagGeneralPartnership
     ):
 
@@ -296,4 +296,4 @@ extends BaseSpec:
       CheckYourAnswersOtherIndividualsPage.clickContinue()
 
       CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Other relevant tax adviser names", "Dick Grayson\nClark Kent\nDiana Prince")
+      CheckYourAnswersPage.assertSummaryRow("Other relevant individual names", "Dick Grayson\nClark Kent\nDiana Prince")
