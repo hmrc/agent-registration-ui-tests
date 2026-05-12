@@ -32,7 +32,11 @@ object DeclarationFlow:
       fastForwardUsed: Boolean = false
     ): Unit =
       startJourney()
-      clickAcceptAndSend(businessType, soleTraderOwner)
+      clickAcceptAndSend(
+        businessType,
+        soleTraderOwner,
+        fastForwardUsed
+      )
       completeJourney()
 
   def startJourney(): Unit =
@@ -42,12 +46,15 @@ object DeclarationFlow:
 
   def clickAcceptAndSend(
     businessType: BusinessType,
-    soleTraderOwner: Boolean
+    soleTraderOwner: Boolean,
+    fastForwardUsed: Boolean
   ): Unit =
     DeclarationPage.assertPageIsDisplayed()
     businessType match
       case SoleTrader =>
-        if soleTraderOwner then DeclarationPage.assertNoAuthorisedByTextDisplayed() else DeclarationPage.assertAuthorisedByTextDisplayed("ST Name ST Lastname")
+        if soleTraderOwner then DeclarationPage.assertNoAuthorisedByTextDisplayed()
+        else if fastForwardUsed then DeclarationPage.assertAuthorisedByTextDisplayed("ST Name ST Lastname")
+        else DeclarationPage.assertAuthorisedByTextDisplayed("Test User")
       case LLP => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
       case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
       case LimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails
 
-import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
