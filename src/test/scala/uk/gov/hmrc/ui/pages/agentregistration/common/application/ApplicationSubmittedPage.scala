@@ -57,6 +57,3 @@ extends BasePage:
         source should include(item)
       }
     }
-
-  def assertPageHeadingContains(applicantName: String): Unit = eventually:
-    getText(pageHeading) should include(s"$applicantName does not meet the registration conditions")

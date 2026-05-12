@@ -32,7 +32,7 @@ object DeclarationFlow:
       fastForwardUsed: Boolean = false
     ): Unit =
       startJourney()
-      clickAcceptAndSend(businessType, soleTraderOwner)
+      clickAcceptAndSend(businessType, soleTraderOwner, fastForwardUsed)
       completeJourney()
 
   def startJourney(): Unit =
@@ -42,7 +42,8 @@ object DeclarationFlow:
 
   def clickAcceptAndSend(
     businessType: BusinessType,
-    soleTraderOwner: Boolean
+    soleTraderOwner: Boolean,
+    fastForwardUsed: Boolean
   ): Unit =
     DeclarationPage.assertPageIsDisplayed()
     businessType match
