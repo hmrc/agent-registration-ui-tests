@@ -24,9 +24,6 @@ import uk.gov.hmrc.ui.utils.AppConfig
 
 object RiskingOutcomeFlow:
 
-  /** Sign in again using the same credentials. Navigate directly to the application-status page — the frontend reads the updated status from Mongo and shows
-    * the outcome page.
-    */
   object SignInAsApplicantAfterRiskingOutcome:
     def runFlow(stubbedSignInData: StubbedSignInData): Unit =
       val applicationStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + ApplicationSubmittedPage.path

@@ -20,7 +20,6 @@ import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.*
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.captureBearerTokenAndSession
 import uk.gov.hmrc.ui.pages.PageObject
-import uk.gov.hmrc.ui.pages.PageObject.getCurrentUrl
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.FastForwardLinksPage
@@ -134,7 +133,7 @@ object FastForwardLinks:
       case Declaration =>
         FastForwardLinksPage.clickDeclarationLink(businessType)
         val stubbedSignInData = logIn()
-        if getCurrentUrl.contains(ApplicationSubmittedPage.path) then
+        if PageObject.getCurrentUrl.contains(ApplicationSubmittedPage.path) then
           ApplicationSubmittedPage.assertPageIsDisplayed()
         else
           TaskListPage.assertPageIsDisplayed()
