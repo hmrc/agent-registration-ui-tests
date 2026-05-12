@@ -20,7 +20,7 @@ import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.MembersAndOtherRelevantTaxAdvisors2
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.MembersAndOtherRelevantIndividuals2
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.partial
@@ -47,7 +47,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlow(MembersAndOtherRelevantTaxAdvisors2, LimitedPartnership)
+        .runFlow(MembersAndOtherRelevantIndividuals2, LimitedPartnership)
 
       val partnersNames = PartnersTaxAdvisorInformationFlow
         .multiplePartnersFF

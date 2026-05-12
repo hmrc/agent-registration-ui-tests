@@ -31,7 +31,7 @@ object FastForwardLinks:
 
   enum ApplicationProgress:
     case BusinessDetails, AgentDetails, ContactDetails, AmlsDetails, AgentStandards, ProveYourIdentity,
-      PartnersAndAdvisors, MembersAndOtherRelevantTaxAdvisors2, MembersAndOtherRelevantTaxAdvisors6, AskPartnersAndAdvisorsToSignIn, CheckProvidedDetails,
+      PartnersAndAdvisors, MembersAndOtherRelevantIndividuals2, MembersAndOtherRelevantIndividuals6, AskPartnersAndAdvisorsToSignIn, CheckProvidedDetails,
       Declaration
 
   object FastForward:
@@ -107,14 +107,14 @@ object FastForwardLinks:
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertHmrcStandardsForAgentsStatus("Completed")
         stubbedSignInData
-      case MembersAndOtherRelevantTaxAdvisors2 =>
-        FastForwardLinksPage.clickMembersAndOtherRelevantTaxAdvisors2Link(businessType)
+      case MembersAndOtherRelevantIndividuals2 =>
+        FastForwardLinksPage.clickMembersAndOtherRelevantIndividuals2Link(businessType)
         val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertPartnersAndAdvisorsStatus("Completed")
         stubbedSignInData
-      case MembersAndOtherRelevantTaxAdvisors6 =>
-        FastForwardLinksPage.clickMembersAndOtherRelevantTaxAdvisors6Link(businessType)
+      case MembersAndOtherRelevantIndividuals6 =>
+        FastForwardLinksPage.clickMembersAndOtherRelevantIndividuals6Link(businessType)
         val stubbedSignInData = logIn()
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertPartnersAndAdvisorsStatus("Completed")
