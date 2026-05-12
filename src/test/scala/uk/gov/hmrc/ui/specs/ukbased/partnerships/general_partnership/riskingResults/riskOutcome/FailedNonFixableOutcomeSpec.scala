@@ -62,7 +62,7 @@ extends BaseSpec:
       val entityFailures = MongoHelper.getEntityRiskingFailures(outcomeDoc)
       entityFailures should not be empty
       val entityFailureTypes = entityFailures.map(f => MongoHelper.getNestedString(f, "type"))
-      entityFailureTypes should contain allOf("_7", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
+      entityFailureTypes should contain allOf ("_7", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
 
       val individuals = MongoHelper.findIndividualsByApplicationReference(applicationReference)
       individuals should have size 2
@@ -71,8 +71,12 @@ extends BaseSpec:
         val indFailures = MongoHelper.getIndividualRiskingFailures(indDoc)
         indFailures should not be empty
         val indFailureTypes = indFailures.map(f => MongoHelper.getNestedString(f, "type"))
-        indFailureTypes should contain allOf(
-          "_4._1", "_5._1", "_6", "_7", "_9"
+        indFailureTypes should contain allOf (
+          "_4._1",
+          "_5._1",
+          "_6",
+          "_7",
+          "_9"
         )
         val fivePointOne = indFailures
           .find(f => MongoHelper.getNestedString(f, "type") == "_5._1")
@@ -93,5 +97,5 @@ extends BaseSpec:
         "has one or more overdue liabilities",
         "is actively disqualified on Companies house",
         "is formally insolvent",
-        "has a relevant unspent criminal conviction",
+        "has a relevant unspent criminal conviction"
       )

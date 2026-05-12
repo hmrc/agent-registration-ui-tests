@@ -79,7 +79,7 @@ extends BaseSpec:
       RiskingOutcomeFlow
         .SignInAsApplicantAfterRiskingOutcome
         .runFlow(stubbedSignInData)
-      
+
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("ST Name ST Lastname")
 
@@ -93,7 +93,7 @@ extends BaseSpec:
       failures should not be empty
 
       val failureTypes = failures.map(f => MongoHelper.getNestedString(f, "type"))
-      failureTypes should contain allOf("_7","_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
+      failureTypes should contain allOf ("_7", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
 
       val fivePointOne = failures
         .find(f => MongoHelper.getNestedString(f, "type") == "_5._1")
@@ -106,7 +106,7 @@ extends BaseSpec:
         "the business has unpaid tax liabilities",
         "the business appears on a published HMRC list of tax avoidance promoter, enablers or suppliers",
         "the business was issued with a relevant anti-avoidance penalty within the last 12 months",
-        "the business has one or more relevant anti-avoidance penalties to pay",
+        "the business has one or more relevant anti-avoidance penalties to pay"
       )
 
     Scenario(
@@ -173,7 +173,7 @@ extends BaseSpec:
       failures should not be empty
 
       val failureTypes = failures.map(f => MongoHelper.getNestedString(f, "type"))
-      failureTypes should contain allOf("_7","_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
+      failureTypes should contain allOf ("_7", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
 
       val fivePointOne = failures
         .find(f => MongoHelper.getNestedString(f, "type") == "_5._1")
@@ -186,5 +186,5 @@ extends BaseSpec:
         "the business has unpaid tax liabilities",
         "the business appears on a published HMRC list of tax avoidance promoter, enablers or suppliers",
         "the business was issued with a relevant anti-avoidance penalty within the last 12 months",
-        "the business has one or more relevant anti-avoidance penalties to pay",
+        "the business has one or more relevant anti-avoidance penalties to pay"
       )

@@ -52,10 +52,12 @@ object MongoHelper:
     .map(_.asString().getValue)
     .getOrElse(throw new AssertionError(s"Field '$field' not found"))
 
-  def getNestedInt(doc: BsonDocument, field: String): Int =
-    Option(doc.get(field))
-      .map(_.asInt32().getValue)
-      .getOrElse(throw new AssertionError(s"Field '$field' not found"))
+  def getNestedInt(
+    doc: BsonDocument,
+    field: String
+  ): Int = Option(doc.get(field))
+    .map(_.asInt32().getValue)
+    .getOrElse(throw new AssertionError(s"Field '$field' not found"))
 
   def getEntityRiskingFailures(doc: Document): Seq[BsonDocument] = doc.get("entityRiskingResult")
     .map(_.asDocument().get("failures").asArray().getValues.toArray.toSeq
@@ -72,7 +74,10 @@ object MongoHelper:
     * true, sets all NonFixableOutcomeListForIndividualFailures codes on each individual-for-risking record; otherwise sets empty failures. Uses replaceOne to
     * preserve correct Mongo field ordering: ..., isEmailSent, riskingFileName, entityRiskingResult.
     */
-  def simulateNonFixableRiskingOutcome(applicationReference: String, withIndividualFailures: Boolean = false): Unit =
+  def simulateNonFixableRiskingOutcome(
+    applicationReference: String,
+    withIndividualFailures: Boolean = false
+  ): Unit =
     val existing = findByApplicationReference(applicationReference)
       .getOrElse(throw new AssertionError(s"No document found for applicationReference='$applicationReference'"))
 
