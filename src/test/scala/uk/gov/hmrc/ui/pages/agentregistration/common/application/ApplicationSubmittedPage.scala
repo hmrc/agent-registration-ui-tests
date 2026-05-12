@@ -42,13 +42,18 @@ extends BasePage:
     getText(copyLinkButton).trim shouldEqual expected
   }
   def assertConfirmationTitle(expected: String): Unit = getText(pageTitle) shouldBe (expected)
-
-  /** Returns the application reference number displayed in the confirmation panel, e.g. "69c161e6a7327af1605a5a92" from "Application reference:
-    * 69c161e6a7327af1605a5a92".
-    */
+  
   def getApplicationReference: String = eventually {
     getText(panelBody).trim.split(":").last.trim
   }
 
   def assertPageHeadingContains(applicantName: String): Unit = eventually:
     getText(pageHeading) should include(s"$applicantName does not meet the registration conditions")
+
+  def assertOutcomeDescriptionContainsAll(items: String*): Unit =
+    val source = eventually(getPageSource)
+    items.foreach { item =>
+      withClue(s"Page did not contain: '$item'\n") {
+        source should include(item)
+      }
+    }

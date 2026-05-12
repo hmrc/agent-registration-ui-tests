@@ -52,9 +52,10 @@ object MongoHelper:
     .map(_.asString().getValue)
     .getOrElse(throw new AssertionError(s"Field '$field' not found"))
 
-  def getFailures(doc: Document): Seq[BsonDocument] = doc.get("failures")
-    .map(_.asArray().getValues.toArray.toSeq.map(_.asInstanceOf[org.bson.BsonValue].asDocument()))
-    .getOrElse(throw new AssertionError("Field 'failures' not found"))
+  def getNestedInt(doc: BsonDocument, field: String): Int =
+    Option(doc.get(field))
+      .map(_.asInt32().getValue)
+      .getOrElse(throw new AssertionError(s"Field '$field' not found"))
 
   def getEntityRiskingFailures(doc: Document): Seq[BsonDocument] = doc.get("entityRiskingResult")
     .map(_.asDocument().get("failures").asArray().getValues.toArray.toSeq
@@ -67,17 +68,45 @@ object MongoHelper:
       .toFuture()
     Await.result(future, 10.seconds)
 
-  /** Simulates the risking service by setting riskingFileName and entityRiskingResult on the application-for-risking record, and individualRiskingResult (with
-    * empty failures) on each individual-for-risking record. At least one non-fixable failure (_7) is set on the application. Uses replaceOne to preserve
-    * correct Mongo field ordering: ..., isEmailSent, riskingFileName, entityRiskingResult.
+  /** Simulates the risking service by setting riskingFileName and entityRiskingResult on the application-for-risking record. When withIndividualFailures is
+    * true, sets all NonFixableOutcomeListForIndividualFailures codes on each individual-for-risking record; otherwise sets empty failures. Uses replaceOne to
+    * preserve correct Mongo field ordering: ..., isEmailSent, riskingFileName, entityRiskingResult.
     */
-  def simulateNonFixableRiskingOutcome(applicationReference: String): Unit =
+  def simulateNonFixableRiskingOutcome(applicationReference: String, withIndividualFailures: Boolean = false): Unit =
     val existing = findByApplicationReference(applicationReference)
       .getOrElse(throw new AssertionError(s"No document found for applicationReference='$applicationReference'"))
 
     val now = java.time.Instant.now().toString
-    val entityRiskingResult = BsonDocument.parse(s"""{"failures":[{"type":"_7"}],"receivedAt":"$now"}""")
-    val individualRiskingResult = BsonDocument.parse(s"""{"failures":[],"receivedAt":"$now"}""")
+    val entityRiskingResult = BsonDocument.parse(
+      s"""{"failures":[
+         |  {"type":"_7"},
+         |  {"type":"_3._1"},
+         |  {"type":"_4._1"},
+         |  {"type":"_5._1","value":150},
+         |  {"type":"_8._1"},
+         |  {"type":"_8._4"},
+         |  {"type":"_8._5"},
+         |  {"type":"_8._6"},
+         |  {"type":"_8._7"}
+         |],"receivedAt":"$now"}""".stripMargin
+    )
+    val individualRiskingResult =
+      if withIndividualFailures then
+        BsonDocument.parse(
+          s"""{"failures":[
+             |  {"type":"_4._1"},
+             |  {"type":"_5._1","value":150},
+             |  {"type":"_6"},
+             |  {"type":"_7"},
+             |  {"type":"_8._1"},
+             |  {"type":"_8._6"},
+             |  {"type":"_8._7"},
+             |  {"type":"_9"}
+             |],"receivedAt":"$now"}""".stripMargin
+        )
+      else
+        BsonDocument.parse(s"""{"failures":[],"receivedAt":"$now"}""")
+            
 
     val ordered = Document(
       "_id" -> existing("_id"),
@@ -105,63 +134,11 @@ object MongoHelper:
       .toFuture()
     Await.result(indFuture, 10.seconds)
 
-  /** Simulates the risking service setting status and failure codes on the record. Replaces the entire document to preserve the correct field ordering: ...
-    * amlRegNumber, failures, individuals ...
-    */
-  def updateStatusWithFailures(
-    ref: String,
-    newStatus: String,
-    failures: String
-  ): Unit =
-    val existing = findByApplicationReference(ref)
-      .getOrElse(throw new AssertionError(s"No document found for applicationReference='$ref'"))
-
-    val parsedFailures = org.bson.BsonArray.parse(failures)
-
-    // Rebuild the document with fields in the correct order
-    val ordered = Document(
-      "_id" -> existing("_id"),
-      "applicationReference" -> existing("applicationReference"),
-      "status" -> newStatus,
-      "createdAt" -> existing("createdAt"),
-      "agentDetails" -> existing("agentDetails"),
-      "applicantCredentials" -> existing("applicantCredentials"),
-      "applicantGroupId" -> existing("applicantGroupId"),
-      "applicantName" -> existing("applicantName"),
-      "applicantPhone" -> existing("applicantPhone"),
-      "applicantEmail" -> existing("applicantEmail"),
-      "entitySafeId" -> existing("entitySafeId"),
-      "entityType" -> existing("entityType"),
-      "entityIdentifier" -> existing("entityIdentifier"),
-      "vrns" -> existing("vrns"),
-      "payeRefs" -> existing("payeRefs"),
-      "amlSupervisoryBody" -> existing("amlSupervisoryBody"),
-      "amlRegNumber" -> existing("amlRegNumber"),
-      "failures" -> parsedFailures,
-      "individuals" -> existing("individuals")
-    )
-
-    val future = collection
-      .replaceOne(equal("applicationReference", ref), ordered)
-      .toFuture()
-    val result = Await.result(future, 10.seconds)
-    assert(
-      result.getMatchedCount == 1,
-      s"updateStatusWithFailures: no document matched applicationReference='$ref'"
-    )
-
-  val nonFixableFailures: String = """[
-      {"type":"_3._1"},
-      {"type":"_3._2"},
-      {"type":"_4._1"},
-      {"type":"_4._2"},
-      {"type":"_5._1","value":100.4},
-      {"type":"_7"},
-      {"type":"_8._1"},
-      {"type":"_8._5"},
-      {"type":"_8._6"},
-      {"type":"_8._7"}
-    ]"""
+  def getIndividualRiskingFailures(doc: Document): Seq[BsonDocument] =
+    doc.get("individualRiskingResult")
+      .map(_.asDocument().get("failures").asArray().getValues.toArray.toSeq
+        .map(_.asInstanceOf[org.bson.BsonValue].asDocument()))
+      .getOrElse(throw new AssertionError("Field 'individualRiskingResult' not found"))
 
   def deleteByApplicationReference(ref: String): Unit =
     val future = collection

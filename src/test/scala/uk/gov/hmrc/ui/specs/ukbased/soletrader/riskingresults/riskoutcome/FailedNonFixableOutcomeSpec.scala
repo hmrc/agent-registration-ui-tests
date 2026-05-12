@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.ukbased.soletrader.application.outcome
+package uk.gov.hmrc.ui.specs.ukbased.soletrader.riskingresults.riskoutcome
 
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
@@ -26,6 +26,7 @@ import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
+import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
@@ -75,19 +76,10 @@ extends BaseSpec:
         */
       MongoHelper.simulateNonFixableRiskingOutcome(applicationReference)
 
-      /** Step 6: Sign in again using the same credentials from step 1. Navigate directly to the application-status page — the frontend reads the updated status
-        * from Mongo and shows the outcome page.
-        */
-      val applicationStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + ApplicationSubmittedPage.path
-      val signInUrl =
-        AppConfig.baseUrlGovernmentGateway +
-          s"/bas-gateway/sign-in?continue_url=$applicationStatusUrl&origin=agent-registration-frontend&affinityGroup=agent"
-      PageObject.get(signInUrl)
-      GovernmentGatewaySignInPage.assertPageIsDisplayed()
-      GovernmentGatewaySignInPage.enterKnownUserId(stubbedSignInData.username)
-      GovernmentGatewaySignInPage.enterKnownPlanetId(stubbedSignInData.planetId)
-      GovernmentGatewaySignInPage.clickContinue()
-
+      RiskingOutcomeFlow
+        .SignInAsApplicantAfterRiskingOutcome
+        .runFlow(stubbedSignInData)
+      
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("ST Name ST Lastname")
 
@@ -96,8 +88,26 @@ extends BaseSpec:
         .findByApplicationReference(applicationReference)
         .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
       MongoHelper.getTopLevelString(outcomeDoc, "riskingFileName") shouldBe "any-old.txt"
-      MongoHelper.getEntityRiskingFailures(outcomeDoc) should not be empty
-      MongoHelper.getEntityRiskingFailures(outcomeDoc).map(f => MongoHelper.getNestedString(f, "type")) should contain("_7")
+
+      val failures = MongoHelper.getEntityRiskingFailures(outcomeDoc)
+      failures should not be empty
+
+      val failureTypes = failures.map(f => MongoHelper.getNestedString(f, "type"))
+      failureTypes should contain allOf("_7","_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
+
+      val fivePointOne = failures
+        .find(f => MongoHelper.getNestedString(f, "type") == "_5._1")
+        .getOrElse(throw new AssertionError("No _5._1 failure found"))
+      MongoHelper.getNestedInt(fivePointOne, "value") shouldBe 150
+
+      ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
+        "our records show that the business is formally insolvent",
+        "the business has missing tax returns in their HMRC record",
+        "the business has unpaid tax liabilities",
+        "the business appears on a published HMRC list of tax avoidance promoter, enablers or suppliers",
+        "the business was issued with a relevant anti-avoidance penalty within the last 12 months",
+        "the business has one or more relevant anti-avoidance penalties to pay",
+      )
 
     Scenario(
       "Sole Trader Non-Owner sees FailedNonFixable Outcome Page after sign in",
@@ -147,15 +157,9 @@ extends BaseSpec:
 
       MongoHelper.simulateNonFixableRiskingOutcome(applicationReference)
 
-      val applicationStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + ApplicationSubmittedPage.path
-      val signInUrl =
-        AppConfig.baseUrlGovernmentGateway +
-          s"/bas-gateway/sign-in?continue_url=$applicationStatusUrl&origin=agent-registration-frontend&affinityGroup=agent"
-      PageObject.get(signInUrl)
-      GovernmentGatewaySignInPage.assertPageIsDisplayed()
-      GovernmentGatewaySignInPage.enterKnownUserId(stubbedSignInData.username)
-      GovernmentGatewaySignInPage.enterKnownPlanetId(stubbedSignInData.planetId)
-      GovernmentGatewaySignInPage.clickContinue()
+      RiskingOutcomeFlow
+        .SignInAsApplicantAfterRiskingOutcome
+        .runFlow(stubbedSignInData)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("Test User")
@@ -164,5 +168,23 @@ extends BaseSpec:
         .findByApplicationReference(applicationReference)
         .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
       MongoHelper.getTopLevelString(outcomeDoc, "riskingFileName") shouldBe "any-old.txt"
-      MongoHelper.getEntityRiskingFailures(outcomeDoc) should not be empty
-      MongoHelper.getEntityRiskingFailures(outcomeDoc).map(f => MongoHelper.getNestedString(f, "type")) should contain("_7")
+
+      val failures = MongoHelper.getEntityRiskingFailures(outcomeDoc)
+      failures should not be empty
+
+      val failureTypes = failures.map(f => MongoHelper.getNestedString(f, "type"))
+      failureTypes should contain allOf("_7","_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
+
+      val fivePointOne = failures
+        .find(f => MongoHelper.getNestedString(f, "type") == "_5._1")
+        .getOrElse(throw new AssertionError("No _5._1 failure found"))
+      MongoHelper.getNestedInt(fivePointOne, "value") shouldBe 150
+
+      ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
+        "our records show that the business is formally insolvent",
+        "the business has missing tax returns in their HMRC record",
+        "the business has unpaid tax liabilities",
+        "the business appears on a published HMRC list of tax avoidance promoter, enablers or suppliers",
+        "the business was issued with a relevant anti-avoidance penalty within the last 12 months",
+        "the business has one or more relevant anti-avoidance penalties to pay",
+      )
