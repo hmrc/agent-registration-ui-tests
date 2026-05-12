@@ -32,7 +32,11 @@ object DeclarationFlow:
       fastForwardUsed: Boolean = false
     ): Unit =
       startJourney()
-      clickAcceptAndSend(businessType, soleTraderOwner, fastForwardUsed)
+      clickAcceptAndSend(
+        businessType,
+        soleTraderOwner,
+        fastForwardUsed
+      )
       completeJourney()
 
   def startJourney(): Unit =

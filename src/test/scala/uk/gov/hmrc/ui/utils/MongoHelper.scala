@@ -112,7 +112,6 @@ object MongoHelper:
       else
         BsonDocument.parse(s"""{"failures":[],"receivedAt":"$now"}""")
 
-
     val ordered = Document(
       "_id" -> existing("_id"),
       "applicationReference" -> existing("applicationReference"),
