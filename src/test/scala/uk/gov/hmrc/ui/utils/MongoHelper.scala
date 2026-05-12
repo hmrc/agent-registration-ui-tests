@@ -139,11 +139,10 @@ object MongoHelper:
       .toFuture()
     Await.result(indFuture, 10.seconds)
 
-  def getIndividualRiskingFailures(doc: Document): Seq[BsonDocument] =
-    doc.get("individualRiskingResult")
-      .map(_.asDocument().get("failures").asArray().getValues.toArray.toSeq
-        .map(_.asInstanceOf[org.bson.BsonValue].asDocument()))
-      .getOrElse(throw new AssertionError("Field 'individualRiskingResult' not found"))
+  def getIndividualRiskingFailures(doc: Document): Seq[BsonDocument] = doc.get("individualRiskingResult")
+    .map(_.asDocument().get("failures").asArray().getValues.toArray.toSeq
+      .map(_.asInstanceOf[org.bson.BsonValue].asDocument()))
+    .getOrElse(throw new AssertionError("Field 'individualRiskingResult' not found"))
 
   def deleteByApplicationReference(ref: String): Unit =
     val future = collection
