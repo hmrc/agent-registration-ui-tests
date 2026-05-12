@@ -51,6 +51,7 @@ object PartnersTaxAdvisorInformationFlow:
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertPartnersAndAdvisorsStatus("Completed")
     TaskListPage.clickPartnersAndAdvisorsStatusLink()
+    CheckYourAnswersPage.assertPageIsDisplayed()
     clickChangeCompaniesHouseListOfPartnersCorrect()
     CheckThisListOfPartnersPage.assertPageIsDisplayed()
 
