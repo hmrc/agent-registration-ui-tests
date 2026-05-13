@@ -121,7 +121,8 @@ object MongoHelper:
       "isSubscribed" -> existing("isSubscribed"),
       "isEmailSent" -> existing("isEmailSent"),
       "riskingFileName" -> "any-old.txt",
-      "entityRiskingResult" -> entityRiskingResult
+      "entityRiskingResult" -> entityRiskingResult,
+      "overallStatus" -> Document("riskingOutcome" -> "FailedNonFixable", "emailsProcessed" -> true)
     )
 
     val appFuture = collection
