@@ -30,7 +30,7 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(path)
 
-  private def changeCompaniesHouseListOfPartnersCorrectLink: By = By.xpath("a[href='/agent-registration/apply/list-details/companies-house-officer']")
+  private def changeCompaniesHouseListOfPartnersCorrectLink: By = By.cssSelector("a[href='/agent-registration/apply/list-details/companies-house-officers']")
   private def changeOtherRelevantTaxAdvisersLink: By = By.cssSelector("a[href='/agent-registration/apply/list-details/how-many-other-individuals']")
   private def changeOtherIndividualTaxAdvisersLink: By = By.cssSelector(
     "a[href='/agent-registration/apply/list-details/other-relevant-individuals/check-your-answers']"

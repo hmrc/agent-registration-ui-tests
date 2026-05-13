@@ -19,8 +19,7 @@ package uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership
 import uk.gov.hmrc.ui.utils.RichMatchers.shouldBe
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.PartnersAndOtherTaxAdvisersCheckYourAnswerPage.clickChangeOtherIndividualTaxAdvisers
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.PartnersAndOtherTaxAdvisersCheckYourAnswerPage.clickChangeOtherRelevantTaxAdvisers
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.PartnersAndOtherTaxAdvisersCheckYourAnswerPage.{clickChangeCompaniesHouseListOfPartnersCorrect, clickChangeOtherIndividualTaxAdvisers, clickChangeOtherRelevantTaxAdvisers}
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.CheckThisListOfPartnersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.PartnersAndOtherTaxAdvisersCheckYourAnswerPage
 
@@ -45,6 +44,13 @@ object PartnersTaxAdvisorInformationFlow:
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertPartnersAndAdvisorsStatus("Incomplete")
     TaskListPage.clickPartnersAndAdvisorsStatusLink()
+
+  def startJourneyFF(): Unit =
+    TaskListPage.assertPageIsDisplayed()
+    TaskListPage.assertPartnersAndAdvisorsStatus("Completed")
+    TaskListPage.clickPartnersAndAdvisorsStatusLink()
+    clickChangeCompaniesHouseListOfPartnersCorrect()
+    CheckThisListOfPartnersPage.assertPageIsDisplayed()
 
   def selectListOfPartnersCorrect(): Unit =
     CheckThisListOfPartnersPage.assertPageIsDisplayed()
@@ -171,6 +177,18 @@ object PartnersTaxAdvisorInformationFlow:
       startJourney()
       val partnersNames = captureFirstNPartnerNamesAndSelectCorrect(2)
       selectNoOtherRelevantTaxAdvisers()
+      checkYourAnswersWithoutRelevantAdviserNames(
+        "Yes",
+        "No"
+      )
+      partnersNames
+
+  /** Fast Forward flow where there are two Partners and no other relevant tax advisers - captures the names of the partners to be used in later flows */
+  object multiplePartnersFF:
+
+    def runFlow(): List[String] =
+      startJourneyFF()
+      val partnersNames = captureFirstNPartnerNamesAndSelectCorrect(2)
       checkYourAnswersWithoutRelevantAdviserNames(
         "Yes",
         "No"

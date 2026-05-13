@@ -18,6 +18,7 @@ package uk.gov.hmrc.ui.flows.common.application.declaration
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import BusinessType.*
+import org.scalatest.matchers.should.Matchers.shouldBe
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.declaration.DeclarationPage
