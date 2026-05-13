@@ -19,7 +19,9 @@ package uk.gov.hmrc.ui.flows.common.application
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.*
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.captureBearerTokenAndSession
+import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow.completeJourney
 import uk.gov.hmrc.ui.pages.PageObject
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.{ApplicationSubmittedPage, TaskListPage}
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.FastForwardLinksPage
@@ -31,7 +33,7 @@ object FastForwardLinks:
 
   enum ApplicationProgress:
     case BusinessDetails, AgentDetails, ContactDetails, AmlsDetails, AgentStandards, ProveYourIdentity,
-      PartnersAndAdvisors, AskPartnersAndAdvisorsToSignIn, CheckProvidedDetails, Declaration
+      PartnersAndAdvisors, MembersAndOtherRelevantTaxAdvisors2, MembersAndOtherRelevantTaxAdvisors6, AskPartnersAndAdvisorsToSignIn, CheckProvidedDetails, Declaration
 
   object FastForward:
 
@@ -106,6 +108,18 @@ object FastForwardLinks:
         TaskListPage.assertPageIsDisplayed()
         TaskListPage.assertHmrcStandardsForAgentsStatus("Completed")
         stubbedSignInData
+      case MembersAndOtherRelevantTaxAdvisors2 =>
+        FastForwardLinksPage.clickMembersAndOtherRelevantTaxAdvisors2Link(businessType)
+        val stubbedSignInData = logIn()
+        TaskListPage.assertPageIsDisplayed()
+        TaskListPage.assertPartnersAndAdvisorsStatus("Completed")
+        stubbedSignInData
+      case MembersAndOtherRelevantTaxAdvisors6 =>
+        FastForwardLinksPage.clickMembersAndOtherRelevantTaxAdvisors6Link(businessType)
+        val stubbedSignInData = logIn()
+        TaskListPage.assertPageIsDisplayed()
+        TaskListPage.assertPartnersAndAdvisorsStatus("Completed")
+        stubbedSignInData
       case PartnersAndAdvisors =>
         FastForwardLinksPage.clickPartnersAndAdvisorsLink(businessType)
         val stubbedSignInData = logIn()
@@ -138,4 +152,5 @@ object FastForwardLinks:
         else
           TaskListPage.assertPageIsDisplayed()
           TaskListPage.assertDeclarationStatus("Completed")
+        completeJourney()
         stubbedSignInData

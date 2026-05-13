@@ -25,6 +25,8 @@ import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.{complete, partial}
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.{PartnersTaxAdvisorInformationFlow, ProvidePartnersDetailsFlow}
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
@@ -37,8 +39,6 @@ extends BaseSpec:
       "User reviews application details",
       TagLimitedPartnership
     ):
-      pending
-
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
@@ -57,6 +57,34 @@ extends BaseSpec:
       AgentStandardsFlow
         .AgreeToMeetStandards
         .runFlow(LimitedPartnership)
+
+      val partnersNames = PartnersTaxAdvisorInformationFlow
+        .multiplePartners
+        .runFlow()
+
+      val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
+
+      /* Sign in first partner (partial - more partner to come) */
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          partial,
+          Some(partnersNames.head),
+          Some(partnersNames)
+        )
+
+      /* Sign in second partner (complete - last partner) - reuse the same link */
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          complete,
+          Some(partnersNames(1)),
+          Some(partnersNames)
+        )
 
       DeclarationFlow
         .AcceptDeclaration
