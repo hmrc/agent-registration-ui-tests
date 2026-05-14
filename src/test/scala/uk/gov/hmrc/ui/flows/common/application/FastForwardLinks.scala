@@ -21,7 +21,8 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgr
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.captureBearerTokenAndSession
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow.completeJourney
 import uk.gov.hmrc.ui.pages.PageObject
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.{ApplicationSubmittedPage, TaskListPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.FastForwardLinksPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
