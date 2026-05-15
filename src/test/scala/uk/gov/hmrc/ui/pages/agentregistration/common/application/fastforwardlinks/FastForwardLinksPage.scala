@@ -60,7 +60,7 @@ extends EntryPage:
 
   def clickContactDetailsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Applicant Contact Details"))
 
-  def clickAgentDetailsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Agent services account details"))
+  def clickAgentDetailsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Account contact details"))
 
   def clickAmlsDetailsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Anti-money laundering supervision details"))
 
