@@ -93,5 +93,5 @@ object AmlsDetailsFlow:
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Supervisory body", nonHmrcSupervisoryBody)
     CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000123456")
-    CheckYourAnswersPage.assertSummaryRow("Evidence of anti-money laundering supervision", "Aml-Evidence.docx")
+    CheckYourAnswersPage.assertSummaryRow("Evidence", "Aml-Evidence.docx")
     CheckYourAnswersPage.clickContinue()
