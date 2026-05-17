@@ -68,7 +68,7 @@ extends EntryPage:
 
   def clickProveYourIdentityLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Prove your identity"))
 
-  def clickPartnersAndAdvisorsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Partners and other relevant tax advisors"))
+  def clickPartnersAndAdvisorsLink(businessType: BusinessType): Unit = click(linkInSection(businessType, "Partners and other relevant individuals"))
 
   def clickAskPartnersAndAdvisorsToSignInLink(businessType: BusinessType): Unit = click(linkInSection(
     businessType,
