@@ -26,7 +26,7 @@ extends BaseCheckYourAnswersPage:
   override val path: String = "/agent-registration/apply/list-details/key-individuals/check-your-answers"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
-  private val changeNumberOfPartnersLink = By.linkText("Change number of partners")
+  private val changeNumberOfPartnersLink = By.linkText("Change the number of partners")
   private val warningText = By.cssSelector(".govuk-warning-text__text")
 
   private def removeLinkFor(name: String): By = By.xpath(

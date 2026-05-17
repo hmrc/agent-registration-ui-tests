@@ -28,7 +28,7 @@ extends BasePage {
 
   // ignore the query string which may be variable
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl.split("\\?").head should include(url)
+    getCurrentUrl.split("\\?").head should include(baseUrl) // our stubs hijack gg/sign-in as well during some flows now so we can't assert the URL always contains `agents-external-stubs`
 
   private val affinityGroupIndividualRadio = By.id("affinityGroup-2")
   private val affinityGroupAgentRadio = By.id("affinityGroup-4")
