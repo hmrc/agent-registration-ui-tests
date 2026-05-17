@@ -76,7 +76,7 @@ extends BaseSpec:
         .runFlow()
       ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
       ViewApplicationPage.assertSummaryRow("Business type", "Sole trader")
-      ViewApplicationPage.assertSummaryRow("Are you the owner of the business?", "Yes")
+      ViewApplicationPage.assertSummaryRow("Owner of the business", "Yes")
       ViewApplicationPage.assertSummaryRow("Sole trader name", "Test User")
       ViewApplicationPage.assertSummaryRowPresent("Unique taxpayer reference")
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
