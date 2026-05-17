@@ -117,7 +117,7 @@ extends BaseSpec:
       CheckThisListOfDirectorsPage.clickContinue()
 
       YouHaveAddedDirectorCheckYourAnswerPage.assertPageIsDisplayed()
-      YouHaveAddedDirectorCheckYourAnswerPage.assertWarningTextIsDisplayed("You need to tell us about 1 more director that deals with tax.")
+      YouHaveAddedDirectorCheckYourAnswerPage.assertWarningTextIsDisplayed("You need to tell us about 1 more director who is a relevant individual.")
       YouHaveAddedDirectorCheckYourAnswerPage.clickContinue()
 
       TellUsAboutTheDirectorPage.assertPageIsDisplayed()
@@ -241,7 +241,7 @@ extends BaseSpec:
       CheckThisListOfDirectorsPage.clickContinue()
 
       YouHaveAddedDirectorCheckYourAnswerPage.assertPageIsDisplayed()
-      YouHaveAddedDirectorCheckYourAnswerPage.assertWarningTextIsDisplayed("You need to tell us about 1 more director that deals with tax.")
+      YouHaveAddedDirectorCheckYourAnswerPage.assertWarningTextIsDisplayed("You need to tell us about 1 more director who is a relevant individual.")
       YouHaveAddedDirectorCheckYourAnswerPage.clickContinue()
 
       TellUsAboutTheDirectorPage.assertPageIsDisplayed()
@@ -258,7 +258,7 @@ extends BaseSpec:
       RemoveCompaniesHouseOfficePage.clickContinue()
 
       YouHaveAddedDirectorCheckYourAnswerPage.assertPageIsDisplayed()
-      YouHaveAddedDirectorCheckYourAnswerPage.assertWarningTextIsDisplayed("You need to tell us about 1 more director that deals with tax.")
+      YouHaveAddedDirectorCheckYourAnswerPage.assertWarningTextIsDisplayed("You need to tell us about 1 more director who is a relevant individual.")
       YouHaveAddedDirectorCheckYourAnswerPage.clickChangeNumberOfDirectors()
 
       CheckThisListOfDirectorsPage.assertPageIsDisplayed()
