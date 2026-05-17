@@ -89,7 +89,7 @@ extends BaseSpec:
 
       CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
       CheckYourAnswersKeyIndividualsPage.assertWarningTextIsDisplayed("You told us there are 3 partners. " +
-        "Change the number of partners or remove 2 partners from the list before you continue.")
+        "Remove 2 partners from the list before you continue.")
       CheckYourAnswersKeyIndividualsPage.removePartner("Tony Stark")
 
       RemovePartnerPage.assertPageIsDisplayed()
@@ -98,7 +98,7 @@ extends BaseSpec:
 
       CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
       CheckYourAnswersKeyIndividualsPage.assertWarningTextIsDisplayed("You told us there are 3 partners. " +
-        "Change the number of partners or remove 1 partner from the list before you continue.")
+        "Remove 1 partner from the list before you continue.")
       CheckYourAnswersKeyIndividualsPage.removePartner("Steve Rogers")
 
       RemovePartnerPage.assertPageIsDisplayed()
@@ -216,7 +216,7 @@ extends BaseSpec:
 
       CheckYourAnswersKeyIndividualsPage.assertPageIsDisplayed()
       CheckYourAnswersKeyIndividualsPage.assertWarningTextIsDisplayed("You told us there are 2 partners. " +
-        "Change the number of partners or remove 1 partner from the list before you continue.")
+        "Remove 1 partner from the list before you continue.")
       CheckYourAnswersKeyIndividualsPage.removePartner("Jack Burton")
 
       RemovePartnerPage.assertPageIsDisplayed()
