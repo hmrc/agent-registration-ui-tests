@@ -30,3 +30,14 @@ extends BasePage:
     getCurrentUrl shouldBe url
 
   def detailsProvided(name: String): String = getText(By.xpath(s"//tr[th[normalize-space()='$name']]/td"))
+
+  private val whatHappensReveal = By.xpath("//span[contains(@class,'govuk-details__summary-text') and contains(.,'What happens if someone cannot sign in?')]")
+
+  private val applicantIndividualDetailsLink = By.xpath("//*[@id='main-content']/div/div/details/div/p[4]/a")
+
+  def clickWhatHappensIfSomeoneCannotSignIn(): Unit = click(whatHappensReveal)
+
+  def assertRevealIsDisplayed(): Unit = eventually:
+    findElementBy(By.cssSelector("details[open] .govuk-details__text")).isDefined shouldBe true
+
+  def clickApplicantIndividualDetailsLink(): Unit = click(applicantIndividualDetailsLink)
