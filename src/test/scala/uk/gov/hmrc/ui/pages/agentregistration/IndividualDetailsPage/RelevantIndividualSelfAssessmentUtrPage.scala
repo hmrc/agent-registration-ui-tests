@@ -14,30 +14,28 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails
+package uk.gov.hmrc.ui.pages.agentregistration.IndividualDetailsPage
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object CheckWhoProvidedDetailsPage
+object RelevantIndividualSelfAssessmentUtrPage
 extends BasePage:
 
-  override val path: String = "/agent-registration/apply/list-details/check-progress"
+  override val path: String = "/agent-registration/apply/list-details/provide-details/self-assessment-unique-taxpayer-reference"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  def detailsProvided(name: String): String = getText(By.xpath(s"//tr[th[normalize-space()='$name']]/td"))
+  private val yesRadio = By.id("providedByApplicantSaUtr.hasSaUtr")
+  private val noRadio = By.id("providedByApplicantSaUtr.hasSaUtr-2")
+  private val utrField = By.id("providedByApplicantSaUtr.saUtr")
 
-  private val whatHappensReveal = By.xpath("//span[contains(@class,'govuk-details__summary-text') and contains(.,'What happens if someone cannot sign in?')]")
+  def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit = click(noRadio)
 
-  private val applicantIndividualDetailsLink = By.xpath("//*[@id='main-content']/div/div/details/div/p[4]/a")
-
-  def clickWhatHappensIfSomeoneCannotSignIn(): Unit = click(whatHappensReveal)
-
-  def assertRevealIsDisplayed(): Unit = eventually:
-    findElementBy(By.cssSelector("details[open] .govuk-details__text")).isDefined shouldBe true
-
-  def clickApplicantIndividualDetailsLink(): Unit = click(applicantIndividualDetailsLink)
+  def fillInSelfAssessmentUtr(utr: String): Unit =
+    click(yesRadio)
+    sendKeys(utrField, utr)

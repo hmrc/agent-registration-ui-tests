@@ -63,7 +63,7 @@ object ProvideDirectorDetailsFlow:
 
   def getProvideDetailsLink: String =
     TaskListPage.assertPageIsDisplayed()
-    TaskListPage.clickAskDirectorsAndOtherAdvisorsToSignInLink()
+    TaskListPage.clickAskAllRelevantIndividualsSignInLink()
     AskPartnersToSignInPage.assertPageIsDisplayed()
     val link = AskPartnersToSignInPage.getShareLinkText
     AskPartnersToSignInPage.clickContinue()
