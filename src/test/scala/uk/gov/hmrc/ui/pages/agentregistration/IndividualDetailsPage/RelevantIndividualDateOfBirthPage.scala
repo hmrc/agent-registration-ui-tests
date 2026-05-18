@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object RelevantIndividualDateOfBirthPage
-extends BasePage:
+  extends BasePage:
 
   override val path: String = "/agent-registration/apply/list-details/provide-details/date-of-birth"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -29,9 +29,9 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  private val dayField = By.id("applicant-provided.date-of-birth.day")
+  private val dayField   = By.id("applicant-provided.date-of-birth.day")
   private val monthField = By.id("applicant-provided.date-of-birth.month")
-  private val yearField = By.id("applicant-provided.date-of-birth.year")
+  private val yearField  = By.id("applicant-provided.date-of-birth.year")
 
   def fillInDateOfBirth(
     day: String,

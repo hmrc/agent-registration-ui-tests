@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object RelevantIndividualSelfAssessmentUtrPage
-extends BasePage:
+  extends BasePage:
 
   override val path: String = "/agent-registration/apply/list-details/provide-details/self-assessment-unique-taxpayer-reference"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
