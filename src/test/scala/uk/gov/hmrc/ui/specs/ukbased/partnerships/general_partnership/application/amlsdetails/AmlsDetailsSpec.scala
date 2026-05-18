@@ -109,7 +109,7 @@ extends BaseSpec:
       AmlsDetailsFlow.checkYourAnswersExpanded()
 
     Scenario(
-      "Upload evidence file exceeding 5MB in size",
+      "Upload evidence file exceeding 6MB in size",
       TagGeneralPartnership
     ):
 
@@ -124,7 +124,7 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-plus-5mb.docx")
       EvidenceOfAmlSupervisionPage.clickContinue()
-      EvidenceOfAmlSupervisionPage.assertErrorMessage("The selected file must not be larger than 5MB")
+      EvidenceOfAmlSupervisionPage.assertErrorMessage("The selected file must not be larger than 6MB")
 
     Scenario(
       "Upload evidence file with virus",
