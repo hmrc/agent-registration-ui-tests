@@ -22,7 +22,8 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgr
 import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.pages.agentregistration.IndividualDetailsPage.*
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{AskPartnersToSignInPage, CheckWhoProvidedDetailsPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskPartnersToSignInPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckWhoProvidedDetailsPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class RelevantIndividualSpec
@@ -62,7 +63,11 @@ extends BaseSpec:
       SelectRelevantIndividualPage.clickContinue()
 
       RelevantIndividualDateOfBirthPage.assertPageIsDisplayed()
-      RelevantIndividualDateOfBirthPage.fillInDateOfBirth("01", "01", "1990")
+      RelevantIndividualDateOfBirthPage.fillInDateOfBirth(
+        "01",
+        "01",
+        "1990"
+      )
       RelevantIndividualDateOfBirthPage.clickContinue()
 
       RelevantIndividualTelephoneNumberPage.assertPageIsDisplayed()
@@ -72,15 +77,15 @@ extends BaseSpec:
       RelevantIndividualEmailAddressPage.assertPageIsDisplayed()
       RelevantIndividualEmailAddressPage.fillInEmailAddress("bobby.boucher@example.com")
       RelevantIndividualEmailAddressPage.clickContinue()
-      
+
       RelevantIndividualNationalInsuranceNumberPage.assertPageIsDisplayed()
       RelevantIndividualNationalInsuranceNumberPage.fillInNationalInsuranceNumber("AB123456C")
       RelevantIndividualNationalInsuranceNumberPage.clickContinue()
-      
+
       RelevantIndividualSelfAssessmentUtrPage.assertPageIsDisplayed()
       RelevantIndividualSelfAssessmentUtrPage.fillInSelfAssessmentUtr("1234567890")
       RelevantIndividualSelfAssessmentUtrPage.clickContinue()
-      
+
       RelevantIndividualCheckYourAnswersPage.assertPageIsDisplayed()
       RelevantIndividualCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 1990")
       RelevantIndividualCheckYourAnswersPage.assertSummaryRow("Telephone number", "01234567890")
@@ -95,12 +100,3 @@ extends BaseSpec:
       CheckWhoProvidedDetailsPage.clickContinue()
 
       TaskListPage.assertPageIsDisplayed()
-
-
-
-
-
-
-      
-
-

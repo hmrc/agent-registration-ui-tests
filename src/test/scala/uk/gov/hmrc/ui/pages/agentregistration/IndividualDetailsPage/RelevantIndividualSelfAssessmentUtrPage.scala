@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object RelevantIndividualSelfAssessmentUtrPage
-  extends BasePage:
+extends BasePage:
 
   override val path: String = "/agent-registration/apply/list-details/provide-details/self-assessment-unique-taxpayer-reference"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -30,11 +30,11 @@ object RelevantIndividualSelfAssessmentUtrPage
     getCurrentUrl shouldBe url
 
   private val yesRadio = By.id("providedByApplicantSaUtr.hasSaUtr")
-  private val noRadio  = By.id("providedByApplicantSaUtr.hasSaUtr-2")
+  private val noRadio = By.id("providedByApplicantSaUtr.hasSaUtr-2")
   private val utrField = By.id("providedByApplicantSaUtr.saUtr")
 
   def selectYes(): Unit = click(yesRadio)
-  def selectNo(): Unit  = click(noRadio)
+  def selectNo(): Unit = click(noRadio)
 
   def fillInSelfAssessmentUtr(utr: String): Unit =
     click(yesRadio)

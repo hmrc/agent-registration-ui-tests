@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object RelevantIndividualTelephoneNumberPage
-  extends BasePage:
+extends BasePage:
 
   override val path: String = "/agent-registration/apply/list-details/provide-details/telephone-number"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -31,5 +31,4 @@ object RelevantIndividualTelephoneNumberPage
 
   private val telephoneNumberField = By.id("providedByApplicantTelephoneNumber")
 
-  def fillInTelephoneNumber(telephoneNumber: String): Unit =
-    sendKeys(telephoneNumberField, telephoneNumber)
+  def fillInTelephoneNumber(telephoneNumber: String): Unit = sendKeys(telephoneNumberField, telephoneNumber)

@@ -23,13 +23,16 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.IndividualDetailsPage.*
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.{ApplicationSubmittedPage, TaskListPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.declaration.DeclarationPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{AskPartnersToSignInPage, AskSoleTraderToSignInPage, CheckWhoProvidedDetailsPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskPartnersToSignInPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskSoleTraderToSignInPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckWhoProvidedDetailsPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class RelevantIndividualSpec
-  extends BaseSpec:
+extends BaseSpec:
 
   Feature("Applicant initiates Relevant Individual details journey"):
     Scenario(
@@ -80,7 +83,11 @@ class RelevantIndividualSpec
       SelectRelevantIndividualPage.clickContinue()
 
       RelevantIndividualDateOfBirthPage.assertPageIsDisplayed()
-      RelevantIndividualDateOfBirthPage.fillInDateOfBirth("01", "01", "1990")
+      RelevantIndividualDateOfBirthPage.fillInDateOfBirth(
+        "01",
+        "01",
+        "1990"
+      )
       RelevantIndividualDateOfBirthPage.clickContinue()
 
       RelevantIndividualTelephoneNumberPage.assertPageIsDisplayed()
@@ -119,16 +126,3 @@ class RelevantIndividualSpec
       DeclarationPage.clickContinue()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
-
-
-
-
-
-
-
-
-
-      
-
-

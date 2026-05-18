@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object RelevantIndividualNationalInsuranceNumberPage
-  extends BasePage:
+extends BasePage:
 
   override val path: String = "/agent-registration/apply/list-details/provide-details/national-insurance-number"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -29,12 +29,12 @@ object RelevantIndividualNationalInsuranceNumberPage
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  private val yesRadio  = By.id("applicant-provided.hasNino")
-  private val noRadio   = By.id("applicant-provided.hasNino-2")
+  private val yesRadio = By.id("applicant-provided.hasNino")
+  private val noRadio = By.id("applicant-provided.hasNino-2")
   private val ninoField = By.id("applicant-provided.nino")
 
   def selectYes(): Unit = click(yesRadio)
-  def selectNo(): Unit  = click(noRadio)
+  def selectNo(): Unit = click(noRadio)
 
   def fillInNationalInsuranceNumber(nino: String): Unit =
     click(yesRadio)

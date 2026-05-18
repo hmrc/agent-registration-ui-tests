@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object RelevantIndividualEmailAddressPage
-  extends BasePage:
+extends BasePage:
 
   override val path: String = "/agent-registration/apply/list-details/provide-details/email-address"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -31,5 +31,4 @@ object RelevantIndividualEmailAddressPage
 
   private val emailAddressField = By.id("providedByApplicantEmailAddress")
 
-  def fillInEmailAddress(emailAddress: String): Unit =
-    sendKeys(emailAddressField, emailAddress)
+  def fillInEmailAddress(emailAddress: String): Unit = sendKeys(emailAddressField, emailAddress)
