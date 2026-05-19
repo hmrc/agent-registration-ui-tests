@@ -51,9 +51,9 @@ object AgentDetailsFlow:
       selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
       businessType match
         case SoleTrader => verifyCheckYourAnswers(expectedName = "ST Name ST Lastname", expectedNumber = "(+44) 10794554342")
-        case LLP => verifyCheckYourAnswers(expectedName = "Test Company Name", expectedNumber = "(+44) 10794554342")
+        case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
         case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
-        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Company Name", expectedNumber = "(+44) 10794554342")
+        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
         case LimitedCompany => verifyCheckYourAnswers(expectedName = "Test Company Ltd", expectedNumber = "(+44) 10794554342")
         case ScottishLimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
         case ScottishPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
@@ -80,11 +80,11 @@ object AgentDetailsFlow:
       selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
       businessType match
         case SoleTrader => verifyCheckYourAnswers(expectedName = "ST Name ST Lastname", expectedNumber = "(+44) 10794554342")
-        case LLP => verifyCheckYourAnswers(expectedName = "Test Company Name", expectedNumber = "(+44) 10794554342")
+        case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
         case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
-        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Company Name", expectedNumber = "(+44) 10794554342")
-        case LimitedCompany => verifyCheckYourAnswers(expectedName = "Test Company Name", expectedNumber = "(+44) 10794554342")
-        case ScottishLimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Company Name", expectedNumber = "(+44) 10794554342")
+        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
+        case LimitedCompany => verifyCheckYourAnswers(expectedName = "Test Company Ltd", expectedNumber = "(+44) 10794554342")
+        case ScottishLimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
         case ScottishPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
 
   def startJourney(): Unit =

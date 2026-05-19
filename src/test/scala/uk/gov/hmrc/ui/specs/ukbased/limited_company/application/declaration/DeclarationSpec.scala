@@ -17,13 +17,15 @@
 package uk.gov.hmrc.ui.specs.ukbased.limited_company.application.declaration
 
 import uk.gov.hmrc.ui.domain.BusinessType
-import BusinessType.*
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
+import uk.gov.hmrc.ui.domain.BusinessType.*
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.MembersAndOtherRelevantIndividuals2
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.ukbased.limited_company.application.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.limited_company.application.DirectorTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.ukbased.limited_company.providedetails.ProvideDirectorDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.limited_company.providedetails.ProvideDirectorDetailsFlow.listProgress.complete
+import uk.gov.hmrc.ui.flows.ukbased.limited_company.providedetails.ProvideDirectorDetailsFlow.listProgress.partial
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class DeclarationSpec
@@ -31,30 +33,56 @@ extends BaseSpec:
 
   Feature("Complete declaration section"):
     Scenario(
-      "User accepts the declaration",
+      "User accepts the declaration link using FF link",
       TagLimitedCompany
     ):
+      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
       pending
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
+      FastForwardLinks
+        .FastForward
+        .runFlow(Declaration, LimitedCompany)
+
+    Scenario(
+      "User accepts the declaration via Members and other relevant individuals(2) journey using FF link",
+      TagLimitedCompany
+    ):
+      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
+      pending
+
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(MembersAndOtherRelevantIndividuals2, LimitedCompany)
+
+      val directorNames = DirectorTaxAdvisorInformationFlow
+        .multipleDirectorsFF
         .runFlow()
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      /* Get the share link once */
+      val shareLink = ProvideDirectorDetailsFlow.getProvideDetailsLink
 
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(LimitedCompany)
+      /* Sign in first director (partial - more directors to come) */
+      ProvideDirectorDetailsFlow
+        .ProvideDirectorDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          partial,
+          Some(directorNames.head),
+          Some(directorNames)
+        )
 
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
-
-      AgentStandardsFlow
-        .AgreeToMeetStandards
-        .runFlow(LimitedCompany)
+      /* Sign in second director (complete - last director) - reuse the same link */
+      ProvideDirectorDetailsFlow
+        .ProvideDirectorDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          complete,
+          Some(directorNames(1)),
+          Some(directorNames)
+        )
 
       DeclarationFlow
         .AcceptDeclaration
-        .runFlow(LimitedCompany)
+        .runFlow(LimitedCompany, fastForwardUsed = true)
