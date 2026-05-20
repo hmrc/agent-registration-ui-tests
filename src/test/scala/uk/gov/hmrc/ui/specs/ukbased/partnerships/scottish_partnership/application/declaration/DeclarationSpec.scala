@@ -18,12 +18,13 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.scottish_partnership.applicati
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_partnership.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class DeclarationSpec
@@ -31,29 +32,39 @@ extends BaseSpec:
 
   Feature("Complete declaration section"):
     Scenario(
-      "User accepts the declaration",
+      "User accepts the declaration link using FF link",
       TagScottishPartnership
     ):
+      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
       pending
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
+      
+      FastForwardLinks
+        .FastForward
+        .runFlow(Declaration, ScottishPartnership)
+
+    Scenario(
+      "User accepts the declaration via Partners and other relevant individuals(2) journey using FF link",
+      TagScottishPartnership
+    ):
+      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
+      pending
+
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .singlePartner
         .runFlow()
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(ScottishPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
-
-      AgentStandardsFlow
-        .AgreeToMeetStandards
-        .runFlow(ScottishPartnership)
+      ProvideIndividualDetailsFlow
+        .ProvideIndividualDetails
+        .runFlow(
+          stubbedSignInData,
+          complete,
+          ScottishPartnership
+        )
 
       DeclarationFlow
         .AcceptDeclaration
-        .runFlow(ScottishPartnership)
+        .runFlow(ScottishPartnership, fastForwardUsed = true)

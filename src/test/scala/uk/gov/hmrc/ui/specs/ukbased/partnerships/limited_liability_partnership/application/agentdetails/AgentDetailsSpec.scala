@@ -99,7 +99,12 @@ extends BaseSpec:
 
       FastForwardLinks
         .FastForward
-        .runFlow(AgentDetails, LLP)
+        .runFlow(ContactDetails, LLP)
+
+      AgentDetailsFlow
+        .WhenUsingProvidedOptions
+        .runFlow(LLP)
+      TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.clickOnAgentServicesAccountDetailsLink()

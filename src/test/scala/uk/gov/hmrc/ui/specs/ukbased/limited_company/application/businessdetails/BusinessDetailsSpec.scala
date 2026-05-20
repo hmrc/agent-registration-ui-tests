@@ -60,7 +60,7 @@ extends BaseSpec:
     CheckYourAnswersPage.assertSummaryRow("UK-based agent", "Yes")
     CheckYourAnswersPage.assertSummaryRow("Business type", "Limited company")
     CheckYourAnswersPage.assertSummaryRow("Are you a director of the limited company?", "No, but I’m authorised by them to set up this account")
-    CheckYourAnswersPage.assertSummaryRow("Company name", "Test Company Name")
+    CheckYourAnswersPage.assertSummaryRow("Company name", "Test Company Ltd")
     CheckYourAnswersPage.assertSummaryRow("Unique taxpayer reference", "2202108031")
     CheckYourAnswersPage.clickOnAssertChangeLink("Business details")
 

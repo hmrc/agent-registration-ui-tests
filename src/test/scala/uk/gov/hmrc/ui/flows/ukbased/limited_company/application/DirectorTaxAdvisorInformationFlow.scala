@@ -20,8 +20,10 @@ import org.scalactic.Prettifier.default
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.limited_company.businessdetails.CheckThisListOfDirectorsPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.limited_company.businessdetails.DirectorsAndOtherTaxAdvisersCheckYourAnswerPage.clickChangeCompaniesHouseListOfDirectorsCorrect
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.limited_company.businessdetails.TellUsAboutTheDirectorPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.limited_company.businessdetails.YouHaveAddedDirectorCheckYourAnswerPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership.CheckThisListOfPartnersPage
 
 object DirectorTaxAdvisorInformationFlow:
 
@@ -98,6 +100,18 @@ object DirectorTaxAdvisorInformationFlow:
       )
       directorNames
 
+  /** Fast Forward flow where there are two Directors and no other relevant tax advisers - captures the names of the directors to be used in later flows */
+  object multipleDirectorsFF:
+
+    def runFlow(): List[String] =
+      startJourneyFF()
+      val directorNames = captureFirstNDirectorNamesAndSelectCorrect(2)
+      checkYourAnswersWithoutRelevantAdviserNames(
+        "Yes",
+        "No"
+      )
+      directorNames
+
   /** flow to test to change directors from check your answers page */
   object RunToCheckYourAnswersToChangeDirectors:
 
@@ -141,6 +155,14 @@ object DirectorTaxAdvisorInformationFlow:
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertDirectorTaxAdvisorInformationStatus("Incomplete")
     TaskListPage.clickOnDirectorTaxAdvisorInformationLink()
+
+  def startJourneyFF(): Unit =
+    TaskListPage.assertPageIsDisplayed()
+    TaskListPage.assertDirectorTaxAdvisorInformationStatus("Completed")
+    TaskListPage.clickOnDirectorTaxAdvisorInformationLink()
+    CheckYourAnswersPage.assertPageIsDisplayed()
+    clickChangeCompaniesHouseListOfDirectorsCorrect()
+    CheckThisListOfPartnersPage.assertPageIsDisplayed()
 
   def selectListOfDirectorsCorrect(): Unit =
     CheckThisListOfDirectorsPage.assertPageIsDisplayed()
