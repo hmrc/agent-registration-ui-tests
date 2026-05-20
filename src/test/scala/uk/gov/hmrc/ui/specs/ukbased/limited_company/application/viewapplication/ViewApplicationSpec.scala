@@ -25,6 +25,10 @@ import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.limited_company.application.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.limited_company.application.DirectorTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.ukbased.limited_company.providedetails.ProvideDirectorDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.limited_company.providedetails.ProvideDirectorDetailsFlow.listProgress.complete
+import uk.gov.hmrc.ui.flows.ukbased.limited_company.providedetails.ProvideDirectorDetailsFlow.listProgress.partial
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
@@ -37,7 +41,6 @@ extends BaseSpec:
       "User reviews application details",
       TagLimitedCompany
     ):
-      pending
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -57,6 +60,35 @@ extends BaseSpec:
       AgentStandardsFlow
         .AgreeToMeetStandards
         .runFlow(LimitedCompany)
+
+      val directorNames = DirectorTaxAdvisorInformationFlow
+        .multipleDirectors
+        .runFlow()
+
+      /* Get the share link once */
+      val shareLink = ProvideDirectorDetailsFlow.getProvideDetailsLink
+
+      /* Sign in first director (partial - more directors to come) */
+      ProvideDirectorDetailsFlow
+        .ProvideDirectorDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          partial,
+          Some(directorNames.head),
+          Some(directorNames)
+        )
+
+      /* Sign in second director (complete - last director) - reuse the same link */
+      ProvideDirectorDetailsFlow
+        .ProvideDirectorDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          complete,
+          Some(directorNames(1)),
+          Some(directorNames)
+        )
 
       DeclarationFlow
         .AcceptDeclaration

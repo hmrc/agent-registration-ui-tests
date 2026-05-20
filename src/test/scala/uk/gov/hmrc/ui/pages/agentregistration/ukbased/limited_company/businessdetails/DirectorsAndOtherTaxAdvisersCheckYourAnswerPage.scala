@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limited_partnership
+package uk.gov.hmrc.ui.pages.agentregistration.ukbased.limited_company.businessdetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.pages.PageObject.click
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object PartnersAndOtherTaxAdvisersCheckYourAnswerPage
+object DirectorsAndOtherTaxAdvisersCheckYourAnswerPage
 extends BasePage:
 
   override val path: String = "/agent-registration/apply/list-details/check-your-answers"
@@ -30,14 +30,9 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(path)
 
-  private def changeCompaniesHouseListOfPartnersCorrectLink: By = By.cssSelector("a[href='/agent-registration/apply/list-details/companies-house-officers']")
-  private def changeOtherRelevantTaxAdvisersLink: By = By.cssSelector("a[href='/agent-registration/apply/list-details/how-many-other-individuals']")
-  private def changeOtherIndividualTaxAdvisersLink: By = By.cssSelector(
-    "a[href='/agent-registration/apply/list-details/other-relevant-individuals/check-your-answers']"
-  )
+  private def changeCompaniesHouseListOfDirectorsCorrectLink: By = By.cssSelector("a[href='/agent-registration/apply/list-details/companies-house-officers']")
+  private def changeOtherRelevantIndividualsLink: By = By.cssSelector("a[href='/agent-registration/apply/list-details/how-many-other-individuals']")
 
-  def clickChangeCompaniesHouseListOfPartnersCorrect(): Unit = click(changeCompaniesHouseListOfPartnersCorrectLink)
+  def clickChangeCompaniesHouseListOfDirectorsCorrect(): Unit = click(changeCompaniesHouseListOfDirectorsCorrectLink)
 
-  def clickChangeOtherRelevantTaxAdvisers(): Unit = click(changeOtherRelevantTaxAdvisersLink)
-
-  def clickChangeOtherIndividualTaxAdvisers(): Unit = click(changeOtherIndividualTaxAdvisersLink)
+  def clickChangeOtherRelevantIndividuals(): Unit = click(changeOtherRelevantIndividualsLink)

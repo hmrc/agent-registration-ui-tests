@@ -17,13 +17,15 @@
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_partnership.application.declaration
 
 import uk.gov.hmrc.ui.domain.BusinessType
-import BusinessType.*
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
+import uk.gov.hmrc.ui.domain.BusinessType.*
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.MembersAndOtherRelevantIndividuals2
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_partnership.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.complete
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.partial
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.PartnersTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class DeclarationSpec
@@ -31,30 +33,55 @@ extends BaseSpec:
 
   Feature("Complete declaration section"):
     Scenario(
-      "User accepts the declaration",
+      "User accepts the declaration link using FF link",
       TagLimitedPartnership
     ):
+      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
+      pending
+      
+      FastForwardLinks
+        .FastForward
+        .runFlow(Declaration, LimitedPartnership)
+
+    Scenario(
+      "User accepts the declaration via Partners and other relevant tax advisers(2) journey using FF link",
+      TagLimitedPartnership
+    ):
+      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
       pending
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(MembersAndOtherRelevantIndividuals2, LimitedPartnership)
+
+      val partnersNames = PartnersTaxAdvisorInformationFlow
+        .multiplePartnersFF
         .runFlow()
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
 
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(LimitedPartnership)
+      /* Sign in first partner (partial - more partner to come) */
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          partial,
+          Some(partnersNames.head),
+          Some(partnersNames)
+        )
 
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
-
-      AgentStandardsFlow
-        .AgreeToMeetStandards
-        .runFlow(LimitedPartnership)
+      /* Sign in second partner (complete - last partner) - reuse the same link */
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          complete,
+          Some(partnersNames(1)),
+          Some(partnersNames)
+        )
 
       DeclarationFlow
         .AcceptDeclaration
-        .runFlow(LimitedPartnership)
+        .runFlow(LimitedPartnership, fastForwardUsed = true)

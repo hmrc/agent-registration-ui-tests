@@ -23,6 +23,9 @@ import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
+import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_partnership.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
@@ -37,7 +40,7 @@ extends BaseSpec:
       "User reviews application details",
       TagScottishPartnership
     ):
-      pending
+
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
@@ -56,6 +59,18 @@ extends BaseSpec:
       AgentStandardsFlow
         .AgreeToMeetStandards
         .runFlow(ScottishPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .singlePartner
+        .runFlow()
+
+      ProvideIndividualDetailsFlow
+        .ProvideIndividualDetails
+        .runFlow(
+          stubbedSignInData,
+          complete,
+          ScottishPartnership
+        )
 
       DeclarationFlow
         .AcceptDeclaration
