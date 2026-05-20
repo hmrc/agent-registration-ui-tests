@@ -16,21 +16,20 @@
 
 package uk.gov.hmrc.ui.flows.common.application.relevantindividual
 
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
-import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.IndividualDetailsPage.*
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskPartnersToSignInPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskPartnersToSignInStartPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskSoleTraderToSignInPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckWhoProvidedDetailsPage
-import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
-import uk.gov.hmrc.ui.utils.AppConfig
 
 object RelevantIndividualFlow:
 
   object WithSoleTrader:
-    def runFlow(individualName: String, emailAddress: String): Unit =
+    def runFlow(
+      individualName: String,
+      emailAddress: String
+    ): Unit =
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.clickAskBusinessOwnerToSignInLink()
       AskSoleTraderToSignInPage.assertPageIsDisplayed()
@@ -40,9 +39,14 @@ object RelevantIndividualFlow:
       fillInIndividualDetails(individualName, emailAddress)
 
   object WithAllRelevantIndividuals:
-    def runFlow(individualName: String, emailAddress: String): Unit =
+    def runFlow(
+      individualName: String,
+      emailAddress: String
+    ): Unit =
       TaskListPage.assertPageIsDisplayed()
-      TaskListPage.clickAskAllRelevantIndividualsSignInLink()
+      TaskListPage.clickAskDirectorsAndOtherAdvisorsToSignInLink()
+      AskPartnersToSignInStartPage.assertPageIsDisplayed()
+      AskPartnersToSignInStartPage.clickContinue()
       AskPartnersToSignInPage.assertPageIsDisplayed()
       AskPartnersToSignInPage.clickContinue()
       TaskListPage.assertPageIsDisplayed()
@@ -50,16 +54,24 @@ object RelevantIndividualFlow:
       fillInIndividualDetails(individualName, emailAddress)
 
   object WithPartnersAndAdvisors:
-    def runFlow(individualName: String, emailAddress: String): Unit =
+    def runFlow(
+      individualName: String,
+      emailAddress: String
+    ): Unit =
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.clickAskPartnersAndAdvisorsToSignInLink()
+      AskPartnersToSignInStartPage.assertPageIsDisplayed()
+      AskPartnersToSignInStartPage.clickContinue()
       AskPartnersToSignInPage.assertPageIsDisplayed()
       AskPartnersToSignInPage.clickContinue()
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.clickCheckProvidedDetailsLink()
       fillInIndividualDetails(individualName, emailAddress)
 
-  private def fillInIndividualDetails(individualName: String, emailAddress: String): Unit =
+  private def fillInIndividualDetails(
+    individualName: String,
+    emailAddress: String
+  ): Unit =
     CheckWhoProvidedDetailsPage.assertPageIsDisplayed()
     CheckWhoProvidedDetailsPage.clickWhatHappensIfSomeoneCannotSignIn()
     CheckWhoProvidedDetailsPage.assertRevealIsDisplayed()
@@ -70,7 +82,11 @@ object RelevantIndividualFlow:
     SelectRelevantIndividualPage.clickContinue()
 
     RelevantIndividualDateOfBirthPage.assertPageIsDisplayed()
-    RelevantIndividualDateOfBirthPage.fillInDateOfBirth("01", "01", "1990")
+    RelevantIndividualDateOfBirthPage.fillInDateOfBirth(
+      "01",
+      "01",
+      "1990"
+    )
     RelevantIndividualDateOfBirthPage.clickContinue()
 
     RelevantIndividualTelephoneNumberPage.assertPageIsDisplayed()

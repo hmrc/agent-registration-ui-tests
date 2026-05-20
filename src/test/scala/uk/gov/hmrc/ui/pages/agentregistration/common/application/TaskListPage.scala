@@ -64,7 +64,7 @@ extends BasePage:
   def clickOnPartnerTaxAdvisorInformationLink(): Unit = click(partnerTaxAdvisorInformationLink)
   def clickSignOutLink(): Unit = click(signOutLink)
   def clickOnDirectorTaxAdvisorInformationLink(): Unit = click(directorTaxAdvisorInformationLink)
-  def clickAskAllRelevantIndividualsSignInLink(): Unit = click(askDirectorsAndOtherAdvisorsToSignInLink)
+  def clickAskDirectorsAndOtherAdvisorsToSignInLink(): Unit = click(askDirectorsAndOtherAdvisorsToSignInLink)
   def clickAskPartnersAndOtherAdvisorsToSignInLink(): Unit = click(askPartnersAndOtherAdvisorsToSignInLink)
   def clickDeclareAndSubmit(): Unit = click(declareAndSubmitLink)
 

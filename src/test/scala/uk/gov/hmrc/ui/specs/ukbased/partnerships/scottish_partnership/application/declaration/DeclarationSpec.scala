@@ -37,7 +37,7 @@ extends BaseSpec:
     ):
       /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
       pending
-      
+
       FastForwardLinks
         .FastForward
         .runFlow(Declaration, ScottishPartnership)
