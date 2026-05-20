@@ -23,6 +23,7 @@ import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ApproveApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskPartnersToSignInPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskPartnersToSignInStartPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.AskSoleTraderToSignInPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.CheckWhoProvidedDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ConfirmYourDetailsPage
@@ -142,6 +143,8 @@ object ProvideIndividualDetailsFlow:
   def getProvideDetailsLink: String =
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.clickAskPartnersAndAdvisorsToSignInLink()
+    AskPartnersToSignInStartPage.assertPageIsDisplayed()
+    AskPartnersToSignInStartPage.clickContinue()
     AskPartnersToSignInPage.assertPageIsDisplayed()
     val link = AskPartnersToSignInPage.getShareLinkText
     AskPartnersToSignInPage.clickContinue()
