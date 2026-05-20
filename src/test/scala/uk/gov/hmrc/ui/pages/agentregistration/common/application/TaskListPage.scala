@@ -59,12 +59,14 @@ extends BasePage:
   def clickAskPartnersAndAdvisorsToSignInLink(): Unit = click(askPartnersAndAdvisorsToSignInLink)
   def clickAskBusinessOwnerToSignInLink(): Unit = click(askBusinessOwnerToSignInLink)
   def clickCheckProvidedDetailsLink(): Unit = click(checkProvidedDetailsLink)
+  def clickCheckProvidedDetailsLinkForSoleTrader(): Unit = click(checkProvidedDetailsLinkForSoleTrader)
   def clickOnDeclarationLink(): Unit = click(declarationLink)
   def clickOnPartnerTaxAdvisorInformationLink(): Unit = click(partnerTaxAdvisorInformationLink)
   def clickSignOutLink(): Unit = click(signOutLink)
   def clickOnDirectorTaxAdvisorInformationLink(): Unit = click(directorTaxAdvisorInformationLink)
   def clickAskDirectorsAndOtherAdvisorsToSignInLink(): Unit = click(askDirectorsAndOtherAdvisorsToSignInLink)
   def clickAskPartnersAndOtherAdvisorsToSignInLink(): Unit = click(askPartnersAndOtherAdvisorsToSignInLink)
+  def clickDeclareAndSubmit(): Unit = click(declareAndSubmitLink)
 
   // Link locators
   private val yourBusinessLink = By.cssSelector("a[aria-describedby='businessDetails-1-status']")
@@ -76,6 +78,7 @@ extends BasePage:
   private val partnersAndAdvisorsLink = By.cssSelector("a[aria-describedby='lists-1-status']")
   private val askPartnersAndAdvisorsToSignInLink = By.cssSelector("a[aria-describedby='lists-2-status']")
   private val askBusinessOwnerToSignInLink = By.cssSelector("a[aria-describedby='lists-1-status']")
+  private val checkProvidedDetailsLinkForSoleTrader = By.cssSelector("a[aria-describedby='lists-2-status']")
   private val checkProvidedDetailsLink = By.cssSelector("a[aria-describedby='lists-3-status']")
   private val declarationLink = By.cssSelector("a[aria-describedby='declaration-1-status']")
   private val partnerTaxAdvisorInformationLink = By.cssSelector("a[aria-describedby='lists-1-status']")
@@ -83,6 +86,7 @@ extends BasePage:
   private val directorTaxAdvisorInformationLink = By.cssSelector("a[aria-describedby='lists-1-status']")
   private val askDirectorsAndOtherAdvisorsToSignInLink = By.cssSelector("a[aria-describedby='lists-2-status']")
   private val askPartnersAndOtherAdvisorsToSignInLink = By.cssSelector("a[aria-describedby='lists-2-status']")
+  private val declareAndSubmitLink = By.cssSelector("a[aria-describedby='declaration-1-status']")
   // Status locators
   private val contactDetailsStatus = By.id("contact-1-status")
   private val businessDetailsStatus = By.id("businessDetails-1-status")
