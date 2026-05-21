@@ -30,4 +30,11 @@ sbt \
   -Dbrowser.logging="${LOGGING}" \
   -Dscalatest.scalingFactor="${SCALATEST_SPAN_SCALE_FACTOR:-1.0}" \
   ${TAGS_ARG} \
-  "clean; test; testReport"
+  "clean; test"
+
+if [ -n "${JENKINS_HOME:-}" ]; then
+  echo "On Jenkins - waiting for axe result files to be fully written..."
+  sleep 5
+fi
+
+sbt testReport
