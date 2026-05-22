@@ -34,7 +34,8 @@ sbt \
 
 if [ -n "${JENKINS_HOME:-}" ]; then
   echo "On Jenkins - waiting for axe result files to be fully written..."
-  sleep 5
+  sleep 10
 fi
 
+find . -iname '*\.json'
 sbt testReport
