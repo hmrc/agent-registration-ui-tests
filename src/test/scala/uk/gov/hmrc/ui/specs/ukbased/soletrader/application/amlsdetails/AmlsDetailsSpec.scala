@@ -162,5 +162,5 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Invalid-ext..zip")
       EvidenceOfAmlSupervisionPage.clickContinue()
       EvidenceOfAmlSupervisionPage.assertErrorMessage(
-        "The selected file must be a JPG, JPEG, PNG, TIFF, PDF, TXT, MSG, DOC, DOCX, XLS, XLSX, PPT, PPTX, ODT, ODS or ODP file"
+        "The selected file must be a JPG, JPEG, PNG, TIFF, PDF, TXT, DOC, DOCX, XLS, XLSX, PPT, PPTX, ODT, ODS or ODP file"
       )
