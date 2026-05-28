@@ -29,6 +29,7 @@ sbt \
   -Dbrowser.option.headless="${HEADLESS}" \
   -Dbrowser.logging="${LOGGING}" \
   -Dscalatest.scalingFactor="${SCALATEST_SPAN_SCALE_FACTOR:-1.0}" \
+  -Daccessibility.timeout=10.seconds \
   ${TAGS_ARG} \
   "clean; test"
 
@@ -37,5 +38,4 @@ if [ -n "${JENKINS_HOME:-}" ]; then
   sleep 10
 fi
 
-find . -iname '*\.json'
 sbt testReport
