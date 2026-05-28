@@ -27,12 +27,22 @@ import org.mongodb.scala.Document
 object MongoHelper:
 
   private val client = MongoClient("mongodb://localhost:27017")
+  private val backEndDatabase = client.getDatabase("agent-registration")
+  private val backEndCollection = backEndDatabase.getCollection("agent-application")
+
   private val database = client.getDatabase("agent-registration-risking")
   private val collection = database.getCollection("application-for-risking")
   private val individualsCollection = database.getCollection("individual-for-risking")
 
   def findByApplicationReference(ref: String): Option[Document] =
     val future = collection
+      .find(equal("applicationReference", ref))
+      .first()
+      .toFutureOption()
+    Await.result(future, 10.seconds)
+
+  def findBackEndApplicationByApplicationReference(ref: String): Option[Document] =
+    val future = backEndCollection
       .find(equal("applicationReference", ref))
       .first()
       .toFutureOption()
@@ -76,6 +86,7 @@ object MongoHelper:
     */
   def simulateNonFixableRiskingOutcome(
     applicationReference: String,
+    withEntityFailures: Boolean = true,
     withIndividualFailures: Boolean = false
   ): Unit =
     val existing = findByApplicationReference(applicationReference)
@@ -115,7 +126,7 @@ object MongoHelper:
     val ordered = Document(
       "_id" -> existing("_id"),
       "applicationReference" -> existing("applicationReference"),
-      "agentApplication" -> existing("agentApplication"),
+      "applicationData" -> existing("applicationData"),
       "createdAt" -> existing("createdAt"),
       "lastUpdatedAt" -> existing("lastUpdatedAt"),
       "isSubscribed" -> existing("isSubscribed"),

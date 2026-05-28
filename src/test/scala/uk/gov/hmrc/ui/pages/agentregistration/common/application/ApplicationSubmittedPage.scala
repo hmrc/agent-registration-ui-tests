@@ -35,6 +35,8 @@ extends BasePage:
   private val panelBody = By.cssSelector("div.govuk-panel__body")
   private val pageHeading = By.cssSelector("h1.govuk-heading-l")
 
+  private val signOutLink = By.linkText("Sign out")
+
   def getCopyLinkButtonText: String = getText(copyLinkButton).trim
   def clickCopyLinkButton(): Unit = click(copyLinkButton)
   def clickViewOrPrintLink(): Unit = click(viewOrPrintLink)
@@ -57,3 +59,5 @@ extends BasePage:
         source should include(item)
       }
     }
+
+  def clickSignOutLink(): Unit = click(signOutLink)

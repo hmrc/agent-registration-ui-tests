@@ -31,5 +31,4 @@ extends BasePage:
 
   private val telephoneNumberField = By.id("providedByApplicantTelephoneNumber")
 
-  def fillInTelephoneNumber(telephoneNumber: String): Unit =
-    sendKeys(telephoneNumberField, telephoneNumber)
+  def fillInTelephoneNumber(telephoneNumber: String): Unit = sendKeys(telephoneNumberField, telephoneNumber)
