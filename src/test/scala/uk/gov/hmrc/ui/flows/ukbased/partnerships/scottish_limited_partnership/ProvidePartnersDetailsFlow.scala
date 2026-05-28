@@ -177,15 +177,3 @@ object ProvidePartnersDetailsFlow:
         CheckWhoProvidedDetailsPage.detailsProvided("Beverly Hills") shouldBe "Yes"
         TaskListPage.open()
         TaskListPage.assertPageIsDisplayed()
-
-object CacheHelper:
-
-  private var cache: Map[String, Any] = Map()
-
-  def memoize[T](key: String)(fn: => T): T = cache.get(key).map(_.asInstanceOf[T]).getOrElse {
-    val result = fn
-    cache += (key -> result)
-    result
-  }
-
-  def clear(): Unit = cache = Map()

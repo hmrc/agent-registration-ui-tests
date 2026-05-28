@@ -19,7 +19,6 @@ package uk.gov.hmrc.ui.flows.common.application.providedetails
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.CacheHelper
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ApproveApplicationPage
@@ -87,7 +86,7 @@ object ProvideIndividualDetailsFlow:
       progress: listProgress,
       businessType: BusinessType
     ): String =
-      val link = getProvideDetailsLinkForIndividual
+      val link = getProvideDetailsLink
       signOut()
       PageObject.get(link)
       val (bearerToken, sessionId, username) = signInWithUsername(
@@ -192,19 +191,6 @@ object ProvideIndividualDetailsFlow:
     val link = AskPartnersToSignInPage.getShareLinkText
     AskPartnersToSignInPage.clickContinue()
     link
-
-  def getProvideDetailsLinkForIndividual: String =
-    CacheHelper.memoize("provideDetailsLink") {
-
-      TaskListPage.assertPageIsDisplayed()
-      TaskListPage.clickAskPartnersAndAdvisorsToSignInLink()
-      AskPartnersToSignInStartPage.assertPageIsDisplayed()
-      AskPartnersToSignInStartPage.clickContinue()
-      AskPartnersToSignInPage.assertPageIsDisplayed()
-      val link = AskPartnersToSignInPage.getShareLinkText
-      AskPartnersToSignInPage.clickContinue()
-      link
-    }
 
   def signOut(): Unit =
     TaskListPage.assertPageIsDisplayed()
