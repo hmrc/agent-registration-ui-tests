@@ -87,7 +87,7 @@ object ProvideIndividualDetailsFlow:
       progress: listProgress,
       businessType: BusinessType
     ): String =
-      val link = getProvideDetailsLink
+      val link = getProvideDetailsLinkForIndividual
       signOut()
       PageObject.get(link)
       val (bearerToken, sessionId, username) = signInWithUsername(
@@ -184,6 +184,16 @@ object ProvideIndividualDetailsFlow:
     link
 
   def getProvideDetailsLink: String =
+    TaskListPage.assertPageIsDisplayed()
+    TaskListPage.clickAskPartnersAndAdvisorsToSignInLink()
+    AskPartnersToSignInStartPage.assertPageIsDisplayed()
+    AskPartnersToSignInStartPage.clickContinue()
+    AskPartnersToSignInPage.assertPageIsDisplayed()
+    val link = AskPartnersToSignInPage.getShareLinkText
+    AskPartnersToSignInPage.clickContinue()
+    link
+
+  def getProvideDetailsLinkForIndividual: String =
     CacheHelper.memoize("provideDetailsLink") {
 
       TaskListPage.assertPageIsDisplayed()

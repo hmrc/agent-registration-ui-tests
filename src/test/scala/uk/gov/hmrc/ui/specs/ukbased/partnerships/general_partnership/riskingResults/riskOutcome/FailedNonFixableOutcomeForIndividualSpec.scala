@@ -27,10 +27,10 @@ import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualD
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.{ApplicationSubmittedPage, ProvideDetailsStatusPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ProvideDetailsStatusPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
-
 
 class FailedNonFixableOutcomeForIndividualSpec
 extends BaseSpec:
@@ -102,16 +102,21 @@ extends BaseSpec:
 
       ApplicationSubmittedPage.clickSignOutLink()
 
-      MongoHelper.simulateNonFixableRiskingOutcome(applicationReference,
-        withIndividualFailures = true)
+      MongoHelper.simulateNonFixableRiskingOutcome(
+        applicationReference,
+        withIndividualFailures = true
+      )
 
       RiskingOutcomeFlow
         .signInAsPreviouslyUsedIndividual
-        .runFlow(stubbedSignInData, linkId, username)
+        .runFlow(
+          stubbedSignInData,
+          linkId,
+          username
+        )
 
       ProvideDetailsStatusPage.assertPageIsDisplayed()
       ProvideDetailsStatusPage.assertPageHeadingContainsForIndividual()
-
 
       val outcomeDoc = MongoHelper
         .findByApplicationReference(applicationReference)
@@ -141,7 +146,7 @@ extends BaseSpec:
           MongoHelper.getNestedString(f, "type")
         )
 
-        indFailureTypes should contain allOf(
+        indFailureTypes should contain allOf (
           "_4._1",
           "_5._1",
           "_6",
