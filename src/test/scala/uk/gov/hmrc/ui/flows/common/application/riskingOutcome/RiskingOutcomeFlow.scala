@@ -19,6 +19,7 @@ package uk.gov.hmrc.ui.flows.common.application.riskingOutcome
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ProvideDetailsStatusPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.utils.AppConfig
 
@@ -35,3 +36,20 @@ object RiskingOutcomeFlow:
       GovernmentGatewaySignInPage.enterKnownUserId(stubbedSignInData.username)
       GovernmentGatewaySignInPage.enterKnownPlanetId(stubbedSignInData.planetId)
       GovernmentGatewaySignInPage.clickContinue()
+
+  object signInAsPreviouslyUsedIndividual:
+    def runFlow(
+      stubbedSignInData: StubbedSignInData,
+      linkId: String,
+      username: String
+    ): Unit =
+      val individualRiskingStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + ProvideDetailsStatusPage.path + "/" + linkId
+      val signInUrl =
+        AppConfig.baseUrlGovernmentGateway +
+          s"/bas-gateway/sign-in?continue_url=$individualRiskingStatusUrl&origin=agent-registration-frontend&affinityGroup=individual"
+      PageObject.get(signInUrl)
+      GovernmentGatewaySignInPage.assertPageIsDisplayed()
+      GovernmentGatewaySignInPage.enterKnownUserId(username)
+      GovernmentGatewaySignInPage.enterKnownPlanetId(stubbedSignInData.planetId)
+      GovernmentGatewaySignInPage.clickContinue()
+      ProvideDetailsStatusPage.assertPageIsDisplayed()
