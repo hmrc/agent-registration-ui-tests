@@ -128,10 +128,18 @@ extends BaseSpec:
       YouHaveAddedDirectorCheckYourAnswerPage.assertPageIsDisplayed()
       YouHaveAddedDirectorCheckYourAnswerPage.assertNameAt(5, "Justine Hills")
 
+    /**
+     * We no longer have change links next to matched CH officers, just Remove links, the names are not editable
+     * Marking this as pending APB-11510 as we may want to convert to "Replace director from CYA" using remove and add 
+     * flow instead of editing the name, but this will require some changes to the existing flows and pages so we can do 
+     * this as a separate piece of work or we may decide the existing add/remove flows in other business types provide enough coverage.
+     */
     Scenario(
       "Change director name from Check your answers screen",
       TagLimitedCompany
     ):
+      pending
+
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow(Some(6))
@@ -276,6 +284,7 @@ extends BaseSpec:
       "Change director name from final Check Your Answers",
       TagLimitedCompany
     ):
+      pending
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
