@@ -39,7 +39,7 @@ extends BasePage:
   )
 
   private def changeLinkToRemoveDirector(name: String): By = By.xpath(
-    s"""//ul[@class='govuk-summary-list__actions-list']/li[contains(normalize-space(.), '$name')]//a[contains(@href, 'remove')]"""
+    s"""//a[contains(normalize-space(.), 'Remove $name')]"""
   )
 
   private def warningText = By.xpath(
