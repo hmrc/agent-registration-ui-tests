@@ -19,16 +19,18 @@ package uk.gov.hmrc.ui.flows.common.application
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag.False
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Agent
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.AgentR2DW
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Individual
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.IndividualWithUtr
 import uk.gov.hmrc.ui.pages.*
 import uk.gov.hmrc.ui.pages.stubs.*
+import uk.gov.hmrc.ui.utils.MongoHelper
 
 /** Encapsulates the Agents External Stubs sign-in/setup screens. */
 object StubbedSignInFlow:
 
   enum JourneyType:
-    case Agent, Individual, IndividualWithUtr
+    case Agent, Individual, IndividualWithUtr, AgentR2DW
 
   enum CompanyStatus:
     case Ok, Blocked
@@ -68,6 +70,8 @@ object StubbedSignInFlow:
           directorNames
         )
 
+      case JourneyType.AgentR2DW => configureForAgentR2DW()
+
       case JourneyType.Individual => configureForIndividual(hasUtr = false)
 
       case JourneyType.IndividualWithUtr => configureForIndividual(hasUtr = true)
@@ -95,6 +99,10 @@ object StubbedSignInFlow:
     directorName,
     numberOfDirectors,
     directorNames
+  )
+
+  def signInAndDataSetupViaStubsForAgentR2DW(): StubbedSignInData = signInAndDataSetupViaStubs(
+    AgentR2DW
   )
 
   def signInAndDataSetupViaStubsForIndividual(): StubbedSignInData = signInAndDataSetupViaStubs(Individual)
@@ -140,6 +148,12 @@ object StubbedSignInFlow:
           directorNames
         )
       case FastForwardFlag.True =>
+
+  def configureForAgentR2DW(): Unit =
+    selectAffinityGroupAgent()
+    selectNoEnrolmentAndContinue()
+    continueFromConfigureUser()
+    configureGrsForRefuseToDealWith()
 
   private def configureForIndividual(hasUtr: Boolean): Unit =
     selectAffinityGroupIndividual()
@@ -189,6 +203,19 @@ object StubbedSignInFlow:
       case Some(names) if names.nonEmpty => GrsDataSetupPage.enterDirectorNames(names)
       case None => directorName.foreach(name => GrsDataSetupPage.enterDirectorName(name))
       case Some(_) => ()
+    GrsDataSetupPage.clickContinue()
+
+  def configureGrsForRefuseToDealWith(): Unit =
+    GrsDataSetupPage.assertPageIsDisplayed()
+
+    val randomObjectId = MongoHelper.generateRandomObjectId()
+    val utr = MongoHelper.insertAgentAssuranceRecord(
+      randomObjectId,
+      "refusal-to-deal-with",
+      "1630226195"
+    )
+
+    GrsDataSetupPage.enterUtr(utr)
     GrsDataSetupPage.clickContinue()
 
   private def enterUtrEnrolmentData(): Unit =

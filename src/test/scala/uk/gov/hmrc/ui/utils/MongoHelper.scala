@@ -30,6 +30,9 @@ object MongoHelper:
   private val backEndDatabase = client.getDatabase("agent-registration")
   private val backEndCollection = backEndDatabase.getCollection("agent-application")
 
+  private val agentAssuranceDatabase = client.getDatabase("agent-assurance")
+  private val agentAssuranceCollection = agentAssuranceDatabase.getCollection("agent-assurance")
+
   private val database = client.getDatabase("agent-registration-risking")
   private val collection = database.getCollection("application-for-risking")
   private val individualsCollection = database.getCollection("individual-for-risking")
@@ -160,3 +163,27 @@ object MongoHelper:
       .deleteOne(equal("applicationReference", ref))
       .toFuture()
     Await.result(future, 10.seconds)
+
+  /** Generate a random MongoDB ObjectId string (24-character hexadecimal format). Example: "6a1ffcbde2c05e3704c3054" * */
+  def generateRandomObjectId(): String = new org.bson.types.ObjectId().toHexString
+
+  def insertAgentAssuranceRecord(
+    oid: String,
+    key: String,
+    value: String
+  ): String =
+    val objId = new org.bson.types.ObjectId(oid)
+    // remove any existing document with the same _id to make test runs idempotent
+    val deleteFuture = agentAssuranceCollection.deleteOne(equal("_id", objId)).toFuture()
+    Await.result(deleteFuture, 10.seconds)
+
+    val doc = Document(
+      "_id" -> objId,
+      "key" -> key,
+      "value" -> value
+    )
+
+    val insertFuture = agentAssuranceCollection.insertOne(doc).toFuture()
+    Await.result(insertFuture, 10.seconds)
+
+    value

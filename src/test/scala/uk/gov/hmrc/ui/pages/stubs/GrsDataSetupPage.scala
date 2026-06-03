@@ -32,6 +32,7 @@ extends BasePage {
   private val companyNumberField = By.id("companyNumber")
   private val deceasedCheckbox = By.id("deceased")
   private val nameField = By.id("name") // Add the locator for name field
+  private val utrField = By.id("sautr")
 
   def enterCompanyNumber(companyNumber: String = "87654321"): Unit = sendKeys(companyNumberField, companyNumber)
   def checkDeceasedCheckbox(): Unit = selectCheckbox(deceasedCheckbox)
@@ -43,5 +44,7 @@ extends BasePage {
   def enterDirectorNames(names: List[String]): Unit =
     val namesString = names.mkString(", ")
     sendKeys(nameField, namesString)
+
+  def enterUtr(utr: String): Unit = sendKeys(utrField, utr)
 
 }
