@@ -23,6 +23,7 @@ import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.O
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.*
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.cannotregister.CannotRegisterPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 
 /** Flow for completing the Business Details section of an agent registration application.
@@ -35,7 +36,7 @@ object BusinessDetailsFlow:
     case HasOnlineAgentAccount, NoOnlineAgentAccount
 
   enum AgencyStatus:
-    case Ok, Blocked
+    case Ok, Blocked, RefuseToDealWith
 
   // --- Public "journeys" (like ProvideDetailsFlow objects) ---
 
@@ -64,6 +65,18 @@ object BusinessDetailsFlow:
       val stubData = stubbedSignIn(AgencyStatus.Ok)
       landOnTaskList()
       stubData
+
+  object RefuseToDealWith:
+    def runFlow(): Unit =
+      startJourney()
+      selectUkBased()
+      selectPartnershipBusinessSetup()
+      selectGeneralPartnership()
+      selectAuthorisedUserRole()
+      answerOnlineServicesAccount(OnlineAgentsAccount.NoOnlineAgentAccount)
+      proceedToGovernmentGateway()
+      stubbedSignIn(AgencyStatus.RefuseToDealWith)
+      CannotRegisterPage.assertPageIsDisplayed()
 
   object HasBlockingStatus:
     def runFlow(): Unit =
@@ -123,6 +136,7 @@ object BusinessDetailsFlow:
     status match
       case AgencyStatus.Ok => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Ok)
       case AgencyStatus.Blocked => StubbedSignInFlow.signInAndDataSetupViaStubsForAgent(Blocked)
+      case AgencyStatus.RefuseToDealWith => StubbedSignInFlow.signInAndDataSetupViaStubsForAgentR2DW()
 
   def landOnTaskList(): Unit = TaskListPage.assertPageIsDisplayed()
 
