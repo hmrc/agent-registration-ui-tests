@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.common.application.cannotregisterR2DW
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.cannotregister
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object CannotRegisterPageR2DW
+object CannotRegisterPage
 extends BasePage:
 
   override val path: String = "/agent-registration/apply/cannot-register"

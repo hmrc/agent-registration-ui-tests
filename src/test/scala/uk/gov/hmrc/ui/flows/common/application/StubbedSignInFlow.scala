@@ -19,7 +19,6 @@ package uk.gov.hmrc.ui.flows.common.application
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.Ok
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.DeceasedFlag.False
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Agent
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.AgentR2DW
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.Individual
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.JourneyType.IndividualWithUtr
 import uk.gov.hmrc.ui.pages.*
@@ -30,10 +29,13 @@ import uk.gov.hmrc.ui.utils.MongoHelper
 object StubbedSignInFlow:
 
   enum JourneyType:
-    case Agent, Individual, IndividualWithUtr, AgentR2DW
+    case Agent, Individual, IndividualWithUtr
 
   enum CompanyStatus:
     case Ok, Blocked
+
+  enum RefuseToDealWith:
+    case True, False
 
   enum DeceasedFlag:
     case True, False
@@ -70,11 +72,26 @@ object StubbedSignInFlow:
           directorNames
         )
 
-      case JourneyType.AgentR2DW => configureForAgentR2DW()
-
       case JourneyType.Individual => configureForIndividual(hasUtr = false)
 
       case JourneyType.IndividualWithUtr => configureForIndividual(hasUtr = true)
+
+    StubbedSignInData(
+      username,
+      planetId,
+      bearerToken,
+      sessionId
+    )
+
+  def signInAndDataSetupViaStubsWithR2DW(
+    refuseToDealWith: RefuseToDealWith = RefuseToDealWith.True
+  ): StubbedSignInData =
+
+    val (username, planetId) = governmentGatewaySignIn()
+
+    val (bearerToken, sessionId) = captureBearerTokenAndSession()
+
+    if refuseToDealWith == RefuseToDealWith.True then configureForAgentR2DW()
 
     StubbedSignInData(
       username,
@@ -101,8 +118,8 @@ object StubbedSignInFlow:
     directorNames
   )
 
-  def signInAndDataSetupViaStubsForAgentR2DW(): StubbedSignInData = signInAndDataSetupViaStubs(
-    AgentR2DW
+  def signInAndDataSetupViaStubsForAgentR2DW(): StubbedSignInData = signInAndDataSetupViaStubsWithR2DW(
+    refuseToDealWith = RefuseToDealWith.True
   )
 
   def signInAndDataSetupViaStubsForIndividual(): StubbedSignInData = signInAndDataSetupViaStubs(Individual)

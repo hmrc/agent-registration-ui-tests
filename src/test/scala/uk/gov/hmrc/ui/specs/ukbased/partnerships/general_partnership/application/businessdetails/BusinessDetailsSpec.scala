@@ -66,3 +66,12 @@ extends BaseSpec:
       StartAgainConfirmationPage.assertPageIsDisplayed()
       StartAgainConfirmationPage.clickContinue()
       IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
+
+    Scenario(
+      "Refuse to deal with - General partnership",
+      TagGeneralPartnership
+    ):
+
+      BusinessDetailsFlow
+        .RefuseToDealWith
+        .runFlow()

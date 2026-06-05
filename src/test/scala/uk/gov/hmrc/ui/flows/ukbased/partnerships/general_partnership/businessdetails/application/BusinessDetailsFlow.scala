@@ -23,7 +23,7 @@ import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.CompanyStatus.O
 import uk.gov.hmrc.ui.pages.agentregistration.ApplyEntryPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.*
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.cannotregisterR2DW.CannotRegisterPageR2DW
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.cannotregister.CannotRegisterPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 
 /** Flow for completing the Business Details section of an agent registration application.
@@ -66,8 +66,8 @@ object BusinessDetailsFlow:
       landOnTaskList()
       stubData
 
-  object HasNoOnlineAccountForRefuseToDealWith:
-    def runFlow(): StubbedSignInData =
+  object RefuseToDealWith:
+    def runFlow(): Unit =
       startJourney()
       selectUkBased()
       selectPartnershipBusinessSetup()
@@ -75,9 +75,8 @@ object BusinessDetailsFlow:
       selectAuthorisedUserRole()
       answerOnlineServicesAccount(OnlineAgentsAccount.NoOnlineAgentAccount)
       proceedToGovernmentGateway()
-      val stubData = stubbedSignIn(AgencyStatus.RefuseToDealWith)
-      CannotRegisterPageR2DW.assertPageIsDisplayed()
-      stubData
+      stubbedSignIn(AgencyStatus.RefuseToDealWith)
+      CannotRegisterPage.assertPageIsDisplayed()
 
   object HasBlockingStatus:
     def runFlow(): Unit =
