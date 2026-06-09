@@ -101,7 +101,7 @@ object MongoHelper:
          |  {"type":"_7"},
          |  {"type":"_3._1"},
          |  {"type":"_4._1"},
-         |  {"type":"_5._1","value":150},
+         |  {"type":"_5._1"},
          |  {"type":"_8._1"},
          |  {"type":"_8._4"},
          |  {"type":"_8._5"},
@@ -114,7 +114,7 @@ object MongoHelper:
         BsonDocument.parse(
           s"""{"failures":[
              |  {"type":"_4._1"},
-             |  {"type":"_5._1","value":150},
+             |  {"type":"_5._1"},
              |  {"type":"_6"},
              |  {"type":"_7"},
              |  {"type":"_8._1"},
