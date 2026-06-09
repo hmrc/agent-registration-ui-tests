@@ -16,14 +16,11 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.declaration
 
+import uk.*
 import uk.gov.hmrc.ui.domain.BusinessType
-import BusinessType.*
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.domain.BusinessType.*
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class DeclarationSpec
@@ -31,30 +28,9 @@ extends BaseSpec:
 
   Feature("Complete declaration section"):
     Scenario(
-      "User accepts the declaration",
+      "User accepts the declaration link using FF link",
       TagLimitedLiabilityPartnership
     ):
-      pending
-
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(LLP)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
-
-      AgentStandardsFlow
-        .AgreeToMeetStandards
-        .runFlow(LLP)
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(LLP)
+      FastForwardLinks
+        .FastForward
+        .runFlow(Declaration, LLP)

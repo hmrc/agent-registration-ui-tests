@@ -17,7 +17,7 @@
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.application.viewapplication
 
 import uk.gov.hmrc.ui.domain.BusinessType
-import BusinessType.*
+import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
@@ -25,6 +25,10 @@ import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.complete
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.partial
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.PartnersTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
@@ -37,8 +41,6 @@ extends BaseSpec:
       "User reviews application details",
       TagLimitedLiabilityPartnership
     ):
-      pending
-
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
@@ -57,6 +59,34 @@ extends BaseSpec:
       AgentStandardsFlow
         .AgreeToMeetStandards
         .runFlow(LLP)
+
+      val partnersNames = PartnersTaxAdvisorInformationFlow
+        .multiplePartners
+        .runFlowForLLP()
+
+      val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
+
+      /* Sign in first partner (partial - more partner to come) */
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          partial,
+          Some(partnersNames.head),
+          Some(partnersNames)
+        )
+
+      /* Sign in second partner (complete - last partner) - reuse the same link */
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          complete,
+          Some(partnersNames(1)),
+          Some(partnersNames)
+        )
 
       DeclarationFlow
         .AcceptDeclaration

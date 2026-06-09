@@ -40,7 +40,7 @@ extends BaseSpec:
       "Sole Trader Owner sees FailedNonFixable Outcome Page after sign in",
       TagSoleTrader
     ):
-      pending // ff links aren't creating risk records so disabling until fixed
+
       /** Step 1: Fast-forward to AgentStandards — same starting point as DeclarationSpec
         */
       val stubbedSignInData = FastForwardLinks
@@ -111,7 +111,6 @@ extends BaseSpec:
       "Sole Trader Non-Owner sees FailedNonFixable Outcome Page after sign in",
       TagSoleTrader
     ):
-      pending // db has been restructured so the mongo interactions need reworking
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow(false)
