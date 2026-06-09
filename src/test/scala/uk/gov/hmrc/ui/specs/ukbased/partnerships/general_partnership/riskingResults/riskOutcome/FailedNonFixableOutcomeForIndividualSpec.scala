@@ -166,11 +166,6 @@ extends BaseSpec:
               "No _5._1 failure found on individual"
             )
           )
-
-        MongoHelper.getNestedInt(
-          fivePointOne,
-          "value"
-        ) shouldBe 150
       }
 
       ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(

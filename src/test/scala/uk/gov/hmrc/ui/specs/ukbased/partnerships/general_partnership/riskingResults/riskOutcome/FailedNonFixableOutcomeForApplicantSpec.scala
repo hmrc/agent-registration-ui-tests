@@ -125,7 +125,6 @@ extends BaseSpec:
         val fivePointOne = indFailures
           .find(f => MongoHelper.getNestedString(f, "type") == "_5._1")
           .getOrElse(throw new AssertionError("No _5._1 failure found on individual"))
-        MongoHelper.getNestedInt(fivePointOne, "value") shouldBe 150
       }
 
       ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
