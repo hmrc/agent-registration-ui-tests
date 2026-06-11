@@ -16,9 +16,13 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.providedetails
 
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
+import uk.gov.hmrc.ui.domain.BusinessType.LLP
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.{PartnersTaxAdvisorInformationFlow, ProvidePartnersDetailsFlow}
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.partial
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AreTheseYourDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.CheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
@@ -35,27 +39,36 @@ extends BaseSpec:
 
   Feature("Complete provide individual details section"):
     Scenario(
-      "User provides individual details with Nino and Utr",
+      "User provides individual details WITHOUT Utr",
       TagProvideDetails
     ):
-      pending
-      ProvideDetailsFlow
-        .ProvideFullIndividualDetails
-        .runFlow()
 
-    Scenario(
-      "User provides individual details WITHOUT Nino and Utr",
-      TagProvideDetails
-    ):
-      pending
-      ProvideDetailsFlow
-        .ProvidePartialIndividualDetails
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, LLP)
+
+      val partnersNames = PartnersTaxAdvisorInformationFlow
+        .multiplePartners
+        .runFlowForLLP()
+
+      val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
+
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          partial,
+          Some(partnersNames.head),
+          Some(partnersNames),
+          hasUtr = false
+        )
 
     Scenario(
       "Nino and Utr details retrieved from HMRC",
       TagProvideDetails
     ):
+      // Manually executed tests using test data setup as per the UI test, still seeing the utr page
       pending
       ProvideDetailsFlow
         .UtrAndNinoFromHmrc
@@ -65,30 +78,33 @@ extends BaseSpec:
       "Locked email",
       TagProvideDetails
     ):
-      pending
-      ProvideDetailsFlow.startJourney()
-      val stubData = ProvideDetailsFlow.stubbedSignIn(hasUtr = true)
-      ProvideDetailsFlow.enterName()
-      ProvideDetailsFlow.enterTelephoneNumber()
-      individualEmailAddressPage.assertPageIsDisplayed()
-      individualEmailAddressPage.enterEmailAddress()
-      individualEmailAddressPage.clickContinue()
-      EmailVerificationTestOnlyPage.assertPageIsDisplayed()
-      EmailVerificationTestOnlyPage.clickContinue()
-      ConfirmYourEmailPage.assertPageIsDisplayed()
-      ConfirmYourEmailPage.forceInvalidAttempts("XXXXXX", attempts = 5)
-      ConfirmYourEmailPage.enterConfirmationCode("XXXXXX")
-      ConfirmYourEmailPage.clickContinue()
-      ConfirmYourEmailPage.assertPageHeading("We could not confirm your identity")
-      ConfirmYourEmailPage.clickChangeEmailAddress()
-      ProvideDetailsFlow.enterEmailAddress(stubData: StubbedSignInData)
-      ProvideDetailsFlow.approveApplicant()
+
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, LLP)
+
+      val partnersNames = PartnersTaxAdvisorInformationFlow
+        .multiplePartners
+        .runFlowForLLP()
+
+      val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
+
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithLinkForLockedEmail(
+          stubbedSignInData,
+          shareLink,
+          partial,
+          Some(partnersNames.head),
+          Some(partnersNames),
+          hasUtr = false
+        )
 
     Scenario(
       "Change details from CYA",
       TagProvideDetails
     ):
-      pending
+//      pending
       val stubbedSignInData = ProvideDetailsFlow
         .RunToCheckYourAnswers
         .runFlow()

@@ -16,13 +16,15 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership
 
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
+import uk.gov.hmrc.ui.flows.common.application.{StubbedSignInData, StubbedSignInFlow}
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubCreateUserPage
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubUserPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.utils.PasscodeHelper
@@ -37,12 +39,30 @@ object ProvidePartnersDetailsFlow:
 
   object ProvidePartnersDetails:
 
+    def runFlowWithLinkForLockedEmail(
+      stubData: StubbedSignInData,
+      link: String,
+      progress: listProgress,
+      partnersName: Option[String] = None,
+      allPartnersNames: Option[List[String]] = None,
+      hasUtr: Boolean
+      ): Unit =
+        signOut()
+        PageObject.get(link)
+        val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
+        confirmDetails()
+        provideTelephoneNumber()
+        provideEmailAddressWithIncorrectPasscode(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+        provideUtr(hasUtr)
+        approveApplication()
+
     def runFlowWithLink(
       stubData: StubbedSignInData,
       link: String,
       progress: listProgress,
       partnersName: Option[String] = None,
-      allPartnersNames: Option[List[String]] = None
+      allPartnersNames: Option[List[String]] = None,
+      hasUtr: Boolean
     ): Unit =
       signOut()
       PageObject.get(link)
@@ -50,17 +70,17 @@ object ProvidePartnersDetailsFlow:
       confirmDetails()
       provideTelephoneNumber()
       provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
-      provideUtr()
+      provideUtr(hasUtr)
       approveApplication()
       agreeStandards()
-      checkYourAnswers()
+      checkYourAnswers(hasUtr)
       finishAndSignOut()
       TaskListPage.open()
       returnToTasklist(stubData)
       progress match
         case listProgress.complete => checkPartnersListProgressComplete()
         case listProgress.partial => checkPartnersListProgressPartial(allPartnersNames)
-
+  
   def getProvideDetailsLink: String =
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.clickAskPartnersAndOtherAdvisorsToSignInLink()
@@ -70,7 +90,7 @@ object ProvidePartnersDetailsFlow:
     val link = AskPartnersToSignInPage.getShareLinkText
     AskPartnersToSignInPage.clickContinue()
     link
-
+  
   def signOut(): Unit =
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.clickSignOutLink()
@@ -114,7 +134,6 @@ object ProvidePartnersDetailsFlow:
     ProvideDetailsEmailAddressPage.assertPageIsDisplayed()
     ProvideDetailsEmailAddressPage.enterEmailAddress()
     ProvideDetailsEmailAddressPage.clickContinue()
-
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
     EmailVerificationTestOnlyPage.clickContinue()
 
@@ -122,10 +141,38 @@ object ProvidePartnersDetailsFlow:
     ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
     ProvideDetailsConfirmEmailPage.clickContinue()
 
-  def provideUtr(): Unit =
+  def provideEmailAddressWithIncorrectPasscode(stubData: StubbedSignInData): Unit =
+    ProvideDetailsEmailAddressPage.assertPageIsDisplayed()
+    ProvideDetailsEmailAddressPage.enterEmailAddress()
+    ProvideDetailsEmailAddressPage.clickContinue()
+    EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    EmailVerificationTestOnlyPage.clickContinue()
+
+    ConfirmYourEmailPage.forceInvalidAttempts("XXXXXX", attempts = 5)
+    ConfirmYourEmailPage.enterConfirmationCode("XXXXXX")
+    ConfirmYourEmailPage.clickContinue()
+    ConfirmYourEmailPage.assertPageHeading("We could not confirm your identity")
+
+    ConfirmYourEmailPage.clickChangeEmailAddress()
+    ProvideDetailsEmailAddressPage.assertPageIsDisplayed()
+    ProvideDetailsEmailAddressPage.enterEmailAddress("individualNew@email.com")
+    ProvideDetailsEmailAddressPage.clickContinue()
+    EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    EmailVerificationTestOnlyPage.clickContinue()
+
+    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
+    ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
+    ProvideDetailsConfirmEmailPage.clickContinue()
+  
+  def provideUtr(hasUtr: Boolean): Unit =
     ProvideDetailsUtrPage.assertPageIsDisplayed()
-    ProvideDetailsUtrPage.selectYes()
-    ProvideDetailsUtrPage.enterUtr()
+    if (hasUtr) {
+      ProvideDetailsUtrPage.selectYes()
+      ProvideDetailsUtrPage.enterUtr()
+    }
+    else {
+      ProvideDetailsUtrPage.selectNo()
+    }
     ProvideDetailsUtrPage.clickContinue()
 
   def approveApplication(): Unit =
@@ -136,13 +183,22 @@ object ProvidePartnersDetailsFlow:
     ProvideDetailsAgreeStandardsPage.assertPageIsDisplayed()
     ProvideDetailsAgreeStandardsPage.clickContinue()
 
-  def checkYourAnswers(): Unit =
-    ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
-    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
-    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
-    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
-    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567890")
-    ProvideDetailsCheckYourAnswersPage.clickContinue()
+  def checkYourAnswers(hasUtr: Boolean): Unit =
+    if (hasUtr) {
+      ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567890")
+      ProvideDetailsCheckYourAnswersPage.clickContinue()
+    }
+    else {
+      ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
+      ProvideDetailsCheckYourAnswersPage.clickContinue()
+    }
 
   def finishAndSignOut(): Unit =
     ProvideDetailsConfirmationPage.assertPageIsDisplayed()
