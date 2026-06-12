@@ -55,7 +55,7 @@ object ProvidePartnersDetailsFlow:
         provideEmailAddressWithIncorrectPasscode(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
         provideUtr(hasUtr)
         approveApplication()
-
+    
     def runFlowWithLink(
       stubData: StubbedSignInData,
       link: String,
@@ -80,6 +80,27 @@ object ProvidePartnersDetailsFlow:
       progress match
         case listProgress.complete => checkPartnersListProgressComplete()
         case listProgress.partial => checkPartnersListProgressPartial(allPartnersNames)
+    
+    def runFlowToChangeDetailsCheckYourAnswers(
+      stubData: StubbedSignInData,
+      link: String,
+      progress: listProgress,
+      partnersName: Option[String] = None,
+      allPartnersNames: Option[List[String]] = None,
+      hasUtr: Boolean): StubbedSignInData =
+      signOut()
+      PageObject.get(link)
+      val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
+      val partnerStubData = stubData.copy(bearerToken = bearerToken, sessionId = sessionId)
+      confirmDetails()
+      provideTelephoneNumber()
+      provideEmailAddress(partnerStubData)
+      provideUtr(hasUtr)
+      approveApplication()
+      agreeStandards()
+      checkYourAnswersForChangesDetails()
+      partnerStubData
+      
   
   def getProvideDetailsLink: String =
     TaskListPage.assertPageIsDisplayed()
@@ -182,6 +203,13 @@ object ProvidePartnersDetailsFlow:
   def agreeStandards(): Unit =
     ProvideDetailsAgreeStandardsPage.assertPageIsDisplayed()
     ProvideDetailsAgreeStandardsPage.clickContinue()
+
+  def checkYourAnswersForChangesDetails(): Unit =
+      ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567890") 
 
   def checkYourAnswers(hasUtr: Boolean): Unit =
     if (hasUtr) {
