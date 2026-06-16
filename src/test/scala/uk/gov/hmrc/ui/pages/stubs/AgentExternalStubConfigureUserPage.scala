@@ -33,8 +33,10 @@ extends BasePage:
   private val identifierNameField = By.id("assignedPrincipalEnrolments[0].identifiers[0].key")
   private val identifierValueField = By.id("assignedPrincipalEnrolments[0].identifiers[0].value")
   private val nameField = By.id("name")
+  private val agentEntityUtrField = By.id("utr")
 
   def enterServiceKey(): Unit = sendKeys(serviceKeyField, "IR-SA")
   def enterIdentifierName(): Unit = sendKeys(identifierNameField, "UTR")
   def enterIdentifierValue(): Unit = sendKeys(identifierValueField, "5146529796")
   def enterName(name: String): Unit = sendKeys(nameField, name)
+  def enterAgentEntityUtrValue(): Unit = sendKeys(agentEntityUtrField, "5146529796")

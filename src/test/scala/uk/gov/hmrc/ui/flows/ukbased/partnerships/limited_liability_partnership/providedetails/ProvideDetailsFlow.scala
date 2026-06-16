@@ -80,19 +80,6 @@ object ProvideDetailsFlow:
       checkYourAnswers(email, DoNotProvideNinoUtrDetails)
       confirmationPage()
 
-  object UtrAndNinoFromHmrc:
-
-    def runFlow(): Unit =
-      startJourney()
-      val stubData = stubbedSignIn(hasUtr = true)
-      enterName()
-      enterTelephoneNumber()
-      val email = enterEmailAddress(stubData)
-      approveApplicant()
-      agreeStandards()
-      checkYourAnswers(email, NinoUtrAlreadyKnown)
-      confirmationPage()
-
   object RunToCheckYourAnswers:
 
     def runFlow(): StubbedSignInData =

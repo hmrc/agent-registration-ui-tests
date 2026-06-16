@@ -19,19 +19,11 @@ package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.
 import uk.gov.hmrc.ui.domain.BusinessType.LLP
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.{PartnersTaxAdvisorInformationFlow, ProvidePartnersDetailsFlow}
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.PartnersTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.partial
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{ProvideDetailsCheckYourAnswersPage, ProvideDetailsConfirmEmailPage, ProvideDetailsEmailAddressPage, ProvideDetailsTelephoneNumberPage, ProvideDetailsUtrPage}
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AreTheseYourDetailsPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.individualEmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualNiNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndivdualTelephoneNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualUtrPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.WhatIsYourNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
+import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
@@ -66,14 +58,27 @@ extends BaseSpec:
         )
 
     Scenario(
-      "Nino and Utr details retrieved from HMRC",
+      "Utr details retrieved from HMRC",
       TagProvideDetails
     ):
-      // Manually executed tests using test data setup as per the UI test, still seeing the utr page
-      pending
-      ProvideDetailsFlow
-        .UtrAndNinoFromHmrc
-        .runFlow()
+
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, LLP)
+
+      val partnersNames = PartnersTaxAdvisorInformationFlow
+        .multiplePartners
+        .runFlowForLLP()
+
+      val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
+
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithUtrDetailsFromHmrc(
+          stubbedSignInData,
+          shareLink,
+          Some(partnersNames.head)
+        )
 
     Scenario(
       "Locked email",
@@ -140,7 +145,7 @@ extends BaseSpec:
       ProvideDetailsEmailAddressPage.enterEmailAddress("newtest@test.com")
       ProvideDetailsEmailAddressPage.clickContinue()
       EmailVerificationTestOnlyPage.assertPageIsDisplayed()
-      
+
       EmailVerificationTestOnlyPage.clickContinue()
       val passcode = PasscodeHelper.getPasscode(partnerStubData.bearerToken, partnerStubData.sessionId)
       ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)

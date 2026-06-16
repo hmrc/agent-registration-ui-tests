@@ -16,17 +16,13 @@
 
 package uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership
 
-import uk.gov.hmrc.ui.flows.common.application.{StubbedSignInData, StubbedSignInFlow}
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage
-import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubCreateUserPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
-import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubUserPage
-import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
+import uk.gov.hmrc.ui.pages.stubs.{AgentExternalStubConfigureUserPage, AgentExternalStubCreateUserPage, AgentExternalStubUserPage, GovernmentGatewaySignInPage}
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 import uk.gov.hmrc.ui.utils.RichMatchers.shouldBe
 
@@ -46,16 +42,36 @@ object ProvidePartnersDetailsFlow:
       partnersName: Option[String] = None,
       allPartnersNames: Option[List[String]] = None,
       hasUtr: Boolean
-      ): Unit =
-        signOut()
-        PageObject.get(link)
-        val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
-        confirmDetails()
-        provideTelephoneNumber()
-        provideEmailAddressWithIncorrectPasscode(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
-        provideUtr(hasUtr)
-        approveApplication()
-    
+    ): Unit =
+      signOut()
+      PageObject.get(link)
+      val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
+      confirmDetails()
+      provideTelephoneNumber()
+      provideEmailAddressWithIncorrectPasscode(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideUtr(hasUtr)
+      approveApplication()
+
+    def runFlowWithUtrDetailsFromHmrc(
+      stubData: StubbedSignInData,
+      link: String,
+      partnersName: Option[String] = None
+    ): Unit =
+      signOut()
+      PageObject.get(link)
+      val (bearerToken, sessionId) = signIn(
+        stubData.planetId,
+        partnersName,
+        true
+      )
+      confirmDetails()
+      provideTelephoneNumber()
+      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      approveApplication()
+      agreeStandards()
+      checkYourAnswersUtrDetailsFromHmrc()
+      finishAndSignOut()
+
     def runFlowWithLink(
       stubData: StubbedSignInData,
       link: String,
@@ -80,14 +96,15 @@ object ProvidePartnersDetailsFlow:
       progress match
         case listProgress.complete => checkPartnersListProgressComplete()
         case listProgress.partial => checkPartnersListProgressPartial(allPartnersNames)
-    
+
     def runFlowToChangeDetailsCheckYourAnswers(
       stubData: StubbedSignInData,
       link: String,
       progress: listProgress,
       partnersName: Option[String] = None,
       allPartnersNames: Option[List[String]] = None,
-      hasUtr: Boolean): StubbedSignInData =
+      hasUtr: Boolean
+    ): StubbedSignInData =
       signOut()
       PageObject.get(link)
       val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
@@ -100,8 +117,7 @@ object ProvidePartnersDetailsFlow:
       agreeStandards()
       checkYourAnswersForChangesDetails()
       partnerStubData
-      
-  
+
   def getProvideDetailsLink: String =
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.clickAskPartnersAndOtherAdvisorsToSignInLink()
@@ -111,14 +127,15 @@ object ProvidePartnersDetailsFlow:
     val link = AskPartnersToSignInPage.getShareLinkText
     AskPartnersToSignInPage.clickContinue()
     link
-  
+
   def signOut(): Unit =
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.clickSignOutLink()
 
   def signIn(
     planet: String,
-    partnerNames: Option[String] = None
+    partnerNames: Option[String] = None,
+    agentEntityUtr: Boolean = false
   ): (String, String) =
     SignInAndConfirmDetailsPage.clickContinue()
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
@@ -138,6 +155,9 @@ object ProvidePartnersDetailsFlow:
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
     val nameToUse = partnerNames.getOrElse("Beverly Hills")
     AgentExternalStubConfigureUserPage.enterName(nameToUse)
+    if (agentEntityUtr) {
+      AgentExternalStubConfigureUserPage.enterAgentEntityUtrValue()
+    }
     AgentExternalStubConfigureUserPage.clickContinue()
     (bearerToken, sessionId)
 
@@ -184,7 +204,7 @@ object ProvidePartnersDetailsFlow:
     val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
     ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
     ProvideDetailsConfirmEmailPage.clickContinue()
-  
+
   def provideUtr(hasUtr: Boolean): Unit =
     ProvideDetailsUtrPage.assertPageIsDisplayed()
     if (hasUtr) {
@@ -205,11 +225,11 @@ object ProvidePartnersDetailsFlow:
     ProvideDetailsAgreeStandardsPage.clickContinue()
 
   def checkYourAnswersForChangesDetails(): Unit =
-      ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
-      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
-      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
-      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
-      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567890") 
+    ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
+    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
+    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567890")
 
   def checkYourAnswers(hasUtr: Boolean): Unit =
     if (hasUtr) {
@@ -227,6 +247,12 @@ object ProvidePartnersDetailsFlow:
       ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
       ProvideDetailsCheckYourAnswersPage.clickContinue()
     }
+
+  def checkYourAnswersUtrDetailsFromHmrc(): Unit =
+    ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
+    ProvideDetailsCheckYourAnswersPage.clickContinue()
 
   def finishAndSignOut(): Unit =
     ProvideDetailsConfirmationPage.assertPageIsDisplayed()
