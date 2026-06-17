@@ -30,5 +30,7 @@ extends BasePage:
     getCurrentUrl should include(url)
 
   private val registrationNumberField = By.id("amlsRegistrationNumber")
-
+  
   def enterRegistrationNumber(regNum: String = "XAML00000123456"): Unit = sendKeys(registrationNumberField, regNum)
+
+  def enterNonHMRCRegistrationNumber(regNum: String = "12345"): Unit = sendKeys(registrationNumberField, regNum)

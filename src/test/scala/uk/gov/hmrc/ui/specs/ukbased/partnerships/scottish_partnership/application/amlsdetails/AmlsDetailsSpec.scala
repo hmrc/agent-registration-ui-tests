@@ -104,7 +104,7 @@ extends BaseSpec:
       WhatSupervisoryBodyPage.enterSupervisor("Association of Chartered Certified Accountants (ACCA)")
       WhatSupervisoryBodyPage.clickContinue()
 
-      AmlsDetailsFlow.enterRegistrationNumber()
+      AmlsDetailsFlow.enterNonHMRCRegistrationNumber()
       AmlsDetailsFlow.uploadSupervisionEvidence()
       AmlsDetailsFlow.checkYourAnswersExpanded()
 
@@ -119,7 +119,7 @@ extends BaseSpec:
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
-      AmlsDetailsFlow.enterRegistrationNumber()
+      AmlsDetailsFlow.enterNonHMRCRegistrationNumber()
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-plus-5mb.docx")
@@ -137,7 +137,7 @@ extends BaseSpec:
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
-      AmlsDetailsFlow.enterRegistrationNumber()
+      AmlsDetailsFlow.enterNonHMRCRegistrationNumber()
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Virus.txt")
@@ -155,7 +155,7 @@ extends BaseSpec:
 
       AmlsDetailsFlow.startJourney()
       AmlsDetailsFlow.enterSupervisoryBody(NonHmrcSupervisoryBody)
-      AmlsDetailsFlow.enterRegistrationNumber()
+      AmlsDetailsFlow.enterNonHMRCRegistrationNumber()
 
       EvidenceOfAmlSupervisionPage.assertPageIsDisplayed()
       EvidenceOfAmlSupervisionPage.uploadFileFromResources("Aml-Evidence-Invalid-ext..zip")

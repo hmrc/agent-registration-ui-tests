@@ -19,15 +19,10 @@ package uk.gov.hmrc.ui.flows.common.application.amlsdetails
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.*
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Locale
-
 object AmlsDetailsFlow:
-
-  private val today = LocalDate.now()
-  private val nextYearDate = today.plusYears(1)
+  
   private val nonHmrcSupervisoryBody = "Association of Chartered Certified Accountants (ACCA)"
+  private val nonHmrcAMLSRegistrationNumber = "12345"
   private val evidenceFile = "Aml-Evidence.docx"
 
   sealed trait AmlsDetailsOption
@@ -49,7 +44,7 @@ object AmlsDetailsFlow:
     def runFlow(): Unit =
       startJourney()
       enterSupervisoryBody(AmlsDetailsOption.NonHmrcSupervisoryBody)
-      enterRegistrationNumber()
+      enterNonHMRCRegistrationNumber()
       uploadSupervisionEvidence(evidenceFile)
       checkYourAnswersExpanded()
 
@@ -70,6 +65,11 @@ object AmlsDetailsFlow:
       case AmlsDetailsOption.HmrcIsSupervisoryBody => WhatSupervisoryBodyPage.enterSupervisor()
       case AmlsDetailsOption.NonHmrcSupervisoryBody => WhatSupervisoryBodyPage.enterSupervisor(nonHmrcSupervisoryBody)
     WhatSupervisoryBodyPage.clickContinue()
+
+  def enterNonHMRCRegistrationNumber(): Unit =
+    WhatRegistrationNumberPage.assertPageIsDisplayed()
+    WhatRegistrationNumberPage.enterNonHMRCRegistrationNumber()
+    WhatRegistrationNumberPage.clickContinue()
 
   def enterRegistrationNumber(): Unit =
     WhatRegistrationNumberPage.assertPageIsDisplayed()
@@ -92,6 +92,6 @@ object AmlsDetailsFlow:
   def checkYourAnswersExpanded(): Unit =
     CheckYourAnswersPage.assertPageIsDisplayed()
     CheckYourAnswersPage.assertSummaryRow("Supervisory body", nonHmrcSupervisoryBody)
-    CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000123456")
+    CheckYourAnswersPage.assertSummaryRow("Registration number", nonHmrcAMLSRegistrationNumber)
     CheckYourAnswersPage.assertSummaryRow("Evidence", "Aml-Evidence.docx")
     CheckYourAnswersPage.clickContinue()
