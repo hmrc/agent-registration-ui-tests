@@ -31,7 +31,7 @@ extends BasePage:
 
   def clickChangeFor(keyText: String): Unit = click(changeLinkLocatorFor(keyText))
 
-  def locatorForAssertChangeLink(keyText: String): By = By.xpath("//a[@class='govuk-link']")
+  def locatorForAssertChangeLink(keyText: String): By = By.xpath("(//a[@class='govuk-link'])[2]")
 
   def assertChangeLink(keyText: String): Unit = eventually {
     findElementBy(locatorForAssertChangeLink(keyText)) shouldBe defined
