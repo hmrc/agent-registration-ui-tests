@@ -35,3 +35,5 @@ object Tags:
   extends Tag("ScottishLimitedPartnership")
   object TagScottishPartnership
   extends Tag("ScottishPartnership")
+  object TagSmokeTests
+  extends Tag("SmokeTests")

@@ -18,7 +18,11 @@ package uk.gov.hmrc.ui.flows.common.application.contactdetails
 
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.*
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.ApplicantNamePage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.ConfirmYourEmailPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.EmailAddressPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.TelephoneNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
