@@ -36,9 +36,6 @@ extends BaseSpec:
       "User accepts the declaration link using FF link",
       TagLimitedCompany
     ):
-      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
-      pending
-
       FastForwardLinks
         .FastForward
         .runFlow(Declaration, LimitedCompany)
@@ -47,8 +44,6 @@ extends BaseSpec:
       "User accepts the declaration via Members and other relevant individuals(2) journey using FF link",
       TagLimitedCompany
     ):
-      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
-      pending
 
       val stubbedSignInData = FastForwardLinks
         .FastForward

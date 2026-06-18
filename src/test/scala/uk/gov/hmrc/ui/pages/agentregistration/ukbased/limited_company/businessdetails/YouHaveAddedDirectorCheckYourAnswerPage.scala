@@ -34,10 +34,6 @@ extends BasePage:
 
   private def changeNumberOfDirectorsLink: By = By.cssSelector("#main-content > div > div > p:nth-child(3) > a")
 
-  private def changeLinkForToAddDirector(name: String): By = By.xpath(
-    s"""//ul[@class='govuk-summary-list__actions-list']/li[contains(normalize-space(.), '$name')]//a[contains(@href, 'change')]"""
-  )
-
   private def changeLinkToRemoveDirector(name: String): By = By.xpath(
     s"""//a[contains(normalize-space(.), 'Remove $name')]"""
   )
@@ -45,8 +41,6 @@ extends BasePage:
   private def warningText = By.xpath(
     "//*[@id='main-content']//*[contains(normalize-space(), 'You need to tell us about') and contains(normalize-space(), 'director')]"
   )
-
-  def changeDirectorName(name: String): Unit = click(changeLinkForToAddDirector(name))
 
   def clickChangeNumberOfDirectors(): Unit = click(changeNumberOfDirectorsLink)
 

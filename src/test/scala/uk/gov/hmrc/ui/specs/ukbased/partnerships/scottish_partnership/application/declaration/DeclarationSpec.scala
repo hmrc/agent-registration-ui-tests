@@ -35,9 +35,6 @@ extends BaseSpec:
       "User accepts the declaration link using FF link",
       TagScottishPartnership
     ):
-      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
-      pending
-
       FastForwardLinks
         .FastForward
         .runFlow(Declaration, ScottishPartnership)
@@ -46,9 +43,6 @@ extends BaseSpec:
       "User accepts the declaration via Partners and other relevant individuals(2) journey using FF link",
       TagScottishPartnership
     ):
-      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
-      pending
-
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, ScottishPartnership)

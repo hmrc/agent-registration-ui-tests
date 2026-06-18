@@ -16,17 +16,14 @@
 
 package uk.gov.hmrc.ui.specs.ukbased.partnerships.limited_liability_partnership.providedetails
 
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.limited_liability_partnership.providedetails.ProvideDetailsFlow
+import uk.gov.hmrc.ui.domain.BusinessType.LLP
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.PartnersTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.partial
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.AreTheseYourDetailsPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.CheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.ConfirmYourEmailPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.individualEmailAddressPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualNiNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndivdualTelephoneNumberPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.IndividualUtrPage
-import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails.WhatIsYourNamePage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.PasscodeHelper
 
@@ -35,134 +32,138 @@ extends BaseSpec:
 
   Feature("Complete provide individual details section"):
     Scenario(
-      "User provides individual details with Nino and Utr",
+      "User provides individual details WITHOUT Utr",
       TagProvideDetails
     ):
-      pending
-      ProvideDetailsFlow
-        .ProvideFullIndividualDetails
-        .runFlow()
+
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, LLP)
+
+      val partnersNames = PartnersTaxAdvisorInformationFlow
+        .multiplePartners
+        .runFlowForLLP()
+
+      val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
+
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithLink(
+          stubbedSignInData,
+          shareLink,
+          partial,
+          Some(partnersNames.head),
+          Some(partnersNames),
+          hasUtr = false
+        )
 
     Scenario(
-      "User provides individual details WITHOUT Nino and Utr",
+      "Utr details retrieved from HMRC",
       TagProvideDetails
     ):
-      pending
-      ProvideDetailsFlow
-        .ProvidePartialIndividualDetails
-        .runFlow()
 
-    Scenario(
-      "Nino and Utr details retrieved from HMRC",
-      TagProvideDetails
-    ):
-      pending
-      ProvideDetailsFlow
-        .UtrAndNinoFromHmrc
-        .runFlow()
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, LLP)
+
+      val partnersNames = PartnersTaxAdvisorInformationFlow
+        .multiplePartners
+        .runFlowForLLP()
+
+      val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
+
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithUtrDetailsFromHmrc(
+          stubbedSignInData,
+          shareLink,
+          Some(partnersNames.head)
+        )
 
     Scenario(
       "Locked email",
       TagProvideDetails
     ):
-      pending
-      ProvideDetailsFlow.startJourney()
-      val stubData = ProvideDetailsFlow.stubbedSignIn(hasUtr = true)
-      ProvideDetailsFlow.enterName()
-      ProvideDetailsFlow.enterTelephoneNumber()
-      individualEmailAddressPage.assertPageIsDisplayed()
-      individualEmailAddressPage.enterEmailAddress()
-      individualEmailAddressPage.clickContinue()
-      EmailVerificationTestOnlyPage.assertPageIsDisplayed()
-      EmailVerificationTestOnlyPage.clickContinue()
-      ConfirmYourEmailPage.assertPageIsDisplayed()
-      ConfirmYourEmailPage.forceInvalidAttempts("XXXXXX", attempts = 5)
-      ConfirmYourEmailPage.enterConfirmationCode("XXXXXX")
-      ConfirmYourEmailPage.clickContinue()
-      ConfirmYourEmailPage.assertPageHeading("We could not confirm your identity")
-      ConfirmYourEmailPage.clickChangeEmailAddress()
-      ProvideDetailsFlow.enterEmailAddress(stubData: StubbedSignInData)
-      ProvideDetailsFlow.approveApplicant()
+
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, LLP)
+
+      val partnersNames = PartnersTaxAdvisorInformationFlow
+        .multiplePartners
+        .runFlowForLLP()
+
+      val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
+
+      ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowWithLinkForLockedEmail(
+          stubbedSignInData,
+          shareLink,
+          partial,
+          Some(partnersNames.head),
+          Some(partnersNames),
+          hasUtr = false
+        )
 
     Scenario(
       "Change details from CYA",
       TagProvideDetails
     ):
-      pending
-      val stubbedSignInData = ProvideDetailsFlow
-        .RunToCheckYourAnswers
-        .runFlow()
 
-      // change Name
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.clickChangeFor("Name")
-      WhatIsYourNamePage.assertPageIsDisplayed()
-      WhatIsYourNamePage.enterFirstName("Jane")
-      WhatIsYourNamePage.enterLastName("Lasso")
-      WhatIsYourNamePage.clickContinue()
-      AreTheseYourDetailsPage.assertPageIsDisplayed()
-      AreTheseYourDetailsPage.selectYes()
-      AreTheseYourDetailsPage.clickContinue()
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Name", "LASSO, Jane")
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, LLP)
 
+      val partnersNames = PartnersTaxAdvisorInformationFlow
+        .multiplePartners
+        .runFlowForLLP()
+
+      val shareLink = ProvidePartnersDetailsFlow.getProvideDetailsLink
+
+      val partnerStubData = ProvidePartnersDetailsFlow
+        .ProvidePartnersDetails
+        .runFlowToChangeDetailsCheckYourAnswers(
+          stubbedSignInData,
+          shareLink,
+          partial,
+          Some(partnersNames.head),
+          Some(partnersNames),
+          hasUtr = true
+        )
       // change Telephone number
-      CheckYourAnswersPage.clickChangeFor("Telephone number")
-      IndivdualTelephoneNumberPage.assertPageIsDisplayed()
-      IndivdualTelephoneNumberPage.enterTelephoneNumber("07888888888")
-      IndivdualTelephoneNumberPage.clickContinue()
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Telephone number", "07888888888")
+      ProvideDetailsCheckYourAnswersPage.clickChangeFor("Telephone number")
+      ProvideDetailsTelephoneNumberPage.assertPageIsDisplayed()
+      ProvideDetailsTelephoneNumberPage.enterTelephoneNumber("07888888888")
+      ProvideDetailsTelephoneNumberPage.clickContinue()
+      ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07888888888")
 
       // change Email address
-      CheckYourAnswersPage.clickChangeFor("Email address")
-      individualEmailAddressPage.assertPageIsDisplayed()
-      val newEmail = individualEmailAddressPage.enterEmailAddress("@newtest.com")
-      individualEmailAddressPage.clickContinue()
+      ProvideDetailsCheckYourAnswersPage.clickChangeFor("Email address")
+      ProvideDetailsEmailAddressPage.assertPageIsDisplayed()
+      ProvideDetailsEmailAddressPage.enterEmailAddress("newtest@test.com")
+      ProvideDetailsEmailAddressPage.clickContinue()
       EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+
       EmailVerificationTestOnlyPage.clickContinue()
-      // Get a fresh passcode using the SAME session
-      val passcode = PasscodeHelper.getPasscode(
-        stubbedSignInData.bearerToken,
-        stubbedSignInData.sessionId,
-        expectedEmail = Some(newEmail)
-      )
-      ConfirmYourEmailPage.assertPageIsDisplayed()
-      ConfirmYourEmailPage.enterConfirmationCode(passcode)
-      ConfirmYourEmailPage.clickContinue()
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
-
-      // change National Insurance number
-      CheckYourAnswersPage.clickChangeFor("National Insurance number")
-      IndividualNiNumberPage.assertPageIsDisplayed()
-      IndividualNiNumberPage.enterNino("AA000000A")
-      IndividualNiNumberPage.clickContinue()
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("National Insurance number", "AA000000A")
-
-      // remove National Insurance number
-      CheckYourAnswersPage.clickChangeFor("Do you have a National Insurance number?")
-      IndividualNiNumberPage.assertPageIsDisplayed()
-      IndividualNiNumberPage.selectNo()
-      IndividualNiNumberPage.clickContinue()
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "No")
-      CheckYourAnswersPage.assertSummaryRowNotPresent("National Insurance number")
+      val passcode = PasscodeHelper.getPasscode(partnerStubData.bearerToken, partnerStubData.sessionId)
+      ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
+      ProvideDetailsConfirmEmailPage.clickContinue()
 
       // change Self Assessment Unique Taxpayer Reference number
-      CheckYourAnswersPage.clickChangeFor("Do you have a Self Assessment Unique Taxpayer Reference?")
-      IndividualUtrPage.assertPageIsDisplayed()
-      IndividualUtrPage.enterUtr("0987654321")
-      IndividualUtrPage.clickContinue()
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "0987654321")
+      ProvideDetailsCheckYourAnswersPage.clickChangeFor("Self Assessment Unique Taxpayer Reference")
+      ProvideDetailsUtrPage.assertPageIsDisplayed()
+      ProvideDetailsUtrPage.enterUtr("0987654321")
+      ProvideDetailsUtrPage.clickContinue()
+      ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "0987654321")
 
       // remove Self Assessment Unique Taxpayer Reference number
-      CheckYourAnswersPage.clickChangeFor("Self Assessment Unique Taxpayer Reference")
-      IndividualUtrPage.assertPageIsDisplayed()
-      IndividualUtrPage.selectNo()
-      IndividualUtrPage.clickContinue()
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
-      CheckYourAnswersPage.assertSummaryRowNotPresent("Self Assessment Unique Taxpayer Reference")
+      ProvideDetailsCheckYourAnswersPage.clickChangeFor("Self Assessment Unique Taxpayer Reference")
+      ProvideDetailsUtrPage.assertPageIsDisplayed()
+      ProvideDetailsUtrPage.selectNo()
+      ProvideDetailsUtrPage.clickContinue()
+      ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRowNotPresent("Self Assessment Unique Taxpayer Reference")
