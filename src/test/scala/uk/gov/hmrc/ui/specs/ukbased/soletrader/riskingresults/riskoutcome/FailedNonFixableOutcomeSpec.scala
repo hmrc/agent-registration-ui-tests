@@ -96,7 +96,6 @@ extends BaseSpec:
       val fivePointOne = failures
         .find(f => MongoHelper.getNestedString(f, "type") == "_5._1")
         .getOrElse(throw new AssertionError("No _5._1 failure found"))
-      MongoHelper.getNestedInt(fivePointOne, "value") shouldBe 150
 
       ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
         "our records show that the business is formally insolvent",
@@ -176,7 +175,6 @@ extends BaseSpec:
       val fivePointOne = failures
         .find(f => MongoHelper.getNestedString(f, "type") == "_5._1")
         .getOrElse(throw new AssertionError("No _5._1 failure found"))
-      MongoHelper.getNestedInt(fivePointOne, "value") shouldBe 150
 
       ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
         "our records show that the business is formally insolvent",

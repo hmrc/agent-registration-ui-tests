@@ -20,7 +20,7 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.*
 
 object AmlsDetailsFlow:
-  
+
   private val nonHmrcSupervisoryBody = "Association of Chartered Certified Accountants (ACCA)"
   private val nonHmrcAMLSRegistrationNumber = "12345"
   private val evidenceFile = "Aml-Evidence.docx"
