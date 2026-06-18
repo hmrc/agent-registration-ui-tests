@@ -36,9 +36,6 @@ extends BaseSpec:
       "User accepts the declaration link using FF link",
       TagLimitedPartnership
     ):
-      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
-      pending
-
       FastForwardLinks
         .FastForward
         .runFlow(Declaration, LimitedPartnership)
@@ -47,9 +44,6 @@ extends BaseSpec:
       "User accepts the declaration via Partners and other relevant tax advisers(2) journey using FF link",
       TagLimitedPartnership
     ):
-      /* Bug raised APB-11452 for an issue with the FF links whereby can't complete an application */
-      pending
-
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlow(MembersAndOtherRelevantIndividuals2, LimitedPartnership)
@@ -68,7 +62,8 @@ extends BaseSpec:
           shareLink,
           partial,
           Some(partnersNames.head),
-          Some(partnersNames)
+          Some(partnersNames),
+          hasUtr = true
         )
 
       /* Sign in second partner (complete - last partner) - reuse the same link */
@@ -79,7 +74,8 @@ extends BaseSpec:
           shareLink,
           complete,
           Some(partnersNames(1)),
-          Some(partnersNames)
+          Some(partnersNames),
+          hasUtr = true
         )
 
       DeclarationFlow

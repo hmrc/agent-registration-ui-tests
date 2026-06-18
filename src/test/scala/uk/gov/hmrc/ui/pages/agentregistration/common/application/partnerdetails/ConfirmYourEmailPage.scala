@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.limited_liability_partnership.providedetails
+package uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage

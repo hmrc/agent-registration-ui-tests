@@ -37,12 +37,50 @@ object ProvidePartnersDetailsFlow:
 
   object ProvidePartnersDetails:
 
+    def runFlowWithLinkForLockedEmail(
+      stubData: StubbedSignInData,
+      link: String,
+      progress: listProgress,
+      partnersName: Option[String] = None,
+      allPartnersNames: Option[List[String]] = None,
+      hasUtr: Boolean
+    ): Unit =
+      signOut()
+      PageObject.get(link)
+      val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
+      confirmDetails()
+      provideTelephoneNumber()
+      provideEmailAddressWithIncorrectPasscode(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideUtr(hasUtr)
+      approveApplication()
+
+    def runFlowWithUtrDetailsFromHmrc(
+      stubData: StubbedSignInData,
+      link: String,
+      partnersName: Option[String] = None
+    ): Unit =
+      signOut()
+      PageObject.get(link)
+      val (bearerToken, sessionId) = signIn(
+        stubData.planetId,
+        partnersName,
+        true
+      )
+      confirmDetails()
+      provideTelephoneNumber()
+      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      approveApplication()
+      agreeStandards()
+      checkYourAnswersUtrDetailsFromHmrc()
+      finishAndSignOut()
+
     def runFlowWithLink(
       stubData: StubbedSignInData,
       link: String,
       progress: listProgress,
       partnersName: Option[String] = None,
-      allPartnersNames: Option[List[String]] = None
+      allPartnersNames: Option[List[String]] = None,
+      hasUtr: Boolean
     ): Unit =
       signOut()
       PageObject.get(link)
@@ -50,16 +88,37 @@ object ProvidePartnersDetailsFlow:
       confirmDetails()
       provideTelephoneNumber()
       provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
-      provideUtr()
+      provideUtr(hasUtr)
       approveApplication()
       agreeStandards()
-      checkYourAnswers()
+      checkYourAnswers(hasUtr)
       finishAndSignOut()
       TaskListPage.open()
       returnToTasklist(stubData)
       progress match
         case listProgress.complete => checkPartnersListProgressComplete()
         case listProgress.partial => checkPartnersListProgressPartial(allPartnersNames)
+
+    def runFlowToChangeDetailsCheckYourAnswers(
+      stubData: StubbedSignInData,
+      link: String,
+      progress: listProgress,
+      partnersName: Option[String] = None,
+      allPartnersNames: Option[List[String]] = None,
+      hasUtr: Boolean
+    ): StubbedSignInData =
+      signOut()
+      PageObject.get(link)
+      val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
+      val partnerStubData = stubData.copy(bearerToken = bearerToken, sessionId = sessionId)
+      confirmDetails()
+      provideTelephoneNumber()
+      provideEmailAddress(partnerStubData)
+      provideUtr(hasUtr)
+      approveApplication()
+      agreeStandards()
+      checkYourAnswersForChangesDetails()
+      partnerStubData
 
   def getProvideDetailsLink: String =
     TaskListPage.assertPageIsDisplayed()
@@ -77,7 +136,8 @@ object ProvidePartnersDetailsFlow:
 
   def signIn(
     planet: String,
-    partnerNames: Option[String] = None
+    partnerNames: Option[String] = None,
+    agentEntityUtr: Boolean = false
   ): (String, String) =
     SignInAndConfirmDetailsPage.clickContinue()
     GovernmentGatewaySignInPage.assertPageIsDisplayed()
@@ -97,6 +157,9 @@ object ProvidePartnersDetailsFlow:
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
     val nameToUse = partnerNames.getOrElse("Beverly Hills")
     AgentExternalStubConfigureUserPage.enterName(nameToUse)
+    if (agentEntityUtr) {
+      AgentExternalStubConfigureUserPage.enterAgentEntityUtrValue()
+    }
     AgentExternalStubConfigureUserPage.clickContinue()
     (bearerToken, sessionId)
 
@@ -114,7 +177,6 @@ object ProvidePartnersDetailsFlow:
     ProvideDetailsEmailAddressPage.assertPageIsDisplayed()
     ProvideDetailsEmailAddressPage.enterEmailAddress()
     ProvideDetailsEmailAddressPage.clickContinue()
-
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
     EmailVerificationTestOnlyPage.clickContinue()
 
@@ -122,10 +184,38 @@ object ProvidePartnersDetailsFlow:
     ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
     ProvideDetailsConfirmEmailPage.clickContinue()
 
-  def provideUtr(): Unit =
+  def provideEmailAddressWithIncorrectPasscode(stubData: StubbedSignInData): Unit =
+    ProvideDetailsEmailAddressPage.assertPageIsDisplayed()
+    ProvideDetailsEmailAddressPage.enterEmailAddress()
+    ProvideDetailsEmailAddressPage.clickContinue()
+    EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    EmailVerificationTestOnlyPage.clickContinue()
+
+    ConfirmYourEmailPage.forceInvalidAttempts("XXXXXX", attempts = 5)
+    ConfirmYourEmailPage.enterConfirmationCode("XXXXXX")
+    ConfirmYourEmailPage.clickContinue()
+    ConfirmYourEmailPage.assertPageHeading("We could not confirm your identity")
+
+    ConfirmYourEmailPage.clickChangeEmailAddress()
+    ProvideDetailsEmailAddressPage.assertPageIsDisplayed()
+    ProvideDetailsEmailAddressPage.enterEmailAddress("individualNew@email.com")
+    ProvideDetailsEmailAddressPage.clickContinue()
+    EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    EmailVerificationTestOnlyPage.clickContinue()
+
+    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
+    ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
+    ProvideDetailsConfirmEmailPage.clickContinue()
+
+  def provideUtr(hasUtr: Boolean): Unit =
     ProvideDetailsUtrPage.assertPageIsDisplayed()
-    ProvideDetailsUtrPage.selectYes()
-    ProvideDetailsUtrPage.enterUtr()
+    if (hasUtr) {
+      ProvideDetailsUtrPage.selectYes()
+      ProvideDetailsUtrPage.enterUtr()
+    }
+    else {
+      ProvideDetailsUtrPage.selectNo()
+    }
     ProvideDetailsUtrPage.clickContinue()
 
   def approveApplication(): Unit =
@@ -136,12 +226,34 @@ object ProvidePartnersDetailsFlow:
     ProvideDetailsAgreeStandardsPage.assertPageIsDisplayed()
     ProvideDetailsAgreeStandardsPage.clickContinue()
 
-  def checkYourAnswers(): Unit =
+  def checkYourAnswersForChangesDetails(): Unit =
     ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
     ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
     ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
     ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
     ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567890")
+
+  def checkYourAnswers(hasUtr: Boolean): Unit =
+    if (hasUtr) {
+      ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567890")
+      ProvideDetailsCheckYourAnswersPage.clickContinue()
+    }
+    else {
+      ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
+      ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
+      ProvideDetailsCheckYourAnswersPage.clickContinue()
+    }
+
+  def checkYourAnswersUtrDetailsFromHmrc(): Unit =
+    ProvideDetailsCheckYourAnswersPage.assertPageDisplayed()
+    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Telephone number", "07777777777")
+    ProvideDetailsCheckYourAnswersPage.assertSummaryRow("Email address", "individual@email.com")
     ProvideDetailsCheckYourAnswersPage.clickContinue()
 
   def finishAndSignOut(): Unit =

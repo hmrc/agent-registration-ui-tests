@@ -61,7 +61,7 @@ extends BaseSpec:
         .WhenNonHmrcSupervisoryBody
         .runFlow()
       TaskListPage.assertAmlsDetailsStatus("Completed")
-      
+
     Scenario(
       "Changes Registration Number from CYA page",
       TagGeneralPartnership

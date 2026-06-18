@@ -128,51 +128,6 @@ extends BaseSpec:
       YouHaveAddedDirectorCheckYourAnswerPage.assertPageIsDisplayed()
       YouHaveAddedDirectorCheckYourAnswerPage.assertNameAt(5, "Justine Hills")
 
-    /** We no longer have change links next to matched CH officers, just Remove links, the names are not editable Marking this as pending APB-11510 as we may
-      * want to convert to "Replace director from CYA" using remove and add flow instead of editing the name, but this will require some changes to the existing
-      * flows and pages so we can do this as a separate piece of work or we may decide the existing add/remove flows in other business types provide enough
-      * coverage.
-      */
-    Scenario(
-      "Change director name from Check your answers screen",
-      TagLimitedCompany
-    ):
-      pending
-
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow(Some(6))
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(LimitedCompany)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
-
-      AgentStandardsFlow
-        .AgreeToMeetStandards
-        .runFlow(LimitedCompany)
-
-      DirectorTaxAdvisorInformationFlow
-        .RunToCheckYourAnswersToChangeDirectors
-        .runFlow()
-
-      YouHaveAddedDirectorCheckYourAnswerPage.assertPageIsDisplayed()
-      YouHaveAddedDirectorCheckYourAnswerPage.changeDirectorName("Steve Austin")
-
-      ChangeDirectorPage.assertPageIsDisplayed()
-      ChangeDirectorPage.enterDirectorFirstName("Justine")
-      ChangeDirectorPage.enterDirectorLastName("Hills")
-      ChangeDirectorPage.clickContinue()
-
-      YouHaveAddedDirectorCheckYourAnswerPage.assertPageIsDisplayed()
-      YouHaveAddedDirectorCheckYourAnswerPage.assertNameAt(0, "Justine Hills")
-
     Scenario(
       "Change other relevant individuals from Check Your Answers screen",
       TagLimitedCompany
@@ -278,53 +233,6 @@ extends BaseSpec:
 
       CheckYourAnswersPage.assertPageIsDisplayed()
       CheckYourAnswersPage.assertSummaryRow("Number of directors", "5")
-
-    Scenario(
-      "Change director name from final Check Your Answers",
-      TagLimitedCompany
-    ):
-      pending
-
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow(Some(6))
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(LimitedCompany)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
-
-      AgentStandardsFlow
-        .AgreeToMeetStandards
-        .runFlow(LimitedCompany)
-
-      DirectorTaxAdvisorInformationFlow
-        .RunToFinalCheckYourAnswers
-        .runFlow()
-
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.changeDirectorNames()
-
-      YouHaveAddedDirectorCheckYourAnswerPage.assertPageIsDisplayed()
-      YouHaveAddedDirectorCheckYourAnswerPage.changeDirectorName("Steve Austin")
-
-      ChangeDirectorPage.assertPageIsDisplayed()
-      ChangeDirectorPage.enterDirectorFirstName("Justine")
-      ChangeDirectorPage.enterDirectorLastName("Hills")
-      ChangeDirectorPage.clickContinue()
-
-      YouHaveAddedDirectorCheckYourAnswerPage.assertPageIsDisplayed()
-      YouHaveAddedDirectorCheckYourAnswerPage.assertNameAt(0, "Justine Hills")
-      YouHaveAddedDirectorCheckYourAnswerPage.clickContinue()
-
-      CheckYourAnswersPage.assertPageIsDisplayed()
-      CheckYourAnswersPage.assertSummaryRow("Director names", "Justine Hills\nBeverly Hills\nPauline Austin\nSteve Palmer\nSandra Hills")
 
     Scenario(
       "Change other relevant individual name from final Check Your Answers",

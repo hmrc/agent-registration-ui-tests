@@ -74,7 +74,8 @@ extends BaseSpec:
           shareLink,
           partial,
           Some(partnersNames.head),
-          Some(partnersNames)
+          Some(partnersNames),
+          hasUtr = true
         )
 
       /* Sign in second partner (complete - last partner) - reuse the same link */
@@ -85,7 +86,8 @@ extends BaseSpec:
           shareLink,
           complete,
           Some(partnersNames(1)),
-          Some(partnersNames)
+          Some(partnersNames),
+          hasUtr = true
         )
 
       DeclarationFlow

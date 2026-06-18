@@ -100,6 +100,19 @@ object PartnersTaxAdvisorInformationFlow:
     TaskListPage.assertAskPartnersAndTaxAdvisorsToSignInStatus("Incomplete")
     TaskListPage.assertCheckProvidedDetailsStatus("Cannot start yet")
 
+  def checkYourAnswersForLLPWithoutRelevantAdviserNames(
+    companiesHouseListOfLLPMembersCorrect: String,
+    otherRelevantTaxAdvisers: String
+  ): Unit =
+    CheckYourAnswersPage.assertPageIsDisplayed()
+    CheckYourAnswersPage.assertSummaryRow("Companies House list of LLP members correct", companiesHouseListOfLLPMembersCorrect)
+    CheckYourAnswersPage.assertSummaryRow("Other relevant individuals", otherRelevantTaxAdvisers)
+    CheckYourAnswersPage.clickContinue()
+    TaskListPage.assertPageIsDisplayed()
+    TaskListPage.assertPartnerTaxAdvisorInformationStatus("Completed")
+    TaskListPage.assertAskPartnersAndTaxAdvisorsToSignInStatus("Incomplete")
+    TaskListPage.assertCheckProvidedDetailsStatus("Cannot start yet")
+
   object partnersAndOtherTaxAdvisers:
 
     def runFlow(): Unit =
@@ -181,6 +194,16 @@ object PartnersTaxAdvisorInformationFlow:
       val partnersNames = captureFirstNPartnerNamesAndSelectCorrect(2)
       selectNoOtherRelevantTaxAdvisers()
       checkYourAnswersWithoutRelevantAdviserNames(
+        "Yes",
+        "No"
+      )
+      partnersNames
+
+    def runFlowForLLP(): List[String] =
+      startJourney()
+      val partnersNames = captureFirstNPartnerNamesAndSelectCorrect(2)
+      selectNoOtherRelevantTaxAdvisers()
+      checkYourAnswersForLLPWithoutRelevantAdviserNames(
         "Yes",
         "No"
       )

@@ -30,7 +30,9 @@ extends BasePage:
     getCurrentUrl should include(url)
 
   private val yesRadio = By.id("individualSaUtr.hasSaUtr")
+  private val noRadio = By.id("individualSaUtr.hasSaUtr-2")
   private val utrField = By.id("individualSaUtr.saUtr")
 
   def enterUtr(utr: String = "1234567890"): Unit = sendKeys(utrField, utr)
   def selectYes(): Unit = click(yesRadio)
+  def selectNo(): Unit = click(noRadio)

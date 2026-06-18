@@ -36,7 +36,6 @@ extends BaseSpec:
       "When user has no online agent account",
       TagSoleTrader
     ):
-      pending // issue with deceased check
       BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
@@ -47,7 +46,6 @@ extends BaseSpec:
       "When company has a blocking status",
       TagSoleTrader
     ):
-      pending // issue with deceased check
       BusinessDetailsFlow
         .IsDeceased
         .runFlow()
