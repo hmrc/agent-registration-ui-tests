@@ -55,7 +55,7 @@ extends BaseSpec:
     Scenario(
       "Change Email address from CYA page"
     ):
-      
+
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlow(BusinessDetails, SoleTrader)
@@ -88,7 +88,7 @@ extends BaseSpec:
     Scenario(
       "Change Telephone number from CYA page"
     ):
-      
+
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlow(BusinessDetails, SoleTrader)

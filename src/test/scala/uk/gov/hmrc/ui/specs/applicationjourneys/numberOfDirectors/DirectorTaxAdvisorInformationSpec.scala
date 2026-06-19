@@ -35,8 +35,7 @@ extends BaseSpec:
 
   Feature("Complete Director and Other Tax Adviser information section"):
     Scenario(
-      "Director has 5 or less directors",
-      TagLimitedCompany
+      "Director has 5 or less directors"
     ):
 
       FastForwardLinks
@@ -51,8 +50,7 @@ extends BaseSpec:
         .runFlow()
 
     Scenario(
-      "Company has 6 or more directors (some relevant tax advisors, happy path)",
-      TagLimitedCompany
+      "Company has 6 or more directors (some relevant tax advisors, happy path)"
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -78,8 +76,7 @@ extends BaseSpec:
         .runFlow()
 
     Scenario(
-      "Change number of directors from Check your answers screen",
-      TagLimitedCompany
+      "Change number of directors from Check your answers screen"
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -124,8 +121,7 @@ extends BaseSpec:
       YouHaveAddedDirectorCheckYourAnswerPage.assertNameAt(5, "Justine Hills")
 
     Scenario(
-      "Change other relevant individuals from Check Your Answers screen",
-      TagLimitedCompany
+      "Change other relevant individuals from Check Your Answers screen"
     ):
 
       val stubbedSignInData = BusinessDetailsFlow
@@ -162,8 +158,7 @@ extends BaseSpec:
       CheckYourAnswersOtherIndividualsPage.assertNameAt(0, "Dick Grayson")
 
     Scenario(
-      "Change number of directors from final Check Your Answers",
-      TagLimitedCompany
+      "Change number of directors from final Check Your Answers"
     ):
 
       val stubbedSignInData = BusinessDetailsFlow
@@ -230,8 +225,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Number of directors", "5")
 
     Scenario(
-      "Change other relevant individual name from final Check Your Answers",
-      TagLimitedCompany
+      "Change other relevant individual name from final Check Your Answers"
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

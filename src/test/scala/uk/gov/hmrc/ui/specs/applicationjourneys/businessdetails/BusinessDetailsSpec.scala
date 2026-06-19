@@ -77,8 +77,7 @@ extends BaseSpec:
       IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
 
     Scenario(
-      "General Partnership",
-      TagGeneralPartnership
+      "General Partnership"
     ):
       GeneralPartnershipBusinessDetailsFlow
         .HasNoOnlineAccount
@@ -87,16 +86,14 @@ extends BaseSpec:
       TaskListPage.assertBusinessDetailsStatus("Completed")
 
     Scenario(
-      "General partnership - Refuse to deal with",
-      TagGeneralPartnership
+      "General partnership - Refuse to deal with"
     ):
       GeneralPartnershipBusinessDetailsFlow
         .RefuseToDealWith
         .runFlow()
 
     Scenario(
-      "Limited Company",
-      TagLimitedCompany
+      "Limited Company"
     ):
       LimitedCompanyBusinessDetailsFlow
         .HasNoOnlineAccount

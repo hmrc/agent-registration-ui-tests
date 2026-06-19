@@ -47,7 +47,7 @@ extends BaseSpec:
           GeneralPartnership
         )
 
-    Scenario("Multiple partners partially completed list", TagGeneralPartnership):
+    Scenario("Multiple partners partially completed list"):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward

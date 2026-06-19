@@ -28,8 +28,7 @@ extends BaseSpec:
 
   Feature("Complete Partner and Tax Advisor information section"):
     Scenario(
-      "Partnership has 5 or less partners",
-      TagGeneralPartnership
+      "Partnership has 5 or less partners"
     ):
 
       FastForwardLinks
@@ -41,8 +40,7 @@ extends BaseSpec:
         .runFlow()
 
     Scenario(
-      "Partnership has 6 or more partners",
-      TagGeneralPartnership
+      "Partnership has 6 or more partners"
     ):
 
       FastForwardLinks
@@ -54,8 +52,7 @@ extends BaseSpec:
         .runFlow()
 
     Scenario(
-      "Partnership has 6 more partners but less than 6 with tax authority",
-      TagGeneralPartnership
+      "Partnership has 6 more partners but less than 6 with tax authority"
     ):
 
       FastForwardLinks
@@ -67,8 +64,7 @@ extends BaseSpec:
         .runFlow()
 
     Scenario(
-      "Change number of partners from Check your answers screen",
-      TagGeneralPartnership
+      "Change number of partners from Check your answers screen"
     ):
 
       FastForwardLinks
@@ -111,8 +107,7 @@ extends BaseSpec:
       PartnerTaxAdvisorInformationFlow.noUnofficialPartners()
 
     Scenario(
-      "Change partner name from Check your answers screen",
-      TagGeneralPartnership
+      "Change partner name from Check your answers screen"
     ):
 
       FastForwardLinks
@@ -134,8 +129,7 @@ extends BaseSpec:
       CheckYourAnswersKeyIndividualsPage.assertNameAt(4, "Bruce Banner")
 
     Scenario(
-      "Add Unofficial Partners",
-      TagGeneralPartnership
+      "Add Unofficial Partners"
     ):
 
       FastForwardLinks
@@ -147,8 +141,7 @@ extends BaseSpec:
         .runFlow()
 
     Scenario(
-      "Change other relevant individuals from Check Your Answers",
-      TagGeneralPartnership
+      "Change other relevant individuals from Check Your Answers"
     ):
 
       FastForwardLinks
@@ -168,8 +161,7 @@ extends BaseSpec:
       CheckYourAnswersOtherIndividualsPage.assertNameAt(0, "Dick Grayson")
 
     Scenario(
-      "Change has other relevant individuals boolean from Check Your Answers",
-      TagGeneralPartnership
+      "Change has other relevant individuals boolean from Check Your Answers"
     ):
 
       FastForwardLinks
@@ -193,8 +185,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRowNotPresent("Other relevant individual names")
 
     Scenario(
-      "Change number of partners from final Check Your Answers",
-      TagGeneralPartnership
+      "Change number of partners from final Check Your Answers"
     ):
 
       FastForwardLinks
@@ -230,8 +221,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Number of partners", "2")
 
     Scenario(
-      "Change partner name from final Check Your Answers",
-      TagGeneralPartnership
+      "Change partner name from final Check Your Answers"
     ):
 
       FastForwardLinks
@@ -260,8 +250,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Partner names", "Bobby Boucher\nSonny Koufax\nPeter Parker")
 
     Scenario(
-      "Change other relevant individual name from final Check Your Answers",
-      TagGeneralPartnership
+      "Change other relevant individual name from final Check Your Answers"
     ):
 
       FastForwardLinks

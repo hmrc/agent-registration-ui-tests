@@ -107,8 +107,7 @@ extends BaseSpec:
       )
 
     Scenario(
-      "Sole Trader Non-Owner sees FailedNonFixable Outcome Page after sign in",
-      TagSoleTrader
+      "Sole Trader Non-Owner sees FailedNonFixable Outcome Page after sign in"
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
