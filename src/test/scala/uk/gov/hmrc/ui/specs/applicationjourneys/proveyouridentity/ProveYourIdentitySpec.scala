@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.application.proveyouridentity
+package uk.gov.hmrc.ui.specs.applicationjourneys.proveyouridentity
 
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
@@ -31,7 +31,7 @@ class ProveYourIdentitySpec
 extends BaseSpec:
 
   Feature("Provide your identity"):
-    Scenario("Applicant signs in and provides their details", TagSmokeTests):
+    Scenario("Applicant signs in and provides their details"):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
@@ -46,7 +46,7 @@ extends BaseSpec:
         )
 
     Scenario("Applicant is not the sole trader", TagSmokeTests):
-      pending // issue with deceased check
+
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow(false)

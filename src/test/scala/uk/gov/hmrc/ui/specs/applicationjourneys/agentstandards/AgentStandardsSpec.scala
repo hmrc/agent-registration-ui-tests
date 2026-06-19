@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.application.agentstandards
+package uk.gov.hmrc.ui.specs.applicationjourneys.agentstandards
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
@@ -29,8 +29,7 @@ extends BaseSpec:
 
   Feature("Complete HMRC standards for agents section"):
     Scenario(
-      "User agrees to HMRC's standards for agents",
-      TagSmokeTests
+      "User agrees to HMRC's standards for agents"
     ):
 
       FastForwardLinks

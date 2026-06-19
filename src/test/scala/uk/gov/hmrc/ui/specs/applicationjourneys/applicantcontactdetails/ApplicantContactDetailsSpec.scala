@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.application.applicantcontactdetails
+package uk.gov.hmrc.ui.specs.applicationjourneys.applicantcontactdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
@@ -33,10 +33,9 @@ extends BaseSpec:
   Feature("Complete Contact Details section"):
 
     Scenario(
-      "Change Name from CYA page",
-      TagSmokeTests
+      "Change Name from CYA page"
     ):
-      pending // issue with deceased check
+
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlow(BusinessDetails, SoleTrader)
@@ -54,10 +53,9 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Name", "John Jones")
 
     Scenario(
-      "Change Email address from CYA page",
-      TagSmokeTests
+      "Change Email address from CYA page"
     ):
-      pending // issue with deceased check
+      
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlow(BusinessDetails, SoleTrader)
@@ -88,10 +86,9 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
 
     Scenario(
-      "Change Telephone number from CYA page",
-      TagSmokeTests
+      "Change Telephone number from CYA page"
     ):
-      pending // issue with deceased check
+      
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlow(BusinessDetails, SoleTrader)

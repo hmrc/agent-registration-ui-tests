@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.application.relevantindividual
+package uk.gov.hmrc.ui.specs.applicationjourneys.relevantindividual
 
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
@@ -23,7 +23,8 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.relevantindividual.RelevantIndividualFlow
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.{ApplicationSubmittedPage, TaskListPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.declaration.DeclarationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 

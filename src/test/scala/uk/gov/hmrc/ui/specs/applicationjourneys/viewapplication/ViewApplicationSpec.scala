@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.application.viewapplication
+package uk.gov.hmrc.ui.specs.applicationjourneys.viewapplication
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
@@ -26,7 +26,8 @@ import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.{ApplicationSubmittedPage, ViewApplicationPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ViewApplicationSpec
@@ -34,10 +35,9 @@ extends BaseSpec:
 
   Feature("View application after first stage"):
     Scenario(
-      "User reviews application details",
-      TagSmokeTests
+      "User reviews application details"
     ):
-      pending // issue with deceased check
+
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.application.declaration
+package uk.gov.hmrc.ui.specs.applicationjourneys.declaration
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
@@ -29,8 +29,7 @@ extends BaseSpec:
 
   Feature("Complete declaration section"):
     Scenario(
-      "User accepts the declaration",
-      TagSmokeTests
+      "User accepts the declaration"
     ):
       pending // ff links aren't creating risk records so disabling until fixed
       val stubbedSignInData = FastForwardLinks

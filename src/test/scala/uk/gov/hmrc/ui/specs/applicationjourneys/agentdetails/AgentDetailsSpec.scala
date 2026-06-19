@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.application.agentdetails
+package uk.gov.hmrc.ui.specs.applicationjourneys.agentdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.{AgentDetails, ContactDetails}
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentDetails
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.ContactDetails
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow.AgentDetailOption
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
@@ -33,8 +34,7 @@ extends BaseSpec:
 
   Feature("Complete Business details section"):
     Scenario(
-      "User selects existing details",
-      TagSmokeTests
+      "User selects existing details"
     ):
 
       FastForwardLinks
@@ -47,8 +47,7 @@ extends BaseSpec:
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario(
-      "User enters all custom values",
-      TagSmokeTests
+      "User enters all custom values"
     ):
 
       val stubbedSignInData = FastForwardLinks
@@ -61,8 +60,7 @@ extends BaseSpec:
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario(
-      "User mixes provided and custom options",
-      TagSmokeTests
+      "User mixes provided and custom options"
     ):
 
       val stubbedSignInData = FastForwardLinks
@@ -84,8 +82,7 @@ extends BaseSpec:
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario(
-      "Change Business Name from Check Your Answers page",
-      TagSmokeTests
+      "Change Business Name from Check Your Answers page"
     ):
 
       FastForwardLinks
@@ -108,8 +105,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "Updated Sole Trader Name")
 
     Scenario(
-      "Change Telephone Number from Check Your Answers page",
-      TagSmokeTests
+      "Change Telephone Number from Check Your Answers page"
     ):
 
       FastForwardLinks
@@ -132,8 +128,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777799999")
 
     Scenario(
-      "Change Email Address from Check Your Answers page",
-      TagSmokeTests
+      "Change Email Address from Check Your Answers page"
     ):
 
       val stubbedSignInData = FastForwardLinks
@@ -169,8 +164,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
 
     Scenario(
-      "Change Correspondence Address from Check Your Answers page",
-      TagSmokeTests
+      "Change Correspondence Address from Check Your Answers page"
     ):
 
       FastForwardLinks

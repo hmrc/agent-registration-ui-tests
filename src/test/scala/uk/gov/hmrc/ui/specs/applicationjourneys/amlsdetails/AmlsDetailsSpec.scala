@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.application.amlsdetails
+package uk.gov.hmrc.ui.specs.applicationjourneys.amlsdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
@@ -24,7 +24,10 @@ import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow.AmlsDetailsOption.NonHmrcSupervisoryBody
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.{CheckYourAnswersPage, EvidenceOfAmlSupervisionPage, WhatRegistrationNumberPage, WhatSupervisoryBodyPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.EvidenceOfAmlSupervisionPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatRegistrationNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatSupervisoryBodyPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class AmlsDetailsSpec
@@ -32,8 +35,7 @@ extends BaseSpec:
 
   Feature("Complete Anti-money laundering section"):
     Scenario(
-      "User selects HMRC as their Supervisory Body",
-      TagSmokeTests
+      "User selects HMRC as their Supervisory Body"
     ):
 
       FastForwardLinks
@@ -60,8 +62,7 @@ extends BaseSpec:
       TaskListPage.assertAmlsDetailsStatus("Completed")
 
     Scenario(
-      "Changes Registration Number from CYA page",
-      TagSmokeTests
+      "Changes Registration Number from CYA page"
     ):
 
       FastForwardLinks
@@ -83,8 +84,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000111111")
 
     Scenario(
-      "Changes Supervisory Body from CYA page",
-      TagSmokeTests
+      "Changes Supervisory Body from CYA page"
     ):
 
       FastForwardLinks
@@ -107,8 +107,7 @@ extends BaseSpec:
       AmlsDetailsFlow.checkYourAnswersExpanded()
 
     Scenario(
-      "Upload evidence file exceeding 6MB in size",
-      TagSmokeTests
+      "Upload evidence file exceeding 6MB in size"
     ):
 
       FastForwardLinks
@@ -125,8 +124,7 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.assertErrorMessage("The selected file must not be larger than 6MB")
 
     Scenario(
-      "Upload evidence file with virus",
-      TagSmokeTests
+      "Upload evidence file with virus"
     ):
 
       FastForwardLinks
@@ -143,8 +141,7 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.assertErrorMessage("A virus has been detected in your uploaded file, try uploading another file.")
 
     Scenario(
-      "Upload evidence file in invalid format",
-      TagSmokeTests
+      "Upload evidence file in invalid format"
     ):
 
       FastForwardLinks

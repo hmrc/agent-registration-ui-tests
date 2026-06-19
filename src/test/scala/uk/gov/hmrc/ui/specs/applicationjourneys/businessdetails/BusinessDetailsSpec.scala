@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.specs.application.businessdetails
+package uk.gov.hmrc.ui.specs.applicationjourneys.businessdetails
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.BusinessDetails
-import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.{BusinessDetailsFlow => SoleTraderBusinessDetailsFlow}
+import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.{BusinessDetailsFlow => GeneralPartnershipBusinessDetailsFlow}
+import uk.gov.hmrc.ui.flows.ukbased.limited_company.application.{BusinessDetailsFlow => LimitedCompanyBusinessDetailsFlow}
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.{CheckYourAnswersPage, IsYourAgentBusinessBasedInTheUKPage, StartAgainConfirmationPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.CheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.IsYourAgentBusinessBasedInTheUKPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.StartAgainConfirmationPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.soletrader.businessdetails.CannotConfirmIdentityPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
@@ -31,32 +35,26 @@ extends BaseSpec:
 
   Feature("Complete BusinessDetails"):
     Scenario(
-      "When user has no online agent account",
-      TagSmokeTests
+      "Sole Trader Business Owner"
     ):
-      pending // issue with deceased check
-      BusinessDetailsFlow
+      SoleTraderBusinessDetailsFlow
         .HasNoOnlineAccount
         .runFlow()
       TaskListPage.assertPageIsDisplayed()
       TaskListPage.assertBusinessDetailsStatus("Completed")
 
     Scenario(
-      "When company has a blocking status",
-      TagSmokeTests
+      "Sole Trader is deceased"
     ):
-      pending // issue with deceased check
-      BusinessDetailsFlow
+      SoleTraderBusinessDetailsFlow
         .IsDeceased
         .runFlow()
       CannotConfirmIdentityPage.assertPageIsDisplayed()
       CannotConfirmIdentityPage.assertHeaderText("Get in touch to confirm your details")
 
     Scenario(
-      "An Applicant completes GRS journey and reviews Business details via enhanced CYA",
-      TagSmokeTests
+      "Sole Trader Business details reviewed on enhanced CYA then start again"
     ):
-
       FastForwardLinks
         .FastForward
         .runFlow(BusinessDetails, SoleTrader)
@@ -77,3 +75,31 @@ extends BaseSpec:
       StartAgainConfirmationPage.assertPageIsDisplayed()
       StartAgainConfirmationPage.clickContinue()
       IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
+
+    Scenario(
+      "General Partnership",
+      TagGeneralPartnership
+    ):
+      GeneralPartnershipBusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow()
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.assertBusinessDetailsStatus("Completed")
+
+    Scenario(
+      "General partnership - Refuse to deal with",
+      TagGeneralPartnership
+    ):
+      GeneralPartnershipBusinessDetailsFlow
+        .RefuseToDealWith
+        .runFlow()
+
+    Scenario(
+      "Limited Company",
+      TagLimitedCompany
+    ):
+      LimitedCompanyBusinessDetailsFlow
+        .HasNoOnlineAccount
+        .runFlow()
+      TaskListPage.assertPageIsDisplayed()
+      TaskListPage.assertBusinessDetailsStatus("Completed")
