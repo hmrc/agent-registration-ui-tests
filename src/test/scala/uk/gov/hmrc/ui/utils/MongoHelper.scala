@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.ui.utils
 
+import org.bson.BsonDocument
 import org.mongodb.scala.*
 import org.mongodb.scala.model.Filters.*
 import org.mongodb.scala.model.Updates
 import scala.concurrent.Await
 import scala.concurrent.duration.*
-import org.bson.BsonDocument
-import org.mongodb.scala.Document
 
 object MongoHelper:
 
@@ -82,6 +81,65 @@ object MongoHelper:
       .find(equal("applicationReference", ref))
       .toFuture()
     Await.result(future, 10.seconds)
+
+
+  /** Simulates the risking service by setting riskingFileName and entityRiskingResult on the application-for-risking record. When withIndividualFailures is
+   * true, sets all NonFixableOutcomeListForIndividualFailures codes on each individual-for-risking record; otherwise sets empty failures. Uses replaceOne to
+   * preserve correct Mongo field ordering: ..., isEmailSent, riskingFileName, entityRiskingResult.
+   */
+  def simulateFixableRiskingOutcome(
+                                        applicationReference: String,
+                                        withEntityFailures: Boolean = true,
+                                        withIndividualFailures: Boolean = true
+                                      ): Unit =
+    val existing = findByApplicationReference(applicationReference)
+      .getOrElse(throw new AssertionError(s"No document found for applicationReference='$applicationReference'"))
+
+    val now = java.time.Instant.now().toString
+    val entityRiskingResult = BsonDocument.parse(
+      s"""{"failures":[
+         |  {"type":"_4._1"},
+         |  {"type":"_4._3"}
+         |],"receivedAt":"$now"}""".stripMargin
+    )
+    val individualRiskingResult =
+      if withIndividualFailures then
+        BsonDocument.parse(
+          s"""{"failures":[
+             |  {"type":"_4._1"},
+             |  {"type":"_4._3"}
+             |],"receivedAt":"$now"}""".stripMargin
+        )
+      else
+        BsonDocument.parse(s"""{"failures":[],"receivedAt":"$now"}""")
+
+    val ordered = Document(
+      "_id" -> existing("_id"),
+      "applicationReference" -> existing("applicationReference"),
+      "applicationData" -> existing("applicationData"),
+      "createdAt" -> existing("createdAt"),
+      "lastUpdatedAt" -> existing("lastUpdatedAt"),
+      "isSubscribed" -> existing("isSubscribed"),
+      "isEmailSent" -> existing("isEmailSent"),
+      "riskingFileName" -> "any-old.txt",
+      "entityRiskingResult" -> entityRiskingResult,
+      "correctiveActionExpiryDate" -> "2026-08-03T19:41:36.816864298Z",
+      "overallStatus" -> Document("riskingOutcome" -> "FailedFixable", "emailsProcessed" -> true)
+    )
+
+    val appFuture = collection
+      .replaceOne(equal("applicationReference", applicationReference), ordered)
+      .toFuture()
+    val appResult = Await.result(appFuture, 10.seconds)
+    assert(appResult.getMatchedCount == 1, s"simulateFixableRiskingOutcome: no application matched for '$applicationReference'")
+
+    val indFuture = individualsCollection
+      .updateMany(
+        equal("applicationReference", applicationReference),
+        Updates.set("individualRiskingResult", individualRiskingResult)
+      )
+      .toFuture()
+    Await.result(indFuture, 10.seconds)
 
   /** Simulates the risking service by setting riskingFileName and entityRiskingResult on the application-for-risking record. When withIndividualFailures is
     * true, sets all NonFixableOutcomeListForIndividualFailures codes on each individual-for-risking record; otherwise sets empty failures. Uses replaceOne to
