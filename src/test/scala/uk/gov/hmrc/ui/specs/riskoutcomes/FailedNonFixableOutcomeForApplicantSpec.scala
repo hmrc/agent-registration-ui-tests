@@ -16,7 +16,8 @@
 
 package uk.gov.hmrc.ui.specs.riskoutcomes
 
-import uk.gov.hmrc.ui.domain.BusinessType.{GeneralPartnership, SoleTrader}
+import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
+import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
@@ -44,13 +45,13 @@ extends BaseSpec:
     ):
 
       /** Step 1: Fast-forward to AgentStandards — same starting point as DeclarationSpec
-       */
+        */
       val stubbedSignInData = FastForwardLinks
         .FastForward
         .runFlow(AgentStandards, SoleTrader)
 
       /** Step 2: Prove identity — populates the individuals array in the Mongo record
-       */
+        */
       ProvideIndividualDetailsFlow
         .ProvideIndividualDetailsSoleTrader
         .runFlow(
@@ -60,7 +61,7 @@ extends BaseSpec:
         )
 
       /** Step 3: Accept declaration — submits the application, creates record with ReadyForSubmission
-       */
+        */
       DeclarationFlow.AcceptDeclaration.runFlow(SoleTrader, fastForwardUsed = true)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
@@ -72,8 +73,8 @@ extends BaseSpec:
         .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
       /** Step 5: Simulate the risking service — set riskingFileName and entityRiskingResult on the application-for-risking record, and individualRiskingResult
-       * (empty failures) on each individual-for-risking record.
-       */
+        * (empty failures) on each individual-for-risking record.
+        */
       MongoHelper.simulateNonFixableRiskingOutcome(applicationReference)
 
       RiskingOutcomeFlow
@@ -93,7 +94,7 @@ extends BaseSpec:
       failures should not be empty
 
       val failureTypes = failures.map(f => MongoHelper.getNestedString(f, "type"))
-      failureTypes should contain allOf("_7", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
+      failureTypes should contain allOf ("_7", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
 
       ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
         "our records show that the business is formally insolvent",
@@ -167,7 +168,7 @@ extends BaseSpec:
       failures should not be empty
 
       val failureTypes = failures.map(f => MongoHelper.getNestedString(f, "type"))
-      failureTypes should contain allOf("_7", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
+      failureTypes should contain allOf ("_7", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
 
       ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
         "our records show that the business is formally insolvent",
@@ -177,7 +178,6 @@ extends BaseSpec:
         "the business was issued with a relevant anti-avoidance penalty within the last 12 months",
         "the business has one or more relevant anti-avoidance penalties to pay"
       )
-
 
     Scenario(
       "General Partnership sees FailedNonFixable Outcome Page when both partners have individual failures",
