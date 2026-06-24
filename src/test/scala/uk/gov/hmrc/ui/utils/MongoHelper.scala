@@ -83,10 +83,6 @@ object MongoHelper:
       .toFuture()
     Await.result(future, 10.seconds)
 
-  /** Simulates the risking service by setting riskingFileName and entityRiskingResult on the application-for-risking record. When withIndividualFailures is
-    * true, sets all NonFixableOutcomeListForIndividualFailures codes on each individual-for-risking record; otherwise sets empty failures. Uses replaceOne to
-    * preserve correct Mongo field ordering: ..., isEmailSent, riskingFileName, entityRiskingResult.
-    */
   def simulateNonFixableRiskingOutcome(
     applicationReference: String,
     withEntityFailures: Boolean = true,
@@ -147,11 +143,6 @@ object MongoHelper:
       .toFuture()
     Await.result(indFuture, 10.seconds)
 
-  /** Insert or update the application-for-risking record with a provided entityRiskingResult JSON.
-    *
-    * Example usage: val json = s"""{"failures":[{"type":"_4._2"}],"receivedAt":"2026-05-17T19:41:36.816864298Z"}"""
-    * MongoHelper.insertEntityRiskingResult(applicationReference, json, "FailedFixable")
-    */
   def insertEntityRiskingResult(
     applicationReference: String,
     entityRiskingResultJson: String,
@@ -181,13 +172,6 @@ object MongoHelper:
       .map(_.asInstanceOf[org.bson.BsonValue].asDocument()))
     .getOrElse(throw new AssertionError("Field 'individualRiskingResult' not found"))
 
-  def deleteByApplicationReference(ref: String): Unit =
-    val future = collection
-      .deleteOne(equal("applicationReference", ref))
-      .toFuture()
-    Await.result(future, 10.seconds)
-
-  /** Generate a random MongoDB ObjectId string (24-character hexadecimal format). Example: "6a1ffcbde2c05e3704c3054" * */
   def generateRandomObjectId(): String = new org.bson.types.ObjectId().toHexString
 
   def insertAgentAssuranceRecord(
@@ -211,7 +195,6 @@ object MongoHelper:
 
     value
 
-  /** Insert risking outcome data into the agent-application collection (backend). This includes applicationState, riskingOutcomeApplication, and riskingOutcomeEntity. */
   def insertRiskingOutcomeToAgentApplication(
     applicationReference: String,
     riskingCompletedDate: String,
@@ -250,7 +233,6 @@ object MongoHelper:
     val updateResult = Await.result(updateFuture, 10.seconds)
     assert(updateResult.getMatchedCount == 1, s"insertRiskingOutcomeToBackEnd: no application matched for '$applicationReference'")
 
-  /** Insert risking outcome data for an individual into the individual collection (backend). This includes riskingOutcomeIndividual with type. */
   def insertRiskingOutcomeIndividualToBackEnd(
     applicationReference: String,
     riskingOutcomeType: String = "Approved",
@@ -282,19 +264,12 @@ object MongoHelper:
       s"insertRiskingOutcomeIndividualToBackEnd: no individual(s) matched for applicationReference='$applicationReference'${individualId.map(id => s", individualId='$id'").getOrElse("")}"
     )
 
-  /** Find individual documents in the backend `individual` collection for an applicationReference. Returns a Seq of Documents so callers can inspect the
-    * available identifier fields (e.g. "id", "individualReference", "_id") and choose the correct one to update.
-    */
   def findBackEndIndividualsByApplicationReference(ref: String): Seq[Document] =
     val future = backEndIndividualCollection
       .find(equal("applicationReference", ref))
       .toFuture()
     Await.result(future, 10.seconds)
 
-  /** Insert/update risking outcome for a specific individual using the given identifier field. This is useful when individual documents use an identifier
-    * different from the applicationReference (for example a separate individual reference or a Mongo _id). Example:
-    * MongoHelper.insertRiskingOutcomeIndividualByField(applicationReference, "individualReference", "IND-123", "Approved")
-    */
   def insertRiskingOutcomeIndividualByField(
     applicationReference: String,
     individualIdField: String,
@@ -321,9 +296,6 @@ object MongoHelper:
             s"insertRiskingOutcomeIndividualByField: failed to insert backend individual for $individualIdField='$individualIdValue' and applicationReference='$applicationReference'"
           )
 
-  /** Insert/update risking outcome for an individual identified by MongoDB ObjectId (hex string). Use this when the individual document uses the Mongo _id
-    * field (ObjectId) rather than a string id.
-    */
   def insertRiskingOutcomeIndividualByObjectId(
     applicationReference: String,
     individualObjectIdHex: String,
@@ -372,18 +344,12 @@ object MongoHelper:
         s"insertRiskingOutcomeIndividualByObjectId: failed to insert backend individual for _id='$individualObjectIdHex' and applicationReference='$applicationReference'"
       throw new AssertionError(msg)
 
-  /** Find individual documents in the risking database (individual-for-risking collection) for a given applicationReference. These individuals definitely exist
-    * after application submission.
-    */
   def findRiskingIndividualsByApplicationReference(ref: String): Seq[Document] =
     val future = individualsCollection
       .find(equal("applicationReference", ref))
       .toFuture()
     Await.result(future, 10.seconds)
-  
-  /** Sync individual documents from the risking database (individual-for-risking) into the backend `individual` collection for the given applicationReference.
-    * This performs an upsert for each risking individual so backend tests can update them afterwards.
-    */
+
   def syncRiskingIndividualsToBackEnd(applicationReference: String): Unit =
     val riskingIndividuals = findRiskingIndividualsByApplicationReference(applicationReference)
     if riskingIndividuals.isEmpty then
@@ -415,12 +381,3 @@ object MongoHelper:
       if (replaceResult.getMatchedCount == 0 && replaceResult.getUpsertedId == null) then
         println(s"[DEBUG] syncRiskingIndividualsToBackEnd: replaceOne did not match or upsert for filter=$filter; replacement=${replacement.toJson()}")
     }
-
-  /** Remove backend individual documents and agent-application document for an applicationReference. This helps to avoid stale or corrupted documents from
-    * previous test runs interfering with the current test.
-    */
-  def cleanupBackEndForApplication(applicationReference: String): Unit =
-    val delIndF = backEndIndividualCollection.deleteMany(equal("applicationReference", applicationReference)).toFuture()
-    val delAppF = backEndCollection.deleteMany(equal("applicationReference", applicationReference)).toFuture()
-    Await.result(delIndF, 10.seconds)
-    Await.result(delAppF, 10.seconds)

@@ -68,7 +68,7 @@ extends BaseSpec:
         correctiveActionExpiryDate = "2026-08-17",
         fixes = Seq("EntityFix._4._2")
       )
-      
+
       MongoHelper.syncRiskingIndividualsToBackEnd(applicationReference)
 
       val riskingIndividuals = MongoHelper.findRiskingIndividualsByApplicationReference(applicationReference)
@@ -137,7 +137,7 @@ extends BaseSpec:
 
     Scenario(
       "General Partnership sees FailedFixable Outcome Page when partner have individual failures",
-      TagSmokeTests
+      TagFixableFailures
     ):
 
       val stubbedSignInData = FastForwardLinks
@@ -175,7 +175,7 @@ extends BaseSpec:
         correctiveActionExpiryDate = "2026-08-17",
         fixes = Seq("EntityFix._4._1", "EntityFix._4._3")
       )
-      
+
       MongoHelper.syncRiskingIndividualsToBackEnd(applicationReference)
 
       val riskingIndividuals = MongoHelper.findRiskingIndividualsByApplicationReference(applicationReference)
