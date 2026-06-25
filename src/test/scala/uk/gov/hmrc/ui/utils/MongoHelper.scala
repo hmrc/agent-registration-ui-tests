@@ -381,3 +381,36 @@ object MongoHelper:
       if (replaceResult.getMatchedCount == 0 && replaceResult.getUpsertedId == null) then
         println(s"[DEBUG] syncRiskingIndividualsToBackEnd: replaceOne did not match or upsert for filter=$filter; replacement=${replacement.toJson()}")
     }
+
+  def insertRiskingOutcomeIndividual(
+                                      applicationReference: String,
+                                      riskingIndividual: Document,
+                                      riskingOutcomeType: String = "Approved"
+                                    ): Unit =
+    riskingIndividual.get("id") match
+      case Some(v) if v.isString =>
+        insertRiskingOutcomeIndividualByField(
+          applicationReference,
+          "id",
+          v.asString().getValue,
+          riskingOutcomeType
+        )
+      case _ =>
+        riskingIndividual.get("individualReference") match
+          case Some(v2) if v2.isString =>
+            insertRiskingOutcomeIndividualByField(
+              applicationReference,
+              "individualReference",
+              v2.asString().getValue,
+              riskingOutcomeType
+            )
+          case _ =>
+            riskingIndividual.get("_id") match
+              case Some(oid) if oid.isObjectId =>
+                insertRiskingOutcomeIndividualByObjectId(
+                  applicationReference,
+                  oid.asObjectId().getValue.toHexString,
+                  riskingOutcomeType
+                )
+              case _ =>
+                insertRiskingOutcomeIndividualToBackEnd(applicationReference, riskingOutcomeType = riskingOutcomeType)

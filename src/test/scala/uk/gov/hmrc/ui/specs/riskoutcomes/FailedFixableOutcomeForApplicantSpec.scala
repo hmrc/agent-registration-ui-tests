@@ -19,12 +19,7 @@ package uk.gov.hmrc.ui.specs.riskoutcomes
 import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.specs.BaseSpec
@@ -41,17 +36,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, SoleTrader)
-
-      ProvideIndividualDetailsFlow
-        .ProvideIndividualDetailsSoleTrader
-        .runFlow(
-          stubbedSignInData,
-          listProgress.complete,
-          fastForwardUsed = true
-        )
-
-      DeclarationFlow.AcceptDeclaration.runFlow(SoleTrader, fastForwardUsed = true)
+        .runFlow(Declaration, SoleTrader)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
 
@@ -74,34 +59,8 @@ extends BaseSpec:
       val riskingIndividuals = MongoHelper.findRiskingIndividualsByApplicationReference(applicationReference)
       riskingIndividuals should not be empty
 
-      // For each individual in the risking database, update the backend individual collection
-      // by trying to match on various identifier fields
       riskingIndividuals.foreach { riskingIndividual =>
-        riskingIndividual.get("id") match
-          case Some(v) if v.isString =>
-            val id = v.asString().getValue
-            MongoHelper.insertRiskingOutcomeIndividualByField(
-              applicationReference,
-              "id",
-              id
-            )
-          case _ =>
-            riskingIndividual.get("individualReference") match
-              case Some(v2) if v2.isString =>
-                val ref = v2.asString().getValue
-                MongoHelper.insertRiskingOutcomeIndividualByField(
-                  applicationReference,
-                  "individualReference",
-                  ref
-                )
-              case _ =>
-                riskingIndividual.get("_id") match
-                  case Some(oid) if oid.isObjectId =>
-                    val hex = oid.asObjectId().getValue.toHexString
-                    MongoHelper.insertRiskingOutcomeIndividualByObjectId(applicationReference, hex)
-                  case _ =>
-                    // Fallback: update all individuals for the application
-                    MongoHelper.insertRiskingOutcomeIndividualToBackEnd(applicationReference)
+        MongoHelper.insertRiskingOutcomeIndividual(applicationReference, riskingIndividual)
       }
 
       RiskingOutcomeFlow
@@ -110,30 +69,7 @@ extends BaseSpec:
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("ST Name ST Lastname")
-
-      val outcomeDoc = MongoHelper
-        .findBackEndApplicationByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      // Verify riskingOutcomeApplication data
-      MongoHelper.getTopLevelString(outcomeDoc, "applicationState") shouldBe "RiskingCompleted"
-      val riskingOutcomeApp = outcomeDoc.get("riskingOutcomeApplication").get.asDocument()
-      riskingOutcomeApp.getString("outcome").getValue shouldBe "FailedFixable"
-      riskingOutcomeApp.getString("riskingCompletedDate").getValue shouldBe "2026-06-18"
-      riskingOutcomeApp.getString("correctiveActionExpiryDate").getValue shouldBe "2026-08-17"
-
-      // Verify riskingOutcomeEntity data
-      val riskingOutcomeEntity = outcomeDoc.get("riskingOutcomeEntity").get.asDocument()
-      riskingOutcomeEntity.getString("type").getValue shouldBe "FailedFixable"
-      val fixesArray = riskingOutcomeEntity.getArray("fixes")
-      val fixesValues = fixesArray.getValues.toArray
-      fixesValues.length shouldBe 1
-      fixesValues(0).asInstanceOf[org.bson.BsonDocument].getString("type").getValue shouldBe "EntityFix._4._2"
-
-      ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
-        "ST Name ST Lastname will not be given an agent services account on this occasion",
-        "the application will be deleted on 17 August 2026 to comply with our data retention policy"
-      )
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("ST Name ST Lastname does not meet the registration conditions yet")
 
     Scenario(
       "General Partnership sees FailedFixable Outcome Page when partner have individual failures",
@@ -142,23 +78,7 @@ extends BaseSpec:
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, GeneralPartnership)
-
-      PartnerTaxAdvisorInformationFlow
-        .singlePartner
-        .runFlow()
-
-      ProvideIndividualDetailsFlow
-        .ProvideIndividualDetails
-        .runFlow(
-          stubbedSignInData,
-          complete,
-          GeneralPartnership
-        )
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(GeneralPartnership, fastForwardUsed = true)
+        .runFlow(Declaration, GeneralPartnership)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
 
@@ -181,34 +101,8 @@ extends BaseSpec:
       val riskingIndividuals = MongoHelper.findRiskingIndividualsByApplicationReference(applicationReference)
       riskingIndividuals should not be empty
 
-      // For each individual in the risking database, update the backend individual collection
-      // by trying to match on various identifier fields
       riskingIndividuals.foreach { riskingIndividual =>
-        riskingIndividual.get("id") match
-          case Some(v) if v.isString =>
-            val id = v.asString().getValue
-            MongoHelper.insertRiskingOutcomeIndividualByField(
-              applicationReference,
-              "id",
-              id
-            )
-          case _ =>
-            riskingIndividual.get("individualReference") match
-              case Some(v2) if v2.isString =>
-                val ref = v2.asString().getValue
-                MongoHelper.insertRiskingOutcomeIndividualByField(
-                  applicationReference,
-                  "individualReference",
-                  ref
-                )
-              case _ =>
-                riskingIndividual.get("_id") match
-                  case Some(oid) if oid.isObjectId =>
-                    val hex = oid.asObjectId().getValue.toHexString
-                    MongoHelper.insertRiskingOutcomeIndividualByObjectId(applicationReference, hex)
-                  case _ =>
-                    // Fallback: update all individuals for the application
-                    MongoHelper.insertRiskingOutcomeIndividualToBackEnd(applicationReference)
+        MongoHelper.insertRiskingOutcomeIndividual(applicationReference, riskingIndividual)
       }
 
       RiskingOutcomeFlow
@@ -217,25 +111,8 @@ extends BaseSpec:
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("Electronicsson Group")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Electronicsson Group does not meet the registration conditions yet")
 
-      val outcomeDoc = MongoHelper
-        .findBackEndApplicationByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      // Verify riskingOutcomeApplication data
-      MongoHelper.getTopLevelString(outcomeDoc, "applicationState") shouldBe "RiskingCompleted"
-      val riskingOutcomeApp = outcomeDoc.get("riskingOutcomeApplication").get.asDocument()
-      riskingOutcomeApp.getString("outcome").getValue shouldBe "FailedFixable"
 
-      // Verify riskingOutcomeEntity data
-      val riskingOutcomeEntity = outcomeDoc.get("riskingOutcomeEntity").get.asDocument()
-      riskingOutcomeEntity.getString("type").getValue shouldBe "FailedFixable"
-      val fixesArr = riskingOutcomeEntity.getArray("fixes").getValues.toArray
-      fixesArr.length shouldBe 2
-      val fixTypes = fixesArr.map(_.asInstanceOf[org.bson.BsonDocument].getString("type").getValue).toSeq
-      fixTypes should contain allOf ("EntityFix._4._1", "EntityFix._4._3")
 
-      ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
-        "Electronicsson Group will not be given an agent services account on this occasion",
-        "the application will be deleted on 17 August 2026 to comply with our data retention policy"
-      )

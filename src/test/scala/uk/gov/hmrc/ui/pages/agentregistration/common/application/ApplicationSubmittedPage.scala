@@ -32,6 +32,7 @@ extends BasePage:
   private val copyLinkButton = By.cssSelector("button.govuk-button.govuk-button--secondary.copy-to-clipboard")
   private val viewOrPrintLink = By.linkText("View or print your application")
   private val pageTitle = By.cssSelector("h1.govuk-panel__title")
+  private val pageTitleHeading = By.cssSelector("h1.govuk-heading-l")
   private val panelBody = By.cssSelector("div.govuk-panel__body")
   private val pageHeading = By.cssSelector("h1.govuk-heading-l")
 
@@ -44,6 +45,8 @@ extends BasePage:
     getText(copyLinkButton).trim shouldEqual expected
   }
   def assertConfirmationTitle(expected: String): Unit = getText(pageTitle) shouldBe (expected)
+  
+  def assertConfirmationTitleHeading(expected: String): Unit = getText(pageTitleHeading) shouldBe (expected)
 
   def getApplicationReference: String = eventually {
     getText(panelBody).trim.split(":").last.trim
