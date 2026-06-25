@@ -21,3 +21,6 @@ object Tags:
 
   object TagSmokeTests
   extends Tag("SmokeTests")
+
+  object TagFixableFailures
+  extends Tag("FixableFailures")
