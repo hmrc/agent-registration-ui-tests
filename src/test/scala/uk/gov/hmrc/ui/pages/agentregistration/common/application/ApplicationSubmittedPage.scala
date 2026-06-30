@@ -37,6 +37,7 @@ extends BasePage:
   private val pageHeading = By.cssSelector("h1.govuk-heading-l")
 
   private val signOutLink = By.linkText("Sign out")
+  private val viewActionsLink = By.linkText("View actions to take")
 
   def getCopyLinkButtonText: String = getText(copyLinkButton).trim
   def clickCopyLinkButton(): Unit = click(copyLinkButton)
@@ -64,3 +65,5 @@ extends BasePage:
     }
 
   def clickSignOutLink(): Unit = click(signOutLink)
+
+  def clickViewActionLink(): Unit = click(viewActionsLink)
