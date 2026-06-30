@@ -45,7 +45,7 @@ extends BasePage:
     getText(copyLinkButton).trim shouldEqual expected
   }
   def assertConfirmationTitle(expected: String): Unit = getText(pageTitle) shouldBe (expected)
-  
+
   def assertConfirmationTitleHeading(expected: String): Unit = getText(pageTitleHeading) shouldBe (expected)
 
   def getApplicationReference: String = eventually {
