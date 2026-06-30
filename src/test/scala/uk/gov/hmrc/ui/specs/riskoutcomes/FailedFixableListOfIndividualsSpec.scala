@@ -106,4 +106,4 @@ extends BaseSpec:
 
       // Proves return to task list button works and returns to the task list page
       ConditionsNotMetIndividualsPage.clickContinue()
-//      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
+      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
