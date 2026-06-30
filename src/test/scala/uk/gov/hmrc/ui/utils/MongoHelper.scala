@@ -219,8 +219,6 @@ object MongoHelper:
       "correctiveActionExpiryDate" -> correctiveActionExpiryDate
     )
 
-    // Update only the relevant risking outcome fields on the backend document. Using updateOne avoids
-    // having to reconstruct the entire document and prevents errors when optional fields are missing.
     val update = Updates.combine(
       Updates.set("applicationState", "RiskingCompleted"),
       Updates.set("riskingOutcomeApplication", riskingOutcomeApplication),
@@ -232,6 +230,42 @@ object MongoHelper:
       .toFuture()
     val updateResult = Await.result(updateFuture, 10.seconds)
     assert(updateResult.getMatchedCount == 1, s"insertRiskingOutcomeToBackEnd: no application matched for '$applicationReference'")
+
+  def insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
+    applicationReference: String,
+    riskingCompletedDate: String,
+    outcome: String,
+    correctiveActionExpiryDate: String,
+    fixes: Seq[Document]
+  ): Unit =
+    findBackEndApplicationByApplicationReference(applicationReference)
+      .getOrElse(throw new AssertionError(s"No document found for applicationReference='$applicationReference' in agent-application collection"))
+
+    val riskingOutcomeEntity = Document(
+      "fixes" -> fixes,
+      "type" -> outcome
+    )
+
+    val riskingOutcomeApplication = Document(
+      "riskingCompletedDate" -> riskingCompletedDate,
+      "outcome" -> outcome,
+      "correctiveActionExpiryDate" -> correctiveActionExpiryDate
+    )
+
+    val updateBackEnd = Updates.combine(
+      Updates.set("applicationState", "RiskingCompleted"),
+      Updates.set("riskingOutcomeApplication", riskingOutcomeApplication),
+      Updates.set("riskingOutcomeEntity", riskingOutcomeEntity)
+    )
+
+    val updateBackEndFuture = backEndCollection
+      .updateOne(equal("applicationReference", applicationReference), updateBackEnd)
+      .toFuture()
+    val backEndResult = Await.result(updateBackEndFuture, 10.seconds)
+    assert(
+      backEndResult.getMatchedCount == 1,
+      s"insertRiskingOutcomeToAgentApplicationWithAmlsDetails: no application matched in agent-application for '$applicationReference'"
+    )
 
   def insertRiskingOutcomeIndividualToBackEnd(
     applicationReference: String,
@@ -264,6 +298,25 @@ object MongoHelper:
       s"insertRiskingOutcomeIndividualToBackEnd: no individual(s) matched for applicationReference='$applicationReference'${individualId.map(id => s", individualId='$id'").getOrElse("")}"
     )
 
+  def insertRiskingOutcomeIndividualByAgentApplicationId(
+    applicationReference: String,
+    riskingOutcomeType: String = "Approved"
+  ): Unit =
+    val appDoc = findBackEndApplicationByApplicationReference(applicationReference)
+      .getOrElse(throw new AssertionError(s"insertRiskingOutcomeIndividualByAgentApplicationId: no agent-application found for '$applicationReference'"))
+
+    val agentApplicationId =
+      appDoc.get("_id") match
+        case Some(v) if v.isObjectId => v.asObjectId().getValue.toHexString
+        case Some(v) if v.isString => v.asString().getValue
+        case _ => throw new AssertionError(s"insertRiskingOutcomeIndividualByAgentApplicationId: application '$applicationReference' has no usable _id")
+
+    val update = Updates.set("riskingOutcomeIndividual", Document("type" -> riskingOutcomeType))
+    val resultFuture = backEndIndividualCollection
+      .updateMany(equal("agentApplicationId", agentApplicationId), update)
+      .toFuture()
+    val result = Await.result(resultFuture, 10.seconds)
+
   def findBackEndIndividualsByApplicationReference(ref: String): Seq[Document] =
     val future = backEndIndividualCollection
       .find(equal("applicationReference", ref))
@@ -284,17 +337,36 @@ object MongoHelper:
       // Try updating by identifier only (some backend individual docs may not contain applicationReference)
       val resultIdOnly = Await.result(backEndIndividualCollection.updateOne(equal(individualIdField, individualIdValue), update).toFuture(), 10.seconds)
       if (resultIdOnly.getMatchedCount == 0) then
-        // Nothing matched; upsert a minimal backend individual document so tests can proceed
-        val doc = Document(
-          individualIdField -> individualIdValue,
-          "applicationReference" -> applicationReference,
-          "riskingOutcomeIndividual" -> Document("type" -> riskingOutcomeType)
+        // Try updating any existing backend individual(s) for this application instead of
+        // inserting a new doc; a new doc without personReference would collide with the existing
+        // individual on the unique personReference index (-> E11000 duplicate key null).
+        val resultByAppRef = Await.result(
+          backEndIndividualCollection.updateMany(equal("applicationReference", applicationReference), update).toFuture(),
+          10.seconds
         )
-        val insertRes = Await.result(backEndIndividualCollection.insertOne(doc).toFuture(), 10.seconds)
-        if (insertRes.getInsertedId == null) then
-          throw new AssertionError(
-            s"insertRiskingOutcomeIndividualByField: failed to insert backend individual for $individualIdField='$individualIdValue' and applicationReference='$applicationReference'"
+        if (resultByAppRef.getMatchedCount == 0) then
+          // Nothing matched; upsert a minimal backend individual document so tests can proceed.
+          // Include a unique, non-null personReference to avoid colliding on the unique index.
+          val doc = Document(
+            individualIdField -> individualIdValue,
+            "applicationReference" -> applicationReference,
+            "personReference" -> individualIdValue,
+            "riskingOutcomeIndividual" -> Document("type" -> riskingOutcomeType)
           )
+          import org.mongodb.scala.model.ReplaceOptions
+          val replaceFilter = equal(individualIdField, individualIdValue)
+          val replaceRes = Await.result(
+            backEndIndividualCollection.replaceOne(
+              replaceFilter,
+              doc,
+              ReplaceOptions().upsert(true)
+            ).toFuture(),
+            10.seconds
+          )
+          if (replaceRes.getMatchedCount == 0 && replaceRes.getUpsertedId == null) then
+            throw new AssertionError(
+              s"insertRiskingOutcomeIndividualByField: failed to upsert backend individual for $individualIdField='$individualIdValue' and applicationReference='$applicationReference'"
+            )
 
   def insertRiskingOutcomeIndividualByObjectId(
     applicationReference: String,
@@ -332,10 +404,22 @@ object MongoHelper:
     if (resultIndRef.getMatchedCount > 0)
       return
 
-    // 6) Nothing matched; upsert a minimal backend individual doc with this _id (use ObjectId)
+    // 6) Nothing matched by id; update the existing backend individual(s) for this
+    // application instead of inserting a new doc (a new doc without personReference would
+    // collide with the existing individual on the unique personReference index -> E11000).
+    val resultByAppRef = Await.result(
+      backEndIndividualCollection.updateMany(equal("applicationReference", applicationReference), update).toFuture(),
+      10.seconds
+    )
+    if (resultByAppRef.getMatchedCount > 0)
+      return
+
+    // 7) Nothing exists; insert a minimal backend individual doc. Include a unique, non-null
+    // personReference so we don't collide with other docs on the unique personReference index.
     val upsertDoc = Document(
       "_id" -> objId,
       "applicationReference" -> applicationReference,
+      "personReference" -> individualObjectIdHex,
       "riskingOutcomeIndividual" -> Document("type" -> riskingOutcomeType)
     )
     val insertRes = Await.result(backEndIndividualCollection.insertOne(upsertDoc).toFuture(), 10.seconds)
@@ -383,10 +467,10 @@ object MongoHelper:
     }
 
   def insertRiskingOutcomeIndividual(
-                                      applicationReference: String,
-                                      riskingIndividual: Document,
-                                      riskingOutcomeType: String = "Approved"
-                                    ): Unit =
+    applicationReference: String,
+    riskingIndividual: Document,
+    riskingOutcomeType: String = "Approved"
+  ): Unit =
     riskingIndividual.get("id") match
       case Some(v) if v.isString =>
         insertRiskingOutcomeIndividualByField(
@@ -412,5 +496,4 @@ object MongoHelper:
                   oid.asObjectId().getValue.toHexString,
                   riskingOutcomeType
                 )
-              case _ =>
-                insertRiskingOutcomeIndividualToBackEnd(applicationReference, riskingOutcomeType = riskingOutcomeType)
+              case _ => insertRiskingOutcomeIndividualToBackEnd(applicationReference, riskingOutcomeType = riskingOutcomeType)

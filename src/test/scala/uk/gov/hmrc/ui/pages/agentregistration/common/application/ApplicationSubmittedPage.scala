@@ -37,6 +37,7 @@ extends BasePage:
   private val pageHeading = By.cssSelector("h1.govuk-heading-l")
 
   private val signOutLink = By.linkText("Sign out")
+  private val viewActionsLink = By.linkText("View actions to take")
 
   def getCopyLinkButtonText: String = getText(copyLinkButton).trim
   def clickCopyLinkButton(): Unit = click(copyLinkButton)
@@ -45,7 +46,7 @@ extends BasePage:
     getText(copyLinkButton).trim shouldEqual expected
   }
   def assertConfirmationTitle(expected: String): Unit = getText(pageTitle) shouldBe (expected)
-  
+
   def assertConfirmationTitleHeading(expected: String): Unit = getText(pageTitleHeading) shouldBe (expected)
 
   def getApplicationReference: String = eventually {
@@ -64,3 +65,5 @@ extends BasePage:
     }
 
   def clickSignOutLink(): Unit = click(signOutLink)
+
+  def clickViewActionLink(): Unit = click(viewActionsLink)

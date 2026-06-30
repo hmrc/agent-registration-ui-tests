@@ -112,7 +112,3 @@ extends BaseSpec:
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("Electronicsson Group")
       ApplicationSubmittedPage.assertConfirmationTitleHeading("Electronicsson Group does not meet the registration conditions yet")
-
-
-
-
