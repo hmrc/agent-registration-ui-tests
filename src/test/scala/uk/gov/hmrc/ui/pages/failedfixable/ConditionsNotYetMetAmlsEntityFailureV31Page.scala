@@ -17,7 +17,8 @@
 package uk.gov.hmrc.ui.pages.failedfixable
 
 import org.openqa.selenium.By
-import uk.gov.hmrc.ui.pages.{BasePage, PageObject}
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object ConditionsNotYetMetAmlsEntityFailureV31Page
@@ -28,4 +29,3 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
-

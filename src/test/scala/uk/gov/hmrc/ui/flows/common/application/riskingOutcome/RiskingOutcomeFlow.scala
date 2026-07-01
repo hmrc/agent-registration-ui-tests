@@ -20,15 +20,16 @@ import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ProvideDetailsStatusPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ApplicationStatusPage, ConditionsNotMetIndividualsPage, ConditionsNotMetTaskListPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotMetIndividualsPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotMetTaskListPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object RiskingOutcomeFlow:
 
   object SignInAsApplicantAfterRiskingOutcome:
-    def runFlow(stubbedSignInData: StubbedSignInData): Unit =
-      signInToApplicationStatusPage(stubbedSignInData: StubbedSignInData)
+    def runFlow(stubbedSignInData: StubbedSignInData): Unit = signInToApplicationStatusPage(stubbedSignInData: StubbedSignInData)
 
   object signInAsPreviouslyUsedIndividual:
     def runFlow(
@@ -46,14 +47,13 @@ object RiskingOutcomeFlow:
       GovernmentGatewaySignInPage.enterKnownPlanetId(stubbedSignInData.planetId)
       GovernmentGatewaySignInPage.clickContinue()
       ProvideDetailsStatusPage.assertPageIsDisplayed()
-      
+
   object viewListOfIndividualActions:
     def runFlow(stubbedSignInData: StubbedSignInData): Unit =
       signInToApplicationStatusPage(stubbedSignInData: StubbedSignInData)
       viewApplicationStatusPage()
       viewIndividualFailuresPage()
-  
-  
+
   private def signInToApplicationStatusPage(stubbedSignInData: StubbedSignInData): Unit =
     val applicationStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + ApplicationSubmittedPage.path
     val signInUrl =
@@ -65,7 +65,7 @@ object RiskingOutcomeFlow:
     GovernmentGatewaySignInPage.enterKnownPlanetId(stubbedSignInData.planetId)
     GovernmentGatewaySignInPage.clickContinue()
     ApplicationStatusPage.assertPageIsDisplayed()
-    
+
   private def viewApplicationStatusPage(): Unit =
     ApplicationStatusPage.assertPageIsDisplayed()
     ApplicationStatusPage.clickViewActionsToTakeButton()
@@ -75,4 +75,3 @@ object RiskingOutcomeFlow:
     ConditionsNotMetTaskListPage.assertPageIsDisplayed()
     ConditionsNotMetTaskListPage.clickIndividualFailuresLink()
     ConditionsNotMetIndividualsPage.assertPageIsDisplayed()
-    

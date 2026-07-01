@@ -29,7 +29,8 @@ extends BaseSpec:
 
   Feature("Complete HMRC standards for agents section"):
     Scenario(
-      "User agrees to HMRC's standards for agents"
+      "User agrees to HMRC's standards for agents",
+      TagFullSuite
     ):
 
       FastForwardLinks

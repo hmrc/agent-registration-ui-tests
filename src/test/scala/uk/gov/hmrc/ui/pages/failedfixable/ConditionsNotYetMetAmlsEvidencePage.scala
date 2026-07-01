@@ -23,16 +23,16 @@ import uk.gov.hmrc.ui.utils.AppConfig
 import java.nio.file.Paths
 
 object ConditionsNotYetMetAmlsEvidencePage
-  extends BasePage:
+extends BasePage:
 
   override val path: String = "/agent-registration/conditions-not-yet-met/anti-money-laundering/evidence"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
-  
+
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
 
   private val fileInput = By.id("fileToUpload")
-  
+
   def uploadFileFromResources(fileName: String): Unit =
     val path =
       Paths
@@ -40,5 +40,3 @@ object ConditionsNotYetMetAmlsEvidencePage
         .toAbsolutePath
         .toString
     sendKeys(fileInput, path)
-
-  

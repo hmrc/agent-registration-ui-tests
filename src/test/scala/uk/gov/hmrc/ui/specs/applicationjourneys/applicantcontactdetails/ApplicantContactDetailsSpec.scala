@@ -33,7 +33,8 @@ extends BaseSpec:
   Feature("Complete Contact Details section"):
 
     Scenario(
-      "Change Name from CYA page"
+      "Change Name from CYA page",
+      TagFullSuite
     ):
 
       val stubbedSignInData = FastForwardLinks
@@ -53,7 +54,8 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Name", "John Jones")
 
     Scenario(
-      "Change Email address from CYA page"
+      "Change Email address from CYA page",
+      TagFullSuite
     ):
 
       val stubbedSignInData = FastForwardLinks
@@ -86,7 +88,8 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
 
     Scenario(
-      "Change Telephone number from CYA page"
+      "Change Telephone number from CYA page",
+      TagFullSuite
     ):
 
       val stubbedSignInData = FastForwardLinks

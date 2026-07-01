@@ -34,7 +34,8 @@ extends BaseSpec:
 
   Feature("Complete Business details section"):
     Scenario(
-      "User selects existing details"
+      "User selects existing details",
+      TagFullSuite
     ):
 
       FastForwardLinks
@@ -47,7 +48,8 @@ extends BaseSpec:
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario(
-      "User enters all custom values"
+      "User enters all custom values",
+      TagFullSuite
     ):
 
       val stubbedSignInData = FastForwardLinks
@@ -60,7 +62,8 @@ extends BaseSpec:
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario(
-      "User mixes provided and custom options"
+      "User mixes provided and custom options",
+      TagFullSuite
     ):
 
       val stubbedSignInData = FastForwardLinks
@@ -82,7 +85,8 @@ extends BaseSpec:
       TaskListPage.assertAgentServicesAccountDetailsStatus("Completed")
 
     Scenario(
-      "Change Business Name from Check Your Answers page"
+      "Change Business Name from Check Your Answers page",
+      TagFullSuite
     ):
 
       FastForwardLinks
@@ -105,7 +109,8 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Name shown to clients", "Updated Sole Trader Name")
 
     Scenario(
-      "Change Telephone Number from Check Your Answers page"
+      "Change Telephone Number from Check Your Answers page",
+      TagFullSuite
     ):
 
       FastForwardLinks
@@ -128,7 +133,8 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Telephone number", "07777799999")
 
     Scenario(
-      "Change Email Address from Check Your Answers page"
+      "Change Email Address from Check Your Answers page",
+      TagFullSuite
     ):
 
       val stubbedSignInData = FastForwardLinks
@@ -164,7 +170,8 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Email address", newEmail)
 
     Scenario(
-      "Change Correspondence Address from Check Your Answers page"
+      "Change Correspondence Address from Check Your Answers page",
+      TagFullSuite
     ):
 
       FastForwardLinks

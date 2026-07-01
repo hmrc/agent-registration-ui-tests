@@ -24,3 +24,6 @@ object Tags:
 
   object TagFixableFailures
   extends Tag("FixableFailures")
+
+  object TagFullSuite
+  extends Tag("FullSuite")

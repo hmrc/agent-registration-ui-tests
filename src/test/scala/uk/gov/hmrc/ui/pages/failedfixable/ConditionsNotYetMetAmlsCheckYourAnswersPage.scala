@@ -18,7 +18,8 @@ package uk.gov.hmrc.ui.pages.failedfixable
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.BaseCheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.{BasePage, PageObject}
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object ConditionsNotYetMetAmlsCheckYourAnswersPage
@@ -26,8 +27,7 @@ extends BaseCheckYourAnswersPage:
 
   override val path: String = "/agent-registration/conditions-not-yet-met/anti-money-laundering/check-your-answers"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
-  
+
   private val amlsDetailsLink = By.cssSelector("a[aria-describedby='amlsDetails-1-status']")
 
   def clickOnProvideYourSupervisionDetailsLink(): Unit = click(amlsDetailsLink)
-

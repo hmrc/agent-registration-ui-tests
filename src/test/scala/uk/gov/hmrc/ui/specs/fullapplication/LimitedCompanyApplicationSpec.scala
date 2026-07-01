@@ -39,7 +39,8 @@ extends BaseSpec:
   Feature("View application after first stage"):
     Scenario(
       "User reviews application details",
-      TagSmokeTests
+      TagSmokeTests,
+      TagFullSuite
     ):
 
       val stubbedSignInData = BusinessDetailsFlow

@@ -19,7 +19,7 @@ package uk.gov.hmrc.ui.pages.failedfixable
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object ConditionsNotYetMetAmlsEvidenceUploadResultPage 
+object ConditionsNotYetMetAmlsEvidenceUploadResultPage
 extends BasePage:
 
   override val path: String = "/agent-registration/conditions-not-yet-met/anti-money-laundering/evidence/upload-result"
@@ -27,5 +27,3 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
-
-  

@@ -19,7 +19,8 @@ package uk.gov.hmrc.ui.utils
 import org.bson.BsonDocument
 import org.mongodb.scala.*
 import org.mongodb.scala.model.Filters.*
-import org.mongodb.scala.model.{ReplaceOptions, Updates}
+import org.mongodb.scala.model.ReplaceOptions
+import org.mongodb.scala.model.Updates
 import scala.concurrent.Await
 import scala.concurrent.duration.*
 
@@ -38,24 +39,23 @@ object MongoHelper:
   private val individualsCollection = database.getCollection("individual-for-risking")
 
   final case class IndividualFix(
-                                  fixType: String,
-                                  isConfirmed: Boolean = false
-                                )
+    fixType: String,
+    isConfirmed: Boolean = false
+  )
 
   final case class IndividualRiskingOutcome(
-                                             outcomeType: String = "Approved",
-                                             fixes: Seq[IndividualFix] = Seq.empty
-                                           )
+    outcomeType: String = "Approved",
+    fixes: Seq[IndividualFix] = Seq.empty
+  )
 
   private def documentStringValue(
-                                   document: Document,
-                                   field: String
-                                 ): Option[String] =
-    document.get(field).flatMap { value =>
-      if value.isString then Some(value.asString().getValue)
-      else if value.isObjectId then Some(value.asObjectId().getValue.toHexString)
-      else None
-    }
+    document: Document,
+    field: String
+  ): Option[String] = document.get(field).flatMap { value =>
+    if value.isString then Some(value.asString().getValue)
+    else if value.isObjectId then Some(value.asObjectId().getValue.toHexString)
+    else None
+  }
 
   private def backEndApplicationIdForApplicationReference(applicationReference: String): String =
     val application = findBackEndApplicationByApplicationReference(applicationReference)
@@ -89,10 +89,9 @@ object MongoHelper:
       )
 
   private def riskingOutcomeIndividualDocument(
-                                                riskingOutcomeType: String,
-                                                fixes: Seq[IndividualFix]
-                                              ): Document =
-    riskingOutcomeIndividualDocument(IndividualRiskingOutcome(riskingOutcomeType, fixes))
+    riskingOutcomeType: String,
+    fixes: Seq[IndividualFix]
+  ): Document = riskingOutcomeIndividualDocument(IndividualRiskingOutcome(riskingOutcomeType, fixes))
 
   def findByApplicationReference(ref: String): Option[Document] =
     val future = collection
@@ -111,23 +110,23 @@ object MongoHelper:
     Await.result(future, 10.seconds)
 
   def getTopLevelString(
-                         doc: Document,
-                         field: String
-                       ): String = doc.get(field)
+    doc: Document,
+    field: String
+  ): String = doc.get(field)
     .map(_.asString().getValue)
     .getOrElse(throw new AssertionError(s"Field '$field' not found"))
 
   def getNestedString(
-                       doc: BsonDocument,
-                       field: String
-                     ): String = Option(doc.get(field))
+    doc: BsonDocument,
+    field: String
+  ): String = Option(doc.get(field))
     .map(_.asString().getValue)
     .getOrElse(throw new AssertionError(s"Field '$field' not found"))
 
   def getNestedInt(
-                    doc: BsonDocument,
-                    field: String
-                  ): Int = Option(doc.get(field))
+    doc: BsonDocument,
+    field: String
+  ): Int = Option(doc.get(field))
     .map(_.asInt32().getValue)
     .getOrElse(throw new AssertionError(s"Field '$field' not found"))
 
@@ -151,10 +150,10 @@ object MongoHelper:
     Await.result(future, 10.seconds)
 
   def simulateNonFixableRiskingOutcome(
-                                        applicationReference: String,
-                                        withEntityFailures: Boolean = true,
-                                        withIndividualFailures: Boolean = false
-                                      ): Unit =
+    applicationReference: String,
+    withEntityFailures: Boolean = true,
+    withIndividualFailures: Boolean = false
+  ): Unit =
     findByApplicationReference(applicationReference)
       .getOrElse(throw new AssertionError(s"No document found for applicationReference='$applicationReference'"))
 
@@ -218,10 +217,10 @@ object MongoHelper:
     Await.result(indFuture, 10.seconds)
 
   def insertEntityRiskingResult(
-                                 applicationReference: String,
-                                 entityRiskingResultJson: String,
-                                 overallOutcome: String = "FailedFixable"
-                               ): Unit =
+    applicationReference: String,
+    entityRiskingResultJson: String,
+    overallOutcome: String = "FailedFixable"
+  ): Unit =
     findByApplicationReference(applicationReference)
       .getOrElse(throw new AssertionError(s"No document found for applicationReference='$applicationReference'"))
 
@@ -259,10 +258,10 @@ object MongoHelper:
   def generateRandomObjectId(): String = new org.bson.types.ObjectId().toHexString
 
   def insertAgentAssuranceRecord(
-                                  oid: String,
-                                  key: String,
-                                  value: String
-                                ): String =
+    oid: String,
+    key: String,
+    value: String
+  ): String =
     val objId = new org.bson.types.ObjectId(oid)
 
     val deleteFuture = agentAssuranceCollection
@@ -286,13 +285,13 @@ object MongoHelper:
     value
 
   def insertRiskingOutcomeToAgentApplication(
-                                              applicationReference: String,
-                                              riskingCompletedDate: String,
-                                              outcome: String,
-                                              correctiveActionExpiryDate: String,
-                                              fixes: Seq[String] = Seq("EntityFix._4._2"),
-                                              riskingOutcomeEntityType: String = "Approved"
-                                            ): Unit =
+    applicationReference: String,
+    riskingCompletedDate: String,
+    outcome: String,
+    correctiveActionExpiryDate: String,
+    fixes: Seq[String] = Seq("EntityFix._4._2"),
+    riskingOutcomeEntityType: String = "Approved"
+  ): Unit =
     findBackEndApplicationByApplicationReference(applicationReference)
       .getOrElse(
         throw new AssertionError(
@@ -334,12 +333,12 @@ object MongoHelper:
     )
 
   def insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
-                                                             applicationReference: String,
-                                                             riskingCompletedDate: String,
-                                                             outcome: String,
-                                                             correctiveActionExpiryDate: String,
-                                                             fixes: Seq[Document]
-                                                           ): Unit =
+    applicationReference: String,
+    riskingCompletedDate: String,
+    outcome: String,
+    correctiveActionExpiryDate: String,
+    fixes: Seq[Document]
+  ): Unit =
     findBackEndApplicationByApplicationReference(applicationReference)
       .getOrElse(
         throw new AssertionError(
@@ -376,11 +375,11 @@ object MongoHelper:
     )
 
   def insertRiskingOutcomeIndividualToBackEnd(
-                                               applicationReference: String,
-                                               riskingOutcomeType: String = "Approved",
-                                               individualId: Option[String] = None,
-                                               fixes: Seq[IndividualFix] = Seq.empty
-                                             ): Unit =
+    applicationReference: String,
+    riskingOutcomeType: String = "Approved",
+    individualId: Option[String] = None,
+    fixes: Seq[IndividualFix] = Seq.empty
+  ): Unit =
     val riskingOutcomeIndividual = riskingOutcomeIndividualDocument(riskingOutcomeType, fixes)
     val applicationFilter = backEndIndividualApplicationFilter(applicationReference)
 
@@ -413,10 +412,10 @@ object MongoHelper:
     )
 
   def insertRiskingOutcomeIndividualByAgentApplicationId(
-                                                          applicationReference: String,
-                                                          riskingOutcomeType: String = "Approved",
-                                                          fixes: Seq[IndividualFix] = Seq.empty
-                                                        ): Unit =
+    applicationReference: String,
+    riskingOutcomeType: String = "Approved",
+    fixes: Seq[IndividualFix] = Seq.empty
+  ): Unit =
     val agentApplicationId = backEndApplicationIdForApplicationReference(applicationReference)
 
     val update = Updates.set(
@@ -443,12 +442,12 @@ object MongoHelper:
     Await.result(future, 10.seconds)
 
   def insertRiskingOutcomeIndividualByField(
-                                             applicationReference: String,
-                                             individualIdField: String,
-                                             individualIdValue: String,
-                                             riskingOutcomeType: String = "Approved",
-                                             fixes: Seq[IndividualFix] = Seq.empty
-                                           ): Unit =
+    applicationReference: String,
+    individualIdField: String,
+    individualIdValue: String,
+    riskingOutcomeType: String = "Approved",
+    fixes: Seq[IndividualFix] = Seq.empty
+  ): Unit =
     val applicationFilter = backEndIndividualApplicationFilter(applicationReference)
     val filterCombined = and(applicationFilter, equal(individualIdField, individualIdValue))
     val update = Updates.set("riskingOutcomeIndividual", riskingOutcomeIndividualDocument(riskingOutcomeType, fixes))
@@ -502,11 +501,11 @@ object MongoHelper:
             )
 
   def insertRiskingOutcomeIndividualByObjectId(
-                                                applicationReference: String,
-                                                individualObjectIdHex: String,
-                                                riskingOutcomeType: String = "Approved",
-                                                fixes: Seq[IndividualFix] = Seq.empty
-                                              ): Unit =
+    applicationReference: String,
+    individualObjectIdHex: String,
+    riskingOutcomeType: String = "Approved",
+    fixes: Seq[IndividualFix] = Seq.empty
+  ): Unit =
     val objId = new org.bson.types.ObjectId(individualObjectIdHex)
     val applicationFilter = backEndIndividualApplicationFilter(applicationReference)
     val update = Updates.set("riskingOutcomeIndividual", riskingOutcomeIndividualDocument(riskingOutcomeType, fixes))
@@ -609,7 +608,7 @@ object MongoHelper:
       val filter =
         ind.get("_id") match
           case Some(oid) if oid.isObjectId => equal("_id", oid.asObjectId().getValue)
-          case Some(id) if id.isString     => equal("_id", id.asString().getValue)
+          case Some(id) if id.isString => equal("_id", id.asString().getValue)
           case _ =>
             ind.get("id") match
               case Some(idv) if idv.isString => equal("id", idv.asString().getValue)
@@ -639,28 +638,25 @@ object MongoHelper:
     }
 
   private def backEndIndividualFilter(
-                                       applicationReference: String,
-                                       individual: Document
-                                     ) =
+    applicationReference: String,
+    individual: Document
+  ) =
     individual.get("_id") match
       case Some(oid) if oid.isObjectId => equal("_id", oid.asObjectId().getValue)
-      case Some(id) if id.isString     => equal("_id", id.asString().getValue)
+      case Some(id) if id.isString => equal("_id", id.asString().getValue)
       case _ =>
         documentStringValue(individual, "personReference") match
-          case Some(personReference) =>
-            and(backEndIndividualApplicationFilter(applicationReference), equal("personReference", personReference))
+          case Some(personReference) => and(backEndIndividualApplicationFilter(applicationReference), equal("personReference", personReference))
           case None =>
             documentStringValue(individual, "individualName") match
-              case Some(individualName) =>
-                and(backEndIndividualApplicationFilter(applicationReference), equal("individualName", individualName))
-              case None =>
-                backEndIndividualApplicationFilter(applicationReference)
+              case Some(individualName) => and(backEndIndividualApplicationFilter(applicationReference), equal("individualName", individualName))
+              case None => backEndIndividualApplicationFilter(applicationReference)
 
   private def updateRiskingOutcomeForBackEndIndividual(
-                                                        applicationReference: String,
-                                                        individual: Document,
-                                                        outcome: IndividualRiskingOutcome
-                                                      ): Unit =
+    applicationReference: String,
+    individual: Document,
+    outcome: IndividualRiskingOutcome
+  ): Unit =
     val filter = backEndIndividualFilter(applicationReference, individual)
 
     val updateResult = Await.result(
@@ -676,10 +672,10 @@ object MongoHelper:
     )
 
   def insertRiskingOutcomeIndividualsToAgentApplication(
-                                                         applicationReference: String,
-                                                         outcomesByIndividualName: Map[String, IndividualRiskingOutcome],
-                                                         defaultOutcome: IndividualRiskingOutcome = IndividualRiskingOutcome()
-                                                       ): Unit =
+    applicationReference: String,
+    outcomesByIndividualName: Map[String, IndividualRiskingOutcome],
+    defaultOutcome: IndividualRiskingOutcome = IndividualRiskingOutcome()
+  ): Unit =
     val individuals = findBackEndIndividualsByApplicationReference(applicationReference)
 
     if individuals.isEmpty then
@@ -699,7 +695,11 @@ object MongoHelper:
         }
         .getOrElse(defaultOutcome)
 
-      updateRiskingOutcomeForBackEndIndividual(applicationReference, individual, outcome)
+      updateRiskingOutcomeForBackEndIndividual(
+        applicationReference,
+        individual,
+        outcome
+      )
     }
 
     val unmatchedIndividualNames = outcomesByIndividualName.keySet.diff(matchedIndividualNames.toSet)
@@ -710,11 +710,11 @@ object MongoHelper:
     )
 
   def insertRiskingOutcomeIndividual(
-                                      applicationReference: String,
-                                      riskingIndividual: Document,
-                                      riskingOutcomeType: String = "Approved",
-                                      fixes: Seq[IndividualFix] = Seq.empty
-                                    ): Unit =
+    applicationReference: String,
+    riskingIndividual: Document,
+    riskingOutcomeType: String = "Approved",
+    fixes: Seq[IndividualFix] = Seq.empty
+  ): Unit =
     riskingIndividual.get("id") match
       case Some(v) if v.isString =>
         insertRiskingOutcomeIndividualByField(

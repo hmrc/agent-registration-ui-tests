@@ -35,7 +35,8 @@ extends BaseSpec:
 
   Feature("Complete Anti-money laundering section"):
     Scenario(
-      "User selects HMRC as their Supervisory Body"
+      "User selects HMRC as their Supervisory Body",
+      TagFullSuite
     ):
 
       FastForwardLinks
@@ -49,7 +50,8 @@ extends BaseSpec:
 
     Scenario(
       "User selects non-HMRC Supervisory Body",
-      TagSmokeTests
+      TagSmokeTests,
+      TagFullSuite
     ):
 
       FastForwardLinks
@@ -62,7 +64,8 @@ extends BaseSpec:
       TaskListPage.assertAmlsDetailsStatus("Completed")
 
     Scenario(
-      "Changes Registration Number from CYA page"
+      "Changes Registration Number from CYA page",
+      TagFullSuite
     ):
 
       FastForwardLinks
@@ -84,7 +87,8 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000111111")
 
     Scenario(
-      "Changes Supervisory Body from CYA page"
+      "Changes Supervisory Body from CYA page",
+      TagFullSuite
     ):
 
       FastForwardLinks
@@ -107,7 +111,8 @@ extends BaseSpec:
       AmlsDetailsFlow.checkYourAnswersExpanded()
 
     Scenario(
-      "Upload evidence file exceeding 6MB in size"
+      "Upload evidence file exceeding 6MB in size",
+      TagFullSuite
     ):
 
       FastForwardLinks
@@ -124,7 +129,8 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.assertErrorMessage("The selected file must not be larger than 6MB")
 
     Scenario(
-      "Upload evidence file with virus"
+      "Upload evidence file with virus",
+      TagFullSuite
     ):
 
       FastForwardLinks
@@ -141,7 +147,8 @@ extends BaseSpec:
       EvidenceOfAmlSupervisionPage.assertErrorMessage("A virus has been detected in your uploaded file, try uploading another file.")
 
     Scenario(
-      "Upload evidence file in invalid format"
+      "Upload evidence file in invalid format",
+      TagFullSuite
     ):
 
       FastForwardLinks

@@ -34,7 +34,8 @@ extends BaseSpec:
   Feature("Applicant initiates Relevant Individual details journey"):
     Scenario(
       "Applicant begins Individual details journey from tracker",
-      TagSmokeTests
+      TagSmokeTests,
+      TagFullSuite
     ):
 
       val stubbedSignInData = BusinessDetailsFlow
