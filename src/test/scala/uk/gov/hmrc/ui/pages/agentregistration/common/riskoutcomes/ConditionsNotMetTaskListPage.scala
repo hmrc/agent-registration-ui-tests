@@ -16,3 +16,16 @@ extends BasePage:
   private val individualFailuresLink = By.cssSelector("a[aria-describedby='individualFailures-1-status']")
 
   def clickIndividualFailuresLink(): Unit = click(individualFailuresLink)
+
+  private val amlsDetailsLink = By.cssSelector("a[aria-describedby='amlsDetails-1-status']")
+
+  private val amlsDetailsStatus = By.id("amlsDetails-1-status")
+
+  def assertAmlsDetailsStatus(expectedStatus: String): Unit = eventually:
+    getText(amlsDetailsStatus) shouldBe expectedStatus
+
+  def assertAmlsDetailsLinkText(expectedText: String): Unit = eventually:
+    getText(amlsDetailsLink) shouldBe expectedText
+
+  def clickOnProvideYourSupervisionDetailsLink(): Unit = click(amlsDetailsLink)
+

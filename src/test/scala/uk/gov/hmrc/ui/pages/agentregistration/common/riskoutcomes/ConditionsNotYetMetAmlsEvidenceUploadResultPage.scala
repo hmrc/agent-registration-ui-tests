@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.failedfixable
+package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
 
-import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
-import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object ConditionsNotYetMetAmlsEntityFailureV31Page
+object ConditionsNotYetMetAmlsEvidenceUploadResultPage
 extends BasePage:
 
-  override val path: String = "/agent-registration/conditions-not-yet-met/anti-money-laundering/failure-details/EntityFailure.3.1"
+  override val path: String = "/agent-registration/conditions-not-yet-met/anti-money-laundering/evidence/upload-result"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:

@@ -23,16 +23,11 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgr
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.pages.PageObject.getCurrentUrl
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.failedfixable.ConditionsNotYetMetAmlsCheckYourAnswersPage
-import uk.gov.hmrc.ui.pages.failedfixable.ConditionsNotYetMetAmlsEntityFailureV31Page
-import uk.gov.hmrc.ui.pages.failedfixable.ConditionsNotYetMetAmlsEvidencePage
-import uk.gov.hmrc.ui.pages.failedfixable.ConditionsNotYetMetAmlsEvidenceUploadResultPage
-import uk.gov.hmrc.ui.pages.failedfixable.ConditionsNotYetMetAmlsRegistrationNumberPage
-import uk.gov.hmrc.ui.pages.failedfixable.ConditionsNotYetMetAmlsSupervisorNamePage
-import uk.gov.hmrc.ui.pages.failedfixable.ConditionsNotYetMetTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ConditionsNotYetMetAmlsCheckYourAnswersPage, ConditionsNotYetMetAmlsEntityFailureV31Page, ConditionsNotYetMetAmlsEvidencePage, ConditionsNotYetMetAmlsEvidenceUploadResultPage, ConditionsNotYetMetAmlsRegistrationNumberPage, ConditionsNotYetMetAmlsSupervisorNamePage}
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 import uk.gov.hmrc.ui.utils.Tags.TagFixableFailures
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotMetTaskListPage
 
 class FailedFixableAmlsCheckYourAnswersSpec
 extends BaseSpec:
@@ -93,8 +88,8 @@ extends BaseSpec:
       ApplicationSubmittedPage.assertPageIsDisplayed()
 
       ApplicationSubmittedPage.clickViewActionLink()
-      ConditionsNotYetMetTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetTaskListPage.clickOnProvideYourSupervisionDetailsLink()
+      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
+      ConditionsNotMetTaskListPage.clickOnProvideYourSupervisionDetailsLink()
 
       ConditionsNotYetMetAmlsEntityFailureV31Page.assertPageIsDisplayed()
       ConditionsNotYetMetAmlsEntityFailureV31Page.clickContinue()
@@ -121,6 +116,73 @@ extends BaseSpec:
 
       ConditionsNotYetMetAmlsCheckYourAnswersPage.clickContinue()
 
-      ConditionsNotYetMetTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetTaskListPage.assertAmlsDetailsLinkText("Provide your supervision details again")
-      ConditionsNotYetMetTaskListPage.assertAmlsDetailsStatus("Completed")
+      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
+      ConditionsNotMetTaskListPage.assertAmlsDetailsLinkText("Provide your supervision details again")
+      ConditionsNotMetTaskListPage.assertAmlsDetailsStatus("Completed")
+
+  Scenario(
+    "SoleTraderOwner changes registration number from CYA with prefilled value and returns to CYA",
+    TagFixableFailures
+  ):
+
+    val stubbedSignInData = FastForwardLinks
+      .FastForward
+      .runFlow(Declaration, SoleTrader)
+
+    ApplicationSubmittedPage.assertPageIsDisplayed()
+
+    val applicationReference = ApplicationSubmittedPage.getApplicationReference
+    MongoHelper
+      .findByApplicationReference(applicationReference)
+      .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
+
+    val amlsFixes = Seq(
+      Document(
+        "failure" -> Document("type" -> "_3._1"),
+        "amlsDetails" -> Document(
+          "supervisoryBody" -> "HMRC",
+          "amlsRegistrationNumber" -> "XAML00000123456"
+        ),
+        "type" -> "EntityFix._3.AmlsFix"
+      )
+    )
+
+    MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
+      applicationReference = applicationReference,
+      riskingCompletedDate = "2026-06-18",
+      outcome = "FailedFixable",
+      correctiveActionExpiryDate = "2026-08-17",
+      fixes = amlsFixes,
+    )
+
+    val riskingIndividuals = MongoHelper.findRiskingIndividualsByApplicationReference(applicationReference)
+    riskingIndividuals should not be empty
+
+    MongoHelper.insertRiskingOutcomeIndividualByAgentApplicationId(
+      applicationReference,
+      riskingOutcomeType = "Approved"
+    )
+
+    RiskingOutcomeFlow
+      .SignInAsApplicantAfterRiskingOutcome
+      .runFlow(stubbedSignInData)
+
+    ApplicationSubmittedPage.assertPageIsDisplayed()
+
+    ApplicationSubmittedPage.clickViewActionLink()
+    ConditionsNotMetTaskListPage.assertPageIsDisplayed()
+    ConditionsNotMetTaskListPage.clickOnProvideYourSupervisionDetailsLink()
+
+    ConditionsNotYetMetAmlsEntityFailureV31Page.assertPageIsDisplayed()
+    ConditionsNotYetMetAmlsEntityFailureV31Page.clickContinue()
+
+    ConditionsNotYetMetAmlsCheckYourAnswersPage.assertPageIsDisplayed()
+    ConditionsNotYetMetAmlsCheckYourAnswersPage.clickChangeFor("Registration number")
+
+    ConditionsNotYetMetAmlsRegistrationNumberPage.assertPageIsDisplayed()
+    ConditionsNotYetMetAmlsRegistrationNumberPage.assertRegistrationNumberPrefilled("XAML00000123456")
+    ConditionsNotYetMetAmlsRegistrationNumberPage.enterRegistrationNumber("XAML00000111111")
+    ConditionsNotYetMetAmlsRegistrationNumberPage.clickContinue()
+
+    ConditionsNotYetMetAmlsCheckYourAnswersPage.assertPageIsDisplayed()
+    ConditionsNotYetMetAmlsCheckYourAnswersPage.assertSummaryRow("Registration number", "XAML00000111111")
