@@ -44,9 +44,10 @@ object MongoHelper:
   )
 
   final case class IndividualRiskingOutcome(
-    outcomeType: String = "Approved",
-    fixes: Seq[IndividualFix] = Seq.empty
-  )
+                                             outcomeType: String = "Approved",
+                                             fixes: Seq[IndividualFix] = Seq.empty,
+                                             providedByApplicant: Boolean = false
+                                           )
 
   private def documentStringValue(
     document: Document,
@@ -661,7 +662,13 @@ object MongoHelper:
 
     val updateResult = Await.result(
       backEndIndividualCollection
-        .updateOne(filter, Updates.set("riskingOutcomeIndividual", riskingOutcomeIndividualDocument(outcome)))
+        .updateOne(
+          filter,
+          Updates.combine(
+            Updates.set("riskingOutcomeIndividual", riskingOutcomeIndividualDocument(outcome)),
+            Updates.set("providedByApplicant", outcome.providedByApplicant)
+          )
+        )
         .toFuture(),
       10.seconds
     )

@@ -107,4 +107,67 @@ extends BaseSpec:
 
       // Proves return to task list button works and returns to the task list page
       ConditionsNotMetIndividualsPage.clickContinue()
-  //    ConditionsNotMetTaskListPage.assertPageIsDisplayed() Disabled due to bug where nav gots back to Status page
+//      ConditionsNotMetTaskListPage.assertPageIsDisplayed() //Disabled due to bug where nav gots back to Status page
+
+    Scenario(
+      "Applicant provided some individual details",
+      TagFixableFailures
+    ):
+
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(Declaration, LLP)
+
+      ApplicationSubmittedPage.assertPageIsDisplayed()
+
+      val applicationReference = ApplicationSubmittedPage.getApplicationReference
+      MongoHelper
+        .findByApplicationReference(applicationReference)
+        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
+
+      MongoHelper.insertRiskingOutcomeToAgentApplication(
+        applicationReference = applicationReference,
+        riskingCompletedDate = "2026-06-18",
+        outcome = "FailedFixable",
+        correctiveActionExpiryDate = "2026-08-17",
+        fixes = Seq.empty
+      )
+      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
+      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
+        applicationReference = applicationReference,
+        outcomesByIndividualName = Map(
+          "Steve Austin" -> IndividualRiskingOutcome(
+            outcomeType = "FailedFixable",
+            fixes = Seq(
+              IndividualFix("IndividualFix._4._3"),
+              IndividualFix("IndividualFix._8._7", isConfirmed = true)
+            )
+          ),
+          "Beverly Hills" -> IndividualRiskingOutcome(
+            outcomeType = "FailedFixable",
+            fixes = Seq(
+              IndividualFix("IndividualFix._4._1", isConfirmed = true),
+              IndividualFix("IndividualFix._5._1", isConfirmed = true)
+            ),
+            providedByApplicant = true
+          )
+        )
+      )
+
+      RiskingOutcomeFlow
+        .viewListOfIndividualActions
+        .runFlow(stubbedSignInData)
+
+      // Proves fixable failure for individual with providedByApplicant = false displays
+      ConditionsNotMetIndividualsPage.assertActionsRow(
+        ActionRow(
+          name = "Steve Austin",
+          actions = Seq(
+            "File one or more relevant returns",
+            "Pay a liability connected to relevant anti-avoidance"
+          ),
+          completed = "No"
+        )
+      )
+      // Proves fixable failure for individual with providedByApplicant = true doesn't display
+      ConditionsNotMetIndividualsPage.assertIndividualNotDisplayed("Beverly Hills")
