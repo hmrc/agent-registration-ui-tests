@@ -41,7 +41,8 @@ extends BaseSpec:
   Feature("Applicant FailedNonFixable List Page"):
     Scenario(
       "Sole Trader Owner sees FailedNonFixable Outcome Page after sign in",
-      TagSmokeTests
+      TagSmokeTests,
+      TagFullSuite
     ):
 
       /** Step 1: Fast-forward to AgentStandards — same starting point as DeclarationSpec
@@ -106,7 +107,8 @@ extends BaseSpec:
       )
 
     Scenario(
-      "Sole Trader Non-Owner sees FailedNonFixable Outcome Page after sign in"
+      "Sole Trader Non-Owner sees FailedNonFixable Outcome Page after sign in",
+      TagFullSuite
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -181,7 +183,8 @@ extends BaseSpec:
 
     Scenario(
       "General Partnership sees FailedNonFixable Outcome Page when both partners have individual failures",
-      TagSmokeTests
+      TagSmokeTests,
+      TagFullSuite
     ):
 
       val stubbedSignInData = FastForwardLinks

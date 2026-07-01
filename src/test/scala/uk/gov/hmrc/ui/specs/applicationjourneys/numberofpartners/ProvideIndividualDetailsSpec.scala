@@ -29,7 +29,11 @@ class ProvideIndividualDetailsSpec
 extends BaseSpec:
 
   Feature("Provide individual details"):
-    Scenario("Single partner signs in and approves application", TagSmokeTests):
+    Scenario(
+      "Single partner signs in and approves application",
+      TagSmokeTests,
+      TagFullSuite
+    ):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
@@ -47,7 +51,7 @@ extends BaseSpec:
           GeneralPartnership
         )
 
-    Scenario("Multiple partners partially completed list"):
+    Scenario("Multiple partners partially completed list", TagFullSuite):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward

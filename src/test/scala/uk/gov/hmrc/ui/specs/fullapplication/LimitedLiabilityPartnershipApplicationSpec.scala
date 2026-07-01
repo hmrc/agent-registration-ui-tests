@@ -38,7 +38,8 @@ extends BaseSpec:
 
   Feature("View application after first stage"):
     Scenario(
-      "User reviews application details"
+      "User reviews application details",
+      TagFullSuite
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

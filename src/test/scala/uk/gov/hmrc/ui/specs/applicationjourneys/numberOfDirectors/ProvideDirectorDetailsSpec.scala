@@ -32,7 +32,11 @@ class ProvideDirectorDetailsSpec
 extends BaseSpec:
 
   Feature("Provide individual details"):
-    Scenario("Multiple Director signs in and approves application", TagSmokeTests):
+    Scenario(
+      "Multiple Director signs in and approves application",
+      TagSmokeTests,
+      TagFullSuite
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

@@ -26,7 +26,7 @@ extends BasePage:
 
   override val path: String = "/agent-registration/conditions-not-yet-met/task-list"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
-  
+
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
 
@@ -36,12 +36,8 @@ extends BasePage:
 
   def assertAmlsDetailsStatus(expectedStatus: String): Unit = eventually:
     getText(amlsDetailsStatus) shouldBe expectedStatus
-    
+
   def assertAmlsDetailsLinkText(expectedText: String): Unit = eventually:
-      getText(amlsDetailsLink) shouldBe expectedText
+    getText(amlsDetailsLink) shouldBe expectedText
 
   def clickOnProvideYourSupervisionDetailsLink(): Unit = click(amlsDetailsLink)
-
- 
-  
-  

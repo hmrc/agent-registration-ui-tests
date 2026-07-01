@@ -38,7 +38,8 @@ extends BaseSpec:
   Feature("Individual FailedNonFixable List Page"):
     Scenario(
       "Risking outcomes for Non Fixable Individual list page for General Partnership",
-      TagSmokeTests
+      TagSmokeTests,
+      TagFullSuite
     ):
 
       val stubbedSignInData = BusinessDetailsFlow

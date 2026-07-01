@@ -31,7 +31,7 @@ class ProveYourIdentitySpec
 extends BaseSpec:
 
   Feature("Provide your identity"):
-    Scenario("Applicant signs in and provides their details"):
+    Scenario("Applicant signs in and provides their details", TagFullSuite):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
@@ -45,7 +45,11 @@ extends BaseSpec:
           fastForwardUsed = true
         )
 
-    Scenario("Applicant is not the sole trader", TagSmokeTests):
+    Scenario(
+      "Applicant is not the sole trader",
+      TagSmokeTests,
+      TagFullSuite
+    ):
 
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

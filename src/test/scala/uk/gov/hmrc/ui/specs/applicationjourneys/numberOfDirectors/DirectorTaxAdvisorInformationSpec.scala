@@ -35,7 +35,8 @@ extends BaseSpec:
 
   Feature("Complete Director and Other Tax Adviser information section"):
     Scenario(
-      "Director has 5 or less directors"
+      "Director has 5 or less directors",
+      TagFullSuite
     ):
 
       FastForwardLinks
@@ -50,7 +51,8 @@ extends BaseSpec:
         .runFlow()
 
     Scenario(
-      "Company has 6 or more directors (some relevant tax advisors, happy path)"
+      "Company has 6 or more directors (some relevant tax advisors, happy path)",
+      TagFullSuite
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -76,7 +78,8 @@ extends BaseSpec:
         .runFlow()
 
     Scenario(
-      "Change number of directors from Check your answers screen"
+      "Change number of directors from Check your answers screen",
+      TagFullSuite
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
@@ -121,7 +124,8 @@ extends BaseSpec:
       YouHaveAddedDirectorCheckYourAnswerPage.assertNameAt(5, "Justine Hills")
 
     Scenario(
-      "Change other relevant individuals from Check Your Answers screen"
+      "Change other relevant individuals from Check Your Answers screen",
+      TagFullSuite
     ):
 
       val stubbedSignInData = BusinessDetailsFlow
@@ -158,7 +162,8 @@ extends BaseSpec:
       CheckYourAnswersOtherIndividualsPage.assertNameAt(0, "Dick Grayson")
 
     Scenario(
-      "Change number of directors from final Check Your Answers"
+      "Change number of directors from final Check Your Answers",
+      TagFullSuite
     ):
 
       val stubbedSignInData = BusinessDetailsFlow
@@ -225,7 +230,8 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("Number of directors", "5")
 
     Scenario(
-      "Change other relevant individual name from final Check Your Answers"
+      "Change other relevant individual name from final Check Your Answers",
+      TagFullSuite
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount

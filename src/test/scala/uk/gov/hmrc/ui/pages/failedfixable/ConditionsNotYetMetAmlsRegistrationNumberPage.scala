@@ -17,12 +17,14 @@
 package uk.gov.hmrc.ui.pages.failedfixable
 
 import org.openqa.selenium.By
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatRegistrationNumberPage.{registrationNumberField, sendKeys}
-import uk.gov.hmrc.ui.pages.{BasePage, PageObject}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatRegistrationNumberPage.registrationNumberField
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatRegistrationNumberPage.sendKeys
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object ConditionsNotYetMetAmlsRegistrationNumberPage
-  extends BasePage:
+extends BasePage:
 
   override val path: String = "/agent-registration/conditions-not-yet-met/anti-money-laundering/registration-number"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -33,5 +35,3 @@ object ConditionsNotYetMetAmlsRegistrationNumberPage
   private val registrationNumberField = By.id("amlsRegistrationNumber")
 
   def enterNonHMRCRegistrationNumber(regNum: String = "12345"): Unit = sendKeys(registrationNumberField, regNum)
-
-  

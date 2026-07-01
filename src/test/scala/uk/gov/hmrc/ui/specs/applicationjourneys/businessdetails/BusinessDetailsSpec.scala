@@ -35,7 +35,8 @@ extends BaseSpec:
 
   Feature("Complete BusinessDetails"):
     Scenario(
-      "Sole Trader Business Owner"
+      "Sole Trader Business Owner",
+      TagFullSuite
     ):
       SoleTraderBusinessDetailsFlow
         .HasNoOnlineAccount
@@ -44,7 +45,8 @@ extends BaseSpec:
       TaskListPage.assertBusinessDetailsStatus("Completed")
 
     Scenario(
-      "Sole Trader is deceased"
+      "Sole Trader is deceased",
+      TagFullSuite
     ):
       SoleTraderBusinessDetailsFlow
         .IsDeceased
@@ -53,7 +55,8 @@ extends BaseSpec:
       CannotConfirmIdentityPage.assertHeaderText("Get in touch to confirm your details")
 
     Scenario(
-      "Sole Trader Business details reviewed on enhanced CYA then start again"
+      "Sole Trader Business details reviewed on enhanced CYA then start again",
+      TagFullSuite
     ):
       FastForwardLinks
         .FastForward
@@ -77,7 +80,8 @@ extends BaseSpec:
       IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
 
     Scenario(
-      "General Partnership"
+      "General Partnership",
+      TagFullSuite
     ):
       GeneralPartnershipBusinessDetailsFlow
         .HasNoOnlineAccount
@@ -86,14 +90,16 @@ extends BaseSpec:
       TaskListPage.assertBusinessDetailsStatus("Completed")
 
     Scenario(
-      "General partnership - Refuse to deal with"
+      "General partnership - Refuse to deal with",
+      TagFullSuite
     ):
       GeneralPartnershipBusinessDetailsFlow
         .RefuseToDealWith
         .runFlow()
 
     Scenario(
-      "Limited Company"
+      "Limited Company",
+      TagFullSuite
     ):
       LimitedCompanyBusinessDetailsFlow
         .HasNoOnlineAccount

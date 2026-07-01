@@ -6,7 +6,7 @@ import org.openqa.selenium.By
 
 object ConditionsNotMetTaskListPage
 extends BasePage:
-  
+
   override val path: String = "/agent-registration/conditions-not-yet-met/task-list"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 

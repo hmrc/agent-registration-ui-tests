@@ -29,7 +29,8 @@ extends BaseSpec:
 
   Feature("Complete declaration section"):
     Scenario(
-      "User accepts the declaration"
+      "User accepts the declaration",
+      TagFullSuite
     ):
       pending // ff links aren't creating risk records so disabling until fixed
       val stubbedSignInData = FastForwardLinks
