@@ -62,7 +62,6 @@ extends BaseSpec:
             fixes = Seq.empty
           ),
           "Beverly Hills" -> IndividualRiskingOutcome(
-            outcomeType = "Approved",
             fixes = Seq.empty
           )
         )
