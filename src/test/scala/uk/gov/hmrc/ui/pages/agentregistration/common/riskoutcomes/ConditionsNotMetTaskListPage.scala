@@ -14,7 +14,9 @@ extends BasePage:
     getCurrentUrl shouldBe url
 
   private val individualFailuresLink = By.cssSelector("a[aria-describedby='individualFailures-1-status']")
-
+  private val selfAssessmentReturnsLink = By.cssSelector("a[aria-describedby='entityFailures-1-status']")
+  private val selfAssessmentMissingReturns = By.id("entityFailures-1-status")
+  
   def clickIndividualFailuresLink(): Unit = click(individualFailuresLink)
 
   private val amlsDetailsLink = By.cssSelector("a[aria-describedby='amlsDetails-1-status']")
@@ -28,4 +30,8 @@ extends BasePage:
     getText(amlsDetailsLink) shouldBe expectedText
 
   def clickOnProvideYourSupervisionDetailsLink(): Unit = click(amlsDetailsLink)
+
+  def clickOnSelfAssessmentReturnsLink(): Unit = click(selfAssessmentReturnsLink)
+
+  def assertSelfAssessmentMissingReturns(expectedStatus: String): Unit = getText(selfAssessmentMissingReturns) shouldBe expectedStatus
 

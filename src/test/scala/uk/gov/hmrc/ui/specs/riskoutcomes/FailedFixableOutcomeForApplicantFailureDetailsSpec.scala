@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.failedfixable.{ConditionsNotYetMetEntityFailureDetailsV41Page, ConditionsNotYetMetTaskListPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ApplicationStatusPage, ConditionsNotMetTaskListPage, ConditionsNotYetMetEntityFailureDetailsV41Page}
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
@@ -31,7 +31,7 @@ extends BaseSpec:
 
   Feature("Applicant Failure Details Page"):
     Scenario(
-      "LLP user sees FailedFixable Details Page and completes the actions to resolve the Self Assessment returns issue",
+      "LLP user sees FailedFixable Details Page and click Yes to resolve the Self Assessment returns issue",
       TagFixableFailures
     ):
       val stubbedSignInData = FastForwardLinks
@@ -76,14 +76,14 @@ extends BaseSpec:
       ApplicationSubmittedPage.assertPageHeadingContains("Test Partnership")
       ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
 
-      ApplicationSubmittedPage.clickViewActionLink()
-      ConditionsNotYetMetTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetTaskListPage.assertSelfAssessmentMissingReturns("Incomplete")
-      ConditionsNotYetMetTaskListPage.clickOnSelfAssessmentReturnsLink()
+      ApplicationStatusPage.clickViewActionsToTakeButton()
+      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
+      ConditionsNotMetTaskListPage.assertSelfAssessmentMissingReturns("Incomplete")
+      ConditionsNotMetTaskListPage.clickOnSelfAssessmentReturnsLink()
 
       ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageIsDisplayed()
       ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageHeadingContains("Self Assessment returns for Test Partnership")
       ConditionsNotYetMetEntityFailureDetailsV41Page.selectYes()
       ConditionsNotYetMetEntityFailureDetailsV41Page.clickContinue()
-      ConditionsNotYetMetTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetTaskListPage.assertSelfAssessmentMissingReturns("Completed")
+      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
+      ConditionsNotMetTaskListPage.assertSelfAssessmentMissingReturns("Completed")
