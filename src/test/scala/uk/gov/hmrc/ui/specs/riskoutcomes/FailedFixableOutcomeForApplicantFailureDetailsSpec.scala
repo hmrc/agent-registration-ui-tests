@@ -31,7 +31,7 @@ extends BaseSpec:
 
   Feature("Applicant Failure Details Page"):
     Scenario(
-      "LLP user sees FailedFixable Details Page and click Yes to resolve the Self Assessment returns issue",
+      "LLP user sees FailedFixable Details Page and click Yes/No variety for Self Assessment returns issue",
       TagFixableFailures
     ):
       val stubbedSignInData = FastForwardLinks
@@ -81,9 +81,19 @@ extends BaseSpec:
       ConditionsNotMetTaskListPage.assertSelfAssessmentMissingReturns("Incomplete")
       ConditionsNotMetTaskListPage.clickOnSelfAssessmentReturnsLink()
 
+      // Click Yes and check that the status is now Completed
       ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageIsDisplayed()
       ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageHeadingContains("Self Assessment returns for Test Partnership")
       ConditionsNotYetMetEntityFailureDetailsV41Page.selectYes()
       ConditionsNotYetMetEntityFailureDetailsV41Page.clickContinue()
       ConditionsNotMetTaskListPage.assertPageIsDisplayed()
       ConditionsNotMetTaskListPage.assertSelfAssessmentMissingReturns("Completed")
+
+      // Click No and check that the status is still Incomplete
+      ConditionsNotMetTaskListPage.clickOnSelfAssessmentReturnsLink()
+      ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageIsDisplayed()
+      ConditionsNotYetMetEntityFailureDetailsV41Page.selectNo()
+      ConditionsNotYetMetEntityFailureDetailsV41Page.clickContinue()
+      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
+      ConditionsNotMetTaskListPage.assertSelfAssessmentMissingReturns("Incomplete")
+
