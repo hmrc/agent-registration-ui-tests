@@ -14,29 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.failedfixable
+package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
 
 import org.openqa.selenium.By
-import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.pages.{BasePage, PageObject}
 import uk.gov.hmrc.ui.utils.AppConfig
 
-import java.nio.file.Paths
-
-object ConditionsNotYetMetAmlsEvidencePage
+object ConditionsNotYetMetAmlsEntityFailureV31Page
 extends BasePage:
 
-  override val path: String = "/agent-registration/conditions-not-yet-met/anti-money-laundering/evidence"
+  override val path: String = "/agent-registration/conditions-not-yet-met/anti-money-laundering/failure-details/EntityFailure.3.1"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
-
-  private val fileInput = By.id("fileToUpload")
-
-  def uploadFileFromResources(fileName: String): Unit =
-    val path =
-      Paths
-        .get(s"src/test/resources/test-files/$fileName")
-        .toAbsolutePath
-        .toString
-    sendKeys(fileInput, path)
