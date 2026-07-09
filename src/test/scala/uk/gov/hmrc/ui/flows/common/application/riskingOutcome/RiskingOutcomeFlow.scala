@@ -20,9 +20,12 @@ import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ProvideDetailsStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.SignInAndConfirmDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotMetIndividualsPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotMetTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ProvideDetailsOutcomeStatusPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.utils.AppConfig
 
@@ -54,6 +57,27 @@ object RiskingOutcomeFlow:
       viewApplicationStatusPage()
       viewIndividualFailuresPage()
 
+  object viewIndividualTaskListPage:
+    def runFlow(
+      stubbedSignInData: StubbedSignInData,
+      linkId: String,
+      username: String
+    ): Unit =
+      val individualRiskingStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + SignInAndConfirmDetailsPage.path + "/" + linkId
+      val signInUrl =
+        AppConfig.baseUrlGovernmentGateway +
+          s"/bas-gateway/sign-in?continue_url=$individualRiskingStatusUrl&origin=agent-registration-frontend&affinityGroup=individual"
+      PageObject.get(signInUrl)
+      GovernmentGatewaySignInPage.assertPageIsDisplayed()
+      GovernmentGatewaySignInPage.enterKnownUserId(username)
+      GovernmentGatewaySignInPage.enterKnownPlanetId(stubbedSignInData.planetId)
+      GovernmentGatewaySignInPage.clickContinue()
+      SignInAndConfirmDetailsPage.assertPageIsDisplayed()
+      SignInAndConfirmDetailsPage.clickContinue()
+      ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
+      ProvideDetailsOutcomeStatusPage.clickContinue()
+      ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
+
   private def signInToApplicationStatusPage(stubbedSignInData: StubbedSignInData): Unit =
     val applicationStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + ApplicationSubmittedPage.path
     val signInUrl =
@@ -69,9 +93,9 @@ object RiskingOutcomeFlow:
   private def viewApplicationStatusPage(): Unit =
     ApplicationStatusPage.assertPageIsDisplayed()
     ApplicationStatusPage.clickViewActionsToTakeButton()
-    ConditionsNotMetTaskListPage.assertPageIsDisplayed()
+    ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
 
   private def viewIndividualFailuresPage(): Unit =
-    ConditionsNotMetTaskListPage.assertPageIsDisplayed()
-    ConditionsNotMetTaskListPage.clickIndividualFailuresLink()
-    ConditionsNotMetIndividualsPage.assertPageIsDisplayed()
+    ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+    ConditionsNotYetMetApplicantTaskListPage.clickIndividualFailuresLink()
+    ConditionsNotYetMetIndividualsPage.assertPageIsDisplayed()

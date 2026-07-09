@@ -23,11 +23,16 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgr
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.pages.PageObject.getCurrentUrl
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ConditionsNotYetMetAmlsCheckYourAnswersPage, ConditionsNotYetMetAmlsEntityFailureV31Page, ConditionsNotYetMetAmlsEvidencePage, ConditionsNotYetMetAmlsEvidenceUploadResultPage, ConditionsNotYetMetAmlsRegistrationNumberPage, ConditionsNotYetMetAmlsSupervisorNamePage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsCheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsEntityFailureV31Page
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsEvidencePage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsEvidenceUploadResultPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsRegistrationNumberPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsSupervisorNamePage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 import uk.gov.hmrc.ui.utils.Tags.TagFixableFailures
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotMetTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
 
 class FailedFixableAmlsCheckYourAnswersSpec
 extends BaseSpec:
@@ -88,8 +93,8 @@ extends BaseSpec:
       ApplicationSubmittedPage.assertPageIsDisplayed()
 
       ApplicationSubmittedPage.clickViewActionLink()
-      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
-      ConditionsNotMetTaskListPage.clickOnProvideYourSupervisionDetailsLink()
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.clickOnProvideYourSupervisionDetailsLink()
 
       ConditionsNotYetMetAmlsEntityFailureV31Page.assertPageIsDisplayed()
       ConditionsNotYetMetAmlsEntityFailureV31Page.clickContinue()
@@ -116,9 +121,9 @@ extends BaseSpec:
 
       ConditionsNotYetMetAmlsCheckYourAnswersPage.clickContinue()
 
-      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
-      ConditionsNotMetTaskListPage.assertAmlsDetailsLinkText("Provide your supervision details again")
-      ConditionsNotMetTaskListPage.assertAmlsDetailsStatus("Completed")
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.assertAmlsDetailsLinkText("Provide your supervision details again")
+      ConditionsNotYetMetApplicantTaskListPage.assertAmlsDetailsStatus("Completed")
 
   Scenario(
     "SoleTraderOwner changes registration number from CYA with prefilled value and returns to CYA",
@@ -152,7 +157,7 @@ extends BaseSpec:
       riskingCompletedDate = "2026-06-18",
       outcome = "FailedFixable",
       correctiveActionExpiryDate = "2026-08-17",
-      fixes = amlsFixes,
+      fixes = amlsFixes
     )
 
     val riskingIndividuals = MongoHelper.findRiskingIndividualsByApplicationReference(applicationReference)
@@ -170,8 +175,8 @@ extends BaseSpec:
     ApplicationSubmittedPage.assertPageIsDisplayed()
 
     ApplicationSubmittedPage.clickViewActionLink()
-    ConditionsNotMetTaskListPage.assertPageIsDisplayed()
-    ConditionsNotMetTaskListPage.clickOnProvideYourSupervisionDetailsLink()
+    ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+    ConditionsNotYetMetApplicantTaskListPage.clickOnProvideYourSupervisionDetailsLink()
 
     ConditionsNotYetMetAmlsEntityFailureV31Page.assertPageIsDisplayed()
     ConditionsNotYetMetAmlsEntityFailureV31Page.clickContinue()

@@ -21,9 +21,8 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotMetIndividualsPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotMetTaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotMetIndividualsPage.ActionRow
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage.ActionRow
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 import uk.gov.hmrc.ui.utils.MongoHelper.IndividualFix
@@ -72,7 +71,8 @@ extends BaseSpec:
             fixes = Seq(
               IndividualFix("IndividualFix._4._1", isConfirmed = true),
               IndividualFix("IndividualFix._5._1", isConfirmed = true)
-            )
+            ),
+            declarationAgreed = true
           )
         )
       )
@@ -83,7 +83,7 @@ extends BaseSpec:
 
       // Proves multi row table is displayed with correct data for each individual
       // Proves Completed status is No until all actions are confirmed by individual
-      ConditionsNotMetIndividualsPage.assertActionsRow(
+      ConditionsNotYetMetIndividualsPage.assertActionsRow(
         ActionRow(
           name = "Steve Austin",
           actions = Seq(
@@ -94,7 +94,7 @@ extends BaseSpec:
         )
       )
       // Proves Completed status is Yes once all actions are confirmed by individual
-      ConditionsNotMetIndividualsPage.assertActionsRow(
+      ConditionsNotYetMetIndividualsPage.assertActionsRow(
         ActionRow(
           name = "Beverly Hills",
           actions = Seq(
@@ -106,8 +106,8 @@ extends BaseSpec:
       )
 
       // Proves return to task list button works and returns to the task list page
-      ConditionsNotMetIndividualsPage.clickContinue()
-//      ConditionsNotMetTaskListPage.assertPageIsDisplayed() //Disabled due to bug where nav gots back to Status page
+      ConditionsNotYetMetIndividualsPage.clickContinue()
+//      ConditionsNotMetTaskListPage.assertPageIsDisplayed() //Disabled due to bug where nav goes back to Status page
 
     Scenario(
       "Applicant provided some individual details",
@@ -149,7 +149,8 @@ extends BaseSpec:
               IndividualFix("IndividualFix._4._1", isConfirmed = true),
               IndividualFix("IndividualFix._5._1", isConfirmed = true)
             ),
-            providedByApplicant = true
+            providedByApplicant = true,
+            declarationAgreed = true
           )
         )
       )
@@ -159,7 +160,7 @@ extends BaseSpec:
         .runFlow(stubbedSignInData)
 
       // Proves fixable failure for individual with providedByApplicant = false displays
-      ConditionsNotMetIndividualsPage.assertActionsRow(
+      ConditionsNotYetMetIndividualsPage.assertActionsRow(
         ActionRow(
           name = "Steve Austin",
           actions = Seq(
@@ -170,4 +171,4 @@ extends BaseSpec:
         )
       )
       // Proves fixable failure for individual with providedByApplicant = true doesn't display
-      ConditionsNotMetIndividualsPage.assertIndividualNotDisplayed("Beverly Hills")
+      ConditionsNotYetMetIndividualsPage.assertIndividualNotDisplayed("Beverly Hills")

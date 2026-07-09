@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails
+package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
 
 import uk.gov.hmrc.ui.pages.BasePage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage.getCurrentUrl
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage.include
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage.url
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object SignInAndConfirmDetailsPage
+object ConditionsNotYetMetDeclarationPage
 extends BasePage:
 
-  override val path: String = "/agent-registration/provide-details/start"
+  override val path: String = "/agent-registration/provide-details/conditions-not-yet-met/declaration"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:

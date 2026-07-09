@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails
+package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails
 
+import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage.getCurrentUrl
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage.include
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage.url
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object SignInAndConfirmDetailsPage
+object IndividualFix_5_1Page
 extends BasePage:
 
-  override val path: String = "/agent-registration/provide-details/start"
+  override val path: String = "/agent-registration/provide-details/conditions-not-yet-met/failure-details/IndividualFix.5.1"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
+
+  private val yesRadio = By.cssSelector("input[name='isFixed'][value='Yes']")
+
+  private val noRadio = By.cssSelector("input[name='isFixed'][value='No']")
+
+  def selectYes(): Unit = click(yesRadio)
