@@ -16,10 +16,8 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails
 
+import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage.getCurrentUrl
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage.include
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage.url
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object SignInAndConfirmDetailsPage
@@ -30,3 +28,8 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
+
+  private val startButton = By.cssSelector("a.govuk-button--start[href*='/agent-registration/provide-details/outcome-status']")
+
+  def clickStartButton(): Unit = eventually:
+    click(startButton)

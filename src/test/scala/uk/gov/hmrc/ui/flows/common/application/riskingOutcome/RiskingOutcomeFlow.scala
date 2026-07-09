@@ -73,7 +73,7 @@ object RiskingOutcomeFlow:
       GovernmentGatewaySignInPage.enterKnownPlanetId(stubbedSignInData.planetId)
       GovernmentGatewaySignInPage.clickContinue()
       SignInAndConfirmDetailsPage.assertPageIsDisplayed()
-      SignInAndConfirmDetailsPage.clickContinue()
+      SignInAndConfirmDetailsPage.clickStartButton()
       ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
       ProvideDetailsOutcomeStatusPage.clickContinue()
       ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
