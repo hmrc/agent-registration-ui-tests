@@ -21,7 +21,9 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ApplicationStatusPage, ConditionsNotMetTaskListPage, ConditionsNotYetMetEntityFailureDetailsV41Page}
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetEntityFailureDetailsV41Page
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
@@ -76,23 +78,22 @@ extends BaseSpec:
       ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
 
       ApplicationStatusPage.clickViewActionsToTakeButton()
-      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
-      ConditionsNotMetTaskListPage.assertSelfAssessmentMissingReturns("Incomplete")
-      ConditionsNotMetTaskListPage.clickOnSelfAssessmentReturnsLink()
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.assertSelfAssessmentMissingReturns("Incomplete")
+      ConditionsNotYetMetApplicantTaskListPage.clickOnSelfAssessmentReturnsLink()
 
       // Click Yes and check that the status is now Completed
       ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageIsDisplayed()
       ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageHeadingContains("Self Assessment returns for Test Partnership")
       ConditionsNotYetMetEntityFailureDetailsV41Page.selectYes()
       ConditionsNotYetMetEntityFailureDetailsV41Page.clickContinue()
-      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
-      ConditionsNotMetTaskListPage.assertSelfAssessmentMissingReturns("Completed")
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.assertSelfAssessmentMissingReturns("Completed")
 
       // Click No and check that the status is still Incomplete
-      ConditionsNotMetTaskListPage.clickOnSelfAssessmentReturnsLink()
+      ConditionsNotYetMetApplicantTaskListPage.clickOnSelfAssessmentReturnsLink()
       ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageIsDisplayed()
       ConditionsNotYetMetEntityFailureDetailsV41Page.selectNo()
       ConditionsNotYetMetEntityFailureDetailsV41Page.clickContinue()
-      ConditionsNotMetTaskListPage.assertPageIsDisplayed()
-      ConditionsNotMetTaskListPage.assertSelfAssessmentMissingReturns("Incomplete")
-
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.assertSelfAssessmentMissingReturns("Incomplete")

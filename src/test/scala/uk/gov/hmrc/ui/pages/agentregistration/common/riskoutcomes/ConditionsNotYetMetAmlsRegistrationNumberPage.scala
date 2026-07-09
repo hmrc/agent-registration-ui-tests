@@ -17,8 +17,10 @@
 package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
 
 import org.openqa.selenium.By
-import uk.gov.hmrc.ui.pages.{BasePage, PageObject}
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatRegistrationNumberPage.{registrationNumberField, sendKeys}
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.pages.PageObject
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatRegistrationNumberPage.registrationNumberField
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.WhatRegistrationNumberPage.sendKeys
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object ConditionsNotYetMetAmlsRegistrationNumberPage
@@ -32,8 +34,7 @@ extends BasePage:
 
   private val registrationNumberField = By.id("amlsRegistrationNumber")
 
-  private def registrationNumberValue: String =
-    Option(getElementBy(registrationNumberField).getAttribute("value")).getOrElse("")
+  private def registrationNumberValue: String = Option(getElementBy(registrationNumberField).getAttribute("value")).getOrElse("")
 
   def enterRegistrationNumber(regNum: String = "XAML00000123456"): Unit = sendKeys(registrationNumberField, regNum)
 
@@ -43,4 +44,3 @@ extends BasePage:
     withClue(s"Expected prefilled registration number to be '$expectedValue' but was '$registrationNumberValue'") {
       registrationNumberValue shouldBe expectedValue
     }
-

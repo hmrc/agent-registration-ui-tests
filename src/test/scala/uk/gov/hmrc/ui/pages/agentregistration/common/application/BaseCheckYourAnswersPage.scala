@@ -39,5 +39,7 @@ extends BasePage:
   def clickOnAssertChangeLink(keyText: String): Unit = click(locatorForAssertChangeLink(keyText))
 
   inline def assertPageIsDisplayed(): Unit = eventually {
-    getCurrentUrl shouldBe url
+    assertUrl()
   }
+
+  protected def assertUrl(): Unit = getCurrentUrl shouldBe url

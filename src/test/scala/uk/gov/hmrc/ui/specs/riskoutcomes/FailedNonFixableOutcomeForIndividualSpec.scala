@@ -17,16 +17,13 @@
 package uk.gov.hmrc.ui.specs.riskoutcomes
 
 import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ProvideDetailsStatusPage
 import uk.gov.hmrc.ui.specs.BaseSpec
@@ -42,24 +39,9 @@ extends BaseSpec:
       TagFullSuite
     ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow()
-
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
-
-      AgentDetailsFlow
-        .WhenUsingProvidedOptions
-        .runFlow(GeneralPartnership)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
-
-      AgentStandardsFlow
-        .AgreeToMeetStandards
-        .runFlow(GeneralPartnership)
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
 
       PartnerTaxAdvisorInformationFlow
         .singlePartner
@@ -85,21 +67,7 @@ extends BaseSpec:
 
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
 
-      val application = MongoHelper
-        .findBackEndApplicationByApplicationReference(applicationReference)
-        .getOrElse(
-          throw new AssertionError(
-            s"No Mongo record found for reference: $applicationReference"
-          )
-        )
-
-      val linkId: String = application.get("linkId")
-        .map(_.asString().getValue)
-        .getOrElse(
-          throw new AssertionError(
-            s"No linkId found in Mongo record for reference: $applicationReference"
-          )
-        )
+      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
 
       ApplicationSubmittedPage.clickSignOutLink()
 

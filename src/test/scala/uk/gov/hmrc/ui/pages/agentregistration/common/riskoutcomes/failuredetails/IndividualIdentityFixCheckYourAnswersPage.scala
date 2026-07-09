@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
+package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails
 
-import org.openqa.selenium.By
-import uk.gov.hmrc.ui.pages.BasePage
-import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.BaseCheckYourAnswersPage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object ConditionsNotYetMetAmlsCheckYourAnswersPage
+object IndividualIdentityFixCheckYourAnswersPage
 extends BaseCheckYourAnswersPage:
 
-  override val path: String = "/agent-registration/conditions-not-yet-met/anti-money-laundering/check-your-answers"
+  override val path: String = "/agent-registration/provide-details/conditions-not-yet-met/check-your-answers"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
-  private val amlsDetailsLink = By.cssSelector("a[aria-describedby='amlsDetails-1-status']")
-
-  def clickOnProvideYourSupervisionDetailsLink(): Unit = click(amlsDetailsLink)
+  override protected def assertUrl(): Unit = getCurrentUrl should include(url)

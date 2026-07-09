@@ -40,14 +40,20 @@ object MongoHelper:
 
   final case class IndividualFix(
     fixType: String,
-    isConfirmed: Boolean = false
+    isConfirmed: Boolean = false,
+    // Fields for IndividualFix._10 (IndividualDetailsFix) only.
+    // None = NotProvided, Some(value) = Provided
+    dateOfBirth: Option[String] = None,
+    nino: Option[String] = None,
+    saUtr: Option[String] = None
   )
 
   final case class IndividualRiskingOutcome(
-                                             outcomeType: String = "Approved",
-                                             fixes: Seq[IndividualFix] = Seq.empty,
-                                             providedByApplicant: Boolean = false
-                                           )
+    outcomeType: String = "Approved",
+    fixes: Seq[IndividualFix] = Seq.empty,
+    providedByApplicant: Boolean = false,
+    declarationAgreed: Boolean = false
+  )
 
   private def documentStringValue(
     document: Document,
@@ -81,12 +87,40 @@ object MongoHelper:
       equal("agentApplicationId", applicationId)
     )
 
+  private def fixDocument(fix: IndividualFix): Document =
+    if fix.fixType.contains("IndividualDetailsFix") || fix.fixType.contains("_10") then
+      val dobDoc =
+        fix.dateOfBirth match
+          case Some(date) => Document("dateOfBirth" -> date, "type" -> "individual.IndividualDateOfBirth.Provided")
+          case None => Document("type" -> "individual.IndividualDateOfBirth.NotProvided")
+
+      val ninoDoc =
+        fix.nino match
+          case Some(n) => Document("nino" -> n, "type" -> "individual.IndividualNino.Provided")
+          case None => Document("type" -> "individual.IndividualNino.NotProvided")
+
+      val saUtrDoc =
+        fix.saUtr match
+          case Some(u) => Document("saUtr" -> u, "type" -> "individual.IndividualSaUtr.Provided")
+          case None => Document("type" -> "individual.IndividualSaUtr.NotProvided")
+
+      Document(
+        "type" -> fix.fixType,
+        "dateOfBirth" -> dobDoc,
+        "nino" -> ninoDoc,
+        "saUtr" -> saUtrDoc
+      )
+    else
+      Document("type" -> fix.fixType, "isConfirmed" -> fix.isConfirmed)
+
   private def riskingOutcomeIndividualDocument(outcome: IndividualRiskingOutcome): Document =
-    if outcome.fixes.isEmpty then Document("type" -> outcome.outcomeType)
+    if outcome.fixes.isEmpty then
+      Document("type" -> outcome.outcomeType, "declarationAgreed" -> outcome.declarationAgreed)
     else
       Document(
         "type" -> outcome.outcomeType,
-        "fixes" -> outcome.fixes.map(fix => Document("type" -> fix.fixType, "isConfirmed" -> fix.isConfirmed))
+        "fixes" -> outcome.fixes.map(fixDocument),
+        "declarationAgreed" -> outcome.declarationAgreed
       )
 
   private def riskingOutcomeIndividualDocument(
@@ -101,6 +135,22 @@ object MongoHelper:
       .toFutureOption()
 
     Await.result(future, 10.seconds)
+
+  def getLinkIdByApplicationReference(applicationReference: String): String =
+    val application = findBackEndApplicationByApplicationReference(applicationReference)
+      .getOrElse(
+        throw new AssertionError(
+          s"No Mongo record found for reference: $applicationReference"
+        )
+      )
+
+    application.get("linkId")
+      .map(_.asString().getValue)
+      .getOrElse(
+        throw new AssertionError(
+          s"No linkId found in Mongo record for reference: $applicationReference"
+        )
+      )
 
   def findBackEndApplicationByApplicationReference(ref: String): Option[Document] =
     val future = backEndCollection
