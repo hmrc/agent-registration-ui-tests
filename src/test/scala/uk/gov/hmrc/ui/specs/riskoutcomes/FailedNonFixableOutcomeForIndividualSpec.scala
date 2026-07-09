@@ -19,22 +19,15 @@ package uk.gov.hmrc.ui.specs.riskoutcomes
 import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
-import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdetails.application.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ProvideDetailsStatusPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualFix
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
 
 class FailedNonFixableOutcomeForIndividualSpec
 extends BaseSpec:

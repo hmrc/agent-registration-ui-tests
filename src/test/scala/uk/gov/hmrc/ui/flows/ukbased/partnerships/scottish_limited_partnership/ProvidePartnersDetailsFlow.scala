@@ -155,6 +155,7 @@ object ProvidePartnersDetailsFlow:
     AgentExternalStubCreateUserPage.selectEnrolment("HMRC-PT")
     AgentExternalStubCreateUserPage.clickContinue()
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
+    AgentExternalStubConfigureUserPage.selectConfidenceLevel250()
     val nameToUse = partnerNames.getOrElse("Beverly Hills")
     AgentExternalStubConfigureUserPage.enterName(nameToUse)
     if (agentEntityUtr) {

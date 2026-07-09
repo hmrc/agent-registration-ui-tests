@@ -98,6 +98,7 @@ object ProvideDirectorDetailsFlow:
     // Use captured director name if provided, otherwise use default
     val nameToUse = directorNames.getOrElse("Beverly Hills")
     AgentExternalStubConfigureUserPage.enterName(nameToUse)
+    AgentExternalStubConfigureUserPage.selectConfidenceLevel250()
     AgentExternalStubConfigureUserPage.clickContinue()
     (bearerToken, sessionId)
 

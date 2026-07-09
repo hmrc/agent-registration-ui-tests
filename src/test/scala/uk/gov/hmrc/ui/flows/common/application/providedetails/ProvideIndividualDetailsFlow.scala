@@ -227,6 +227,7 @@ object ProvideIndividualDetailsFlow:
         AgentExternalStubConfigureUserPage.enterName("Test User")
     else
       AgentExternalStubConfigureUserPage.enterName("Bobby Boucher")
+    AgentExternalStubConfigureUserPage.selectConfidenceLevel250()
     AgentExternalStubConfigureUserPage.clickContinue()
     (bearerToken, sessionId)
 
@@ -254,6 +255,7 @@ object ProvideIndividualDetailsFlow:
     AgentExternalStubCreateUserPage.selectEnrolment("HMRC-PT")
     AgentExternalStubCreateUserPage.clickContinue()
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
+    AgentExternalStubConfigureUserPage.selectConfidenceLevel250()
     if businessType == SoleTrader then
       if fastForwardUsed then
         AgentExternalStubConfigureUserPage.enterName("ST Name ST Lastname")

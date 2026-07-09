@@ -176,6 +176,7 @@ object StubbedSignInFlow:
     selectAffinityGroupIndividual()
     selectNoEnrolmentAndContinue()
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
+    AgentExternalStubConfigureUserPage.selectConfidenceLevel250()
 
     if (hasUtr) then enterUtrEnrolmentData()
 
