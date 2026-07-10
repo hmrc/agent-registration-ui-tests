@@ -656,21 +656,8 @@ object MongoHelper:
       throw new AssertionError(s"syncRiskingIndividualsToBackEnd: no risking individuals found for $applicationReference")
 
     riskingIndividuals.foreach { ind =>
-      val filter =
-        ind.get("_id") match
-          case Some(oid) if oid.isObjectId => equal("_id", oid.asObjectId().getValue)
-          case Some(id) if id.isString => equal("_id", id.asString().getValue)
-          case _ =>
-            ind.get("id") match
-              case Some(idv) if idv.isString => equal("id", idv.asString().getValue)
-              case _ =>
-                val name = documentStringValue(ind, "individualName")
-                  .orElse(documentStringValue(ind, "firstName"))
-                  .getOrElse("")
-
-                and(backEndIndividualApplicationFilter(applicationReference), equal("individualName", name))
-
-      val replacement = Document(ind.toJson())
+      val filter = backEndIndividualFilter(applicationReference, ind)
+      val replacement = Document(ind.toJson()).filterKeys(_ != "_id")
 
       val replaceFuture = backEndIndividualCollection
         .replaceOne(
@@ -692,13 +679,13 @@ object MongoHelper:
     applicationReference: String,
     individual: Document
   ) =
-    individual.get("_id") match
-      case Some(oid) if oid.isObjectId => equal("_id", oid.asObjectId().getValue)
-      case Some(id) if id.isString => equal("_id", id.asString().getValue)
-      case _ =>
-        documentStringValue(individual, "personReference") match
-          case Some(personReference) => and(backEndIndividualApplicationFilter(applicationReference), equal("personReference", personReference))
-          case None =>
+    documentStringValue(individual, "personReference") match
+      case Some(personReference) => and(backEndIndividualApplicationFilter(applicationReference), equal("personReference", personReference))
+      case None =>
+        individual.get("_id") match
+          case Some(oid) if oid.isObjectId => equal("_id", oid.asObjectId().getValue)
+          case Some(id) if id.isString => equal("_id", id.asString().getValue)
+          case _ =>
             documentStringValue(individual, "individualName") match
               case Some(individualName) => and(backEndIndividualApplicationFilter(applicationReference), equal("individualName", individualName))
               case None => backEndIndividualApplicationFilter(applicationReference)

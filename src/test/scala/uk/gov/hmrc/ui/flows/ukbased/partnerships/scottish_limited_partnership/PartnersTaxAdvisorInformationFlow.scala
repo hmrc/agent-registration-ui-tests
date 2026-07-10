@@ -27,21 +27,6 @@ import uk.gov.hmrc.ui.pages.agentregistration.ukbased.partnerships.scottish_limi
 
 object PartnersTaxAdvisorInformationFlow:
 
-  private val allPartnersNames = List(
-    "Steve",
-    "Beverly"
-  )
-
-  private val allPartnersSurnames = List(
-    "Austin",
-    "Hills"
-  )
-  private val otherRelevantTaxAdvisorsNames = List(
-    "Bruce Wayne",
-    "Clark Kent",
-    "Diana Prince"
-  )
-
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()
     TaskListPage.assertPartnersAndAdvisorsStatus("Incomplete")

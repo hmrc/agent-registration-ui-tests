@@ -31,6 +31,4 @@ extends BasePage:
 
   private val yesRadio = By.cssSelector("input[name='isFixed'][value='Yes']")
 
-  private val noRadio = By.cssSelector("input[name='isFixed'][value='No']")
-
   def selectYes(): Unit = click(yesRadio)
