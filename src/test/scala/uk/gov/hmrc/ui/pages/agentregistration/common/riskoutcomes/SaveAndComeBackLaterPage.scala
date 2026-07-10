@@ -19,7 +19,7 @@ package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object SaveAndComeBackLater
+object SaveAndComeBackLaterPage
 extends BasePage:
 
   override val path: String = "/agent-registration/conditions-not-yet-met/save-and-come-back-later"
