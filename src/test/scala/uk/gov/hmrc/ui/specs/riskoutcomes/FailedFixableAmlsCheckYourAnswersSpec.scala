@@ -31,7 +31,6 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotY
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsSupervisorNamePage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.Tags.TagFixableFailures
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
 
 class FailedFixableAmlsCheckYourAnswersSpec

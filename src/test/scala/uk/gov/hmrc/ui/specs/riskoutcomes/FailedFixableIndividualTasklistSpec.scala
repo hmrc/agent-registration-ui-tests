@@ -38,7 +38,6 @@ import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 import uk.gov.hmrc.ui.utils.MongoHelper.IndividualFix
 import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
-import uk.gov.hmrc.ui.utils.Tags.TagFixableFailures
 
 class FailedFixableIndividualTasklistSpec
 extends BaseSpec:

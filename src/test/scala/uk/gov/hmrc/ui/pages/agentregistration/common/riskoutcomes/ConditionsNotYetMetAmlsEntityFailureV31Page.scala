@@ -16,9 +16,7 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
 
-import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
-import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object ConditionsNotYetMetAmlsEntityFailureV31Page
