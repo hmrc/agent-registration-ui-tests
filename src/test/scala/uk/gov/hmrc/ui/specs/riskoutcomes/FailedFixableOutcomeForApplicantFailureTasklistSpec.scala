@@ -71,7 +71,6 @@ extends BaseSpec:
         fixes = amlsFixes
       )
 
-      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
       MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
         applicationReference = applicationReference,
         outcomesByIndividualName = Map(
@@ -164,7 +163,6 @@ extends BaseSpec:
         fixes = amlsFixes
       )
 
-      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
       MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
         applicationReference = applicationReference,
         outcomesByIndividualName = Map(
