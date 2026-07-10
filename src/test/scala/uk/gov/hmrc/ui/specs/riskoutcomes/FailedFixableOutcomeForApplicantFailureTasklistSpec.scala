@@ -101,7 +101,7 @@ extends BaseSpec:
       ConditionsNotYetMetApplicantTaskListPage.assertTaskListBusinessIssuesSubHeading("Issues with the business")
       ConditionsNotYetMetApplicantTaskListPage.assertTaskListResubmitApplicationSubHeading("Resubmit application")
 
-      // verify actions and their incomplete status
+      // verify actions and their status
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
         "Provide your supervision details again",
         "Incomplete"
@@ -194,7 +194,7 @@ extends BaseSpec:
       ConditionsNotYetMetApplicantTaskListPage.assertTaskListBusinessIssuesSubHeading("Issues with the business")
       ConditionsNotYetMetApplicantTaskListPage.assertTaskListResubmitApplicationSubHeading("Resubmit application")
 
-      // verify actions and their incomplete status
+      // verify actions and their status
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
         "Provide your supervision details again",
         "Incomplete"
