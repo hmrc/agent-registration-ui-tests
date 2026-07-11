@@ -87,7 +87,7 @@ extends BaseSpec:
 
       MongoHelper.insertRiskingOutcomeToAgentApplication(
         applicationReference = applicationReference,
-        riskingCompletedDate = "2026-06-18",
+        actualDecisionDate = "2026-06-18",
         outcome = "FailedFixable",
         correctiveActionExpiryDate = "2026-08-17",
         fixes = Seq.empty
@@ -398,7 +398,7 @@ extends BaseSpec:
 
       MongoHelper.insertRiskingOutcomeToAgentApplication(
         applicationReference = applicationReference,
-        riskingCompletedDate = "2026-06-18",
+        actualDecisionDate = "2026-06-18",
         outcome = "FailedFixable",
         correctiveActionExpiryDate = "2026-08-17",
         fixes = Seq.empty
@@ -489,7 +489,7 @@ extends BaseSpec:
 
       MongoHelper.insertRiskingOutcomeToAgentApplication(
         applicationReference = applicationReference,
-        riskingCompletedDate = "2026-06-18",
+        actualDecisionDate = "2026-06-18",
         outcome = "FailedFixable",
         correctiveActionExpiryDate = "2026-08-17",
         fixes = Seq.empty
