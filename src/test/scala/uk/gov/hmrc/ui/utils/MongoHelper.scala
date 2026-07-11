@@ -337,7 +337,7 @@ object MongoHelper:
 
   def insertRiskingOutcomeToAgentApplication(
     applicationReference: String,
-    riskingCompletedDate: String,
+    actualDecisionDate: String,
     outcome: String,
     correctiveActionExpiryDate: String,
     fixes: Seq[String] = Seq("EntityFix._4._2"),
@@ -361,7 +361,7 @@ object MongoHelper:
         )
 
     val riskingOutcomeApplication = Document(
-      "riskingCompletedDate" -> riskingCompletedDate,
+      "actualDecisionDate" -> actualDecisionDate,
       "outcome" -> outcome,
       "correctiveActionExpiryDate" -> correctiveActionExpiryDate
     )
@@ -385,7 +385,7 @@ object MongoHelper:
 
   def insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
     applicationReference: String,
-    riskingCompletedDate: String,
+    actualDecisionDate: String,
     outcome: String,
     correctiveActionExpiryDate: String,
     fixes: Seq[Document]
@@ -403,7 +403,7 @@ object MongoHelper:
     )
 
     val riskingOutcomeApplication = Document(
-      "riskingCompletedDate" -> riskingCompletedDate,
+      "actualDecisionDate" -> actualDecisionDate,
       "outcome" -> outcome,
       "correctiveActionExpiryDate" -> correctiveActionExpiryDate
     )

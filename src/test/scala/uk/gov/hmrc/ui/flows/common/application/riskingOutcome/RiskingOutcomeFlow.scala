@@ -78,6 +78,25 @@ object RiskingOutcomeFlow:
       ProvideDetailsOutcomeStatusPage.clickContinue()
       ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
 
+  object viewIndividualOutcomeStatusPage:
+    def runFlow(
+      stubbedSignInData: StubbedSignInData,
+      linkId: String,
+      username: String
+    ): Unit =
+      val individualRiskingStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + SignInAndConfirmDetailsPage.path + "/" + linkId
+      val signInUrl =
+        AppConfig.baseUrlGovernmentGateway +
+          s"/bas-gateway/sign-in?continue_url=$individualRiskingStatusUrl&origin=agent-registration-frontend&affinityGroup=individual"
+      PageObject.get(signInUrl)
+      GovernmentGatewaySignInPage.assertPageIsDisplayed()
+      GovernmentGatewaySignInPage.enterKnownUserId(username)
+      GovernmentGatewaySignInPage.enterKnownPlanetId(stubbedSignInData.planetId)
+      GovernmentGatewaySignInPage.clickContinue()
+      SignInAndConfirmDetailsPage.assertPageIsDisplayed()
+      SignInAndConfirmDetailsPage.clickStartButton()
+      ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
+
   private def signInToApplicationStatusPage(stubbedSignInData: StubbedSignInData): Unit =
     val applicationStatusUrl = AppConfig.baseUrlAgentRegistrationFrontend + ApplicationSubmittedPage.path
     val signInUrl =

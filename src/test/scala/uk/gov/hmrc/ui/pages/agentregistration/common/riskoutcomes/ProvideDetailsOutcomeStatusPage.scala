@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
 
+import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
@@ -27,3 +28,12 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
+
+  private val financeAct2026Link = By.cssSelector("a[href*='legislation.gov.uk/ukpga/2026/11/section/230']")
+  private val financeAct2026Url = "https://www.legislation.gov.uk/ukpga/2026/11/section/230"
+  private val requestReviewOrAppealLink = By.cssSelector("a[href*='gov.uk/guidance/if-you-disagree-with-hmrcs-decision-about-your-tax-adviser-registration']")
+  private val requestReviewOrAppealUrl = "https://www.gov.uk/guidance/if-you-disagree-with-hmrcs-decision-about-your-tax-adviser-registration"
+
+  def clickFinanceAct2026LinkAndAssertUrl(): Unit = clickLinkAndAssertUrlInNewTab(financeAct2026Link, financeAct2026Url)
+
+  def clickRequestReviewOrAppealLinkAndAssertUrl(): Unit = clickLinkAndAssertUrlInNewTab(requestReviewOrAppealLink, requestReviewOrAppealUrl)
