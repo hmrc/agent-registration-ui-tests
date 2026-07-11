@@ -20,21 +20,21 @@ import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object IndividualFix_4_1Page
+object IndividualFix_5_6Page
 extends BasePage:
 
-  override val path: String = "/agent-registration/provide-details/conditions-not-yet-met/failure-details/IndividualFix.4.1"
+  override val path: String = "/agent-registration/provide-details/conditions-not-yet-met/failure-details/IndividualFix.5.6"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
 
   private val yesRadio = By.cssSelector("input[name='isFixed'][value='Yes']")
-  private val noRadio = By.cssSelector("input[name='isFixed'][value='No']")
-  private val saTaxReturnLink = By.cssSelector("a[href*='gov.uk/self-assessment-tax-returns']")
-  private val saTaxReturnUrl = "https://www.gov.uk/self-assessment-tax-returns"
+  private val howToPayStampDutyLink = By.cssSelector(
+    "a[href*='gov.uk/government/collections/paying-hmrc-detailed-information#stamp-duty-and-other-property-taxes']"
+  )
+  private val howToPayStampDutyUrl = "https://www.gov.uk/government/collections/paying-hmrc-detailed-information#stamp-duty-and-other-property-taxes"
 
   def selectYes(): Unit = click(yesRadio)
-  def selectNo(): Unit = click(noRadio)
 
-  def clickSelfAssessmentTaxReturnsLinkAndAssertUrl(): Unit = clickLinkAndAssertUrlInNewTab(saTaxReturnLink, saTaxReturnUrl)
+  def clickSelfAssessmentTaxReturnsLinkAndAssertUrl(): Unit = clickLinkAndAssertUrlInNewTab(howToPayStampDutyLink, howToPayStampDutyUrl)

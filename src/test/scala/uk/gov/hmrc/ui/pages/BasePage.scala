@@ -20,6 +20,8 @@ import org.openqa.selenium.By
 import uk.gov.hmrc.selenium.webdriver.Driver
 import uk.gov.hmrc.ui.utils.RichMatchers
 
+import scala.jdk.CollectionConverters.*
+
 trait BasePage
 extends PageObject:
 
@@ -118,6 +120,27 @@ extends PageObject:
     findElementBy(valueLocatorFor(key)) shouldBe defined
 
   def clickBrowserBack(): Unit = Driver.instance.navigate().back()
+
+  protected def clickLinkAndAssertUrlInNewTab(
+    link: By,
+    expectedUrl: String
+  ): Unit =
+    val originalWindowHandle = Driver.instance.getWindowHandle
+    val existingWindowHandles = Driver.instance.getWindowHandles.asScala.toSet
+
+    click(link)
+
+    val newWindowHandle = eventually:
+      val newWindowHandle = Driver.instance.getWindowHandles.asScala.toSet.diff(existingWindowHandles).head
+      Driver.instance.switchTo().window(newWindowHandle)
+      newWindowHandle
+
+    try
+      eventually:
+        getCurrentUrl should startWith(expectedUrl)
+    finally
+      if Driver.instance.getWindowHandles.asScala.contains(newWindowHandle) then Driver.instance.close()
+      Driver.instance.switchTo().window(originalWindowHandle)
 
   export RichMatchers.*
 

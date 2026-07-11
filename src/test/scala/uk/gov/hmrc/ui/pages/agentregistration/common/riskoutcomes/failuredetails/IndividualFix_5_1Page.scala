@@ -30,5 +30,9 @@ extends BasePage:
     getCurrentUrl should include(url)
 
   private val yesRadio = By.cssSelector("input[name='isFixed'][value='Yes']")
+  private val howToPaySelfAssessmentLink = By.cssSelector("a[href*='gov.uk/government/collections/paying-hmrc-detailed-information#self-assessment']")
+  private val howToPaySelfAssessmentUrl = "https://www.gov.uk/government/collections/paying-hmrc-detailed-information#self-assessment"
 
   def selectYes(): Unit = click(yesRadio)
+
+  def clickSelfAssessmentTaxReturnsLinkAndAssertUrl(): Unit = clickLinkAndAssertUrlInNewTab(howToPaySelfAssessmentLink, howToPaySelfAssessmentUrl)
