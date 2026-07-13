@@ -55,6 +55,11 @@ object MongoHelper:
     declarationAgreed: Boolean = false
   )
 
+  final case class EntityFix(
+    fixType: String,
+    isConfirmed: Boolean = false
+  )
+
   private def documentStringValue(
     document: Document,
     field: String
@@ -340,7 +345,7 @@ object MongoHelper:
     actualDecisionDate: String,
     outcome: String,
     correctiveActionExpiryDate: String,
-    fixes: Seq[String] = Seq("EntityFix._4._2"),
+    fixes: Seq[EntityFix] = Seq(EntityFix("EntityFix._4._2")),
     riskingOutcomeEntityType: String = "Approved"
   ): Unit =
     findBackEndApplicationByApplicationReference(applicationReference)
@@ -350,7 +355,7 @@ object MongoHelper:
         )
       )
 
-    val fixesArray = fixes.map(fix => Document("type" -> fix))
+    val fixesArray = fixes.map(fix => Document("type" -> fix.fixType, "isConfirmed" -> fix.isConfirmed))
 
     val riskingOutcomeEntity =
       if fixesArray.isEmpty then Document("type" -> riskingOutcomeEntityType)

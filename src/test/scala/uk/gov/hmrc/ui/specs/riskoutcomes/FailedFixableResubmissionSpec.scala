@@ -1,8 +1,20 @@
 package uk.gov.hmrc.ui.specs.riskoutcomes
 
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
+import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
+import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
+import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
+import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
+import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.MongoHelper.{IndividualFix, IndividualRiskingOutcome}
+import uk.gov.hmrc.ui.utils.MongoHelper.EntityFix
+import uk.gov.hmrc.ui.utils.MongoHelper.IndividualFix
+import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
+
 
 class FailedFixableResubmissionSpec
 
@@ -49,26 +61,18 @@ class FailedFixableResubmissionSpec
         actualDecisionDate = "2026-06-18",
         outcome = "FailedFixable",
         correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq.empty
+        fixes = Seq(EntityFix("EntityFix._4._2", isConfirmed = true))
       )
       
-      // Insert two individuals. Both have confirmed their fixes and signed the declaration
+      // Insert one individual. They have confirmed their fixes and signed the declaration
       MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
         applicationReference = applicationReference,
         outcomesByIndividualName = Map(
-          "Steve Austin" -> IndividualRiskingOutcome(
+          "Bobby Boucher" -> IndividualRiskingOutcome(
             outcomeType = "FailedFixable",
             fixes = Seq(
               IndividualFix("IndividualFix._4._3", isConfirmed = true),
               IndividualFix("IndividualFix._8._7", isConfirmed = true)
-            ),
-            declarationAgreed = true
-          ),
-          "Beverly Hills" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._1", isConfirmed = true),
-              IndividualFix("IndividualFix._5._1", isConfirmed = true)
             ),
             declarationAgreed = true
           )
@@ -76,9 +80,7 @@ class FailedFixableResubmissionSpec
       )
 
       RiskingOutcomeFlow
-        .viewIndividualTaskListPage
+        .viewListOfIndividualActions
         .runFlow(
-          stubbedSignInData,
-          linkId,
-          username
+          stubbedSignInData
         )

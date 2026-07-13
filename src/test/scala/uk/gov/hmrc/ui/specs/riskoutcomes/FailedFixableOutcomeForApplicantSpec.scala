@@ -24,6 +24,7 @@ import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
+import uk.gov.hmrc.ui.utils.MongoHelper.EntityFix
 
 class FailedFixableOutcomeForApplicantSpec
 extends BaseSpec:
@@ -51,7 +52,7 @@ extends BaseSpec:
         actualDecisionDate = "2026-06-18",
         outcome = "FailedFixable",
         correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq("EntityFix._4._2")
+        fixes = Seq(EntityFix("EntityFix._4._2"))
       )
 
       MongoHelper.syncRiskingIndividualsToBackEnd(applicationReference)
@@ -93,7 +94,7 @@ extends BaseSpec:
         actualDecisionDate = "2026-06-18",
         outcome = "FailedFixable",
         correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq("EntityFix._4._1", "EntityFix._4._3")
+        fixes = Seq(EntityFix("EntityFix._4._1"), EntityFix("EntityFix._4._3"))
       )
 
       MongoHelper.syncRiskingIndividualsToBackEnd(applicationReference)
