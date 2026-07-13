@@ -80,7 +80,10 @@ extends BaseSpec:
 
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertSelfAssessmentMissingReturns("Incomplete")
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Self Assessment - missing returns",
+        "Incomplete"
+      )
       ConditionsNotYetMetApplicantTaskListPage.clickOnSelfAssessmentReturnsLink()
 
       // Click Yes and check that the status is now Completed
@@ -89,7 +92,10 @@ extends BaseSpec:
       ConditionsNotYetMetEntityFailureDetailsV41Page.selectYes()
       ConditionsNotYetMetEntityFailureDetailsV41Page.clickContinue()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertSelfAssessmentMissingReturns("Completed")
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Self Assessment - missing returns",
+        "Completed"
+      )
 
       // Click No and check that the status is still Incomplete
       ConditionsNotYetMetApplicantTaskListPage.clickOnSelfAssessmentReturnsLink()
@@ -97,4 +103,8 @@ extends BaseSpec:
       ConditionsNotYetMetEntityFailureDetailsV41Page.selectNo()
       ConditionsNotYetMetEntityFailureDetailsV41Page.clickContinue()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertSelfAssessmentMissingReturns("Incomplete")
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Self Assessment - missing returns",
+        "Incomplete"
+      )
+      
