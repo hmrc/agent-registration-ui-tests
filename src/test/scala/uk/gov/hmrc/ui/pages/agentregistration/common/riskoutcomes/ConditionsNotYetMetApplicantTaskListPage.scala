@@ -99,9 +99,6 @@ extends BasePage:
   private val individualFailuresLink = By.cssSelector("a[aria-describedby='individualFailures-1-status']")
   private val selfAssessmentReturnsLink = By.cssSelector("a[aria-describedby='entityFailures-1-status']")
   private val pageTitleHeading = By.cssSelector("h1.govuk-heading-l")
-  private val amlsSubHeading = By.xpath("(//h2[contains(@class, 'govuk-heading-m')])[2]")
-  private val businessIssuesSubHeading = By.xpath("(//h2[contains(@class, 'govuk-heading-m')])[3]")
-  private val resubmitApplicationSubHeading = By.xpath("(//h2[contains(@class, 'govuk-heading-m')])[4]")
   private val saveAndComeBackLaterButton = By.cssSelector("a.govuk-button--secondary[href='/agent-registration/conditions-not-yet-met/save-and-come-back-later']")
 
   def clickIndividualFailuresLink(): Unit = click(individualFailuresLink)
@@ -121,12 +118,6 @@ extends BasePage:
   def clickOnSelfAssessmentReturnsLink(): Unit = click(selfAssessmentReturnsLink)
   
   def assertTaskListTitleHeading(expected: String): Unit = getText(pageTitleHeading) shouldBe (expected)
-
-  def assertTaskListAmlsSubeHeading(expected: String): Unit = getText(amlsSubHeading) shouldBe (expected)
-  
-  def assertTaskListBusinessIssuesSubHeading(expected: String): Unit = getText(businessIssuesSubHeading) shouldBe (expected)
-  
-  def assertTaskListResubmitApplicationSubHeading(expected: String): Unit = getText(resubmitApplicationSubHeading) shouldBe (expected)
   
   def clickSaveAndComeBackLaterButton(): Unit = click(saveAndComeBackLaterButton)
    
