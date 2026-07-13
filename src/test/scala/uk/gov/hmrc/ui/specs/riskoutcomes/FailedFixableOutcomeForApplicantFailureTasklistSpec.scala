@@ -65,7 +65,7 @@ extends BaseSpec:
 
       MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
         applicationReference = applicationReference,
-        riskingCompletedDate = "2026-06-18",
+        actualDecisionDate = "2026-06-18",
         outcome = "FailedFixable",
         correctiveActionExpiryDate = "2026-08-17",
         fixes = amlsFixes
@@ -151,7 +151,7 @@ extends BaseSpec:
 
       MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
         applicationReference = applicationReference,
-        riskingCompletedDate = "2026-06-18",
+        actualDecisionDate = "2026-06-18",
         outcome = "FailedFixable",
         correctiveActionExpiryDate = "2026-08-17",
         fixes = amlsFixes
@@ -246,7 +246,7 @@ extends BaseSpec:
 
       MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
         applicationReference = applicationReference,
-        riskingCompletedDate = "2026-06-18",
+        actualDecisionDate = "2026-06-18",
         outcome = "FailedFixable",
         correctiveActionExpiryDate = "2026-08-17",
         fixes = amlsFixes
@@ -308,98 +308,98 @@ extends BaseSpec:
         "Cannot start yet"
       )
 
-  Scenario(
-    "Both applicant and individual actions are complete on task list",
-    TagFixableFailures
-  ):
-    val stubbedSignInData = FastForwardLinks
-      .FastForward
-      .runFlow(Declaration, LLP)
+    Scenario(
+      "Both applicant and individual actions are complete on task list",
+      TagFixableFailures
+    ):
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(Declaration, LLP)
 
-    ApplicationSubmittedPage.assertPageIsDisplayed()
+      ApplicationSubmittedPage.assertPageIsDisplayed()
 
-    val applicationReference = ApplicationSubmittedPage.getApplicationReference
-    MongoHelper
-      .findByApplicationReference(applicationReference)
-      .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
+      val applicationReference = ApplicationSubmittedPage.getApplicationReference
+      MongoHelper
+        .findByApplicationReference(applicationReference)
+        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-    val amlsFixes = Seq(
-      Document(
-        "failure" -> Document("type" -> "_3._1"),
-        "amlsDetails" -> Document(
-          "supervisoryBody" -> "HMRC",
-          "amlsRegistrationNumber" -> "XAML00000123456"
-        ),
-        "type" -> "EntityFix._3.AmlsFix", "isConfirmed" -> true
-      ),
-      Document(
-        "type" -> "EntityFix._4._1", "isConfirmed" -> true
-      ),
-      Document(
-        "type" -> "EntityFix._4._3", "isConfirmed" -> true
-      )
-    )
-
-    MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
-      applicationReference = applicationReference,
-      riskingCompletedDate = "2026-06-18",
-      outcome = "FailedFixable",
-      correctiveActionExpiryDate = "2026-08-17",
-      fixes = amlsFixes
-    )
-
-    MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-      applicationReference = applicationReference,
-      outcomesByIndividualName = Map(
-        "Steve Austin" -> IndividualRiskingOutcome(
-          outcomeType = "FailedFixable",
-          fixes = Seq(
-            IndividualFix("IndividualFix._4._3", isConfirmed = true),
-            IndividualFix("IndividualFix._8._7", isConfirmed = true)
+      val amlsFixes = Seq(
+        Document(
+          "failure" -> Document("type" -> "_3._1"),
+          "amlsDetails" -> Document(
+            "supervisoryBody" -> "HMRC",
+            "amlsRegistrationNumber" -> "XAML00000123456"
           ),
-          declarationAgreed = true
+          "type" -> "EntityFix._3.AmlsFix", "isConfirmed" -> true
         ),
-        "Beverly Hills" -> IndividualRiskingOutcome(
-          outcomeType = "FailedFixable",
-          fixes = Seq(
-            IndividualFix("IndividualFix._4._1", isConfirmed = true),
-            IndividualFix("IndividualFix._5._1", isConfirmed = true)
-          ),
-          declarationAgreed = true
+        Document(
+          "type" -> "EntityFix._4._1", "isConfirmed" -> true
+        ),
+        Document(
+          "type" -> "EntityFix._4._3", "isConfirmed" -> true
         )
       )
-    )
 
-    RiskingOutcomeFlow
-      .SignInAsApplicantAfterRiskingOutcome
-      .runFlow(stubbedSignInData)
+      MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
+        applicationReference = applicationReference,
+        actualDecisionDate = "2026-06-18",
+        outcome = "FailedFixable",
+        correctiveActionExpiryDate = "2026-08-17",
+        fixes = amlsFixes
+      )
 
-    ApplicationSubmittedPage.assertPageIsDisplayed()
-    ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
+      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
+        applicationReference = applicationReference,
+        outcomesByIndividualName = Map(
+          "Steve Austin" -> IndividualRiskingOutcome(
+            outcomeType = "FailedFixable",
+            fixes = Seq(
+              IndividualFix("IndividualFix._4._3", isConfirmed = true),
+              IndividualFix("IndividualFix._8._7", isConfirmed = true)
+            ),
+            declarationAgreed = true
+          ),
+          "Beverly Hills" -> IndividualRiskingOutcome(
+            outcomeType = "FailedFixable",
+            fixes = Seq(
+              IndividualFix("IndividualFix._4._1", isConfirmed = true),
+              IndividualFix("IndividualFix._5._1", isConfirmed = true)
+            ),
+            declarationAgreed = true
+          )
+        )
+      )
 
-    // Click the "View actions to take" button to navigate to the Conditions Not Met Task List page
-    ApplicationStatusPage.clickViewActionsToTakeButton()
-    ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-    ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Partnership has not met the registration conditions")
+      RiskingOutcomeFlow
+        .SignInAsApplicantAfterRiskingOutcome
+        .runFlow(stubbedSignInData)
 
-    // verify actions and their status
-    ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
-      "Provide your supervision details again",
-      "Completed"
-    )
-    ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
-      "Self Assessment - missing returns",
-      "Completed"
-    )
-    ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
-      "VAT - missing returns",
-      "Completed"
-    )
-    ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
-      "We are awaiting information from these people",
-      "Completed"
-    )
-    ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
-      "Declare and submit",
-      "Incomplete"
-    )
+      ApplicationSubmittedPage.assertPageIsDisplayed()
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
+
+      // Click the "View actions to take" button to navigate to the Conditions Not Met Task List page
+      ApplicationStatusPage.clickViewActionsToTakeButton()
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Partnership has not met the registration conditions")
+
+      // verify actions and their status
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Provide your supervision details again",
+        "Completed"
+      )
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Self Assessment - missing returns",
+        "Completed"
+      )
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "VAT - missing returns",
+        "Completed"
+      )
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "We are awaiting information from these people",
+        "Completed"
+      )
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Declare and submit",
+        "Incomplete"
+      )
