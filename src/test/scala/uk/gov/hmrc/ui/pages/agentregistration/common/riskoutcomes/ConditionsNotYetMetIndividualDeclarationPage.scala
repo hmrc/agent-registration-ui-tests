@@ -19,7 +19,7 @@ package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
-object ConditionsNotYetMetDeclarationPage
+object ConditionsNotYetMetIndividualDeclarationPage
 extends BasePage:
 
   override val path: String = "/agent-registration/provide-details/conditions-not-yet-met/declaration"

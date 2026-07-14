@@ -53,8 +53,7 @@ extends BaseSpec:
         actualDecisionDate = "2026-06-18",
         outcome = "FailedFixable",
         correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq(EntityFix("EntityFix._4._1"), EntityFix("EntityFix._4._3")),
-        riskingOutcomeEntityType = "FailedFixable"
+        fixes = Seq(EntityFix("EntityFix._4._1"), EntityFix("EntityFix._4._3"))
       )
 
       // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
@@ -107,4 +106,3 @@ extends BaseSpec:
         "Self Assessment - missing returns",
         "Incomplete"
       )
-      

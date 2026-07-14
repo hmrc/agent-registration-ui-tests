@@ -345,8 +345,7 @@ object MongoHelper:
     actualDecisionDate: String,
     outcome: String,
     correctiveActionExpiryDate: String,
-    fixes: Seq[EntityFix] = Seq(EntityFix("EntityFix._4._2")),
-    riskingOutcomeEntityType: String = "Approved"
+    fixes: Seq[EntityFix] = Seq(EntityFix("EntityFix._4._2"))
   ): Unit =
     findBackEndApplicationByApplicationReference(applicationReference)
       .getOrElse(
@@ -358,11 +357,11 @@ object MongoHelper:
     val fixesArray = fixes.map(fix => Document("type" -> fix.fixType, "isConfirmed" -> fix.isConfirmed))
 
     val riskingOutcomeEntity =
-      if fixesArray.isEmpty then Document("type" -> riskingOutcomeEntityType)
+      if fixesArray.isEmpty then Document("type" -> outcome)
       else
         Document(
           "fixes" -> fixesArray,
-          "type" -> riskingOutcomeEntityType
+          "type" -> outcome
         )
 
     val riskingOutcomeApplication = Document(
@@ -809,3 +808,7 @@ object MongoHelper:
                   riskingOutcomeType = riskingOutcomeType,
                   fixes = fixes
                 )
+
+  def deleteAllRiskingData(applicationReference: String): Unit =
+    Await.result(collection.deleteMany(equal("applicationReference", applicationReference)).toFuture(), 10.seconds)
+    Await.result(individualsCollection.deleteMany(equal("applicationReference", applicationReference)).toFuture(), 10.seconds)
