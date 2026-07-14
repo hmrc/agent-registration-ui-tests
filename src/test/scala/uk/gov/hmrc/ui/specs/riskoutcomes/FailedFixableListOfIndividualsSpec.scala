@@ -110,7 +110,7 @@ extends BaseSpec:
 //      ConditionsNotMetTaskListPage.assertPageIsDisplayed() //Disabled due to bug where nav goes back to Status page
 
     Scenario(
-      "Applicant provided some individual details",
+      "Applicant provided some of the individuals details",
       TagFixableFailures
     ):
 

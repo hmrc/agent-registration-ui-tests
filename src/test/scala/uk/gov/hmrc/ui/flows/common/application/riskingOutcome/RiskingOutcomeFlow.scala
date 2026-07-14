@@ -23,8 +23,8 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.ProvideDetailsS
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.SignInAndConfirmDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ProvideDetailsOutcomeStatusPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
 import uk.gov.hmrc.ui.utils.AppConfig
@@ -32,7 +32,9 @@ import uk.gov.hmrc.ui.utils.AppConfig
 object RiskingOutcomeFlow:
 
   object SignInAsApplicantAfterRiskingOutcome:
-    def runFlow(stubbedSignInData: StubbedSignInData): Unit = signInToApplicationStatusPage(stubbedSignInData: StubbedSignInData)
+    def runFlow(
+      stubbedSignInData: StubbedSignInData
+    ): Unit = signInToApplicationStatusPage(stubbedSignInData: StubbedSignInData)
 
   object signInAsPreviouslyUsedIndividual:
     def runFlow(

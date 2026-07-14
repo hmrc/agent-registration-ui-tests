@@ -22,10 +22,13 @@ import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ApplicationStatusPage, ConditionsNotYetMetApplicantTaskListPage, ConditionsNotYetMetEntityFailureDetailsV41Page, SaveAndComeBackLaterPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.SaveAndComeBackLaterPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.MongoHelper.{IndividualFix, IndividualRiskingOutcome}
+import uk.gov.hmrc.ui.utils.MongoHelper.IndividualFix
+import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
 
 class FailedFixableOutcomeForApplicantFailureTasklistSpec
 extends BaseSpec:
@@ -139,13 +142,16 @@ extends BaseSpec:
             "supervisoryBody" -> "HMRC",
             "amlsRegistrationNumber" -> "XAML00000123456"
           ),
-          "type" -> "EntityFix._3.AmlsFix", "isConfirmed" -> true
+          "type" -> "EntityFix._3.AmlsFix",
+          "isConfirmed" -> true
         ),
         Document(
-          "type" -> "EntityFix._4._1", "isConfirmed" -> true
+          "type" -> "EntityFix._4._1",
+          "isConfirmed" -> true
         ),
         Document(
-          "type" -> "EntityFix._4._3", "isConfirmed" -> true
+          "type" -> "EntityFix._4._3",
+          "isConfirmed" -> true
         )
       )
 
@@ -234,13 +240,16 @@ extends BaseSpec:
             "supervisoryBody" -> "HMRC",
             "amlsRegistrationNumber" -> "XAML00000123456"
           ),
-          "type" -> "EntityFix._3.AmlsFix", "isConfirmed" -> true
+          "type" -> "EntityFix._3.AmlsFix",
+          "isConfirmed" -> true
         ),
         Document(
-          "type" -> "EntityFix._4._1", "isConfirmed" -> false
+          "type" -> "EntityFix._4._1",
+          "isConfirmed" -> false
         ),
         Document(
-          "type" -> "EntityFix._4._3", "isConfirmed" -> true
+          "type" -> "EntityFix._4._3",
+          "isConfirmed" -> true
         )
       )
 
@@ -330,13 +339,16 @@ extends BaseSpec:
             "supervisoryBody" -> "HMRC",
             "amlsRegistrationNumber" -> "XAML00000123456"
           ),
-          "type" -> "EntityFix._3.AmlsFix", "isConfirmed" -> true
+          "type" -> "EntityFix._3.AmlsFix",
+          "isConfirmed" -> true
         ),
         Document(
-          "type" -> "EntityFix._4._1", "isConfirmed" -> true
+          "type" -> "EntityFix._4._1",
+          "isConfirmed" -> true
         ),
         Document(
-          "type" -> "EntityFix._4._3", "isConfirmed" -> true
+          "type" -> "EntityFix._4._3",
+          "isConfirmed" -> true
         )
       )
 

@@ -30,5 +30,15 @@ extends BasePage:
     getCurrentUrl shouldBe url
 
   private val viewActionsToTakeButton = By.cssSelector("a.govuk-button--start[href='/agent-registration/conditions-not-yet-met/task-list']")
+  private val viewOrPrintLink = By.linkText("View or print your application")
+  private val panelBody = By.cssSelector("div.govuk-panel__body")
+  private val viewActionsLink = By.linkText("View actions to take")
+  private val pageTitle = By.cssSelector("h1.govuk-panel__title")
 
   def clickViewActionsToTakeButton(): Unit = click(viewActionsToTakeButton)
+  def clickViewOrPrintLink(): Unit = click(viewOrPrintLink)
+  def getApplicationReference: String = eventually {
+    getText(panelBody).trim.split(":").last.trim
+  }
+  def clickViewActionLink(): Unit = click(viewActionsLink)
+  def assertConfirmationTitle(expected: String): Unit = getText(pageTitle) shouldBe (expected)

@@ -26,7 +26,7 @@ import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvi
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetConfirmationPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetDeclarationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualDeclarationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualTaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ProvideDetailsOutcomeStatusPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFixIdentityPage
@@ -356,8 +356,8 @@ extends BaseSpec:
       ConditionsNotYetMetIndividualTaskListPage.clickActionLink(
         "Confirm your responses are final"
       )
-      ConditionsNotYetMetDeclarationPage.assertPageIsDisplayed()
-      ConditionsNotYetMetDeclarationPage.clickContinue()
+      ConditionsNotYetMetIndividualDeclarationPage.assertPageIsDisplayed()
+      ConditionsNotYetMetIndividualDeclarationPage.clickContinue()
       ConditionsNotYetMetConfirmationPage.assertPageIsDisplayed()
       ConditionsNotYetMetConfirmationPage.assertConfirmationTitle("You have finished this process")
 

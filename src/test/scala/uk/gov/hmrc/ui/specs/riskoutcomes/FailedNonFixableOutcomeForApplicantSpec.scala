@@ -32,6 +32,7 @@ import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualD
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 
@@ -207,7 +208,7 @@ extends BaseSpec:
         .AcceptDeclaration
         .runFlow(GeneralPartnership, fastForwardUsed = true)
 
-      ApplicationSubmittedPage.assertPageIsDisplayed()
+      ApplicationStatusPage.assertPageIsDisplayed()
 
       ApplicationSubmittedPage.assertConfirmationTitle(
         "You’ve applied for an agent services account"

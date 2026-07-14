@@ -18,7 +18,8 @@ package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
 
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
-import org.openqa.selenium.{By, WebElement}
+import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 
 object ConditionsNotYetMetApplicantTaskListPage
 extends BasePage:
@@ -28,11 +29,11 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
-  
+
   case class FixableActionRow(
-                               action: String,
-                               completed: String
-                             )
+    action: String,
+    completed: String
+  )
 
   private def normalise(text: String): String = text.replaceAll("\\s+", " ").trim
 
@@ -79,9 +80,9 @@ extends BasePage:
     actualRow shouldBe expected
 
   def assertActionStatus(
-                          action: String,
-                          expectedStatus: String
-                        ): Unit =
+    action: String,
+    expectedStatus: String
+  ): Unit =
     val actualRow = actionRowFrom(rowForAction(action))
 
     actualRow.completed shouldBe expectedStatus
@@ -95,11 +96,13 @@ extends BasePage:
     val displayedActions = actionRows.map(actionTextFrom)
 
     displayedActions should not contain action
-  
+
   private val individualFailuresLink = By.cssSelector("a[aria-describedby='individualFailures-1-status']")
   private val selfAssessmentReturnsLink = By.cssSelector("a[aria-describedby='entityFailures-1-status']")
   private val pageTitleHeading = By.cssSelector("h1.govuk-heading-l")
-  private val saveAndComeBackLaterButton = By.cssSelector("a.govuk-button--secondary[href='/agent-registration/conditions-not-yet-met/save-and-come-back-later']")
+  private val saveAndComeBackLaterButton = By.cssSelector(
+    "a.govuk-button--secondary[href='/agent-registration/conditions-not-yet-met/save-and-come-back-later']"
+  )
 
   def clickIndividualFailuresLink(): Unit = click(individualFailuresLink)
 
@@ -116,8 +119,7 @@ extends BasePage:
   def clickOnProvideYourSupervisionDetailsLink(): Unit = click(amlsDetailsLink)
 
   def clickOnSelfAssessmentReturnsLink(): Unit = click(selfAssessmentReturnsLink)
-  
+
   def assertTaskListTitleHeading(expected: String): Unit = getText(pageTitleHeading) shouldBe (expected)
-  
+
   def clickSaveAndComeBackLaterButton(): Unit = click(saveAndComeBackLaterButton)
-   
