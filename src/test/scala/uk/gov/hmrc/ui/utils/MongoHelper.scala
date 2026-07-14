@@ -357,7 +357,7 @@ object MongoHelper:
     val fixesArray = fixes.map(fix => Document("type" -> fix.fixType, "isConfirmed" -> fix.isConfirmed))
 
     val riskingOutcomeEntity =
-      if fixesArray.isEmpty then Document("type" -> outcome)
+      if fixesArray.isEmpty then Document("type" -> "Approved")
       else
         Document(
           "fixes" -> fixesArray,

@@ -18,7 +18,8 @@ package uk.gov.hmrc.ui.flows.common.application.riskingOutcome
 
 import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.PageObject
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.{ApplicationSubmittedPage, ProvideDetailsStatusPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.ProvideDetailsStatusPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.SignInAndConfirmDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
@@ -112,7 +113,7 @@ object RiskingOutcomeFlow:
 
   private def viewApplicationStatusPage(): Unit =
     ApplicationStatusPage.assertPageIsDisplayed()
-    ApplicationStatusPage.clickViewOrPrintLink()
+    ApplicationStatusPage.clickViewActionsToTakeButton()
     ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
 
   private def viewIndividualFailuresPage(): Unit =
