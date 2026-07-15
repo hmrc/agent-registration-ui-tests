@@ -29,6 +29,7 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotY
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualDeclarationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualTaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ProvideDetailsOutcomeStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ProvideDetailsSaveAndComeBackLaterPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFixIdentityPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFix_4_1Page
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFix_4_3Page
@@ -523,3 +524,77 @@ extends BaseSpec:
       ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
       // Click and verify navigation to Appeals and Reviews url
       ProvideDetailsOutcomeStatusPage.clickRequestReviewOrAppealLinkAndAssertUrl()
+
+    Scenario("Individual can save progress and continue with application from save and come back later page", TagFixableFailures):
+
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .singlePartner
+        .runFlow()
+
+      val username = ProvideIndividualDetailsFlow
+        .ProvideIndividualDetails
+        .runFlowWithUsername(
+          stubbedSignInData,
+          complete,
+          GeneralPartnership
+        )
+
+      DeclarationFlow
+        .AcceptDeclaration
+        .runFlow(GeneralPartnership)
+
+      ApplicationSubmittedPage.assertPageIsDisplayed()
+
+      ApplicationSubmittedPage.assertConfirmationTitle(
+        "You’ve applied for an agent services account"
+      )
+
+      val applicationReference = ApplicationSubmittedPage.getApplicationReference
+      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
+
+      MongoHelper
+        .findByApplicationReference(applicationReference)
+        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
+
+      MongoHelper.insertRiskingOutcomeToAgentApplication(
+        applicationReference = applicationReference,
+        actualDecisionDate = "2026-07-15",
+        outcome = "FailedFixable",
+        correctiveActionExpiryDate = "2026-08-30",
+        fixes = Seq.empty
+      )
+
+      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
+        applicationReference = applicationReference,
+        outcomesByIndividualName = Map(
+          "Bobby Boucher" -> IndividualRiskingOutcome(
+            outcomeType = "FailedFixable",
+            fixes = Seq(
+              IndividualFix("IndividualFix._4._3"),
+              IndividualFix("IndividualFix._8._7"),
+              IndividualFix("IndividualFix._4._1"),
+              IndividualFix("IndividualFix._5._1")
+            )
+          )
+        )
+      )
+
+      RiskingOutcomeFlow
+        .viewIndividualTaskListPage
+        .runFlow(
+          stubbedSignInData,
+          linkId,
+          username
+        )
+
+      ConditionsNotYetMetIndividualTaskListPage.clickSaveAndComeBackLaterButton()
+      ProvideDetailsSaveAndComeBackLaterPage.assertPageIsDisplayed()
+      ProvideDetailsSaveAndComeBackLaterPage.assertHeading("Your progress will be saved until 30 August 2026")
+      ProvideDetailsSaveAndComeBackLaterPage.assertContinueWithApplicationLinkIsDisplayed()
+      ProvideDetailsSaveAndComeBackLaterPage.assertFinishAndSignOutLinkIsDisplayed()
+      ProvideDetailsSaveAndComeBackLaterPage.clickOnContinueWithApplicationLink()
+      ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
