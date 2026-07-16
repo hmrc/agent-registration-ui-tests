@@ -26,3 +26,9 @@ extends BaseCheckYourAnswersPage:
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
   override protected def assertUrl(): Unit = getCurrentUrl should include(url)
+
+  def changeDateOfBirth(): Unit = clickChangeFor("Date of birth")
+  def changeDoYouHaveANationalInsuranceNumber(): Unit = clickChangeFor("Do you have a National Insurance number?")
+  def changeNationalInsuranceNumber(): Unit = clickChangeFor("National Insurance number")
+  def changeDoYouHaveASelfAssessmentUniqueTaxpayerReference(): Unit = clickChangeFor("Do you have a Self Assessment Unique Taxpayer Reference?")
+  def changeSelfAssessmentUniqueTaxpayerReference(): Unit = clickChangeFor("Self Assessment Unique Taxpayer Reference?")
