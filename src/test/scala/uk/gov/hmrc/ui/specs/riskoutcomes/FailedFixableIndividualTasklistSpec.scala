@@ -574,10 +574,7 @@ extends BaseSpec:
           "Bobby Boucher" -> IndividualRiskingOutcome(
             outcomeType = "FailedFixable",
             fixes = Seq(
-              IndividualFix("IndividualFix._4._3"),
-              IndividualFix("IndividualFix._8._7"),
-              IndividualFix("IndividualFix._4._1"),
-              IndividualFix("IndividualFix._5._1")
+              IndividualFix("IndividualFix._4._3")
             )
           )
         )
@@ -590,6 +587,18 @@ extends BaseSpec:
           linkId,
           username
         )
+
+      ConditionsNotYetMetIndividualTaskListPage.clickActionLink(
+        "File your missing VAT returns"
+      )
+      IndividualFix_4_3Page.assertPageIsDisplayed()
+      IndividualFix_4_3Page.selectYes()
+      IndividualFix_4_3Page.clickContinue()
+      ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+        "File your missing VAT returns",
+        "Completed"
+      )
 
       ConditionsNotYetMetIndividualTaskListPage.clickSaveAndComeBackLaterButton()
       ProvideDetailsSaveAndComeBackLaterPage.assertPageIsDisplayed()
