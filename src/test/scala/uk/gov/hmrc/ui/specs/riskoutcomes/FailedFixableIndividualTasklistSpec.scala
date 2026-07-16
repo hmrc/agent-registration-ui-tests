@@ -599,7 +599,7 @@ extends BaseSpec:
         "File your missing VAT returns",
         "Completed"
       )
-
+      ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
       ConditionsNotYetMetIndividualTaskListPage.clickSaveAndComeBackLaterButton()
       ProvideDetailsSaveAndComeBackLaterPage.assertPageIsDisplayed()
       ProvideDetailsSaveAndComeBackLaterPage.assertHeading("Your progress will be saved until 30 August 2026")
@@ -607,3 +607,7 @@ extends BaseSpec:
       ProvideDetailsSaveAndComeBackLaterPage.assertFinishAndSignOutLinkIsDisplayed()
       ProvideDetailsSaveAndComeBackLaterPage.clickOnContinueWithApplicationLink()
       ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+        "File your missing VAT returns",
+        "Completed"
+      )
