@@ -25,11 +25,7 @@ import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetConfirmationPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualDeclarationPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualTaskListPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ProvideDetailsOutcomeStatusPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ProvideDetailsSaveAndComeBackLaterPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ConditionsNotYetMetConfirmationPage, ConditionsNotYetMetDateOfBirthPage, ConditionsNotYetMetIndividualDeclarationPage, ConditionsNotYetMetIndividualTaskListPage, ConditionsNotYetMetNinoPage, ConditionsNotYetMetSaUtrPage, ProvideDetailsOutcomeStatusPage, ProvideDetailsSaveAndComeBackLaterPage}
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFixIdentityPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFix_4_1Page
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFix_4_3Page
@@ -362,7 +358,7 @@ extends BaseSpec:
       ConditionsNotYetMetConfirmationPage.assertPageIsDisplayed()
       ConditionsNotYetMetConfirmationPage.assertConfirmationTitle("You have finished this process")
 
-    Scenario("Unknown Individual failure", TagFixableFailures):
+    Scenario("Unknown Individual failure and update personal details from Check your answers", TagFixableFailures):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
@@ -452,6 +448,146 @@ extends BaseSpec:
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("National Insurance number", "AA111111B")
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "123456789")
+
+      // Change Date of birth and verify the change is reflected on the check your answers page
+      IndividualIdentityFixCheckYourAnswersPage.clickChangeFor("Date of birth")
+      ConditionsNotYetMetDateOfBirthPage.assertPageIsDisplayed()
+      ConditionsNotYetMetDateOfBirthPage.fillInDateOfBirth(
+        "02",
+        "02",
+        "1992"
+      )
+      ConditionsNotYetMetDateOfBirthPage.clickContinue()
+      IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "2 February 1992")
+
+      // Change Nino and verify the change is reflected on the check your answers page
+      IndividualIdentityFixCheckYourAnswersPage.clickChangeFor("National Insurance number")
+      ConditionsNotYetMetNinoPage.assertPageIsDisplayed()
+      ConditionsNotYetMetNinoPage.fillInNationalInsuranceNumber("AA111111C")
+      ConditionsNotYetMetNinoPage.clickContinue()
+      IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("National Insurance number", "AA111111C")
+
+      // Change SA UTR and verify the change is reflected on the check your answers page
+      IndividualIdentityFixCheckYourAnswersPage.clickChangeFor("Self Assessment Unique Taxpayer Reference")
+      ConditionsNotYetMetSaUtrPage.assertPageIsDisplayed()
+      ConditionsNotYetMetSaUtrPage.fillInSaUtr("9876543210")
+      ConditionsNotYetMetSaUtrPage.clickContinue()
+      IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "9876543210")
+
+    Scenario("Unknown Individual failure and update Nino and SaUtr with No option from Check your answers", TagFixableFailures):
+
+      val stubbedSignInData = FastForwardLinks
+        .FastForward
+        .runFlow(AgentStandards, GeneralPartnership)
+
+      PartnerTaxAdvisorInformationFlow
+        .singlePartner
+        .runFlow()
+
+      val username = ProvideIndividualDetailsFlow
+        .ProvideIndividualDetails
+        .runFlowWithUsername(
+          stubbedSignInData,
+          complete,
+          GeneralPartnership
+        )
+
+      DeclarationFlow
+        .AcceptDeclaration
+        .runFlow(GeneralPartnership)
+
+      ApplicationSubmittedPage.assertPageIsDisplayed()
+
+      ApplicationSubmittedPage.assertConfirmationTitle(
+        "You’ve applied for an agent services account"
+      )
+
+      val applicationReference = ApplicationSubmittedPage.getApplicationReference
+      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
+
+      MongoHelper
+        .findByApplicationReference(applicationReference)
+        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
+
+      MongoHelper.insertRiskingOutcomeToAgentApplication(
+        applicationReference = applicationReference,
+        actualDecisionDate = "2026-06-18",
+        outcome = "FailedFixable",
+        correctiveActionExpiryDate = "2026-08-17",
+        fixes = Seq.empty
+      )
+      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
+      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
+        applicationReference = applicationReference,
+        outcomesByIndividualName = Map(
+          "Bobby Boucher" -> IndividualRiskingOutcome(
+            outcomeType = "FailedFixable",
+            fixes = Seq(
+              IndividualFix(
+                fixType = "IndividualFix._10.IndividualDetailsFix",
+                dateOfBirth = Some("1990-01-01"),
+                nino = Some("AA111111B"),
+                saUtr = Some("123456789")
+              )
+            )
+          )
+        )
+      )
+
+      RiskingOutcomeFlow
+        .viewIndividualTaskListPage
+        .runFlow(
+          stubbedSignInData,
+          linkId,
+          username
+        )
+
+      // verify action is present and has an incomplete status
+      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+        "Provide more details to prove your identity",
+        "Incomplete"
+      )
+      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+        "Confirm your responses are final",
+        "Cannot start yet"
+      )
+
+      // view IndividualDetailsFix check your answers page
+      ConditionsNotYetMetIndividualTaskListPage.clickActionLink(
+        "Provide more details to prove your identity"
+      )
+      IndividualFixIdentityPage.assertPageIsDisplayed()
+      IndividualFixIdentityPage.clickContinue()
+      IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 1990")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "Yes")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("National Insurance number", "AA111111B")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "123456789")
+
+      // Select No for Nino and verify the change is reflected on the check your answers page
+      IndividualIdentityFixCheckYourAnswersPage.clickChangeFor("National Insurance number")
+      ConditionsNotYetMetNinoPage.assertPageIsDisplayed()
+      ConditionsNotYetMetNinoPage.selectNo()
+      ConditionsNotYetMetNinoPage.clickContinue()
+      IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 1990")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "No")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "123456789")
+
+      // Select No for SA UTR and verify the change is reflected on the check your answers page
+      IndividualIdentityFixCheckYourAnswersPage.clickChangeFor("Self Assessment Unique Taxpayer Reference")
+      ConditionsNotYetMetSaUtrPage.assertPageIsDisplayed()
+      ConditionsNotYetMetSaUtrPage.selectNo()
+      ConditionsNotYetMetSaUtrPage.clickContinue()
+      IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 1990")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "No")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
 
     Scenario("Individual clicks links to Finance Act 2026 and Appeals urls", TagFixableFailures):
 
