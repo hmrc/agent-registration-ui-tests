@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes
 
+import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
@@ -27,3 +28,8 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
+
+  private val continueWithApplicationLink = By.linkText("Continue with the application")
+  
+  def clickOnContinueWithApplicationLink(): Unit =
+    click(continueWithApplicationLink)  
