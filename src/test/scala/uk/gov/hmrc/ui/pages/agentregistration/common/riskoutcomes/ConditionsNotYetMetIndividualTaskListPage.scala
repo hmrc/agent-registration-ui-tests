@@ -74,6 +74,10 @@ extends BasePage:
     else
       links.get(0).click()
 
+  private val individualTaskListSaveAndComeBackLaterButton = By.cssSelector(
+    "a.govuk-button.govuk-button--secondary[href*='/agent-registration/provide-details/conditions-not-yet-met/save-and-come-back-later/']"
+  )
+
   def assertActionRow(expected: FixableActionRow): Unit =
     val actualRow = actionRowFrom(rowForAction(expected.action))
 
@@ -96,3 +100,5 @@ extends BasePage:
     val displayedActions = actionRows.map(actionTextFrom)
 
     displayedActions should not contain action
+
+  def clickSaveAndComeBackLaterButton(): Unit = click(individualTaskListSaveAndComeBackLaterButton)
