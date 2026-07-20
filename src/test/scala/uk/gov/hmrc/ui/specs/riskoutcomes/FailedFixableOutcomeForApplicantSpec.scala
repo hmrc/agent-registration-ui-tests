@@ -69,8 +69,7 @@ extends BaseSpec:
         .runFlow(stubbedSignInData)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertPageHeadingContains("ST Name ST Lastname")
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("ST Name ST Lastname does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("You do not meet the registration conditions yet")
 
     Scenario(
       "General Partnership sees FailedFixable Outcome Page when partner have individual failures",
