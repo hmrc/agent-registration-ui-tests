@@ -17,7 +17,6 @@
 package uk.gov.hmrc.ui.pages.agentregistration.ukbased
 
 import org.openqa.selenium.By
-import org.openqa.selenium.support.ui.ExpectedConditions
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 

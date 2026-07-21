@@ -25,7 +25,6 @@ import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubCreateUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubUserPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
-import uk.gov.hmrc.ui.utils.PasscodeHelper
 import uk.gov.hmrc.ui.utils.RichMatchers.shouldBe
 
 object ProvidePartnersDetailsFlow:

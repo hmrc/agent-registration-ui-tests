@@ -24,7 +24,6 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.EmailAddressPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.TelephoneNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 object ContactDetailsFlow {
 

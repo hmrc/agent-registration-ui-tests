@@ -22,7 +22,6 @@ import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 object AgentDetailsFlow:
 
@@ -127,7 +126,7 @@ object AgentDetailsFlow:
         WhatEmailAddressPage.clickContinue()
       case AgentDetailOption.Custom(value) =>
         WhatEmailAddressPage.selectSomethingElse()
-        val newEmail = WhatEmailAddressPage.enterEmailAddress(value)
+        WhatEmailAddressPage.enterEmailAddress(value)
         WhatEmailAddressPage.clickContinue()
 
         EmailVerificationTestOnlyPage.assertPageIsDisplayed()

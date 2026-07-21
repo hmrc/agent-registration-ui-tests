@@ -42,7 +42,6 @@ import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubCreateUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubUserPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
-import uk.gov.hmrc.ui.utils.PasscodeHelper
 import uk.gov.hmrc.ui.utils.RichMatchers.shouldBe
 
 object ProvideIndividualDetailsFlow:
@@ -280,15 +279,15 @@ object ProvideIndividualDetailsFlow:
     ProvideDetailsEmailAddressPage.assertPageIsDisplayed()
     ProvideDetailsEmailAddressPage.enterEmailAddress()
     ProvideDetailsEmailAddressPage.clickContinue()
-//
-//    // get email verification code from test only page
-//    EmailVerificationTestOnlyPage.assertPageIsDisplayed()
-//    EmailVerificationTestOnlyPage.clickContinue()
-//
-//    // confirm email by providing confirmation code
-//    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
-//    ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
-//    ProvideDetailsConfirmEmailPage.clickContinue()
+
+    // get email verification code from test only page
+    EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    val passcode = EmailVerificationTestOnlyPage.getPasscode
+    EmailVerificationTestOnlyPage.clickContinue()
+
+    // confirm email by providing confirmation code
+    ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
+    ProvideDetailsConfirmEmailPage.clickContinue()
 
   def provideUtr(): Unit =
     ProvideDetailsUtrPage.assertPageIsDisplayed()

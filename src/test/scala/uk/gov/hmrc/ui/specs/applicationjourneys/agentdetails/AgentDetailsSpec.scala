@@ -27,7 +27,6 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.TaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.agentdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 class AgentDetailsSpec
 extends BaseSpec:
@@ -137,7 +136,7 @@ extends BaseSpec:
       TagFullSuite
     ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
         .runFlow(AgentDetails, SoleTrader)
 
