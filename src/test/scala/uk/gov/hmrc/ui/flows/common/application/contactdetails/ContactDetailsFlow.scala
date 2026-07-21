@@ -24,7 +24,6 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.EmailAddressPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.TelephoneNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
-import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 object ContactDetailsFlow {
 
@@ -64,10 +63,11 @@ object ContactDetailsFlow {
 
     // get email verification code from test only page
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    val passcode = EmailVerificationTestOnlyPage.getPasscode
     EmailVerificationTestOnlyPage.clickContinue()
 
     // confirm email by providing confirmation code
-    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
+    ConfirmYourEmailPage.assertPageIsDisplayed()
     ConfirmYourEmailPage.enterConfirmationCode(passcode)
     ConfirmYourEmailPage.clickContinue()
 

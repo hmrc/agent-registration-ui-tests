@@ -25,7 +25,6 @@ import uk.gov.hmrc.ui.pages
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.contactdetails.*
 import uk.gov.hmrc.ui.pages.agentregistration.ukbased.EmailVerificationTestOnlyPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.PasscodeHelper
 
 class ApplicantContactDetailsSpec
 extends BaseSpec:
@@ -71,14 +70,8 @@ extends BaseSpec:
       val newEmail = EmailAddressPage.enterEmailAddress("@newtest.com")
       EmailAddressPage.clickContinue()
       EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+      val passcode = EmailVerificationTestOnlyPage.getPasscode
       EmailVerificationTestOnlyPage.clickContinue()
-
-      // Get a fresh passcode using the SAME session
-      val passcode = PasscodeHelper.getPasscode(
-        stubbedSignInData.bearerToken,
-        stubbedSignInData.sessionId,
-        expectedEmail = Some(newEmail)
-      )
 
       ConfirmYourEmailPage.assertPageIsDisplayed()
       ConfirmYourEmailPage.enterConfirmationCode(passcode)

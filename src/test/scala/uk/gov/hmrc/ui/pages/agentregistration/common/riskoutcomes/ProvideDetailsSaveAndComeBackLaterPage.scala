@@ -33,15 +33,11 @@ extends BasePage:
   private val serviceName = By.cssSelector(".govuk-service-navigation__service-name, .govuk-header__service-name")
   private val continueWithApplicationLink = By.linkText("Continue with the application")
   private val finishAndSignOutLink = By.linkText("Finish and sign out")
-  
-  def assertHeading(expected: String): Unit =
-    getText(pageHeading).trim shouldBe expected
 
-  def assertContinueWithApplicationLinkIsDisplayed(): Unit =
-    findElementBy(continueWithApplicationLink) shouldBe defined
+  def assertHeading(expected: String): Unit = getText(pageHeading).trim shouldBe expected
 
-  def assertFinishAndSignOutLinkIsDisplayed(): Unit =
-    findElementBy(finishAndSignOutLink) shouldBe defined
-    
-  def clickOnContinueWithApplicationLink(): Unit =
-    click(continueWithApplicationLink)  
+  def assertContinueWithApplicationLinkIsDisplayed(): Unit = findElementBy(continueWithApplicationLink) shouldBe defined
+
+  def assertFinishAndSignOutLinkIsDisplayed(): Unit = findElementBy(finishAndSignOutLink) shouldBe defined
+
+  def clickOnContinueWithApplicationLink(): Unit = click(continueWithApplicationLink)

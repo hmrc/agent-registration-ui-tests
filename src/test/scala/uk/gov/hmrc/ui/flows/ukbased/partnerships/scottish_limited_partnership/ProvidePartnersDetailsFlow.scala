@@ -25,7 +25,6 @@ import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubCreateUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubUserPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
-import uk.gov.hmrc.ui.utils.PasscodeHelper
 import uk.gov.hmrc.ui.utils.RichMatchers.shouldBe
 
 object ProvidePartnersDetailsFlow:
@@ -50,7 +49,7 @@ object ProvidePartnersDetailsFlow:
       val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
       confirmDetails()
       provideTelephoneNumber()
-      provideEmailAddressWithIncorrectPasscode(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideEmailAddressWithIncorrectPasscode(stubData.copy())
       provideUtr(hasUtr)
       approveApplication()
 
@@ -68,7 +67,7 @@ object ProvidePartnersDetailsFlow:
       )
       confirmDetails()
       provideTelephoneNumber()
-      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideEmailAddress(stubData.copy())
       approveApplication()
       agreeStandards()
       checkYourAnswersUtrDetailsFromHmrc()
@@ -87,7 +86,7 @@ object ProvidePartnersDetailsFlow:
       val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
       confirmDetails()
       provideTelephoneNumber()
-      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideEmailAddress(stubData.copy())
       provideUtr(hasUtr)
       approveApplication()
       agreeStandards()
@@ -110,7 +109,7 @@ object ProvidePartnersDetailsFlow:
       signOut()
       PageObject.get(link)
       val (bearerToken, sessionId) = signIn(stubData.planetId, partnersName)
-      val partnerStubData = stubData.copy(bearerToken = bearerToken, sessionId = sessionId)
+      val partnerStubData = stubData.copy()
       confirmDetails()
       provideTelephoneNumber()
       provideEmailAddress(partnerStubData)
@@ -179,9 +178,10 @@ object ProvidePartnersDetailsFlow:
     ProvideDetailsEmailAddressPage.enterEmailAddress()
     ProvideDetailsEmailAddressPage.clickContinue()
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    val passcode = EmailVerificationTestOnlyPage.getPasscode
     EmailVerificationTestOnlyPage.clickContinue()
 
-    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
+    ProvideDetailsConfirmEmailPage.assertPageIsDisplayed()
     ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
     ProvideDetailsConfirmEmailPage.clickContinue()
 
@@ -192,6 +192,7 @@ object ProvidePartnersDetailsFlow:
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
     EmailVerificationTestOnlyPage.clickContinue()
 
+    ConfirmYourEmailPage.assertPageIsDisplayed()
     ConfirmYourEmailPage.forceInvalidAttempts("XXXXXX", attempts = 5)
     ConfirmYourEmailPage.enterConfirmationCode("XXXXXX")
     ConfirmYourEmailPage.clickContinue()
@@ -202,9 +203,10 @@ object ProvidePartnersDetailsFlow:
     ProvideDetailsEmailAddressPage.enterEmailAddress("individualNew@email.com")
     ProvideDetailsEmailAddressPage.clickContinue()
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    val passcode = EmailVerificationTestOnlyPage.getPasscode
     EmailVerificationTestOnlyPage.clickContinue()
 
-    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
+    ProvideDetailsConfirmEmailPage.assertPageIsDisplayed()
     ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
     ProvideDetailsConfirmEmailPage.clickContinue()
 

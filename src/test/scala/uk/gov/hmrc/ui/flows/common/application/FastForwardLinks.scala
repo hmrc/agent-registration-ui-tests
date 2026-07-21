@@ -18,7 +18,6 @@ package uk.gov.hmrc.ui.flows.common.application
 
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.*
-import uk.gov.hmrc.ui.flows.common.application.StubbedSignInFlow.captureBearerTokenAndSession
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow.completeJourney
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
@@ -63,14 +62,10 @@ object FastForwardLinks:
     ShowAgentApplicationPage.assertPageIsDisplayed()
     ShowAgentApplicationPage.clickLogInLink()
     val (username, planetId) = ShowAgentApplicationPage.getInternalUserDetails
-    ShowAgentApplicationPage.clickGoToExternalStubLink()
-    val (bearerToken, sessionId) = captureBearerTokenAndSession()
     ShowAgentApplicationPage.clickGoToTaskListLink()
     StubbedSignInData(
       username,
-      planetId,
-      bearerToken,
-      sessionId
+      planetId
     )
 
   def selectFastForwardLink(

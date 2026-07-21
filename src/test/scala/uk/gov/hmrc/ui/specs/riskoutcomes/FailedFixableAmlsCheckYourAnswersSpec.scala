@@ -64,7 +64,7 @@ extends BaseSpec:
         )
       )
 
-      val entityRiskingFailures = Seq(
+      Seq(
         Document("type" -> "_3._1")
       )
 

@@ -42,7 +42,6 @@ import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubConfigureUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubCreateUserPage
 import uk.gov.hmrc.ui.pages.stubs.AgentExternalStubUserPage
 import uk.gov.hmrc.ui.pages.stubs.GovernmentGatewaySignInPage
-import uk.gov.hmrc.ui.utils.PasscodeHelper
 import uk.gov.hmrc.ui.utils.RichMatchers.shouldBe
 
 object ProvideIndividualDetailsFlow:
@@ -69,7 +68,7 @@ object ProvideIndividualDetailsFlow:
       )
       confirmDetails()
       provideTelephoneNumber()
-      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideEmailAddress(stubData.copy())
       provideUtr()
       approveApplication()
       agreeStandards()
@@ -96,7 +95,7 @@ object ProvideIndividualDetailsFlow:
       )
       confirmDetails()
       provideTelephoneNumber()
-      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideEmailAddress(stubData.copy())
       provideUtr()
       approveApplication()
       agreeStandards()
@@ -139,7 +138,7 @@ object ProvideIndividualDetailsFlow:
       identityProvenConfirmation()
       returnToApplication(stubData)
       checkProveYourIdentityProgressComplete()
-      stubData.copy(bearerToken = bearerToken, sessionId = sessionId)
+      stubData.copy()
 
   object ProvideIndividualDetailsSoleTraderOwner:
     def runFlow(
@@ -158,7 +157,7 @@ object ProvideIndividualDetailsFlow:
       )
       confirmDetails()
       provideTelephoneNumber()
-      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideEmailAddress(stubData.copy())
       provideUtr()
       approveApplication()
       agreeStandards()
@@ -167,7 +166,7 @@ object ProvideIndividualDetailsFlow:
       TaskListPage.open()
       returnToApplication(stubData)
       checkProveYourIdentityProgressComplete()
-      stubData.copy(bearerToken = bearerToken, sessionId = sessionId)
+      stubData.copy()
 
   def startJourneySoleTrader(): Unit =
     TaskListPage.assertPageIsDisplayed()
@@ -283,10 +282,10 @@ object ProvideIndividualDetailsFlow:
 
     // get email verification code from test only page
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    val passcode = EmailVerificationTestOnlyPage.getPasscode
     EmailVerificationTestOnlyPage.clickContinue()
 
     // confirm email by providing confirmation code
-    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
     ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
     ProvideDetailsConfirmEmailPage.clickContinue()
 

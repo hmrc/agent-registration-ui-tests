@@ -18,7 +18,5 @@ package uk.gov.hmrc.ui.flows.common.application
 
 final case class StubbedSignInData(
   username: String,
-  planetId: String,
-  bearerToken: String,
-  sessionId: String
+  planetId: String
 )
