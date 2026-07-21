@@ -129,22 +129,15 @@ object AgentDetailsFlow:
         WhatEmailAddressPage.selectSomethingElse()
         val newEmail = WhatEmailAddressPage.enterEmailAddress(value)
         WhatEmailAddressPage.clickContinue()
+
         EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+        val passcode = EmailVerificationTestOnlyPage.getPasscode
         EmailVerificationTestOnlyPage.clickContinue()
-
-        val data = stubData.getOrElse(
-          throw new IllegalArgumentException("stubData is required for Custom email flow")
-        )
-
-        val passcode = PasscodeHelper.getPasscode(
-          data.bearerToken,
-          data.sessionId,
-          Some(newEmail)
-        )
 
         ConfirmYourEmailPage.assertPageIsDisplayed()
         ConfirmYourEmailPage.enterConfirmationCode(passcode)
         ConfirmYourEmailPage.clickContinue()
+
       case _ => throw new IllegalArgumentException("Unsupported option for email address")
 
   def selectCorrespondenceAddress(option: AgentDetailOption): Unit =

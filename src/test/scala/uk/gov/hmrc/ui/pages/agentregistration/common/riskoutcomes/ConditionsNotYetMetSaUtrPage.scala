@@ -22,22 +22,22 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.What
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object ConditionsNotYetMetSaUtrPage
-  extends BasePage:
+extends BasePage:
 
-    override val path: String = "/agent-registration/provide-details/conditions-not-yet-met/self-assessment-unique-taxpayer-reference"
-    override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+  override val path: String = "/agent-registration/provide-details/conditions-not-yet-met/self-assessment-unique-taxpayer-reference"
+  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
-    inline def assertPageIsDisplayed(): Unit = eventually:
-      getCurrentUrl should include(url)
+  inline def assertPageIsDisplayed(): Unit = eventually:
+    getCurrentUrl should include(url)
 
-    private val yesRadio = By.id("individualSaUtr.hasSaUtr")
-    private val noRadio = By.id("individualSaUtr.hasSaUtr-2")
-    private val saUtrField = By.id("individualSaUtr.saUtr")
+  private val yesRadio = By.id("individualSaUtr.hasSaUtr")
+  private val noRadio = By.id("individualSaUtr.hasSaUtr-2")
+  private val saUtrField = By.id("individualSaUtr.saUtr")
 
-    def selectYes(): Unit = click(yesRadio)
+  def selectYes(): Unit = click(yesRadio)
 
-    def selectNo(): Unit = click(noRadio)
+  def selectNo(): Unit = click(noRadio)
 
-    def fillInSaUtr(saUtr: String): Unit =
-      click(yesRadio)
-      sendKeys(saUtrField, saUtr)
+  def fillInSaUtr(saUtr: String): Unit =
+    click(yesRadio)
+    sendKeys(saUtrField, saUtr)

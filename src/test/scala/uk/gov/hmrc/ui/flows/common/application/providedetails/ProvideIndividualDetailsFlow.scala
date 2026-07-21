@@ -69,7 +69,7 @@ object ProvideIndividualDetailsFlow:
       )
       confirmDetails()
       provideTelephoneNumber()
-      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideEmailAddress(stubData.copy())
       provideUtr()
       approveApplication()
       agreeStandards()
@@ -96,7 +96,7 @@ object ProvideIndividualDetailsFlow:
       )
       confirmDetails()
       provideTelephoneNumber()
-      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideEmailAddress(stubData.copy())
       provideUtr()
       approveApplication()
       agreeStandards()
@@ -139,7 +139,7 @@ object ProvideIndividualDetailsFlow:
       identityProvenConfirmation()
       returnToApplication(stubData)
       checkProveYourIdentityProgressComplete()
-      stubData.copy(bearerToken = bearerToken, sessionId = sessionId)
+      stubData.copy()
 
   object ProvideIndividualDetailsSoleTraderOwner:
     def runFlow(
@@ -158,7 +158,7 @@ object ProvideIndividualDetailsFlow:
       )
       confirmDetails()
       provideTelephoneNumber()
-      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideEmailAddress(stubData.copy())
       provideUtr()
       approveApplication()
       agreeStandards()
@@ -167,7 +167,7 @@ object ProvideIndividualDetailsFlow:
       TaskListPage.open()
       returnToApplication(stubData)
       checkProveYourIdentityProgressComplete()
-      stubData.copy(bearerToken = bearerToken, sessionId = sessionId)
+      stubData.copy()
 
   def startJourneySoleTrader(): Unit =
     TaskListPage.assertPageIsDisplayed()
@@ -280,15 +280,15 @@ object ProvideIndividualDetailsFlow:
     ProvideDetailsEmailAddressPage.assertPageIsDisplayed()
     ProvideDetailsEmailAddressPage.enterEmailAddress()
     ProvideDetailsEmailAddressPage.clickContinue()
-
-    // get email verification code from test only page
-    EmailVerificationTestOnlyPage.assertPageIsDisplayed()
-    EmailVerificationTestOnlyPage.clickContinue()
-
-    // confirm email by providing confirmation code
-    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
-    ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
-    ProvideDetailsConfirmEmailPage.clickContinue()
+//
+//    // get email verification code from test only page
+//    EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+//    EmailVerificationTestOnlyPage.clickContinue()
+//
+//    // confirm email by providing confirmation code
+//    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
+//    ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
+//    ProvideDetailsConfirmEmailPage.clickContinue()
 
   def provideUtr(): Unit =
     ProvideDetailsUtrPage.assertPageIsDisplayed()

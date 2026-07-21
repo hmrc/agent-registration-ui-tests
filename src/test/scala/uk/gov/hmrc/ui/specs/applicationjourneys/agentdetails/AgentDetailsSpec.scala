@@ -152,15 +152,10 @@ extends BaseSpec:
       WhatEmailAddressPage.selectSomethingElse()
       val newEmail = WhatEmailAddressPage.enterEmailAddress("@newtest.com")
       WhatEmailAddressPage.clickContinue()
-      EmailVerificationTestOnlyPage.assertPageIsDisplayed()
-      EmailVerificationTestOnlyPage.clickContinue()
 
-      // Get a fresh passcode using the SAME session
-      val passcode = PasscodeHelper.getPasscode(
-        stubbedSignInData.bearerToken,
-        stubbedSignInData.sessionId,
-        expectedEmail = Some(newEmail)
-      )
+      EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+      val passcode = EmailVerificationTestOnlyPage.getPasscode
+      EmailVerificationTestOnlyPage.clickContinue()
 
       ConfirmYourEmailPage.assertPageIsDisplayed()
       ConfirmYourEmailPage.enterConfirmationCode(passcode)

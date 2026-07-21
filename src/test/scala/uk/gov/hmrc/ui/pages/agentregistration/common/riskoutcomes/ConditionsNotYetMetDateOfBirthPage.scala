@@ -35,13 +35,11 @@ extends BasePage:
   private val yearField = By.id("dateOfBirth.year")
 
   def fillInDateOfBirth(
-                         day: String,
-                         month: String,
-                         year: String
-                       ): Unit =
-    
+    day: String,
+    month: String,
+    year: String
+  ): Unit =
+
     sendKeys(dayField, day)
     sendKeys(monthField, month)
     sendKeys(yearField, year)
-
-

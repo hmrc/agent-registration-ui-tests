@@ -78,9 +78,9 @@ object StubbedSignInFlow:
 
     StubbedSignInData(
       username,
-      planetId,
-      bearerToken,
-      sessionId
+      planetId
+//      bearerToken,
+//      sessionId
     )
 
   def signInAndDataSetupViaStubsWithR2DW(
@@ -95,9 +95,9 @@ object StubbedSignInFlow:
 
     StubbedSignInData(
       username,
-      planetId,
-      bearerToken,
-      sessionId
+      planetId
+//      bearerToken,
+//      sessionId
     )
 
   // --- Convenience wrappers for callers that know the journey ---

@@ -63,14 +63,14 @@ object FastForwardLinks:
     ShowAgentApplicationPage.assertPageIsDisplayed()
     ShowAgentApplicationPage.clickLogInLink()
     val (username, planetId) = ShowAgentApplicationPage.getInternalUserDetails
-    ShowAgentApplicationPage.clickGoToExternalStubLink()
-    val (bearerToken, sessionId) = captureBearerTokenAndSession()
+//    ShowAgentApplicationPage.clickGoToExternalStubLink()
+//    val (bearerToken, sessionId) = captureBearerTokenAndSession()
     ShowAgentApplicationPage.clickGoToTaskListLink()
     StubbedSignInData(
       username,
-      planetId,
-      bearerToken,
-      sessionId
+      planetId
+//      bearerToken,
+//      sessionId
     )
 
   def selectFastForwardLink(

@@ -32,12 +32,12 @@ extends EntryPage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
 
-  private val goToTaskListLink = By.id("goto-task-list-page")
-  private val logInLink = By.linkText("login")
+  private val goToTaskListLink = By.linkText("Task list page")
+  private val logInLink = By.linkText("Log in as applicant")
   private val gotToExternalStubLink = By.id("goto-agents-external-stubs")
 
   private val internalUserIdValue = By.xpath(
-    "//dt[normalize-space()='Internal user id']/following-sibling::dd/span"
+    "//li[contains(normalize-space(), 'Internal user id:')]/code"
   )
 
   def clickGoToTaskListLink(): Unit = click(goToTaskListLink)

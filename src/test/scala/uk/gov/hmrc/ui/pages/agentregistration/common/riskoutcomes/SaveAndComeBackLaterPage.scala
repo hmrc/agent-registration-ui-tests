@@ -30,6 +30,5 @@ extends BasePage:
     getCurrentUrl shouldBe url
 
   private val continueWithApplicationLink = By.linkText("Continue with the application")
-  
-  def clickOnContinueWithApplicationLink(): Unit =
-    click(continueWithApplicationLink)  
+
+  def clickOnContinueWithApplicationLink(): Unit = click(continueWithApplicationLink)

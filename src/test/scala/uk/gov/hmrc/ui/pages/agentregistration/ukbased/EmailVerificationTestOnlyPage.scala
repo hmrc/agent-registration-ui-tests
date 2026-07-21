@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.ui.pages.agentregistration.ukbased
 
+import org.openqa.selenium.By
+import org.openqa.selenium.support.ui.ExpectedConditions
 import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
@@ -27,3 +29,13 @@ extends BasePage:
 
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
+
+  private val passcodeButton = By.cssSelector("button.copy-to-clipboard[data-clip]")
+
+  def getPasscode: String = {
+    val passcode =
+      getElementBy(passcodeButton)
+        .getAttribute("data-clip")
+        .trim
+    passcode
+  }

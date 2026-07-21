@@ -64,10 +64,11 @@ object ContactDetailsFlow {
 
     // get email verification code from test only page
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    val passcode = EmailVerificationTestOnlyPage.getPasscode
     EmailVerificationTestOnlyPage.clickContinue()
 
     // confirm email by providing confirmation code
-    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
+    ConfirmYourEmailPage.assertPageIsDisplayed()
     ConfirmYourEmailPage.enterConfirmationCode(passcode)
     ConfirmYourEmailPage.clickContinue()
 

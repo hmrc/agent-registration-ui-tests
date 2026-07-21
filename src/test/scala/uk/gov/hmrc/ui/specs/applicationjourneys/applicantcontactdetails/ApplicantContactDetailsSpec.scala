@@ -71,14 +71,15 @@ extends BaseSpec:
       val newEmail = EmailAddressPage.enterEmailAddress("@newtest.com")
       EmailAddressPage.clickContinue()
       EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+      val passcode = EmailVerificationTestOnlyPage.getPasscode
       EmailVerificationTestOnlyPage.clickContinue()
 
       // Get a fresh passcode using the SAME session
-      val passcode = PasscodeHelper.getPasscode(
-        stubbedSignInData.bearerToken,
-        stubbedSignInData.sessionId,
-        expectedEmail = Some(newEmail)
-      )
+//      val passcode = PasscodeHelper.getPasscode(
+//        stubbedSignInData.bearerToken,
+//        stubbedSignInData.sessionId,
+//        expectedEmail = Some(newEmail)
+//      )
 
       ConfirmYourEmailPage.assertPageIsDisplayed()
       ConfirmYourEmailPage.enterConfirmationCode(passcode)

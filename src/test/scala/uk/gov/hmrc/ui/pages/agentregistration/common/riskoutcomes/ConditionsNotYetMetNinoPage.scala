@@ -22,7 +22,7 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.amldetails.What
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object ConditionsNotYetMetNinoPage
-  extends BasePage:
+extends BasePage:
 
   override val path: String = "/agent-registration/provide-details/conditions-not-yet-met/national-insurance-number"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -41,4 +41,3 @@ object ConditionsNotYetMetNinoPage
   def fillInNationalInsuranceNumber(nino: String): Unit =
     click(yesRadio)
     sendKeys(ninoField, nino)
-    

@@ -49,7 +49,7 @@ object ProvideDirectorDetailsFlow:
       val (bearerToken, sessionId) = signIn(stubData.planetId, directorName)
       confirmDetails()
       provideTelephoneNumber()
-      provideEmailAddress(stubData.copy(bearerToken = bearerToken, sessionId = sessionId))
+      provideEmailAddress(stubData.copy())
       provideUtr()
       approveApplication()
       agreeStandards()
@@ -117,12 +117,11 @@ object ProvideDirectorDetailsFlow:
     ProvideDetailsEmailAddressPage.enterEmailAddress()
     ProvideDetailsEmailAddressPage.clickContinue()
 
-    // get email verification code from test only page
     EmailVerificationTestOnlyPage.assertPageIsDisplayed()
+    val passcode = EmailVerificationTestOnlyPage.getPasscode
     EmailVerificationTestOnlyPage.clickContinue()
 
-    // confirm email by providing confirmation code
-    val passcode = PasscodeHelper.getPasscode(stubData.bearerToken, stubData.sessionId)
+    ProvideDetailsConfirmEmailPage.assertPageIsDisplayed()
     ProvideDetailsConfirmEmailPage.enterConfirmationCode(passcode)
     ProvideDetailsConfirmEmailPage.clickContinue()
 
