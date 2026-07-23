@@ -37,6 +37,7 @@ extends BasePage {
 
   def selectAffinityGroupIndividual(): Unit = click(affinityGroupIndividualRadio)
   def selectAffinityGroupAgent(): Unit = click(affinityGroupAgentRadio)
+  // note stubs now generate unwanted BPRs for the agent user when none is selected
   def selectEnrolment(enrolment: String = "none"): Unit = selectByValue(enrolmentDropdown, enrolment)
   def selectCurrentUserLink(): Unit = click(currentUserLink)
 
