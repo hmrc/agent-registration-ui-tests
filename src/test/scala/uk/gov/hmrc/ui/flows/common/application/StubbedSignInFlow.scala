@@ -185,7 +185,7 @@ object StubbedSignInFlow:
   private def selectAffinityGroupIndividual(): Unit = AgentExternalStubCreateUserPage.selectAffinityGroupIndividual()
 
   private def selectNoEnrolmentAndContinue(): Unit =
-    AgentExternalStubCreateUserPage.selectEnrolment()
+    AgentExternalStubCreateUserPage.selectEnrolment("HMCE-VAT-AGNT") // this as a default ensures no unwanted BPRs are generated
     AgentExternalStubCreateUserPage.clickContinue()
 
   private def continueFromConfigureUser(): Unit =
