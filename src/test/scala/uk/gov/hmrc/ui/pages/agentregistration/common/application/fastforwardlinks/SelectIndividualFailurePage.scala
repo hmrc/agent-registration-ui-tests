@@ -17,12 +17,16 @@
 package uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks
 
 import org.openqa.selenium.By
-import uk.gov.hmrc.ui.pages.PageObject.{click, get, getCurrentUrl, getText}
-import uk.gov.hmrc.ui.pages.{BasePage, EntryPage}
+import uk.gov.hmrc.ui.pages.PageObject.click
+import uk.gov.hmrc.ui.pages.PageObject.get
+import uk.gov.hmrc.ui.pages.PageObject.getCurrentUrl
+import uk.gov.hmrc.ui.pages.PageObject.getText
+import uk.gov.hmrc.ui.pages.BasePage
+import uk.gov.hmrc.ui.pages.EntryPage
 import uk.gov.hmrc.ui.utils.RichMatchers.*
 
 object SelectIndividualFailurePage
-  extends BasePage:
+extends BasePage:
 
   override val path: String = "/agent-registration/test-only/risking/select-individual-failures/"
   override val baseUrl: String = FastForwardLinksPage.baseUrl
@@ -30,10 +34,8 @@ object SelectIndividualFailurePage
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
 
-  private def failureLabel(code: String): By =
-  By.xpath(s"//label[contains(normalize-space(), '$code')]")
+  private def failureLabel(code: String): By = By.xpath(s"//label[contains(normalize-space(), '$code')]")
 
   def selectFailureCode(code: String): Unit = click(failureLabel(code))
 
   def clickSubmitButton(): Unit = clickContinue()
-

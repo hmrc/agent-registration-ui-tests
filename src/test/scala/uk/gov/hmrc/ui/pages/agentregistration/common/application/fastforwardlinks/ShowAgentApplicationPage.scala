@@ -58,18 +58,15 @@ extends EntryPage:
     val username = parts(0)
     val planetId = parts(1)
     (username, planetId)
-    
-  def openForApplicationReference(applicationReference: String): Unit =
-  get(s"$url$applicationReference")
-  
+
+  def openForApplicationReference(applicationReference: String): Unit = get(s"$url$applicationReference")
+
   def clickRunRiskingLink(): Unit = click(runRiskingLink)
 
   def clickRunResultsFileProcessingLink(): Unit = click(runResultsFileProcessingLink)
 
-  def getApplicationStateText: String =
-    getText(stateValue).replaceAll("\\s+", " ").trim
+  def getApplicationStateText: String = getText(stateValue).replaceAll("\\s+", " ").trim
 
   def clickChooseEntityFailuresLink(): Unit = click(chooseEntityFailuresLink)
-  
-  def clickChooseIndividualFailuresLink(): Unit = click(chooseIndividualFailuresLink)
 
+  def clickChooseIndividualFailuresLink(): Unit = click(chooseIndividualFailuresLink)
