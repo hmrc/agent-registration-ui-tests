@@ -26,7 +26,7 @@ import uk.gov.hmrc.ui.utils.RichMatchers.*
 object ShowAgentApplicationPage
 extends EntryPage:
 
-  override val path: String = "/agent-registration/test-only/show-agent-application-tile"
+  override val path: String = "/agent-registration/test-only/agent-application-details/"
   override val baseUrl: String = FastForwardLinksPage.baseUrl
 
   inline def assertPageIsDisplayed(): Unit = eventually:
