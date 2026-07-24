@@ -118,7 +118,7 @@ extends BaseSpec:
       ConditionsNotYetMetApplicantDeclarationPage.assertPageIsDisplayed()
       ConditionsNotYetMetApplicantDeclarationPage.clickContinue()
 
-        ApplicationStatusPage.assertPageIsDisplayed()
+      ApplicationStatusPage.assertPageIsDisplayed()
 
 
 
