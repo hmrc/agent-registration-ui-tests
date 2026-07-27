@@ -119,6 +119,7 @@ extends BaseSpec:
       ConditionsNotYetMetApplicantDeclarationPage.clickContinue()
 
       ApplicationStatusPage.assertPageIsDisplayed()
+      ApplicationStatusPage.assertConfirmationTitle("You have resubmitted your application for an agent services account")
 
 
 
