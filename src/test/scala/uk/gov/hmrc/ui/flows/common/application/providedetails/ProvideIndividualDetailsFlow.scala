@@ -141,6 +141,7 @@ object ProvideIndividualDetailsFlow:
       stubData.copy()
 
   object ProvideIndividualDetailsSoleTraderOwner:
+
     def runFlow(
       stubData: StubbedSignInData,
       progress: listProgress,
@@ -167,6 +168,33 @@ object ProvideIndividualDetailsFlow:
       returnToApplication(stubData)
       checkProveYourIdentityProgressComplete()
       stubData.copy()
+
+    def runFlowWithUsername(
+      stubData: StubbedSignInData,
+      progress: listProgress,
+      fastForwardUsed: Boolean = false
+    ): (StubbedSignInData, String) =
+      val link = startJourneySoleTraderOwner()
+      signOut()
+      PageObject.get(link)
+      val (_, _, username) = signInWithUsername(
+        stubData.planetId,
+        BusinessType.SoleTrader,
+        fastForwardUsed,
+        isSoleTraderOwner = false
+      )
+      confirmDetails()
+      provideTelephoneNumber()
+      provideEmailAddress(stubData.copy())
+      provideUtr()
+      approveApplication()
+      agreeStandards()
+      checkYourAnswers()
+      finishAndSignOut()
+      TaskListPage.open()
+      returnToApplication(stubData)
+      checkProveYourIdentityProgressComplete()
+      (stubData.copy(), username)
 
   def startJourneySoleTrader(): Unit =
     TaskListPage.assertPageIsDisplayed()
