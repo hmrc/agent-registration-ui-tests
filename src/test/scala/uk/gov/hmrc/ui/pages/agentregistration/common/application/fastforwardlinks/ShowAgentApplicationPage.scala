@@ -22,6 +22,7 @@ import uk.gov.hmrc.ui.pages.PageObject.click
 import uk.gov.hmrc.ui.pages.PageObject.getCurrentUrl
 import uk.gov.hmrc.ui.pages.PageObject.getText
 import uk.gov.hmrc.ui.utils.RichMatchers.*
+import uk.gov.hmrc.ui.pages.PageObject.get
 
 object ShowAgentApplicationPage
 extends EntryPage:
@@ -42,6 +43,13 @@ extends EntryPage:
 
   def clickGoToTaskListLink(): Unit = click(goToTaskListLink)
   def clickLogInLink(): Unit = click(logInLink)
+
+  private val runRiskingLink = By.linkText("Run risking")
+  private val runResultsFileProcessingLink = By.linkText("Run results file processing")
+  private val stateValue = By.xpath("//dt[normalize-space()='State']/following-sibling::dd[1]")
+  private val chooseEntityFailuresLink = By.linkText("Choose entity failures")
+  private val chooseIndividualFailuresLink = By.linkText("Choose individual failures")
+
   def clickGoToExternalStubLink(): Unit = click(gotToExternalStubLink)
   def getInternalUserDetails: (String, String) =
     val rawValue = getText(internalUserIdValue).trim
@@ -50,3 +58,15 @@ extends EntryPage:
     val username = parts(0)
     val planetId = parts(1)
     (username, planetId)
+
+  def openForApplicationReference(applicationReference: String): Unit = get(s"$url$applicationReference")
+
+  def clickRunRiskingLink(): Unit = click(runRiskingLink)
+
+  def clickRunResultsFileProcessingLink(): Unit = click(runResultsFileProcessingLink)
+
+  def getApplicationStateText: String = getText(stateValue).replaceAll("\\s+", " ").trim
+
+  def clickChooseEntityFailuresLink(): Unit = click(chooseEntityFailuresLink)
+
+  def clickChooseIndividualFailuresLink(): Unit = click(chooseIndividualFailuresLink)
