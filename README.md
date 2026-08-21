@@ -45,7 +45,7 @@ Use built-in run configurations to run individual scenarios, see below screensho
 
 ![howToRunFromIntellijIdea.png](readme/howToRunFromIntellijIdea.png)
 
-Ensure the project is imported into IntelliJ correctly, see below screenshot for guidance
+Ensure the project is imported into IntelliJ correctly, see below screenshot for guidance.
 
 ![howToImportProjectIntoIntelliJIdea.png](readme/howToImportProjectIntoIntelliJIdea.png)
 
