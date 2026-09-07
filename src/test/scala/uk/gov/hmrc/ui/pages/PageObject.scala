@@ -19,6 +19,7 @@ package uk.gov.hmrc.ui.pages
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebElement
 import org.scalactic.Prettifier.default
@@ -76,9 +77,27 @@ trait PageObject:
   inline def sendKeys(
     locator: By,
     value: String
-  ): Unit = getElementBy(locator)
-    .tap(_.clear())
-    .sendKeys(value)
+  ): Unit =
+    val element = getElementBy(locator)
+    if !isFileInput(element) then element.clear()
+    element.sendKeys(value)
+
+  inline def uploadFile(
+    locator: By,
+    absolutePath: String
+  ): Unit =
+    val element = getElementBy(locator)
+    val js = Driver.instance.asInstanceOf[JavascriptExecutor]
+    try
+      if !element.isDisplayed then
+        js.executeScript(
+          "arguments[0].setAttribute('style', 'display:block !important;visibility:visible !important;opacity:1 !important;')",
+          element,
+          null
+        )
+      element.sendKeys(absolutePath)
+    finally
+      js.executeScript("arguments[0].removeAttribute('style')", element)
 
   inline def sendKeys(
     locator: By,
@@ -98,6 +117,9 @@ trait PageObject:
     .tap(element =>
       if element.isSelected then element.click() else ()
     )
+
+  private inline def isFileInput(element: WebElement): Boolean =
+    element.getTagName.equalsIgnoreCase("input") && Option(element.getAttribute("type")).exists(_.equalsIgnoreCase("file"))
 
   private inline def getSelect(locator: By): Select = getElementBy(locator)
     .pipe(element => new Select(element))
