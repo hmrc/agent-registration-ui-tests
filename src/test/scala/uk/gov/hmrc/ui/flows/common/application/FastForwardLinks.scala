@@ -60,7 +60,7 @@ object FastForwardLinks:
 
   def logIn(): StubbedSignInData =
     ShowAgentApplicationPage.assertPageIsDisplayed()
-    ShowAgentApplicationPage.clickLogInLink()
+    ShowAgentApplicationPage.clickLogInAsApplicantLink()
     val (username, planetId) = ShowAgentApplicationPage.getInternalUserDetails
     ShowAgentApplicationPage.clickGoToTaskListLink()
     StubbedSignInData(

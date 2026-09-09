@@ -16,14 +16,11 @@
 
 package uk.gov.hmrc.ui.specs.riskoutcomes
 
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetConfirmationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetDateOfBirthPage
@@ -46,84 +43,50 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFix_8_7Page
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualIdentityFixCheckYourAnswersPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualFix
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
 
 class FailedFixableIndividualTasklistSpec
 extends BaseSpec:
 
   Feature("Individual FailedFixable Tasklist"):
-    Scenario("Individual views Actions to be completed list", TagFixableFailures):
+    Scenario(
+      "Individual views Actions to be completed list",
+      TagFullSuite,
+      TagRisking
+    ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, GeneralPartnership)
-
-      PartnerTaxAdvisorInformationFlow
-        .singlePartner
-        .runFlow()
-
-      val username = ProvideIndividualDetailsFlow
-        .ProvideIndividualDetails
-        .runFlowWithUsername(
-          stubbedSignInData,
-          complete,
-          GeneralPartnership
-        )
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(GeneralPartnership)
+        .runFlow(Declaration, GeneralPartnership)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
-      ApplicationSubmittedPage.assertConfirmationTitle(
-        "You’ve applied for an agent services account"
-      )
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
 
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq.empty
-      )
-      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Bobby Boucher" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._1"),
-              IndividualFix("IndividualFix._4._3"),
-              IndividualFix("IndividualFix._4._4"),
-              IndividualFix("IndividualFix._5._1"),
-              IndividualFix("IndividualFix._5._3"),
-              IndividualFix("IndividualFix._5._4"),
-              IndividualFix("IndividualFix._5._5"),
-              IndividualFix("IndividualFix._5._6"),
-              IndividualFix("IndividualFix._5._7"),
-              IndividualFix("IndividualFix._8._7")
-            )
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          SetRiskingOutcomesFlow.ApplicantApproved,
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq(
+              "4.1",
+              "4.3",
+              "4.4",
+              "5.1",
+              "5.3",
+              "5.4",
+              "5.5",
+              "5.6",
+              "5.7",
+              "8.7"
+            )),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Approved
           )
         )
-      )
 
       RiskingOutcomeFlow
-        .viewIndividualTaskListPage
+        .viewIndividualTaskListPageViaStub
         .runFlow(
-          stubbedSignInData,
-          linkId,
-          username
+          applicationReference,
+          "Steve Austin"
         )
 
       // verify actions and their incomplete status
@@ -365,72 +328,34 @@ extends BaseSpec:
       ConditionsNotYetMetConfirmationPage.assertPageIsDisplayed()
       ConditionsNotYetMetConfirmationPage.assertConfirmationTitle("You have finished this process")
 
-    Scenario("Unknown Individual failure and update personal details from Check your answers", TagFixableFailures):
+    Scenario(
+      "Unknown Individual failure and update personal details from Check your answers",
+      TagFullSuite,
+      TagRisking
+    ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, GeneralPartnership)
-
-      PartnerTaxAdvisorInformationFlow
-        .singlePartner
-        .runFlow()
-
-      val username = ProvideIndividualDetailsFlow
-        .ProvideIndividualDetails
-        .runFlowWithUsername(
-          stubbedSignInData,
-          complete,
-          GeneralPartnership
-        )
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(GeneralPartnership)
+        .runFlow(Declaration, GeneralPartnership)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
-      ApplicationSubmittedPage.assertConfirmationTitle(
-        "You’ve applied for an agent services account"
-      )
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
 
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq.empty
-      )
-      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Bobby Boucher" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix(
-                fixType = "IndividualFix._10.IndividualDetailsFix",
-                dateOfBirth = Some("1990-01-01"),
-                nino = Some("AA111111B"),
-                saUtr = Some("123456789")
-              )
-            )
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          SetRiskingOutcomesFlow.ApplicantApproved,
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("10.1")),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Approved
           )
         )
-      )
 
       RiskingOutcomeFlow
-        .viewIndividualTaskListPage
+        .viewIndividualTaskListPageViaStub
         .runFlow(
-          stubbedSignInData,
-          linkId,
-          username
+          applicationReference,
+          "Steve Austin"
         )
 
       // verify action is present and has an incomplete status
@@ -450,11 +375,11 @@ extends BaseSpec:
       IndividualFixIdentityPage.assertPageIsDisplayed()
       IndividualFixIdentityPage.clickContinue()
       IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
-      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 1990")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 2000")
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "Yes")
-      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("National Insurance number", "AA111111B")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("National Insurance number", "AB123456C")
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
-      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "123456789")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567895")
 
       // Change Date of birth and verify the change is reflected on the check your answers page
       IndividualIdentityFixCheckYourAnswersPage.clickChangeFor("Date of birth")
@@ -484,72 +409,34 @@ extends BaseSpec:
       IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "9876543210")
 
-    Scenario("Unknown Individual failure and update Nino and SaUtr with No option from Check your answers", TagFixableFailures):
+    Scenario(
+      "Unknown Individual failure and update Nino and SaUtr with No option from Check your answers",
+      TagFullSuite,
+      TagRisking
+    ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, GeneralPartnership)
-
-      PartnerTaxAdvisorInformationFlow
-        .singlePartner
-        .runFlow()
-
-      val username = ProvideIndividualDetailsFlow
-        .ProvideIndividualDetails
-        .runFlowWithUsername(
-          stubbedSignInData,
-          complete,
-          GeneralPartnership
-        )
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(GeneralPartnership)
+        .runFlow(Declaration, GeneralPartnership)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
-      ApplicationSubmittedPage.assertConfirmationTitle(
-        "You’ve applied for an agent services account"
-      )
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
 
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq.empty
-      )
-      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Bobby Boucher" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix(
-                fixType = "IndividualFix._10.IndividualDetailsFix",
-                dateOfBirth = Some("1990-01-01"),
-                nino = Some("AA111111B"),
-                saUtr = Some("123456789")
-              )
-            )
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          SetRiskingOutcomesFlow.ApplicantApproved,
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("10.1")),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Approved
           )
         )
-      )
 
       RiskingOutcomeFlow
-        .viewIndividualTaskListPage
+        .viewIndividualTaskListPageViaStub
         .runFlow(
-          stubbedSignInData,
-          linkId,
-          username
+          applicationReference,
+          "Steve Austin"
         )
 
       // verify action is present and has an incomplete status
@@ -569,11 +456,11 @@ extends BaseSpec:
       IndividualFixIdentityPage.assertPageIsDisplayed()
       IndividualFixIdentityPage.clickContinue()
       IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
-      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 1990")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 2000")
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "Yes")
-      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("National Insurance number", "AA111111B")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("National Insurance number", "AB123456C")
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
-      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "123456789")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567895")
 
       // Select No for Nino and verify the change is reflected on the check your answers page
       IndividualIdentityFixCheckYourAnswersPage.clickChangeFor("National Insurance number")
@@ -581,10 +468,10 @@ extends BaseSpec:
       ConditionsNotYetMetNinoPage.selectNo()
       ConditionsNotYetMetNinoPage.clickContinue()
       IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
-      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 1990")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 2000")
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "No")
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "Yes")
-      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "123456789")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Self Assessment Unique Taxpayer Reference", "1234567895")
 
       // Select No for SA UTR and verify the change is reflected on the check your answers page
       IndividualIdentityFixCheckYourAnswersPage.clickChangeFor("Self Assessment Unique Taxpayer Reference")
@@ -592,143 +479,75 @@ extends BaseSpec:
       ConditionsNotYetMetSaUtrPage.selectNo()
       ConditionsNotYetMetSaUtrPage.clickContinue()
       IndividualIdentityFixCheckYourAnswersPage.assertPageIsDisplayed()
-      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 1990")
+      IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Date of birth", "1 January 2000")
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a National Insurance number?", "No")
       IndividualIdentityFixCheckYourAnswersPage.assertSummaryRow("Do you have a Self Assessment Unique Taxpayer Reference?", "No")
 
-    Scenario("Individual clicks links to Finance Act 2026 and Appeals urls", TagFixableFailures):
+    Scenario(
+      "Individual clicks links to Finance Act 2026 and Appeals urls",
+      TagFullSuite,
+      TagRisking
+    ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, GeneralPartnership)
-
-      PartnerTaxAdvisorInformationFlow
-        .singlePartner
-        .runFlow()
-
-      val username = ProvideIndividualDetailsFlow
-        .ProvideIndividualDetails
-        .runFlowWithUsername(
-          stubbedSignInData,
-          complete,
-          GeneralPartnership
-        )
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(GeneralPartnership)
+        .runFlow(Declaration, GeneralPartnership)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
-      ApplicationSubmittedPage.assertConfirmationTitle(
-        "You’ve applied for an agent services account"
-      )
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
 
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq.empty
-      )
-      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Bobby Boucher" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._3"),
-              IndividualFix("IndividualFix._8._7"),
-              IndividualFix("IndividualFix._4._1"),
-              IndividualFix("IndividualFix._5._1")
-            )
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          SetRiskingOutcomesFlow.ApplicantApproved,
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("10.1")),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Approved
           )
         )
-      )
 
       RiskingOutcomeFlow
-        .viewIndividualOutcomeStatusPage
+        .viewIndividualOutcomeStatusPageViaStub
         .runFlow(
-          stubbedSignInData,
-          linkId,
-          username
+          applicationReference,
+          "Steve Austin"
         )
 
       // Click and verify navigation to Finance Act 2026 url
+      ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
       ProvideDetailsOutcomeStatusPage.clickFinanceAct2026LinkAndAssertUrl()
       ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
       // Click and verify navigation to Appeals and Reviews url
       ProvideDetailsOutcomeStatusPage.clickRequestReviewOrAppealLinkAndAssertUrl()
 
-    Scenario("Individual can save progress and continue with application from save and come back later page", TagFixableFailures):
+    Scenario(
+      "Individual can save progress and continue with application from save and come back later page",
+      TagFullSuite,
+      TagRisking
+    ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, GeneralPartnership)
-
-      PartnerTaxAdvisorInformationFlow
-        .singlePartner
-        .runFlow()
-
-      val username = ProvideIndividualDetailsFlow
-        .ProvideIndividualDetails
-        .runFlowWithUsername(
-          stubbedSignInData,
-          complete,
-          GeneralPartnership
-        )
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(GeneralPartnership)
+        .runFlow(Declaration, GeneralPartnership)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
-      ApplicationSubmittedPage.assertConfirmationTitle(
-        "You’ve applied for an agent services account"
-      )
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
 
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-07-15",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-30",
-        fixes = Seq.empty
-      )
-
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Bobby Boucher" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._3")
-            )
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          SetRiskingOutcomesFlow.ApplicantApproved,
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("4.3")),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Approved
           )
         )
-      )
 
       RiskingOutcomeFlow
-        .viewIndividualTaskListPage
+        .viewIndividualTaskListPageViaStub
         .runFlow(
-          stubbedSignInData,
-          linkId,
-          username
+          applicationReference,
+          "Steve Austin"
         )
 
       ConditionsNotYetMetIndividualTaskListPage.clickActionLink(
@@ -745,7 +564,7 @@ extends BaseSpec:
       ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
       ConditionsNotYetMetIndividualTaskListPage.clickSaveAndComeBackLaterButton()
       ProvideDetailsSaveAndComeBackLaterPage.assertPageIsDisplayed()
-      ProvideDetailsSaveAndComeBackLaterPage.assertHeading("Your progress will be saved until 30 August 2026")
+      ProvideDetailsSaveAndComeBackLaterPage.assertSaveDeadlineHeadingIsDisplayed()
       ProvideDetailsSaveAndComeBackLaterPage.assertContinueWithApplicationLinkIsDisplayed()
       ProvideDetailsSaveAndComeBackLaterPage.assertFinishAndSignOutLinkIsDisplayed()
       ProvideDetailsSaveAndComeBackLaterPage.clickOnContinueWithApplicationLink()

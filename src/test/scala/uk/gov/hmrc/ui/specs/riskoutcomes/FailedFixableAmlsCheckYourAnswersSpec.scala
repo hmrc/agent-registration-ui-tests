@@ -16,22 +16,21 @@
 
 package uk.gov.hmrc.ui.specs.riskoutcomes
 
-import org.mongodb.scala.Document
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
-import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.pages.PageObject.getCurrentUrl
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsCheckYourAnswersPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsEntityFailureV31Page
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsEvidencePage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsEvidenceUploadResultPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsRegistrationNumberPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsSupervisorNamePage
-import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.MongoHelper
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
+import uk.gov.hmrc.ui.specs.BaseSpec
 
 class FailedFixableAmlsCheckYourAnswersSpec
 extends BaseSpec:
@@ -39,60 +38,32 @@ extends BaseSpec:
   Feature("Check and confirm AMLS details after AMLS failure"):
     Scenario(
       "SoleTraderOwner reviews and confirms AMLS details with reason code 3.1 successfully",
-      TagFixableFailures
+      TagFullSuite,
+      TagRisking
     ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
         .runFlow(Declaration, SoleTrader)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      val amlsFixes = Seq(
-        Document(
-          "failure" -> Document("type" -> "_3._1"),
-          "amlsDetails" -> Document(
-            "supervisoryBody" -> "HMRC",
-            "amlsRegistrationNumber" -> "XAML00000123456"
-          ),
-          "type" -> "EntityFix._3.AmlsFix"
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq("3.1"),
+          Seq(SetRiskingOutcomesFlow.Approved)
         )
-      )
 
-      Seq(
-        Document("type" -> "_3._1")
-      )
-
-      // Insert risking outcome data with AMLS details into both backend and risking databases
-      MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = amlsFixes
-      )
-
-      val riskingIndividuals = MongoHelper.findRiskingIndividualsByApplicationReference(applicationReference)
-      riskingIndividuals should not be empty
-
-      MongoHelper.insertRiskingOutcomeIndividualByAgentApplicationId(
-        applicationReference,
-        riskingOutcomeType = "Approved"
-      )
-
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(stubbedSignInData)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       ApplicationSubmittedPage.clickViewActionLink()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+
       ConditionsNotYetMetApplicantTaskListPage.clickOnProvideYourSupervisionDetailsLink()
 
       ConditionsNotYetMetAmlsEntityFailureV31Page.assertPageIsDisplayed()
@@ -126,54 +97,31 @@ extends BaseSpec:
 
   Scenario(
     "SoleTraderOwner changes registration number from CYA with prefilled value and returns to CYA",
-    TagFixableFailures
+    TagFullSuite,
+    TagRisking
   ):
 
-    val stubbedSignInData = FastForwardLinks
+    FastForwardLinks
       .FastForward
       .runFlow(Declaration, SoleTrader)
 
     ApplicationSubmittedPage.assertPageIsDisplayed()
-
     val applicationReference = ApplicationSubmittedPage.getApplicationReference
-    MongoHelper
-      .findByApplicationReference(applicationReference)
-      .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-    val amlsFixes = Seq(
-      Document(
-        "failure" -> Document("type" -> "_3._1"),
-        "amlsDetails" -> Document(
-          "supervisoryBody" -> "HMRC",
-          "amlsRegistrationNumber" -> "XAML00000123456"
-        ),
-        "type" -> "EntityFix._3.AmlsFix"
+    SetRiskingOutcomesFlow
+      .runFlow(
+        applicationReference,
+        Seq("3.1"),
+        Seq(SetRiskingOutcomesFlow.Approved)
       )
-    )
 
-    MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
-      applicationReference = applicationReference,
-      actualDecisionDate = "2026-06-18",
-      outcome = "FailedFixable",
-      correctiveActionExpiryDate = "2026-08-17",
-      fixes = amlsFixes
-    )
-
-    val riskingIndividuals = MongoHelper.findRiskingIndividualsByApplicationReference(applicationReference)
-    riskingIndividuals should not be empty
-
-    MongoHelper.insertRiskingOutcomeIndividualByAgentApplicationId(
-      applicationReference,
-      riskingOutcomeType = "Approved"
-    )
-
-    RiskingOutcomeFlow
-      .SignInAsApplicantAfterRiskingOutcome
-      .runFlow(stubbedSignInData)
+    ShowAgentApplicationPage.assertPageIsDisplayed()
+    ShowAgentApplicationPage.clickLogInAsApplicantLink()
+    ShowAgentApplicationPage.clickGoToTaskListLink()
 
     ApplicationSubmittedPage.assertPageIsDisplayed()
-
     ApplicationSubmittedPage.clickViewActionLink()
+
     ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
     ConditionsNotYetMetApplicantTaskListPage.clickOnProvideYourSupervisionDetailsLink()
 

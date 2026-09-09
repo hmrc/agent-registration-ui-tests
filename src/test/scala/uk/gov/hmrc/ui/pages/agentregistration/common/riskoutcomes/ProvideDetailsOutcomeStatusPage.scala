@@ -37,3 +37,11 @@ extends BasePage:
   def clickFinanceAct2026LinkAndAssertUrl(): Unit = clickLinkAndAssertUrlInNewTab(financeAct2026Link, financeAct2026Url)
 
   def clickRequestReviewOrAppealLinkAndAssertUrl(): Unit = clickLinkAndAssertUrlInNewTab(requestReviewOrAppealLink, requestReviewOrAppealUrl)
+
+  def assertOutcomeDescriptionContainsAll(items: String*): Unit =
+    val source = eventually(getPageSource)
+    items.foreach { item =>
+      withClue(s"Page did not contain: '$item'\n") {
+        source should include(item)
+      }
+    }

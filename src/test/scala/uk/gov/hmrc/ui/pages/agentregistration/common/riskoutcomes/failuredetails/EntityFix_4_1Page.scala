@@ -38,4 +38,3 @@ extends BasePage:
   def selectNo(): Unit = click(noRadio)
 
   def clickSelfAssessmentTaxReturnsLinkAndAssertUrl(): Unit = clickLinkAndAssertUrlInNewTab(saTaxReturnLink, saTaxReturnUrl)
-

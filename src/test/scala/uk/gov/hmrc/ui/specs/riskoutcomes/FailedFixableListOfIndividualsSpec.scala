@@ -20,13 +20,13 @@ import uk.gov.hmrc.ui.domain.BusinessType.LLP
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage.ActionRow
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualFix
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
 
 class FailedFixableListOfIndividualsSpec
 extends BaseSpec:
@@ -34,55 +34,39 @@ extends BaseSpec:
   Feature("Applicant FailedFixable List of Individuals Page"):
     Scenario(
       "Applicant views Actions to be completed list",
-      TagFixableFailures
+      TagFullSuite,
+      TagRisking
     ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
         .runFlow(Declaration, LLP)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq.empty
+      SetRiskingOutcomesFlow.runFlow(
+        applicationReference,
+        SetRiskingOutcomesFlow.ApplicantApproved,
+        Map(
+          "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("4.3", "8.7")),
+          "Beverly Hills" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
+        )
       )
-      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
+
+      MongoHelper.confirmRiskingOutcomeIndividualFixes(
         applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Steve Austin" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._3"),
-              IndividualFix("IndividualFix._8._7", isConfirmed = true)
-            )
-          ),
-          "Beverly Hills" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._1", isConfirmed = true),
-              IndividualFix("IndividualFix._5._1", isConfirmed = true)
-            ),
-            declarationAgreed = true
-          )
+        fixTypesByIndividualName = Map(
+          "Steve Austin" -> Seq("IndividualFix._4._3"),
+          "Beverly Hills" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
         )
       )
 
       RiskingOutcomeFlow
-        .viewListOfIndividualActions
-        .runFlow(stubbedSignInData)
+        .viewListOfIndividualActionsViaStub
+        .runFlow(applicationReference)
 
-      // Proves multi row table is displayed with correct data for each individual
-      // Proves Completed status is No until all actions are confirmed by individual
+      ConditionsNotYetMetIndividualsPage.assertPageIsDisplayed()
       ConditionsNotYetMetIndividualsPage.assertActionsRow(
         ActionRow(
           name = "Steve Austin",
@@ -107,57 +91,46 @@ extends BaseSpec:
 
       // Proves return to task list button works and returns to the task list page
       ConditionsNotYetMetIndividualsPage.clickContinue()
-//      ConditionsNotMetTaskListPage.assertPageIsDisplayed() //Disabled due to bug where nav goes back to Status page
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
 
     Scenario(
       "Applicant provided some of the individuals details",
-      TagFixableFailures
+      TagFullSuite,
+      TagRisking
     ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
         .runFlow(Declaration, LLP)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq.empty
-      )
-      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Steve Austin" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._3"),
-              IndividualFix("IndividualFix._8._7", isConfirmed = true)
-            )
-          ),
-          "Beverly Hills" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._1", isConfirmed = true),
-              IndividualFix("IndividualFix._5._1", isConfirmed = true)
-            ),
-            providedByApplicant = true,
-            declarationAgreed = true
-          )
+      SetRiskingOutcomesFlow.runFlow(
+        applicationReference,
+        SetRiskingOutcomesFlow.ApplicantApproved,
+        Map(
+          "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("4.3", "8.7")),
+          "Beverly Hills" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
         )
       )
 
+      MongoHelper.confirmRiskingOutcomeIndividualFixes(
+        applicationReference = applicationReference,
+        fixTypesByIndividualName = Map(
+          "Steve Austin" -> Seq("IndividualFix._8._7"),
+          "Beverly Hills" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
+        )
+      )
+
+      MongoHelper.setProvidedByApplicantForIndividual(
+        applicationReference = applicationReference,
+        individualName = "Beverly Hills"
+      )
+
       RiskingOutcomeFlow
-        .viewListOfIndividualActions
-        .runFlow(stubbedSignInData)
+        .viewListOfIndividualActionsViaStub
+        .runFlow(applicationReference)
 
       // Proves fixable failure for individual with providedByApplicant = false displays
       ConditionsNotYetMetIndividualsPage.assertActionsRow(

@@ -18,16 +18,12 @@ package uk.gov.hmrc.ui.specs.riskoutcomes
 
 import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.ProvideDetailsStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ProvideDetailsOutcomeStatusPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.MongoHelper
 
 class FailedNonFixableOutcomeForIndividualSpec
 extends BaseSpec:
@@ -35,109 +31,47 @@ extends BaseSpec:
   Feature("Individual FailedNonFixable List Page"):
     Scenario(
       "Risking outcomes for Non Fixable Individual list page for General Partnership",
-      TagSmokeTests,
+      TagRisking,
       TagFullSuite
     ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, GeneralPartnership)
-
-      PartnerTaxAdvisorInformationFlow
-        .singlePartner
-        .runFlow()
-
-      val username = ProvideIndividualDetailsFlow
-        .ProvideIndividualDetails
-        .runFlowWithUsername(
-          stubbedSignInData,
-          complete,
-          GeneralPartnership
-        )
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(GeneralPartnership)
+        .runFlow(Declaration, GeneralPartnership)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
-      ApplicationSubmittedPage.assertConfirmationTitle(
-        "You’ve applied for an agent services account"
-      )
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
 
-      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
-
-      ApplicationSubmittedPage.clickSignOutLink()
-
-      MongoHelper.simulateNonFixableRiskingOutcome(
-        applicationReference,
-        withIndividualFailures = true
-      )
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          SetRiskingOutcomesFlow.ApplicantApproved,
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(
+              Seq(
+                "4.1",
+                "5.1",
+                "6",
+                "7",
+                "8.1",
+                "8.6",
+                "8.7",
+                "9"
+              )
+            ),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Approved
+          )
+        )
 
       RiskingOutcomeFlow
-        .signInAsPreviouslyUsedIndividual
+        .viewIndividualOutcomeStatusPageViaStub
         .runFlow(
-          stubbedSignInData,
-          linkId,
-          username
+          applicationReference,
+          "Steve Austin"
         )
 
-      ProvideDetailsStatusPage.assertPageIsDisplayed()
-      ProvideDetailsStatusPage.assertPageHeadingContainsForIndividual()
-
-      val outcomeDoc = MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(
-          throw new AssertionError(
-            s"No Mongo record found for reference: $applicationReference"
-          )
-        )
-
-      MongoHelper.getTopLevelString(
-        outcomeDoc,
-        "riskingFileName"
-      ) shouldBe "any-old.txt"
-
-      val individuals = MongoHelper.findIndividualsByApplicationReference(
-        applicationReference
-      )
-
-      individuals should have size 1
-
-      individuals.foreach { indDoc =>
-        val indFailures = MongoHelper.getIndividualRiskingFailures(indDoc)
-
-        indFailures should not be empty
-
-        val indFailureTypes = indFailures.map(f =>
-          MongoHelper.getNestedString(f, "type")
-        )
-
-        indFailureTypes should contain allOf (
-          "_4._1",
-          "_5._1",
-          "_6",
-          "_7",
-          "_8._1",
-          "_8._6",
-          "_8._7",
-          "_9"
-        )
-
-        val fivePointOne = indFailures
-          .find(f =>
-            MongoHelper.getNestedString(f, "type") == "_5._1"
-          )
-          .getOrElse(
-            throw new AssertionError(
-              "No _5._1 failure found on individual"
-            )
-          )
-      }
-
-      ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
+      ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
+      ProvideDetailsOutcomeStatusPage.assertOutcomeDescriptionContainsAll(
         "you have a relevant unspent criminal conviction",
         "you are on a published HMRC list of tax avoidance promoters, enablers or suppliers",
         "you have an overdue Self Assessment liability",

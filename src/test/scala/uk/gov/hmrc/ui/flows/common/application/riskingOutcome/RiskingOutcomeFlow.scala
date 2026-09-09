@@ -20,6 +20,7 @@ import uk.gov.hmrc.ui.flows.common.application.StubbedSignInData
 import uk.gov.hmrc.ui.pages.PageObject
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ProvideDetailsStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.SignInAndConfirmDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
@@ -59,6 +60,14 @@ object RiskingOutcomeFlow:
       viewApplicationStatusPage()
       viewIndividualFailuresPage()
 
+  object viewListOfIndividualActionsViaStub:
+    def runFlow(applicationReference: String): Unit =
+      ShowAgentApplicationPage.openForApplicationReference(applicationReference)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
+      viewApplicationStatusPage()
+      viewIndividualFailuresPage()
+
   object viewIndividualTaskListPage:
     def runFlow(
       stubbedSignInData: StubbedSignInData,
@@ -79,6 +88,64 @@ object RiskingOutcomeFlow:
       ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
       ProvideDetailsOutcomeStatusPage.clickContinue()
       ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
+
+  object viewIndividualTaskListPageViaStub:
+
+    def runFlow(
+      applicationReference: String
+    ): Unit =
+      ShowAgentApplicationPage.openForApplicationReference(applicationReference)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLoginAsIndividualLink()
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickProvideDetailsLink()
+      SignInAndConfirmDetailsPage.assertPageIsDisplayed()
+      SignInAndConfirmDetailsPage.clickStartButton()
+      ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
+      ProvideDetailsOutcomeStatusPage.clickContinue()
+      ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
+
+    def runFlow(
+      applicationReference: String,
+      individualName: String
+    ): Unit =
+      ShowAgentApplicationPage.openForApplicationReference(applicationReference)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLoginAsIndividualLinkForIndividualName(individualName)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickProvideDetailsLink()
+      SignInAndConfirmDetailsPage.assertPageIsDisplayed()
+      SignInAndConfirmDetailsPage.clickStartButton()
+      ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
+      ProvideDetailsOutcomeStatusPage.clickContinue()
+      ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
+
+  object viewIndividualOutcomeStatusPageViaStub:
+
+    def runFlow(
+      applicationReference: String
+    ): Unit =
+      ShowAgentApplicationPage.openForApplicationReference(applicationReference)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLoginAsIndividualLink()
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickProvideDetailsLink()
+      SignInAndConfirmDetailsPage.assertPageIsDisplayed()
+      SignInAndConfirmDetailsPage.clickStartButton()
+      ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
+
+    def runFlow(
+      applicationReference: String,
+      individualName: String
+    ): Unit =
+      ShowAgentApplicationPage.openForApplicationReference(applicationReference)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLoginAsIndividualLinkForIndividualName(individualName)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickProvideDetailsLink()
+      SignInAndConfirmDetailsPage.assertPageIsDisplayed()
+      SignInAndConfirmDetailsPage.clickStartButton()
+      ProvideDetailsOutcomeStatusPage.assertPageIsDisplayed()
 
   object viewIndividualOutcomeStatusPage:
     def runFlow(

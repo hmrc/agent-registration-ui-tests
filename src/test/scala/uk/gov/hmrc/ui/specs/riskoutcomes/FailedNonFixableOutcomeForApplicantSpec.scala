@@ -19,22 +19,19 @@ package uk.gov.hmrc.ui.specs.riskoutcomes
 import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
-import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.MongoHelper
 
 class FailedNonFixableOutcomeForApplicantSpec
 extends BaseSpec:
@@ -42,61 +39,34 @@ extends BaseSpec:
   Feature("Applicant FailedNonFixable List Page"):
     Scenario(
       "Sole Trader Owner sees FailedNonFixable Outcome Page after sign in",
-      TagSmokeTests,
+      TagRisking,
       TagFullSuite
     ):
 
-      /** Step 1: Fast-forward to AgentStandards — same starting point as DeclarationSpec
-        */
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, SoleTrader)
+        .runFlow(Declaration, SoleTrader)
 
-      /** Step 2: Prove identity — populates the individuals array in the Mongo record
-        */
-      ProvideIndividualDetailsFlow
-        .ProvideIndividualDetailsSoleTrader
+      ApplicationSubmittedPage.assertPageIsDisplayed()
+      val applicationReference = ApplicationSubmittedPage.getApplicationReference
+
+      SetRiskingOutcomesFlow
         .runFlow(
-          stubbedSignInData,
-          listProgress.complete,
-          fastForwardUsed = true
+          applicationReference,
+          Seq(
+            "7",
+            "4.1",
+            "5.1",
+            "8.1",
+            "8.4",
+            "8.5"
+          ),
+          Seq(SetRiskingOutcomesFlow.Approved)
         )
 
-      /** Step 3: Accept declaration — submits the application, creates record with ReadyForSubmission
-        */
-      DeclarationFlow.AcceptDeclaration.runFlow(SoleTrader, fastForwardUsed = true)
-
-      ApplicationSubmittedPage.assertPageIsDisplayed()
-
-      /** Step 4: Capture reference and verify document exists */
-      val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      /** Step 5: Simulate the risking service — set riskingFileName and entityRiskingResult on the application-for-risking record, and individualRiskingResult
-        * (empty failures) on each individual-for-risking record.
-        */
-      MongoHelper.simulateNonFixableRiskingOutcome(applicationReference)
-
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(stubbedSignInData)
-
-      ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertPageHeadingContains("ST Name ST Lastname")
-
-      /** Step 7: Assert the application-for-risking record has the risking fields set correctly */
-      val outcomeDoc = MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-      MongoHelper.getTopLevelString(outcomeDoc, "riskingFileName") shouldBe "any-old.txt"
-
-      val failures = MongoHelper.getEntityRiskingFailures(outcomeDoc)
-      failures should not be empty
-
-      val failureTypes = failures.map(f => MongoHelper.getNestedString(f, "type"))
-      failureTypes should contain allOf ("_7", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
         "our records show that the business is formally insolvent",
@@ -109,6 +79,7 @@ extends BaseSpec:
 
     Scenario(
       "Sole Trader Non-Owner sees FailedNonFixable Outcome Page after sign in",
+      TagRisking,
       TagFullSuite
     ):
       val stubbedSignInData = BusinessDetailsFlow
@@ -149,11 +120,20 @@ extends BaseSpec:
       ApplicationSubmittedPage.assertConfirmationTitle("You’ve applied for an agent services account")
 
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      MongoHelper.simulateNonFixableRiskingOutcome(applicationReference)
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "7",
+            "4.1",
+            "5.1",
+            "8.1",
+            "8.4",
+            "8.5"
+          ),
+          Seq(SetRiskingOutcomesFlow.Approved)
+        )
 
       RiskingOutcomeFlow
         .SignInAsApplicantAfterRiskingOutcome
@@ -161,17 +141,6 @@ extends BaseSpec:
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("Test User")
-
-      val outcomeDoc = MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-      MongoHelper.getTopLevelString(outcomeDoc, "riskingFileName") shouldBe "any-old.txt"
-
-      val failures = MongoHelper.getEntityRiskingFailures(outcomeDoc)
-      failures should not be empty
-
-      val failureTypes = failures.map(f => MongoHelper.getNestedString(f, "type"))
-      failureTypes should contain allOf ("_7", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5")
 
       ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
         "our records show that the business is formally insolvent",
@@ -184,78 +153,51 @@ extends BaseSpec:
 
     Scenario(
       "General Partnership sees FailedNonFixable Outcome Page when both partners have individual failures",
-      TagSmokeTests,
+      TagRisking,
       TagFullSuite
     ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, GeneralPartnership)
-
-      PartnerTaxAdvisorInformationFlow
-        .singlePartner
-        .runFlow()
-
-      ProvideIndividualDetailsFlow
-        .ProvideIndividualDetails
-        .runFlow(
-          stubbedSignInData,
-          complete,
-          GeneralPartnership
-        )
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(GeneralPartnership, fastForwardUsed = true)
-
-      ApplicationStatusPage.assertPageIsDisplayed()
-
-      ApplicationSubmittedPage.assertConfirmationTitle(
-        "You’ve applied for an agent services account"
-      )
-
-      val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      MongoHelper.simulateNonFixableRiskingOutcome(applicationReference, withIndividualFailures = true)
-
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(stubbedSignInData)
+        .runFlow(Declaration, GeneralPartnership)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertPageHeadingContains("Electronicsson Group")
+      val applicationReference = ApplicationSubmittedPage.getApplicationReference
 
-      val outcomeDoc = MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-      MongoHelper.getTopLevelString(outcomeDoc, "riskingFileName") shouldBe "any-old.txt"
-
-      val entityFailures = MongoHelper.getEntityRiskingFailures(outcomeDoc)
-      entityFailures should not be empty
-      val entityFailureTypes = entityFailures.map(f => MongoHelper.getNestedString(f, "type"))
-      entityFailureTypes should contain allOf ("_7", "_3._1", "_4._1", "_5._1", "_8._1", "_8._4", "_8._5", "_8._6", "_8._7")
-
-      val individuals = MongoHelper.findIndividualsByApplicationReference(applicationReference)
-      individuals should have size 1
-
-      individuals.foreach { indDoc =>
-        val indFailures = MongoHelper.getIndividualRiskingFailures(indDoc)
-        indFailures should not be empty
-        val indFailureTypes = indFailures.map(f => MongoHelper.getNestedString(f, "type"))
-        indFailureTypes should contain allOf (
-          "_4._1",
-          "_5._1",
-          "_6",
-          "_7",
-          "_8._1",
-          "_8._6",
-          "_8._7",
-          "_9"
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "7",
+            "3.1",
+            "4.1",
+            "5.1",
+            "8.1",
+            "8.4",
+            "8.5",
+            "8.6",
+            "8.7"
+          ),
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(
+              Seq(
+                "4.1",
+                "5.1",
+                "6",
+                "7",
+                "8.1",
+                "8.6",
+                "8.7",
+                "9"
+              )
+            ),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Approved
+          )
         )
-      }
+
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
         "our records show that the business is formally insolvent",
@@ -266,7 +208,7 @@ extends BaseSpec:
         "the business has unpaid tax liabilities",
         "the business has one or more relevant anti-avoidance penalties to pay",
         "one or more relevant individuals linked to the application do not meet the registration conditions",
-        "Records indicate that Bobby Boucher:",
+        "Records indicate that Steve Austin:",
         "has one or more overdue liabilities",
         "is actively disqualified on Companies house",
         "is formally insolvent",

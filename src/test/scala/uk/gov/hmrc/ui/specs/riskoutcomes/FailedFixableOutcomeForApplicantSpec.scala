@@ -20,11 +20,10 @@ import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
-import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.MongoHelper.EntityFix
 
 class FailedFixableOutcomeForApplicantSpec
 extends BaseSpec:
@@ -32,82 +31,66 @@ extends BaseSpec:
   Feature("Applicant FailedFixable List Page"):
     Scenario(
       "Sole Trader Owner sees FailedFixable Outcome Page after sign in",
-      TagFixableFailures
+      TagFullSuite,
+      TagRisking
     ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
         .runFlow(Declaration, SoleTrader)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      // Insert risking outcome data into the backend agent-application collection
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq(EntityFix("EntityFix._4._2"))
-      )
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "3.1",
+            "4.1",
+            "4.3"
+          ),
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("8.7", "10.1"))
+          )
+        )
 
-      MongoHelper.syncRiskingIndividualsToBackEnd(applicationReference)
-
-      val riskingIndividuals = MongoHelper.findRiskingIndividualsByApplicationReference(applicationReference)
-      riskingIndividuals should not be empty
-
-      riskingIndividuals.foreach { riskingIndividual =>
-        MongoHelper.insertRiskingOutcomeIndividual(applicationReference, riskingIndividual)
-      }
-
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(stubbedSignInData)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertConfirmationTitleHeading("You do not meet the registration conditions yet")
 
     Scenario(
       "General Partnership sees FailedFixable Outcome Page when partner have individual failures",
-      TagFixableFailures
+      TagFullSuite,
+      TagRisking
     ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
         .runFlow(Declaration, GeneralPartnership)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      // Insert risking outcome data into the backend agent-application collection
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq(EntityFix("EntityFix._4._1"), EntityFix("EntityFix._4._3"))
-      )
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "4.1",
+            "4.3"
+          ),
+          Seq(
+            SetRiskingOutcomesFlow.Approved,
+            SetRiskingOutcomesFlow.Approved
+          )
+        )
 
-      MongoHelper.syncRiskingIndividualsToBackEnd(applicationReference)
-
-      val riskingIndividuals = MongoHelper.findRiskingIndividualsByApplicationReference(applicationReference)
-      riskingIndividuals should not be empty
-
-      riskingIndividuals.foreach { riskingIndividual =>
-        MongoHelper.insertRiskingOutcomeIndividual(applicationReference, riskingIndividual)
-      }
-
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(stubbedSignInData)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("Electronicsson Group")
