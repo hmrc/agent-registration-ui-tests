@@ -31,7 +31,7 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
 
-  private val fileInput = By.id("fileToUpload")
+  private val fileInput = By.cssSelector("input[type='file']#fileToUpload-input, input[type='file']#fileToUpload")
 
   def uploadFileFromResources(fileName: String): Unit =
     val path =
@@ -39,4 +39,4 @@ extends BasePage:
         .get(s"src/test/resources/test-files/$fileName")
         .toAbsolutePath
         .toString
-    sendKeys(fileInput, path)
+    uploadFile(fileInput, path)

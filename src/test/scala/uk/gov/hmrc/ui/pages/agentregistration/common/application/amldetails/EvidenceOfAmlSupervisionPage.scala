@@ -31,7 +31,7 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  private val fileInput = By.id("fileToUpload")
+  private val fileInput = By.cssSelector("input[type='file']#fileToUpload-input, input[type='file']#fileToUpload")
   private val uploadErrorMessageText = By.id("fileToUpload-error")
 
   def uploadFileFromResources(fileName: String): Unit =
@@ -41,7 +41,7 @@ extends BasePage:
         .toAbsolutePath
         .toString
 
-    sendKeys(fileInput, path)
+    uploadFile(fileInput, path)
 
   def assertErrorMessage(expected: String): Unit = eventually:
     val error = getElementBy(uploadErrorMessageText)
