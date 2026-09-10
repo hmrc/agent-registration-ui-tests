@@ -4,5 +4,5 @@ set -euo pipefail
 BROWSER=${1:-chrome}
 HEADLESS=${2:-true}
 
-exec "$(dirname "$0")/run-tests.sh" "${BROWSER}" "FixableFailures" "${HEADLESS}"
+exec "$(dirname "$0")/run-tests.sh" "${BROWSER}" "Risking" "${HEADLESS}"
 

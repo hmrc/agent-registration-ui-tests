@@ -30,11 +30,13 @@ extends BasePage:
     getCurrentUrl should include(path)
 
   private val pageHeading = By.cssSelector("h1.govuk-panel__title")
-  private val serviceName = By.cssSelector(".govuk-service-navigation__service-name, .govuk-header__service-name")
   private val continueWithApplicationLink = By.linkText("Continue with the application")
   private val finishAndSignOutLink = By.linkText("Finish and sign out")
 
   def assertHeading(expected: String): Unit = getText(pageHeading).trim shouldBe expected
+
+  def assertSaveDeadlineHeadingIsDisplayed(): Unit =
+    getText(pageHeading).trim should fullyMatch regex "Your progress will be saved until \\d{1,2} [A-Za-z]+ \\d{4}"
 
   def assertContinueWithApplicationLinkIsDisplayed(): Unit = findElementBy(continueWithApplicationLink) shouldBe defined
 

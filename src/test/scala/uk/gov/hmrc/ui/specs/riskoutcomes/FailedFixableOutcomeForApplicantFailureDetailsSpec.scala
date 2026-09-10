@@ -19,16 +19,14 @@ package uk.gov.hmrc.ui.specs.riskoutcomes
 import uk.gov.hmrc.ui.domain.BusinessType.LLP
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
-import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetEntityFailureDetailsV41Page
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.SaveAndComeBackLaterPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.MongoHelper.EntityFix
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
 
 class FailedFixableOutcomeForApplicantFailureDetailsSpec
 extends BaseSpec:
@@ -36,43 +34,33 @@ extends BaseSpec:
   Feature("Applicant Failure Details Page"):
     Scenario(
       "LLP user sees FailedFixable Details Page and click Yes/No variety for Self Assessment returns issue",
-      TagFixableFailures
+      TagFullSuite,
+      TagRisking
     ):
-      val stubbedSignInData = FastForwardLinks
+
+      FastForwardLinks
         .FastForward
         .runFlow(Declaration, LLP)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq(EntityFix("EntityFix._4._1"), EntityFix("EntityFix._4._3"))
-      )
-
-      // Insert two individuals. One with all actions confirmed, one with some actions unconfirmed
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Steve Austin" -> IndividualRiskingOutcome(
-            fixes = Seq.empty
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "4.1",
+            "4.3"
           ),
-          "Beverly Hills" -> IndividualRiskingOutcome(
-            fixes = Seq.empty
+          Seq(
+            SetRiskingOutcomesFlow.Approved,
+            SetRiskingOutcomesFlow.Approved
           )
         )
-      )
 
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(stubbedSignInData)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertPageHeadingContains("Test Partnership")

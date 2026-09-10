@@ -16,103 +16,72 @@
 
 package uk.gov.hmrc.ui.specs.riskoutcomes
 
-import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
-import uk.gov.hmrc.ui.domain.BusinessType.GeneralPartnership
+import uk.gov.hmrc.ui.domain.BusinessType.LLP
 import uk.gov.hmrc.ui.domain.BusinessType.SoleTrader
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
-import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.AgentStandards
-import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
-import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
-import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
-import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
-import uk.gov.hmrc.ui.flows.ukbased.soletrader.application.businessdetails.BusinessDetailsFlow
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantDeclarationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.MongoHelper.EntityFix
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualFix
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
 
 class FailedFixableResubmissionSpec
 extends BaseSpec:
 
   Feature("Individual FailedFixable Tasklist"):
-    Scenario("LLP Applicant signs declaration and confirms resubmission", TagFixableFailures):
+    Scenario(
+      "General Partnership Applicant signs declaration and confirms resubmission",
+      TagFullSuite,
+      TagRisking
+    ):
 
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
-        .runFlow(AgentStandards, GeneralPartnership)
-
-      PartnerTaxAdvisorInformationFlow
-        .singlePartner
-        .runFlow()
-
-      ProvideIndividualDetailsFlow
-        .ProvideIndividualDetails
-        .runFlowWithUsername(
-          stubbedSignInData,
-          complete,
-          GeneralPartnership
-        )
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(GeneralPartnership)
+        .runFlow(Declaration, LLP)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
-      ApplicationSubmittedPage.assertConfirmationTitle(
-        "You’ve applied for an agent services account"
-      )
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
 
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      // insert failed fixable data into agent-application collection
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq(EntityFix("EntityFix._4._2", isConfirmed = true))
-      )
-
-      // Insert one individual. They have confirmed their fixes and signed the declaration
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Bobby Boucher" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._3", isConfirmed = true),
-              IndividualFix("IndividualFix._8._7", isConfirmed = true)
-            ),
-            declarationAgreed = true
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "3.1",
+            "4.1"
+          ),
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1")),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
           )
         )
+
+      MongoHelper.confirmRiskingOutcomeApplicantFixes(
+        applicationReference = applicationReference,
+        fixTypesToConfirm = Seq(
+          "EntityFix._3.AmlsFix",
+          "EntityFix._4._1"
+        )
       )
 
-      // Delete risking data from application-for-risking and individual-for-risking collections
-      // This simulates what happens when the archiving process runs once a risking outcome is determined
-      MongoHelper.deleteAllRiskingData(applicationReference)
-
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(
-          stubbedSignInData
+      MongoHelper.confirmRiskingOutcomeIndividualFixes(
+        applicationReference = applicationReference,
+        fixTypesByIndividualName = Map(
+          "Steve Austin" -> Seq("IndividualFix._4._1", "IndividualFix._5._1"),
+          "Beverly Hills" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
         )
+      )
+
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationStatusPage.assertPageIsDisplayed()
       ApplicationStatusPage.clickViewActionLink()
@@ -125,7 +94,11 @@ extends BaseSpec:
       ApplicationStatusPage.clickViewOrPrintLink()
       ViewApplicationPage.assertPageIsDisplayed()
 
-    Scenario("Sole Trader (Non Owner) Applicant signs declaration and confirms resubmission", TagFixableFailures):
+    Scenario(
+      "Sole Trader (Non Owner) Applicant signs declaration and confirms resubmission",
+      TagFullSuite,
+      TagRisking
+    ):
 
       val stubbedSignInData = FastForwardLinks
         .FastForward
@@ -151,43 +124,39 @@ extends BaseSpec:
 
       val applicationReference = ApplicationStatusPage.getApplicationReference
 
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      // insert failed fixable data into agent-application collection
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq(EntityFix("EntityFix._4._2", isConfirmed = true))
-      )
-
-      // Insert one individual. They have confirmed their fixes and signed the declaration
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "ST Name ST Lastname" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._3", isConfirmed = true),
-              IndividualFix("IndividualFix._8._7", isConfirmed = true)
-            ),
-            declarationAgreed = true
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "3.1",
+            "4.1"
+          ),
+          Seq(
+            SetRiskingOutcomesFlow.Failures(Seq(
+              "4.1",
+              "5.1"
+            ))
           )
         )
+
+      MongoHelper.confirmRiskingOutcomeApplicantFixes(
+        applicationReference = applicationReference,
+        fixTypesToConfirm = Seq(
+          "EntityFix._3.AmlsFix",
+          "EntityFix._4._1"
+        )
       )
 
-      // Delete risking data from application-for-risking and individual-for-risking collections
-      // This simulates what happens when the archiving process runs once a risking outcome is determined
-      MongoHelper.deleteAllRiskingData(applicationReference)
-
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(
-          stubbedSignInData
+      MongoHelper.confirmRiskingOutcomeIndividualFixes(
+        applicationReference = applicationReference,
+        fixTypesByIndividualName = Map(
+          "ST Name ST Lastname" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
         )
+      )
+
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationStatusPage.assertPageIsDisplayed()
       ApplicationStatusPage.clickViewActionLink()
@@ -200,87 +169,49 @@ extends BaseSpec:
       ApplicationStatusPage.clickViewOrPrintLink()
       ViewApplicationPage.assertPageIsDisplayed()
 
-    Scenario("Sole Trader (Owner) Applicant signs declaration and confirms resubmission", TagFixableFailures):
+    Scenario(
+      "Sole Trader (Owner) Applicant signs declaration and confirms resubmission",
+      TagFullSuite,
+      TagRisking
+    ):
 
-      val stubbedSignInData = BusinessDetailsFlow
-        .HasNoOnlineAccount
-        .runFlow(false)
+      FastForwardLinks
+        .FastForward
+        .runFlow(Declaration, SoleTrader)
 
-      ContactDetailsFlow
-        .runFlow(stubbedSignInData)
+      ApplicationSubmittedPage.assertPageIsDisplayed()
+      val applicationReference = ApplicationSubmittedPage.getApplicationReference
 
-      AgentDetailsFlow
-        .WhenUsingCustomValues
-        .runFlow(stubbedSignInData)
-
-      AmlsDetailsFlow
-        .WhenHmrcAreSupervisoryBody
-        .runFlow()
-
-      AgentStandardsFlow
-        .AgreeToMeetStandards
+      SetRiskingOutcomesFlow
         .runFlow(
-          SoleTrader,
-          false,
-          "Test User"
+          applicationReference,
+          Seq(
+            "3.1",
+            "4.1",
+            "4.3"
+          ),
+          Seq("8.7", "4.1")
         )
 
-      ProvideIndividualDetailsFlow
-        .ProvideIndividualDetailsSoleTraderOwner
-        .runFlow(
-          stubbedSignInData,
-          ProvideIndividualDetailsFlow.listProgress.complete
-        )
-
-      DeclarationFlow
-        .AcceptDeclaration
-        .runFlow(SoleTrader, soleTraderOwner = false)
-
-      ApplicationStatusPage.assertPageIsDisplayed()
-
-      ApplicationStatusPage.assertConfirmationTitle(
-        "You’ve applied for an agent services account"
-      )
-
-      val applicationReference = ApplicationStatusPage.getApplicationReference
-
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
-
-      // insert failed fixable data into agent-application collection
-      MongoHelper.insertRiskingOutcomeToAgentApplication(
+      MongoHelper.confirmRiskingOutcomeApplicantFixes(
         applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = Seq(EntityFix("EntityFix._4._2", isConfirmed = true))
+        fixTypesToConfirm = Seq(
+          "EntityFix._3.AmlsFix",
+          "EntityFix._4._1",
+          "EntityFix._4._3"
+        )
       )
 
-      // Insert one individual. They have confirmed their fixes and signed the declaration
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
+      MongoHelper.confirmRiskingOutcomeIndividualFixes(
         applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Test User" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._3", isConfirmed = true),
-              IndividualFix("IndividualFix._8._7", isConfirmed = true)
-            ),
-            declarationAgreed = true
-          )
+        fixTypesByIndividualName = Map(
+          "Steve Austin" -> Seq("IndividualFix._8._7", "IndividualFix._4._1")
         )
       )
 
-      // Delete risking data from application-for-risking and individual-for-risking collections
-      // This simulates what happens when the archiving process runs once a risking outcome is determined
-      MongoHelper.deleteAllRiskingData(applicationReference)
-
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(
-          stubbedSignInData
-        )
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationStatusPage.assertPageIsDisplayed()
       ApplicationStatusPage.clickViewActionLink()

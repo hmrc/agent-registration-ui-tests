@@ -16,19 +16,17 @@
 
 package uk.gov.hmrc.ui.specs.riskoutcomes
 
-import org.mongodb.scala.Document
 import uk.gov.hmrc.ui.domain.BusinessType.LLP
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks.ApplicationProgress.Declaration
-import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.SaveAndComeBackLaterPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualFix
-import uk.gov.hmrc.ui.utils.MongoHelper.IndividualRiskingOutcome
 
 class FailedFixableOutcomeForApplicantFailureTasklistSpec
 extends BaseSpec:
@@ -36,59 +34,34 @@ extends BaseSpec:
   Feature("Applicant Task List Page"):
     Scenario(
       "Applicant actions are incomplete on task list",
-      TagFixableFailures
+      TagFullSuite,
+      TagRisking
     ):
-      val stubbedSignInData = FastForwardLinks
+
+      FastForwardLinks
         .FastForward
         .runFlow(Declaration, LLP)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      val amlsFixes = Seq(
-        Document(
-          "failure" -> Document("type" -> "_3._1"),
-          "amlsDetails" -> Document(
-            "supervisoryBody" -> "HMRC",
-            "amlsRegistrationNumber" -> "XAML00000123456"
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "3.1",
+            "4.1",
+            "4.3"
           ),
-          "type" -> "EntityFix._3.AmlsFix"
-        ),
-        Document(
-          "type" -> "EntityFix._4._1"
-        ),
-        Document(
-          "type" -> "EntityFix._4._3"
-        )
-      )
-
-      MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = amlsFixes
-      )
-
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Steve Austin" -> IndividualRiskingOutcome(
-            fixes = Seq.empty
-          ),
-          "Beverly Hills" -> IndividualRiskingOutcome(
-            fixes = Seq.empty
+          Seq(
+            SetRiskingOutcomesFlow.Approved,
+            SetRiskingOutcomesFlow.Approved
           )
         )
-      )
 
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(stubbedSignInData)
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
@@ -122,71 +95,51 @@ extends BaseSpec:
 
     Scenario(
       "Applicant actions are complete, but individual action is incomplete on task list",
-      TagFixableFailures
+      TagFullSuite,
+      TagRisking
     ):
-      val stubbedSignInData = FastForwardLinks
+
+      FastForwardLinks
         .FastForward
         .runFlow(Declaration, LLP)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      val amlsFixes = Seq(
-        Document(
-          "failure" -> Document("type" -> "_3._1"),
-          "amlsDetails" -> Document(
-            "supervisoryBody" -> "HMRC",
-            "amlsRegistrationNumber" -> "XAML00000123456"
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "3.1",
+            "4.1",
+            "4.3"
           ),
-          "type" -> "EntityFix._3.AmlsFix",
-          "isConfirmed" -> true
-        ),
-        Document(
-          "type" -> "EntityFix._4._1",
-          "isConfirmed" -> true
-        ),
-        Document(
-          "type" -> "EntityFix._4._3",
-          "isConfirmed" -> true
-        )
-      )
-
-      MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = amlsFixes
-      )
-
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Steve Austin" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._3"),
-              IndividualFix("IndividualFix._8._7", isConfirmed = true)
-            )
-          ),
-          "Beverly Hills" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._1", isConfirmed = true),
-              IndividualFix("IndividualFix._5._1", isConfirmed = true)
-            ),
-            declarationAgreed = true
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1")),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
           )
         )
+
+      MongoHelper.confirmRiskingOutcomeApplicantFixes(
+        applicationReference = applicationReference,
+        fixTypesToConfirm = Seq(
+          "EntityFix._3.AmlsFix",
+          "EntityFix._4._1",
+          "EntityFix._4._3"
+        )
       )
 
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(stubbedSignInData)
+      MongoHelper.confirmRiskingOutcomeIndividualFixes(
+        applicationReference = applicationReference,
+        fixTypesByIndividualName = Map(
+          "Steve Austin" -> Seq("IndividualFix._4._1"),
+          "Beverly Hills" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
+        )
+      )
+
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
@@ -220,72 +173,50 @@ extends BaseSpec:
 
     Scenario(
       "Applicant action is incomplete, but individual action is complete on task list",
-      TagFixableFailures
+      TagFullSuite,
+      TagRisking
     ):
-      val stubbedSignInData = FastForwardLinks
+
+      FastForwardLinks
         .FastForward
         .runFlow(Declaration, LLP)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      val amlsFixes = Seq(
-        Document(
-          "failure" -> Document("type" -> "_3._1"),
-          "amlsDetails" -> Document(
-            "supervisoryBody" -> "HMRC",
-            "amlsRegistrationNumber" -> "XAML00000123456"
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "3.1",
+            "4.1",
+            "4.3"
           ),
-          "type" -> "EntityFix._3.AmlsFix",
-          "isConfirmed" -> true
-        ),
-        Document(
-          "type" -> "EntityFix._4._1",
-          "isConfirmed" -> false
-        ),
-        Document(
-          "type" -> "EntityFix._4._3",
-          "isConfirmed" -> true
-        )
-      )
-
-      MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = amlsFixes
-      )
-
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Steve Austin" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._3", isConfirmed = true),
-              IndividualFix("IndividualFix._8._7", isConfirmed = true)
-            ),
-            declarationAgreed = true
-          ),
-          "Beverly Hills" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._1", isConfirmed = true),
-              IndividualFix("IndividualFix._5._1", isConfirmed = true)
-            ),
-            declarationAgreed = true
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1")),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
           )
         )
+
+      MongoHelper.confirmRiskingOutcomeApplicantFixes(
+        applicationReference = applicationReference,
+        fixTypesToConfirm = Seq(
+          "EntityFix._3.AmlsFix",
+          "EntityFix._4._3"
+        )
       )
 
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(stubbedSignInData)
+      MongoHelper.confirmRiskingOutcomeIndividualFixes(
+        applicationReference = applicationReference,
+        fixTypesByIndividualName = Map(
+          "Steve Austin" -> Seq("IndividualFix._4._1", "IndividualFix._5._1"),
+          "Beverly Hills" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
+        )
+      )
+
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
@@ -319,72 +250,50 @@ extends BaseSpec:
 
     Scenario(
       "Both applicant and individual actions are complete on task list",
-      TagFixableFailures
+      TagFullSuite,
+      TagRisking
     ):
-      val stubbedSignInData = FastForwardLinks
+      FastForwardLinks
         .FastForward
         .runFlow(Declaration, LLP)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
-      MongoHelper
-        .findByApplicationReference(applicationReference)
-        .getOrElse(throw new AssertionError(s"No Mongo record found for reference: $applicationReference"))
 
-      val amlsFixes = Seq(
-        Document(
-          "failure" -> Document("type" -> "_3._1"),
-          "amlsDetails" -> Document(
-            "supervisoryBody" -> "HMRC",
-            "amlsRegistrationNumber" -> "XAML00000123456"
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq(
+            "3.1",
+            "4.1",
+            "4.3"
           ),
-          "type" -> "EntityFix._3.AmlsFix",
-          "isConfirmed" -> true
-        ),
-        Document(
-          "type" -> "EntityFix._4._1",
-          "isConfirmed" -> true
-        ),
-        Document(
-          "type" -> "EntityFix._4._3",
-          "isConfirmed" -> true
-        )
-      )
-
-      MongoHelper.insertRiskingOutcomeToAgentApplicationWithAmlsDetails(
-        applicationReference = applicationReference,
-        actualDecisionDate = "2026-06-18",
-        outcome = "FailedFixable",
-        correctiveActionExpiryDate = "2026-08-17",
-        fixes = amlsFixes
-      )
-
-      MongoHelper.insertRiskingOutcomeIndividualsToAgentApplication(
-        applicationReference = applicationReference,
-        outcomesByIndividualName = Map(
-          "Steve Austin" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._3", isConfirmed = true),
-              IndividualFix("IndividualFix._8._7", isConfirmed = true)
-            ),
-            declarationAgreed = true
-          ),
-          "Beverly Hills" -> IndividualRiskingOutcome(
-            outcomeType = "FailedFixable",
-            fixes = Seq(
-              IndividualFix("IndividualFix._4._1", isConfirmed = true),
-              IndividualFix("IndividualFix._5._1", isConfirmed = true)
-            ),
-            declarationAgreed = true
+          Map(
+            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1")),
+            "Beverly Hills" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
           )
         )
+
+      MongoHelper.confirmRiskingOutcomeApplicantFixes(
+        applicationReference = applicationReference,
+        fixTypesToConfirm = Seq(
+          "EntityFix._3.AmlsFix",
+          "EntityFix._4._1",
+          "EntityFix._4._3"
+        )
       )
 
-      RiskingOutcomeFlow
-        .SignInAsApplicantAfterRiskingOutcome
-        .runFlow(stubbedSignInData)
+      MongoHelper.confirmRiskingOutcomeIndividualFixes(
+        applicationReference = applicationReference,
+        fixTypesByIndividualName = Map(
+          "Steve Austin" -> Seq("IndividualFix._4._1", "IndividualFix._5._1"),
+          "Beverly Hills" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
+        )
+      )
+
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
