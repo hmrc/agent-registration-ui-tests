@@ -88,6 +88,16 @@ extends EntryPage:
   )
   private val internalUserIdValue = By.xpath("//li[contains(normalize-space(), 'Internal user id:')]/code")
   private val provideDetailsLink = By.cssSelector("a[href*='/agent-registration/provide-details/start/']")
+  // Grab just the coloured status tag inside each dd, not the trailing "Submitted:" text
+  private val stateTag = By.xpath(
+    "//dt[normalize-space()='State']/following-sibling::dd[1]//strong"
+  )
+  private val applicationRiskingOutcomeTag = By.xpath(
+    "//dt[normalize-space()='Risking outcome (application)']/following-sibling::dd[1]//strong"
+  )
+  private val entityRiskingOutcomeTag = By.xpath(
+    "//dt[normalize-space()='Risking outcome (entity)']/following-sibling::dd[1]//strong"
+  )
 
   def clickGoToTaskListLink(): Unit =
     assertPageIsDisplayed()
@@ -114,6 +124,17 @@ extends EntryPage:
     resultsFileProcessingInterval
   )
   def getApplicationStateText: String = getText(stateValue).replaceAll("\\s+", " ").trim
+
+  def getApplicationStateTag: String = getText(stateTag).replaceAll("\\s+", " ").trim
+
+  def getApplicationRiskingOutcomeTag: String = getText(applicationRiskingOutcomeTag).replaceAll("\\s+", " ").trim
+
+  def getEntityRiskingOutcomeTag: String = getText(entityRiskingOutcomeTag).replaceAll("\\s+", " ").trim
+  
+  def assertApplicationOutcomeIsApproved(): Unit = eventually {
+    getApplicationStateTag shouldBe "RiskingCompleted"
+    getApplicationRiskingOutcomeTag shouldBe "Approved"
+  }
   def clickChooseEntityFailuresLink(): Unit =
     assertPageIsDisplayed()
     click(chooseEntityFailuresLink)
