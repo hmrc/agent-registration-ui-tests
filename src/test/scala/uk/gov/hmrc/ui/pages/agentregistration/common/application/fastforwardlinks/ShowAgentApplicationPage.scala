@@ -18,6 +18,9 @@ package uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlin
 
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
+import org.scalatest.time.Millis
+import org.scalatest.time.Seconds
+import org.scalatest.time.Span
 import uk.gov.hmrc.ui.pages.EntryPage
 import uk.gov.hmrc.ui.pages.PageObject.click
 import uk.gov.hmrc.ui.pages.PageObject.findElementsBy
@@ -29,11 +32,38 @@ import uk.gov.hmrc.ui.pages.PageObject.get
 object ShowAgentApplicationPage
 extends EntryPage:
 
+  private val resultsFileProcessingTimeout = scaled(Span(45, Seconds))
+  private val resultsFileProcessingInterval = scaled(Span(200, Millis))
+
   override val path: String = "/agent-registration/test-only/agent-application-details/"
   override val baseUrl: String = FastForwardLinksPage.baseUrl
 
   inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl should include(url)
+    getCurrentUrl.startsWith(url) shouldBe true
+
+  private def waitUntilReturnedToApplicationDetailsPage(): Unit = assertPageIsDisplayed()
+
+  private def waitUntilReturnedToApplicationDetailsPage(
+    timeoutSpan: Span,
+    intervalSpan: Span
+  ): Unit =
+    eventually(timeout(timeoutSpan), interval(intervalSpan)):
+      getCurrentUrl.startsWith(url) shouldBe true
+
+  private def clickAndWaitToReturn(locator: By): Unit =
+    assertPageIsDisplayed()
+    click(locator)
+    waitUntilReturnedToApplicationDetailsPage()
+
+  private def clickAndWaitToReturn(
+    locator: By,
+    timeoutSpan: Span,
+    intervalSpan: Span
+  ): Unit =
+    assertPageIsDisplayed()
+    click(locator)
+    waitUntilReturnedToApplicationDetailsPage(timeoutSpan, intervalSpan)
+    waitUntilReturnedToApplicationDetailsPage()
 
   private val goToTaskListLink = By.linkText("Task list page")
   private val applicantLogInLink = By.linkText("Log in as applicant")
@@ -63,15 +93,9 @@ extends EntryPage:
     assertPageIsDisplayed()
     click(goToTaskListLink)
 
-  def clickLogInAsApplicantLink(): Unit =
-    assertPageIsDisplayed()
-    click(applicantLogInLink)
-    assertPageIsDisplayed()
+  def clickLogInAsApplicantLink(): Unit = clickAndWaitToReturn(applicantLogInLink)
 
-  def clickLoginAsIndividualLink(): Unit =
-    assertPageIsDisplayed()
-    click(individualLogInLink)
-    assertPageIsDisplayed()
+  def clickLoginAsIndividualLink(): Unit = clickAndWaitToReturn(individualLogInLink)
 
   def clickGoToExternalStubLink(): Unit = click(gotToExternalStubLink)
   def getInternalUserDetails: (String, String) =
@@ -82,15 +106,13 @@ extends EntryPage:
     val planetId = parts(1)
     (username, planetId)
   def openForApplicationReference(applicationReference: String): Unit = get(s"$url$applicationReference")
-  def clickRunRiskingLink(): Unit =
-    assertPageIsDisplayed()
-    click(runRiskingLink)
-    assertPageIsDisplayed()
+  def clickRunRiskingLink(): Unit = clickAndWaitToReturn(runRiskingLink)
 
-  def clickRunResultsFileProcessingLink(): Unit =
-    assertPageIsDisplayed()
-    click(runResultsFileProcessingLink)
-    assertPageIsDisplayed()
+  def clickRunResultsFileProcessingLink(): Unit = clickAndWaitToReturn(
+    runResultsFileProcessingLink,
+    resultsFileProcessingTimeout,
+    resultsFileProcessingInterval
+  )
   def getApplicationStateText: String = getText(stateValue).replaceAll("\\s+", " ").trim
   def clickChooseEntityFailuresLink(): Unit =
     assertPageIsDisplayed()
@@ -100,10 +122,7 @@ extends EntryPage:
     assertPageIsDisplayed()
     click(chooseIndividualFailuresLink)
 
-  def clickApproveApplicantLink(): Unit =
-    assertPageIsDisplayed()
-    click(approveApplicantLink)
-    assertPageIsDisplayed()
+  def clickApproveApplicantLink(): Unit = clickAndWaitToReturn(approveApplicantLink)
   def hasChooseIndividualFailuresLinksByIndividual: Boolean = findElementsBy(chooseIndividualFailuresLinksByIndividual).nonEmpty
   def numberOfChooseIndividualFailuresLinksByIndividual: Int = findElementsBy(chooseIndividualFailuresLinksByIndividual).size
   def hasApproveIndividualLinksByIndividual: Boolean = findElementsBy(approveIndividualLinksByIndividual).nonEmpty
