@@ -52,6 +52,7 @@ extends EntryPage:
 
   private def clickAndWaitToReturn(locator: By): Unit =
     assertPageIsDisplayed()
+    findElementsBy(locator).nonEmpty shouldBe true
     click(locator)
     waitUntilReturnedToApplicationDetailsPage()
 
@@ -143,7 +144,10 @@ extends EntryPage:
     assertPageIsDisplayed()
     click(chooseIndividualFailuresLink)
 
-  def clickApproveApplicantLink(): Unit = clickAndWaitToReturn(approveApplicantLink)
+  def clickApproveApplicantLink(): Unit = eventually {
+    clickAndWaitToReturn(approveApplicantLink)
+  }
+
   def hasChooseIndividualFailuresLinksByIndividual: Boolean = findElementsBy(chooseIndividualFailuresLinksByIndividual).nonEmpty
   def numberOfChooseIndividualFailuresLinksByIndividual: Int = findElementsBy(chooseIndividualFailuresLinksByIndividual).size
   def hasApproveIndividualLinksByIndividual: Boolean = findElementsBy(approveIndividualLinksByIndividual).nonEmpty

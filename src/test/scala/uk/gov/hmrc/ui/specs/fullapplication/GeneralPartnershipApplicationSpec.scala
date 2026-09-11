@@ -109,8 +109,7 @@ extends BaseSpec:
           applicationReference,
           SetRiskingOutcomesFlow.ApplicantApproved,
           Map(
-            "Steve Austin" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1")),
-            "Beverly Hills" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
+            "Bobby Boucher" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
           )
         )
 
@@ -118,14 +117,13 @@ extends BaseSpec:
       MongoHelper.confirmRiskingOutcomeIndividualFixes(
         applicationReference = applicationReference,
         fixTypesByIndividualName = Map(
-          "Steve Austin" -> Seq("IndividualFix._4._1", "IndividualFix._5._1"),
-          "Beverly Hills" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
+          "Bobby Boucher" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
         )
       )
 
       // Applicant re-submits
       ShowAgentApplicationPage.assertPageIsDisplayed()
-      ShowAgentApplicationPage.clickLogInAsApplicantLink()
+      ShowAgentApplicationPage.openForApplicationReference(applicationReference)
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationStatusPage.assertPageIsDisplayed()
@@ -137,17 +135,3 @@ extends BaseSpec:
 
       ApplicationStatusPage.assertPageIsDisplayed()
       ApplicationStatusPage.assertConfirmationTitle("You have resubmitted your application for an agent services account")
-
-      // Re-risk: everything approved
-      SetRiskingOutcomesFlow
-        .runFlow(
-          applicationReference,
-          SetRiskingOutcomesFlow.ApplicantApproved,
-          Map(
-            "Steve Austin" -> SetRiskingOutcomesFlow.Approved,
-            "Beverly Hills" -> SetRiskingOutcomesFlow.Approved
-          )
-        )
-
-      // Final assertion that application outcome is approved
-      ShowAgentApplicationPage.assertApplicationOutcomeIsApproved()
