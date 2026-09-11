@@ -34,8 +34,6 @@ object MongoHelper:
   private val agentAssuranceDatabase = client.getDatabase("agent-assurance")
   private val agentAssuranceCollection = agentAssuranceDatabase.getCollection("agent-assurance")
 
-  private val database = client.getDatabase("agent-registration-risking")
-
   final case class IndividualFix(
     fixType: String,
     isConfirmed: Boolean = false,

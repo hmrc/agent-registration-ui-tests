@@ -174,7 +174,7 @@ object StubbedSignInFlow:
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
     AgentExternalStubConfigureUserPage.selectConfidenceLevel250()
 
-    if (hasUtr) then enterUtrEnrolmentData()
+    if hasUtr then enterUtrEnrolmentData()
 
     AgentExternalStubConfigureUserPage.clickContinue()
 
