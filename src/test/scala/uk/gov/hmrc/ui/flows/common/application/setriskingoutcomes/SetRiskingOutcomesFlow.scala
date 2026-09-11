@@ -20,6 +20,7 @@ import scala.annotation.targetName
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.SelectEntityFailurePage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.SelectIndividualFailurePage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
+import uk.gov.hmrc.ui.utils.RichMatchers.*
 
 object SetRiskingOutcomesFlow:
 
@@ -200,6 +201,18 @@ object SetRiskingOutcomesFlow:
         SelectEntityFailurePage.clickSubmitButton()
 
   private def selectIndividualOutcomes(outcomesByIndividual: Seq[IndividualOutcomeSelection]): Unit =
+    val expectedOutcomes = outcomesByIndividual.size
+
+    // When more than one outcome is expected, wait for per-individual controls to render
+    // so we don't incorrectly fall back to the single-individual journey branch.
+    if expectedOutcomes > 1 then
+      eventually {
+        math.max(
+          ShowAgentApplicationPage.numberOfChooseIndividualFailuresLinksByIndividual,
+          ShowAgentApplicationPage.numberOfApproveIndividualLinksByIndividual
+        ) shouldBe expectedOutcomes
+      }
+
     if ShowAgentApplicationPage.hasChooseIndividualFailuresLinksByIndividual || ShowAgentApplicationPage.hasApproveIndividualLinksByIndividual then
       val individualActionControls = math.max(
         ShowAgentApplicationPage.numberOfChooseIndividualFailuresLinksByIndividual,
@@ -252,6 +265,17 @@ object SetRiskingOutcomesFlow:
   private def selectIndividualOutcomesByName(
     outcomesByIndividualName: Map[String, IndividualOutcomeSelection]
   ): Unit =
+    val expectedOutcomes = outcomesByIndividualName.size
+
+    // Name-based flows are also vulnerable to the same timing gap when cards are still rendering.
+    if expectedOutcomes > 1 then
+      eventually {
+        math.max(
+          ShowAgentApplicationPage.numberOfChooseIndividualFailuresLinksByIndividual,
+          ShowAgentApplicationPage.numberOfApproveIndividualLinksByIndividual
+        ) shouldBe expectedOutcomes
+      }
+
     if ShowAgentApplicationPage.hasChooseIndividualFailuresLinksByIndividual || ShowAgentApplicationPage.hasApproveIndividualLinksByIndividual then
       val individualActionControls = math.max(
         ShowAgentApplicationPage.numberOfChooseIndividualFailuresLinksByIndividual,
