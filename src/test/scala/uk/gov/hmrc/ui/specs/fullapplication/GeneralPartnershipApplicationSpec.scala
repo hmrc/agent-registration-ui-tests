@@ -41,7 +41,7 @@ extends BaseSpec:
 
   Feature("View application after first stage"):
     Scenario(
-      "User reviews application details",
+      "General Partnership applicant reviews application and resubmits after individual fixes are completed",
       TagSmokeTests,
       TagFullSuite,
       TagRisking

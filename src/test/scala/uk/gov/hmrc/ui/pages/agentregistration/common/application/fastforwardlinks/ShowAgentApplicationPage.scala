@@ -52,6 +52,7 @@ extends EntryPage:
 
   private def clickAndWaitToReturn(locator: By): Unit =
     assertPageIsDisplayed()
+    getCurrentUrl.startsWith(url) shouldBe true
     findElementsBy(locator).nonEmpty shouldBe true
     click(locator)
     waitUntilReturnedToApplicationDetailsPage()
@@ -104,9 +105,19 @@ extends EntryPage:
     assertPageIsDisplayed()
     click(goToTaskListLink)
 
-  def clickLogInAsApplicantLink(): Unit = clickAndWaitToReturn(applicantLogInLink)
+  def clickLogInAsApplicantLink(): Unit =
+    eventually {
+      assertPageIsDisplayed()
+      findElementsBy(applicantLogInLink).nonEmpty shouldBe true
+    }
+    click(applicantLogInLink)
 
-  def clickLoginAsIndividualLink(): Unit = clickAndWaitToReturn(individualLogInLink)
+  def clickLoginAsIndividualLink(): Unit =
+    eventually {
+      assertPageIsDisplayed()
+      findElementsBy(individualLogInLink).nonEmpty shouldBe true
+    }
+    click(individualLogInLink)
 
   def clickGoToExternalStubLink(): Unit = click(gotToExternalStubLink)
   def getInternalUserDetails: (String, String) =
@@ -117,7 +128,11 @@ extends EntryPage:
     val planetId = parts(1)
     (username, planetId)
   def openForApplicationReference(applicationReference: String): Unit = get(s"$url$applicationReference")
-  def clickRunRiskingLink(): Unit = clickAndWaitToReturn(runRiskingLink)
+  def clickRunRiskingLink(): Unit = clickAndWaitToReturn(
+    runRiskingLink,
+    resultsFileProcessingTimeout,
+    resultsFileProcessingInterval
+  )
 
   def clickRunResultsFileProcessingLink(): Unit = clickAndWaitToReturn(
     runResultsFileProcessingLink,
