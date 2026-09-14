@@ -32,7 +32,9 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.general_partnership.businessdet
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ApplicationStatusPage, ConditionsNotYetMetApplicantDeclarationPage, ConditionsNotYetMetApplicantTaskListPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantDeclarationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 
@@ -103,7 +105,6 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")
       ViewApplicationPage.assertSummaryRow("Agreed to meet the HMRC standard for agents", "Yes")
 
-      // Initial risk result: Entity Approved, Individual Failures
       SetRiskingOutcomesFlow
         .runFlow(
           applicationReference,
@@ -113,7 +114,6 @@ extends BaseSpec:
           )
         )
 
-      // Mark individual fixes complete so applicant can re-submit
       MongoHelper.confirmRiskingOutcomeIndividualFixes(
         applicationReference = applicationReference,
         fixTypesByIndividualName = Map(

@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.specs.fullapplication
 
+import org.scalactic.Prettifier.default
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
@@ -26,19 +27,27 @@ import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_partnership.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantDeclarationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
 import uk.gov.hmrc.ui.specs.BaseSpec
+import uk.gov.hmrc.ui.utils.MongoHelper
 
 class ScottishPartnershipApplicationSpec
 extends BaseSpec:
 
   Feature("View application after first stage"):
     Scenario(
-      "User reviews application details",
-      TagFullSuite
+      "User reviews application details and successfully resubmits after entity and individual failures",
+      TagFullSuite,
+      TagSmokeTests,
+      TagRisking
     ):
 
       val stubbedSignInData = BusinessDetailsFlow
@@ -75,6 +84,10 @@ extends BaseSpec:
       DeclarationFlow
         .AcceptDeclaration
         .runFlow(ScottishPartnership)
+
+      ApplicationSubmittedPage.assertPageIsDisplayed()
+      val applicationReference = ApplicationSubmittedPage.getApplicationReference
+
       ApplicationSubmittedPage.clickViewOrPrintLink()
 
       ViewApplicationFlow
@@ -92,3 +105,53 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")
       ViewApplicationPage.assertSummaryRow("Agreed to meet the HMRC standard for agents", "Yes")
+
+      // Initial risk result: entity failures + individual failure (single partner)
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          Seq("3.1", "4.1"),
+          Map(
+            "Bobby Boucher" -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
+          )
+        )
+
+      MongoHelper.confirmRiskingOutcomeApplicantFixes(
+        applicationReference = applicationReference,
+        fixTypesToConfirm = Seq(
+          "EntityFix._3.AmlsFix",
+          "EntityFix._4._1"
+        )
+      )
+
+      MongoHelper.confirmRiskingOutcomeIndividualFixes(
+        applicationReference = applicationReference,
+        fixTypesByIndividualName = Map(
+          "Bobby Boucher" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
+        )
+      )
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.openForApplicationReference(applicationReference)
+      ShowAgentApplicationPage.clickGoToTaskListLink()
+
+      ApplicationStatusPage.assertPageIsDisplayed()
+      ApplicationStatusPage.clickViewActionLink()
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.clickActionLink("Declare and submit")
+      ConditionsNotYetMetApplicantDeclarationPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantDeclarationPage.clickContinue()
+
+      ApplicationStatusPage.assertPageIsDisplayed()
+      ApplicationStatusPage.assertConfirmationTitle("You have resubmitted your application for an agent services account")
+
+      // Re-risk: entity + individual approved
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          SetRiskingOutcomesFlow.ApplicantApproved,
+          Map(
+            "Bobby Boucher" -> SetRiskingOutcomesFlow.Approved
+          )
+        )
+
+      ShowAgentApplicationPage.assertApplicationOutcomeIsApproved()

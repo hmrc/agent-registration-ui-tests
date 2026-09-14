@@ -146,7 +146,7 @@ extends EntryPage:
   def getApplicationRiskingOutcomeTag: String = getText(applicationRiskingOutcomeTag).replaceAll("\\s+", " ").trim
 
   def getEntityRiskingOutcomeTag: String = getText(entityRiskingOutcomeTag).replaceAll("\\s+", " ").trim
-  
+
   def assertApplicationOutcomeIsApproved(): Unit = eventually {
     getApplicationStateTag shouldBe "RiskingCompleted"
     getApplicationRiskingOutcomeTag shouldBe "Approved"
