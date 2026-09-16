@@ -103,6 +103,7 @@ extends BasePage:
   private val saveAndComeBackLaterButton = By.cssSelector(
     "a.govuk-button--secondary[href='/agent-registration/conditions-not-yet-met/save-and-come-back-later']"
   )
+  private val signOutLink = By.linkText("Sign out")
 
   def clickIndividualFailuresLink(): Unit = click(individualFailuresLink)
 
@@ -123,3 +124,6 @@ extends BasePage:
   def assertTaskListTitleHeading(expected: String): Unit = getText(pageTitleHeading) shouldBe (expected)
 
   def clickSaveAndComeBackLaterButton(): Unit = click(saveAndComeBackLaterButton)
+
+ 
+  def clickSignOutLink(): Unit = click(signOutLink)

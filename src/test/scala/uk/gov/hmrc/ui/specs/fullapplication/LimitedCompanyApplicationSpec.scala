@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.specs.fullapplication
 
+import org.scalactic.Prettifier.default
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
@@ -23,6 +24,7 @@ import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
+import uk.gov.hmrc.ui.flows.common.application.riskingOutcome.RiskingOutcomeFlow
 import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.limited_company.application.BusinessDetailsFlow
@@ -30,12 +32,13 @@ import uk.gov.hmrc.ui.flows.ukbased.limited_company.application.DirectorTaxAdvis
 import uk.gov.hmrc.ui.flows.ukbased.limited_company.providedetails.ProvideDirectorDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.limited_company.providedetails.ProvideDirectorDetailsFlow.listProgress.complete
 import uk.gov.hmrc.ui.flows.ukbased.limited_company.providedetails.ProvideDirectorDetailsFlow.listProgress.partial
+import uk.gov.hmrc.ui.pages.PageObject.getCurrentUrl
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantDeclarationPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage.ActionRow
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.{IndividualFix_4_1Page, IndividualFix_5_1Page}
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ApplicationStatusPage, ConditionsNotYetMetAmlsCheckYourAnswersPage, ConditionsNotYetMetAmlsEntityFailureV31Page, ConditionsNotYetMetApplicantDeclarationPage, ConditionsNotYetMetApplicantTaskListPage, ConditionsNotYetMetConfirmationPage, ConditionsNotYetMetIndividualDeclarationPage, ConditionsNotYetMetIndividualTaskListPage, ConditionsNotYetMetIndividualsPage}
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 
@@ -77,7 +80,7 @@ extends BaseSpec:
       val shareLink = ProvideDirectorDetailsFlow.getProvideDetailsLink
 
       /* Sign in first director (partial - more directors to come) */
-      ProvideDirectorDetailsFlow
+      val firstDirectorUsername: String = ProvideDirectorDetailsFlow
         .ProvideDirectorDetails
         .runFlowWithLink(
           stubbedSignInData,
@@ -88,7 +91,7 @@ extends BaseSpec:
         )
 
       /* Sign in second director (complete - last director) - reuse the same link */
-      ProvideDirectorDetailsFlow
+      val secondDirectorUsername: String = ProvideDirectorDetailsFlow
         .ProvideDirectorDetails
         .runFlowWithLink(
           stubbedSignInData,
@@ -127,44 +130,114 @@ extends BaseSpec:
       SetRiskingOutcomesFlow
         .runFlow(
           applicationReference,
-          Seq("3.1", "4.1"),
+          Seq("3.1"),
           Map(
-            directorNames.head -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1")),
-            directorNames(1) -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
+            directorNames.head -> SetRiskingOutcomesFlow.Failures(Seq("4.1")),
+            directorNames(1) -> SetRiskingOutcomesFlow.Failures(Seq("4.1"))
           )
         )
 
-      // Confirm entity fixes so applicant can re-submit
-      MongoHelper.confirmRiskingOutcomeApplicantFixes(
-        applicationReference = applicationReference,
-        fixTypesToConfirm = Seq(
-          "EntityFix._3.AmlsFix",
-          "EntityFix._4._1"
-        )
-      )
-
-      // Confirm director fixes so applicant can re-submit
-      MongoHelper.confirmRiskingOutcomeIndividualFixes(
-        applicationReference = applicationReference,
-        fixTypesByIndividualName = Map(
-          directorNames.head -> Seq("IndividualFix._4._1", "IndividualFix._5._1"),
-          directorNames(1) -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
-        )
-      )
-
-      // Applicant re-submits
-      ShowAgentApplicationPage.assertPageIsDisplayed()
-      ShowAgentApplicationPage.openForApplicationReference(applicationReference)
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationStatusPage.assertPageIsDisplayed()
-      ApplicationStatusPage.clickViewActionLink()
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Ltd does not meet the registration conditions yet")
+      ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Ltd has not met the registration conditions")
+
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Provide your supervision details again",
+        "Incomplete"
+      )
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "We are awaiting information from these people",
+        "Incomplete"
+      )
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Declare and submit",
+        "Cannot start yet"
+      )
+      ConditionsNotYetMetApplicantTaskListPage.clickActionLink("Provide your supervision details again")
+      ConditionsNotYetMetAmlsEntityFailureV31Page.assertPageIsDisplayed()
+      ConditionsNotYetMetAmlsEntityFailureV31Page.clickContinue()
+      ConditionsNotYetMetAmlsCheckYourAnswersPage.assertPageIsDisplayed()
+      ConditionsNotYetMetAmlsCheckYourAnswersPage.clickContinue()
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+
+      ConditionsNotYetMetApplicantTaskListPage.clickIndividualFailuresLink()
+      ConditionsNotYetMetIndividualsPage.assertPageIsDisplayed()
+      ConditionsNotYetMetIndividualsPage.assertActionsRow(
+        ActionRow(
+          name = "Steve Austin",
+          actions = Seq("File one or more relevant returns"),
+          completed = "No"
+        )
+      )
+      ConditionsNotYetMetIndividualsPage.assertActionsRow(
+       ActionRow(
+          name = "Beverly Hills",
+          actions = Seq("File one or more relevant returns"),
+          completed = "No"
+     )
+   )
+      ConditionsNotYetMetIndividualsPage.clickContinue()
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus("Declare and submit", "Cannot start yet")
+      ConditionsNotYetMetApplicantTaskListPage.clickSignOutLink()
+      
+      val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
+
+      // Each director signs in and completes their fixable failures
+      Seq(firstDirectorUsername, secondDirectorUsername).foreach { directorUsername =>
+      RiskingOutcomeFlow
+      .viewIndividualTaskListPage
+      .runFlow(
+        stubbedSignInData,
+        linkId,
+        directorUsername
+      )
+
+      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+      "File your missing Self Assessment returns", "Incomplete"
+      )
+      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+      "Confirm your responses are final", "Cannot start yet"
+      )
+
+      ConditionsNotYetMetIndividualTaskListPage.clickActionLink(
+      "File your missing Self Assessment returns"
+      )
+      IndividualFix_4_1Page.assertPageIsDisplayed()
+      IndividualFix_4_1Page.selectYes()
+      IndividualFix_4_1Page.clickContinue()
+
+      ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+      "File your missing Self Assessment returns",
+      "Completed"
+    )
+      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+      "Confirm your responses are final",
+      "Incomplete"
+    )
+      ConditionsNotYetMetIndividualTaskListPage.clickActionLink(
+      "Confirm your responses are final"
+    )
+      ConditionsNotYetMetIndividualDeclarationPage.assertPageIsDisplayed()
+      ConditionsNotYetMetIndividualDeclarationPage.clickContinue()
+      ConditionsNotYetMetConfirmationPage.assertPageIsDisplayed()
+      ConditionsNotYetMetConfirmationPage.assertConfirmationTitle(
+      "You have finished this process"
+    )
+  }
+      RiskingOutcomeFlow.SignInAsApplicantAfterRiskingOutcome.runFlow(stubbedSignInData)
+
+      ApplicationStatusPage.assertPageIsDisplayed()
+      ApplicationStatusPage.clickViewActionsToTakeButton()
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus("Declare and submit", "Incomplete")
       ConditionsNotYetMetApplicantTaskListPage.clickActionLink("Declare and submit")
       ConditionsNotYetMetApplicantDeclarationPage.assertPageIsDisplayed()
       ConditionsNotYetMetApplicantDeclarationPage.clickContinue()
-
       ApplicationStatusPage.assertPageIsDisplayed()
-      ApplicationStatusPage.assertConfirmationTitle(
-        "You have resubmitted your application for an agent services account"
-      )
+      ApplicationStatusPage.assertConfirmationTitle("You have resubmitted your application for an agent services account")
