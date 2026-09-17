@@ -151,6 +151,11 @@ extends EntryPage:
     getApplicationStateTag shouldBe "RiskingCompleted"
     getApplicationRiskingOutcomeTag shouldBe "Approved"
   }
+
+  def assertApplicationOutcomeIsFailedNonFixable(): Unit = eventually {
+    getApplicationStateTag shouldBe "RiskingCompleted"
+    getApplicationRiskingOutcomeTag shouldBe "Failed (non-fixable)"
+  }
   def clickChooseEntityFailuresLink(): Unit =
     assertPageIsDisplayed()
     click(chooseEntityFailuresLink)

@@ -37,8 +37,16 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubm
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage.ActionRow
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.{IndividualFix_4_1Page, IndividualFix_5_1Page}
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ApplicationStatusPage, ConditionsNotYetMetAmlsCheckYourAnswersPage, ConditionsNotYetMetAmlsEntityFailureV31Page, ConditionsNotYetMetApplicantDeclarationPage, ConditionsNotYetMetApplicantTaskListPage, ConditionsNotYetMetConfirmationPage, ConditionsNotYetMetIndividualDeclarationPage, ConditionsNotYetMetIndividualTaskListPage, ConditionsNotYetMetIndividualsPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFix_4_1Page
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsCheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsEntityFailureV31Page
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantDeclarationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetConfirmationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualDeclarationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 
@@ -174,62 +182,64 @@ extends BaseSpec:
         )
       )
       ConditionsNotYetMetIndividualsPage.assertActionsRow(
-       ActionRow(
+        ActionRow(
           name = "Beverly Hills",
           actions = Seq("File one or more relevant returns"),
           completed = "No"
-     )
-   )
+        )
+      )
       ConditionsNotYetMetIndividualsPage.clickContinue()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus("Declare and submit", "Cannot start yet")
       ConditionsNotYetMetApplicantTaskListPage.clickSignOutLink()
-      
+
       val linkId: String = MongoHelper.getLinkIdByApplicationReference(applicationReference)
 
       // Each director signs in and completes their fixable failures
       Seq(firstDirectorUsername, secondDirectorUsername).foreach { directorUsername =>
-      RiskingOutcomeFlow
-      .viewIndividualTaskListPage
-      .runFlow(
-        stubbedSignInData,
-        linkId,
-        directorUsername
-      )
+        RiskingOutcomeFlow
+          .viewIndividualTaskListPage
+          .runFlow(
+            stubbedSignInData,
+            linkId,
+            directorUsername
+          )
 
-      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
-      "File your missing Self Assessment returns", "Incomplete"
-      )
-      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
-      "Confirm your responses are final", "Cannot start yet"
-      )
+        ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+          "File your missing Self Assessment returns",
+          "Incomplete"
+        )
+        ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+          "Confirm your responses are final",
+          "Cannot start yet"
+        )
 
-      ConditionsNotYetMetIndividualTaskListPage.clickActionLink(
-      "File your missing Self Assessment returns"
-      )
-      IndividualFix_4_1Page.assertPageIsDisplayed()
-      IndividualFix_4_1Page.selectYes()
-      IndividualFix_4_1Page.clickContinue()
+        ConditionsNotYetMetIndividualTaskListPage.clickActionLink(
+          "File your missing Self Assessment returns"
+        )
+        IndividualFix_4_1Page.assertPageIsDisplayed()
+        IndividualFix_4_1Page.selectYes()
+        IndividualFix_4_1Page.clickContinue()
 
-      ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
-      "File your missing Self Assessment returns",
-      "Completed"
-    )
-      ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
-      "Confirm your responses are final",
-      "Incomplete"
-    )
-      ConditionsNotYetMetIndividualTaskListPage.clickActionLink(
-      "Confirm your responses are final"
-    )
-      ConditionsNotYetMetIndividualDeclarationPage.assertPageIsDisplayed()
-      ConditionsNotYetMetIndividualDeclarationPage.clickContinue()
-      ConditionsNotYetMetConfirmationPage.assertPageIsDisplayed()
-      ConditionsNotYetMetConfirmationPage.assertConfirmationTitle(
-      "You have finished this process"
-    )
-  }
+        ConditionsNotYetMetIndividualTaskListPage.assertPageIsDisplayed()
+        ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+          "File your missing Self Assessment returns",
+          "Completed"
+        )
+        ConditionsNotYetMetIndividualTaskListPage.assertActionStatus(
+          "Confirm your responses are final",
+          "Incomplete"
+        )
+        ConditionsNotYetMetIndividualTaskListPage.clickActionLink(
+          "Confirm your responses are final"
+        )
+        ConditionsNotYetMetIndividualDeclarationPage.assertPageIsDisplayed()
+        ConditionsNotYetMetIndividualDeclarationPage.clickContinue()
+        ConditionsNotYetMetConfirmationPage.assertPageIsDisplayed()
+        ConditionsNotYetMetConfirmationPage.assertConfirmationTitle(
+          "You have finished this process"
+        )
+      }
       RiskingOutcomeFlow.SignInAsApplicantAfterRiskingOutcome.runFlow(stubbedSignInData)
 
       ApplicationStatusPage.assertPageIsDisplayed()

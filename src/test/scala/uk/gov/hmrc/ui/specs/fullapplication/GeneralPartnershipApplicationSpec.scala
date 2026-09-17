@@ -34,8 +34,15 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubm
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage.ActionRow
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.{IndividualFix_4_1Page, IndividualFix_5_1Page}
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.{ApplicationStatusPage, ConditionsNotYetMetApplicantDeclarationPage, ConditionsNotYetMetApplicantTaskListPage, ConditionsNotYetMetConfirmationPage, ConditionsNotYetMetIndividualDeclarationPage, ConditionsNotYetMetIndividualTaskListPage, ConditionsNotYetMetIndividualsPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFix_4_1Page
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.IndividualFix_5_1Page
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantDeclarationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetConfirmationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualDeclarationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualTaskListPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetIndividualsPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 import uk.gov.hmrc.ui.utils.MongoHelper
 

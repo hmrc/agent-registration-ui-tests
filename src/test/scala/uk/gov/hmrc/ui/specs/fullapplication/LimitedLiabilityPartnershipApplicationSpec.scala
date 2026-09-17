@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.specs.fullapplication
 
+import org.scalactic.Prettifier.default
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
@@ -33,11 +34,13 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.Pr
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.EntityFix_4_1Page
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsCheckYourAnswersPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetAmlsEntityFailureV31Page
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantDeclarationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.MongoHelper
 
 class LimitedLiabilityPartnershipApplicationSpec
 extends BaseSpec:
@@ -133,21 +136,38 @@ extends BaseSpec:
           )
         )
 
-      MongoHelper.confirmRiskingOutcomeApplicantFixes(
-        applicationReference = applicationReference,
-        fixTypesToConfirm = Seq(
-          "EntityFix._3.AmlsFix",
-          "EntityFix._4._1"
-        )
-      )
-
-      // Applicant re-submits
-      ShowAgentApplicationPage.assertPageIsDisplayed()
-      ShowAgentApplicationPage.openForApplicationReference(applicationReference)
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationStatusPage.assertPageIsDisplayed()
-      ApplicationStatusPage.clickViewActionLink()
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
+      ApplicationStatusPage.clickViewActionsToTakeButton()
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Partnership has not met the registration conditions")
+
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Provide your supervision details again",
+        "Incomplete"
+      )
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Self Assessment - missing returns",
+        "Incomplete"
+      )
+      ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
+        "Declare and submit",
+        "Cannot start yet"
+      )
+
+      ConditionsNotYetMetApplicantTaskListPage.clickActionLink("Provide your supervision details again")
+      ConditionsNotYetMetAmlsEntityFailureV31Page.assertPageIsDisplayed()
+      ConditionsNotYetMetAmlsEntityFailureV31Page.clickContinue()
+      ConditionsNotYetMetAmlsCheckYourAnswersPage.assertPageIsDisplayed()
+      ConditionsNotYetMetAmlsCheckYourAnswersPage.clickContinue()
+      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
+
+      ConditionsNotYetMetApplicantTaskListPage.clickActionLink("Self Assessment - missing returns")
+      EntityFix_4_1Page.assertPageIsDisplayed()
+      EntityFix_4_1Page.selectYes()
+      EntityFix_4_1Page.clickContinue()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
       ConditionsNotYetMetApplicantTaskListPage.clickActionLink("Declare and submit")
       ConditionsNotYetMetApplicantDeclarationPage.assertPageIsDisplayed()

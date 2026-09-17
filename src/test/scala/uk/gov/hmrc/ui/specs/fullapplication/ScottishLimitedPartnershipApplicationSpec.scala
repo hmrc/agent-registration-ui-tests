@@ -34,17 +34,14 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubm
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantDeclarationPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ConditionsNotYetMetApplicantTaskListPage
 import uk.gov.hmrc.ui.specs.BaseSpec
-import uk.gov.hmrc.ui.utils.MongoHelper
 
 class ScottishLimitedPartnershipApplicationSpec
 extends BaseSpec:
 
   Feature("View application after first stage"):
     Scenario(
-      "User reviews application and resubmits after individual fixes are completed",
+      "User reviews application details following a non-fixable individual failure",
       TagFullSuite,
       TagSmokeTests,
       TagRisking
@@ -124,42 +121,21 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")
       ViewApplicationPage.assertSummaryRow("Agreed to meet the HMRC standard for agents", "Yes")
 
-      // Entity Approved, Individual Failures -> Re-Risk -> Application Approved
-      val individualFailuresByName: Map[String, SetRiskingOutcomesFlow.IndividualOutcomeSelection] =
-        partnersNames.map { name =>
-          name -> SetRiskingOutcomesFlow.Failures(Seq("4.1", "5.1"))
-        }.toMap
-
       SetRiskingOutcomesFlow
         .runFlow(
           applicationReference,
           SetRiskingOutcomesFlow.ApplicantApproved,
-          individualFailuresByName
+          Map(
+            partnersNames.head -> SetRiskingOutcomesFlow.NonFixableFailures(Seq("8.6")),
+            partnersNames(1) -> SetRiskingOutcomesFlow.NonFixableFailures(Seq("8.6"))
+          )
         )
 
-      val individualFixesByName: Map[String, Seq[String]] =
-        partnersNames.map { name =>
-          name -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
-        }.toMap
-
-      MongoHelper.confirmRiskingOutcomeIndividualFixes(
-        applicationReference = applicationReference,
-        fixTypesByIndividualName = individualFixesByName
-      )
-
-      // Applicant re-submits
+      ShowAgentApplicationPage.assertApplicationOutcomeIsFailedNonFixable()
       ShowAgentApplicationPage.assertPageIsDisplayed()
-      ShowAgentApplicationPage.openForApplicationReference(applicationReference)
       ShowAgentApplicationPage.clickGoToTaskListLink()
-
       ApplicationStatusPage.assertPageIsDisplayed()
-      ApplicationStatusPage.clickViewActionLink()
-      ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.clickActionLink("Declare and submit")
-      ConditionsNotYetMetApplicantDeclarationPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantDeclarationPage.clickContinue()
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions")
 
-      ApplicationStatusPage.assertPageIsDisplayed()
-      ApplicationStatusPage.assertConfirmationTitle(
-        "You have resubmitted your application for an agent services account"
-      )
+
+

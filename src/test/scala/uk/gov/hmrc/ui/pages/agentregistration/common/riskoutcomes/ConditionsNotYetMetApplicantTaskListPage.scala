@@ -125,5 +125,4 @@ extends BasePage:
 
   def clickSaveAndComeBackLaterButton(): Unit = click(saveAndComeBackLaterButton)
 
- 
   def clickSignOutLink(): Unit = click(signOutLink)

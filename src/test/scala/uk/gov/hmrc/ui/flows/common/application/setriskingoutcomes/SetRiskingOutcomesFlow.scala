@@ -29,11 +29,15 @@ object SetRiskingOutcomesFlow:
   extends ApplicantOutcomeSelection
   final case class ApplicantFailures(failureCodes: Seq[String])
   extends ApplicantOutcomeSelection
+  case object ApplicantNonFixableFailure
+  extends ApplicantOutcomeSelection
 
   sealed trait IndividualOutcomeSelection
   case object Approved
   extends IndividualOutcomeSelection
-  final case class Failures(failureCodes: Seq[String])
+  final case class  Failures(failureCodes: Seq[String])
+  extends IndividualOutcomeSelection
+  final case class NonFixableFailures(failureCodes: Seq[String])
   extends IndividualOutcomeSelection
 
   /** Sets risking outcomes by running through the full UI flow:
@@ -200,6 +204,12 @@ object SetRiskingOutcomesFlow:
 
         SelectEntityFailurePage.clickSubmitButton()
 
+      case ApplicantNonFixableFailure =>
+        ShowAgentApplicationPage.clickChooseEntityFailuresLink()
+        SelectEntityFailurePage.assertPageIsDisplayed()
+        SelectEntityFailurePage.selectNonFixableFailureCode("8.1")
+        SelectEntityFailurePage.clickSubmitButton()
+
   private def selectIndividualOutcomes(outcomesByIndividual: Seq[IndividualOutcomeSelection]): Unit =
     val expectedOutcomes = outcomesByIndividual.size
 
@@ -239,6 +249,13 @@ object SetRiskingOutcomesFlow:
 
           SelectIndividualFailurePage.clickSubmitButton()
           ShowAgentApplicationPage.assertPageIsDisplayed()
+        
+        /*case NonFixableFailures(failureCodes) =>
+          ShowAgentApplicationPage.clickFirstRemainingChooseIndividualFailuresLink()
+          SelectIndividualFailurePage.assertPageIsDisplayed()
+          failureCodes.foreach(SelectIndividualFailurePage.selectFailureCode)
+          SelectIndividualFailurePage.clickSubmitButton()
+          ShowAgentApplicationPage.assertPageIsDisplayed()*/
       }
     else
       require(
@@ -261,7 +278,7 @@ object SetRiskingOutcomesFlow:
 
           SelectIndividualFailurePage.clickSubmitButton()
           ShowAgentApplicationPage.assertPageIsDisplayed()
-
+          
   private def selectIndividualOutcomesByName(
     outcomesByIndividualName: Map[String, IndividualOutcomeSelection]
   ): Unit =
@@ -300,7 +317,14 @@ object SetRiskingOutcomesFlow:
             failureCodes.foreach { code =>
               SelectIndividualFailurePage.selectFailureCode(code)
             }
+            SelectIndividualFailurePage.clickSubmitButton()
+            ShowAgentApplicationPage.assertPageIsDisplayed()
 
+          case NonFixableFailures(failureCodes) =>
+            ShowAgentApplicationPage.clickChooseIndividualFailuresLinkForIndividualName(individualName)
+            SelectIndividualFailurePage.assertPageIsDisplayed()
+            failureCodes.foreach(SelectIndividualFailurePage.selectFailureCode)
+            
             SelectIndividualFailurePage.clickSubmitButton()
             ShowAgentApplicationPage.assertPageIsDisplayed()
       }
@@ -322,6 +346,14 @@ object SetRiskingOutcomesFlow:
           failureCodes.foreach { code =>
             SelectIndividualFailurePage.selectFailureCode(code)
           }
+
+          SelectIndividualFailurePage.clickSubmitButton()
+          ShowAgentApplicationPage.assertPageIsDisplayed()
+
+        case NonFixableFailures(failureCodes) =>
+          ShowAgentApplicationPage.clickChooseIndividualFailuresLink()
+          SelectIndividualFailurePage.assertPageIsDisplayed()
+          failureCodes.foreach(SelectIndividualFailurePage.selectFailureCode)
 
           SelectIndividualFailurePage.clickSubmitButton()
           ShowAgentApplicationPage.assertPageIsDisplayed()

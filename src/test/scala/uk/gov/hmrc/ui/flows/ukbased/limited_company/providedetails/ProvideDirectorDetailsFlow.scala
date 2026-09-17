@@ -37,8 +37,8 @@ object ProvideDirectorDetailsFlow:
   object ProvideDirectorDetails:
 
     def signIn(
-    planet: String,
-    directorNames: Option[String] = None
+      planet: String,
+      directorNames: Option[String] = None
     ): (String, String, String) = // now also returns username
       SignInAndConfirmDetailsPage.clickContinue()
       GovernmentGatewaySignInPage.assertPageIsDisplayed()
@@ -61,8 +61,7 @@ object ProvideDirectorDetailsFlow:
       AgentExternalStubConfigureUserPage.selectConfidenceLevel250()
       AgentExternalStubConfigureUserPage.clickContinue()
       (bearerToken, sessionId, username)
-    
-    
+
     def runFlowWithLink(
       stubData: StubbedSignInData,
       link: String,
