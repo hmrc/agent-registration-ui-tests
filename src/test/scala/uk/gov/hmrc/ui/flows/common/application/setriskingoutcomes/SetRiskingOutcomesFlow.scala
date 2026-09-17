@@ -35,7 +35,7 @@ object SetRiskingOutcomesFlow:
   sealed trait IndividualOutcomeSelection
   case object Approved
   extends IndividualOutcomeSelection
-  final case class  Failures(failureCodes: Seq[String])
+  final case class Failures(failureCodes: Seq[String])
   extends IndividualOutcomeSelection
   final case class NonFixableFailures(failureCodes: Seq[String])
   extends IndividualOutcomeSelection
@@ -249,7 +249,7 @@ object SetRiskingOutcomesFlow:
 
           SelectIndividualFailurePage.clickSubmitButton()
           ShowAgentApplicationPage.assertPageIsDisplayed()
-        
+
         /*case NonFixableFailures(failureCodes) =>
           ShowAgentApplicationPage.clickFirstRemainingChooseIndividualFailuresLink()
           SelectIndividualFailurePage.assertPageIsDisplayed()
@@ -278,7 +278,7 @@ object SetRiskingOutcomesFlow:
 
           SelectIndividualFailurePage.clickSubmitButton()
           ShowAgentApplicationPage.assertPageIsDisplayed()
-          
+
   private def selectIndividualOutcomesByName(
     outcomesByIndividualName: Map[String, IndividualOutcomeSelection]
   ): Unit =
@@ -324,7 +324,7 @@ object SetRiskingOutcomesFlow:
             ShowAgentApplicationPage.clickChooseIndividualFailuresLinkForIndividualName(individualName)
             SelectIndividualFailurePage.assertPageIsDisplayed()
             failureCodes.foreach(SelectIndividualFailurePage.selectFailureCode)
-            
+
             SelectIndividualFailurePage.clickSubmitButton()
             ShowAgentApplicationPage.assertPageIsDisplayed()
       }

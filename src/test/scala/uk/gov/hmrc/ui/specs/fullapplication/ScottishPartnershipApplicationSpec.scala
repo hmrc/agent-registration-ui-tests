@@ -119,5 +119,3 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
       ApplicationStatusPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertConfirmationTitleHeading("Electronicsson Group does not meet the registration conditions")
-
-

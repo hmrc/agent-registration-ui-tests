@@ -136,6 +136,3 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
       ApplicationStatusPage.assertPageIsDisplayed()
       ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions")
-
-
-
