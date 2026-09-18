@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.ui.specs.fullapplication
 
+import org.scalactic.Prettifier.default
 import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.agentdetails.AgentDetailsFlow
@@ -26,10 +27,13 @@ import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
 import uk.gov.hmrc.ui.flows.common.application.partnerInformation.PartnerTaxAdvisorInformationFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.providedetails.ProvideIndividualDetailsFlow.listProgress.complete
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_partnership.BusinessDetailsFlow
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ScottishPartnershipApplicationSpec
@@ -37,8 +41,10 @@ extends BaseSpec:
 
   Feature("View application after first stage"):
     Scenario(
-      "User reviews application details",
-      TagFullSuite
+      "User reviews application details following a non-fixable entity failure",
+      TagFullSuite,
+      TagSmokeTests,
+      TagRisking
     ):
 
       val stubbedSignInData = BusinessDetailsFlow
@@ -75,6 +81,10 @@ extends BaseSpec:
       DeclarationFlow
         .AcceptDeclaration
         .runFlow(ScottishPartnership)
+
+      ApplicationSubmittedPage.assertPageIsDisplayed()
+      val applicationReference = ApplicationSubmittedPage.getApplicationReference
+
       ApplicationSubmittedPage.clickViewOrPrintLink()
 
       ViewApplicationFlow
@@ -92,3 +102,20 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")
       ViewApplicationPage.assertSummaryRow("Agreed to meet the HMRC standard for agents", "Yes")
+
+      // Entity failure - non-fixable
+
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          SetRiskingOutcomesFlow.ApplicantNonFixableFailure,
+          Map(
+            "Bobby Boucher" -> SetRiskingOutcomesFlow.Approved
+          )
+        )
+
+      ShowAgentApplicationPage.assertApplicationOutcomeIsFailedNonFixable()
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
+      ApplicationStatusPage.assertPageIsDisplayed()
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Electronicsson Group does not meet the registration conditions")

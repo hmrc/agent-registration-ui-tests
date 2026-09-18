@@ -44,4 +44,6 @@ extends BasePage:
 
   def selectFailureCode(code: String): Unit = click(failureLabel(code))
 
+  def selectNonFixableFailureCode(code: String): Unit = click(failureLabel(code))
+
   def clickSubmitButton(): Unit = clickContinue()

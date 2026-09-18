@@ -23,6 +23,7 @@ import uk.gov.hmrc.ui.flows.common.application.agentstandards.AgentStandardsFlow
 import uk.gov.hmrc.ui.flows.common.application.amlsdetails.AmlsDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.contactdetails.ContactDetailsFlow
 import uk.gov.hmrc.ui.flows.common.application.declaration.DeclarationFlow
+import uk.gov.hmrc.ui.flows.common.application.setriskingoutcomes.SetRiskingOutcomesFlow
 import uk.gov.hmrc.ui.flows.common.application.viewapplication.ViewApplicationFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.BusinessDetailsFlow
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.PartnersTaxAdvisorInformationFlow
@@ -31,6 +32,8 @@ import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.Pr
 import uk.gov.hmrc.ui.flows.ukbased.partnerships.scottish_limited_partnership.ProvidePartnersDetailsFlow.listProgress.partial
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ApplicationSubmittedPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.ViewApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.ApplicationStatusPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
 class ScottishLimitedPartnershipApplicationSpec
@@ -38,8 +41,10 @@ extends BaseSpec:
 
   Feature("View application after first stage"):
     Scenario(
-      "User reviews application details",
-      TagFullSuite
+      "User reviews application details following a non-fixable individual failure",
+      TagFullSuite,
+      TagSmokeTests,
+      TagRisking
     ):
 
       val stubbedSignInData = BusinessDetailsFlow
@@ -94,6 +99,10 @@ extends BaseSpec:
       DeclarationFlow
         .AcceptDeclaration
         .runFlow(ScottishLimitedPartnership)
+
+      ApplicationSubmittedPage.assertPageIsDisplayed()
+      val applicationReference = ApplicationSubmittedPage.getApplicationReference
+
       ApplicationSubmittedPage.clickViewOrPrintLink()
 
       ViewApplicationFlow
@@ -111,3 +120,19 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
       ViewApplicationPage.assertSummaryRow("Registration number", "XAML00000123456")
       ViewApplicationPage.assertSummaryRow("Agreed to meet the HMRC standard for agents", "Yes")
+
+      SetRiskingOutcomesFlow
+        .runFlow(
+          applicationReference,
+          SetRiskingOutcomesFlow.ApplicantApproved,
+          Map(
+            partnersNames.head -> SetRiskingOutcomesFlow.NonFixableFailures(Seq("8.6")),
+            partnersNames(1) -> SetRiskingOutcomesFlow.NonFixableFailures(Seq("8.6"))
+          )
+        )
+
+      ShowAgentApplicationPage.assertApplicationOutcomeIsFailedNonFixable()
+      ShowAgentApplicationPage.assertPageIsDisplayed()
+      ShowAgentApplicationPage.clickGoToTaskListLink()
+      ApplicationStatusPage.assertPageIsDisplayed()
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions")

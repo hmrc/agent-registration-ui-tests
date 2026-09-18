@@ -36,16 +36,42 @@ object ProvideDirectorDetailsFlow:
 
   object ProvideDirectorDetails:
 
+    def signIn(
+      planet: String,
+      directorNames: Option[String] = None
+    ): (String, String, String) = // now also returns username
+      SignInAndConfirmDetailsPage.clickContinue()
+      GovernmentGatewaySignInPage.assertPageIsDisplayed()
+      val username = GovernmentGatewaySignInPage.enterRandomUsername() // must return the generated username
+      GovernmentGatewaySignInPage.enterKnownPlanetId(planet)
+      GovernmentGatewaySignInPage.clickContinue()
+      AgentExternalStubCreateUserPage.assertPageIsDisplayed()
+      AgentExternalStubCreateUserPage.selectCurrentUserLink()
+      AgentExternalStubUserPage.assertPageIsDisplayed()
+      val bearerToken = AgentExternalStubUserPage.bearerToken
+      val sessionId = AgentExternalStubUserPage.sessionId
+      AgentExternalStubUserPage.clickBrowserBack()
+      AgentExternalStubCreateUserPage.assertPageIsDisplayed()
+      AgentExternalStubCreateUserPage.selectAffinityGroupIndividual()
+      AgentExternalStubCreateUserPage.selectEnrolment("HMRC-PT")
+      AgentExternalStubCreateUserPage.clickContinue()
+      AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
+      val nameToUse = directorNames.getOrElse("Beverly Hills")
+      AgentExternalStubConfigureUserPage.enterName(nameToUse)
+      AgentExternalStubConfigureUserPage.selectConfidenceLevel250()
+      AgentExternalStubConfigureUserPage.clickContinue()
+      (bearerToken, sessionId, username)
+
     def runFlowWithLink(
       stubData: StubbedSignInData,
       link: String,
       progress: listProgress,
       directorName: Option[String] = None,
       allDirectorNames: Option[List[String]] = None
-    ): Unit =
+    ): String =
       signOut()
       PageObject.get(link)
-      val (bearerToken, sessionId) = signIn(stubData.planetId, directorName)
+      val (bearerToken, sessionId, username) = signIn(stubData.planetId, directorName)
       confirmDetails()
       provideTelephoneNumber()
       provideEmailAddress(stubData.copy())
@@ -59,6 +85,7 @@ object ProvideDirectorDetailsFlow:
       progress match
         case listProgress.complete => checkDirectorListProgressComplete()
         case listProgress.partial => checkDirectorListProgressPartial(allDirectorNames)
+      username
 
   def getProvideDetailsLink: String =
     TaskListPage.assertPageIsDisplayed()
