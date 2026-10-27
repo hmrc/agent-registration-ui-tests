@@ -34,6 +34,8 @@ extends BasePage:
   private val panelBody = By.cssSelector("div.govuk-panel__body")
   private val viewActionsLink = By.linkText("View actions to take")
   private val pageTitle = By.cssSelector("h1.govuk-panel__title")
+  private val deleteApplicationLink = By.cssSelector("a.govuk-button--secondary[href='/agent-registration/apply/delete-application']")
+  private val deleteApplicationAndApplyAgainLink = By.cssSelector("li#delete-application a.govuk-link")
 
   def clickViewActionsToTakeButton(): Unit = click(viewActionsToTakeButton)
   def clickViewOrPrintLink(): Unit = click(viewOrPrintLink)
@@ -42,3 +44,13 @@ extends BasePage:
   }
   def clickViewActionLink(): Unit = click(viewActionsLink)
   def assertConfirmationTitle(expected: String): Unit = getText(pageTitle) shouldBe (expected)
+  def assertDeleteApplicationLinkIsDisplayed(): Unit = eventually {
+    findElementBy(deleteApplicationLink) shouldBe defined
+  }
+  def clickDeleteApplicationLink(): Unit = click(deleteApplicationLink)
+
+  def assertDeleteApplicationAndApplyAgainLinkIsDisplayed(): Unit = eventually {
+    findElementBy(deleteApplicationAndApplyAgainLink) shouldBe defined
+  }
+
+  def clickDeleteApplicationAndApplyAgainLink(): Unit = click(deleteApplicationAndApplyAgainLink)
