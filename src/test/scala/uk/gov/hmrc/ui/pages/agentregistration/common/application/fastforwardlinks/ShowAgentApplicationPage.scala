@@ -101,6 +101,21 @@ extends EntryPage:
     "//dt[normalize-space()='Risking outcome (entity)']/following-sibling::dd[1]//strong"
   )
 
+  private val expireApplicationNowButton = By.xpath("//button[normalize-space()='Expire application now']")
+
+  private val runExpirySchedulerLink = By.id("quick-nav-run-expiry-scheduler")
+
+  private val endPostExpiryGracePeriodNowButton = By.id("end-post-expiry-grace-period-now")
+
+  def clickEndPostExpiryGracePeriodNow(): Unit = clickAndWaitToReturn(endPostExpiryGracePeriodNowButton)
+
+  def clickRunExpirySchedulerLink(): Unit = clickAndWaitToReturn(runExpirySchedulerLink)
+
+  def clickExpireApplicationNow(): Unit = click(expireApplicationNowButton)
+
+  def assertApplicationIsExpired(): Unit = eventually:
+    getApplicationStateTag shouldBe "Expired"
+
   def clickGoToTaskListLink(): Unit =
     assertPageIsDisplayed()
     click(goToTaskListLink)
