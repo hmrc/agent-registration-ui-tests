@@ -124,10 +124,10 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
       ViewApplicationPage.assertSummaryRow("Business type", "Limited company")
       ViewApplicationPage.assertSummaryRow("Are you a director of the limited company?", "Yes, I’m a current officer in Companies House")
-      ViewApplicationPage.assertSummaryRow("Company name", "Test Company Ltd")
+      ViewApplicationPage.assertSummaryRow("Company name", "Test Company Name")
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
       ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
-      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test Company Ltd")
+      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test Company Name")
       ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
       ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Test Street\nTest Area\nTE1 1ST\nGB")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
@@ -148,10 +148,10 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationStatusPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Ltd does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Ltd has not met the registration conditions")
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Name has not met the registration conditions")
 
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
         "Provide your supervision details again",

@@ -64,12 +64,12 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
 
       // Click the "View actions to take" button to navigate to the Conditions Not Met Task List page
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Partnership has not met the registration conditions")
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Name has not met the registration conditions")
 
       // verify actions and their status
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
@@ -142,12 +142,12 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
 
       // Click the "View actions to take" button to navigate to the Conditions Not Met Task List page
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Partnership has not met the registration conditions")
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Name has not met the registration conditions")
 
       // verify actions and their status
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
@@ -219,12 +219,12 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
 
       // Click the "View actions to take" button to navigate to the Conditions Not Met Task List page
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Partnership has not met the registration conditions")
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Name has not met the registration conditions")
 
       // verify actions and their status
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
@@ -296,12 +296,12 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
 
       // Click the "View actions to take" button to navigate to the Conditions Not Met Task List page
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Partnership has not met the registration conditions")
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Name has not met the registration conditions")
 
       // verify actions and their status
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(

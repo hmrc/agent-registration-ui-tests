@@ -63,8 +63,8 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertPageHeadingContains("Test Partnership")
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertPageHeadingContains("Test Company Name")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
 
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
@@ -76,7 +76,7 @@ extends BaseSpec:
 
       // Click Yes and check that the status is now Completed
       ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageIsDisplayed()
-      ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageHeadingContains("Self Assessment returns for Test Partnership")
+      ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageHeadingContains("Self Assessment returns for Test Company Name")
       ConditionsNotYetMetEntityFailureDetailsV41Page.selectYes()
       ConditionsNotYetMetEntityFailureDetailsV41Page.clickContinue()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
