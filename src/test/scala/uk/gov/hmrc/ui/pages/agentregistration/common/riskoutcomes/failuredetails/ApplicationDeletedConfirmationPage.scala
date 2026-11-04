@@ -22,27 +22,34 @@ import uk.gov.hmrc.ui.pages.agentregistration.common.application.BaseCheckYourAn
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object ApplicationDeletedConfirmationPage
-extends BasePage:
+  extends BasePage:
 
-  override val path: String = "/agent-registration/application-deleted"
-  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+    override val path: String = "/agent-registration/application-deleted"
+    override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
-  inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl should include(url)
+    inline def assertPageIsDisplayed(): Unit = eventually:
+      getCurrentUrl should include(url)
 
-  private val confirmationTitle = By.cssSelector("h1.govuk-panel__title")
-  private val whatHappensNextHeading = By.cssSelector("h2.govuk-heading-m")
-  private val startNewApplicationLink = By.cssSelector("a.govuk-link[href='/agent-registration/apply']")
-  private val finishAndSignOutLink = By.linkText("Finish and sign out")
+    private val confirmationTitle = By.cssSelector("h1.govuk-panel__title")
+    private val whatHappensNextHeading = By.cssSelector("h2.govuk-heading-m")
+    private val startNewApplicationLink = By.cssSelector("a.govuk-link[href='/agent-registration/apply']")
+    private val finishAndSignOutLink = By.linkText("Finish and sign out")
 
-  def assertConfirmationTitle(expected: String): Unit = eventually:
-    getText(confirmationTitle).trim shouldBe expected
 
-  def assertWhatHappensNextHeading(): Unit = eventually:
-    getText(whatHappensNextHeading).trim shouldBe "What happens next"
+    def assertConfirmationTitle(expected: String): Unit = eventually:
+      getText(confirmationTitle).trim shouldBe expected
 
-  def assertStartNewApplicationLinkIsDisplayed(): Unit = eventually:
-    findElementBy(startNewApplicationLink) shouldBe defined
+    def assertWhatHappensNextHeading(): Unit = eventually:
+      getText(whatHappensNextHeading).trim shouldBe "What happens next"  
 
-  def clickStartNewApplicationLink(): Unit = click(startNewApplicationLink)
-  def clickFinishAndSignOutLink(): Unit = click(finishAndSignOutLink)
+    def assertStartNewApplicationLinkIsDisplayed(): Unit = eventually:
+      findElementBy(startNewApplicationLink) shouldBe defined
+      
+    def clickStartNewApplicationLink(): Unit = click(startNewApplicationLink)
+    def clickFinishAndSignOutLink(): Unit = click(finishAndSignOutLink)
+
+
+
+
+
+

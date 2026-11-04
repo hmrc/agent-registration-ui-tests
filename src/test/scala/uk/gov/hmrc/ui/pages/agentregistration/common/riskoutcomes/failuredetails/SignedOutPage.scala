@@ -21,18 +21,23 @@ import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object SignedOutPage
-extends BasePage:
+  extends BasePage:
 
-  override val path: String = "/agent-registration/signed-out"
-  override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
+    override val path: String = "/agent-registration/signed-out"
+    override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
 
-  inline def assertPageIsDisplayed(): Unit = eventually:
-    getCurrentUrl should include(url)
-  private val pageHeading = By.cssSelector("h1.govuk-heading-l")
-  private val signInAgainLink = By.linkText("Sign in again")
+    inline def assertPageIsDisplayed(): Unit = eventually:
+      getCurrentUrl should include(url)
+    private val pageHeading = By.cssSelector("h1.govuk-heading-l")
+    private val signInAgainLink = By.linkText("Sign in again")
 
-  def assertPageHeading(): Unit = eventually:
-    getText(pageHeading).trim shouldBe "You have signed out"
+    def assertPageHeading(): Unit = eventually:
+      getText(pageHeading).trim shouldBe "You have signed out"
 
-  def assertSignInAgainLinkIsDisplayed(): Unit = eventually:
-    findElementBy(signInAgainLink) shouldBe defined
+    def assertSignInAgainLinkIsDisplayed(): Unit = eventually:
+      findElementBy(signInAgainLink) shouldBe defined
+
+
+
+
+

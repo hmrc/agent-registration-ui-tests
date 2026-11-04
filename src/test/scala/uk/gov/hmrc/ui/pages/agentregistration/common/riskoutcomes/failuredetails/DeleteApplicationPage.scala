@@ -30,6 +30,7 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
+
   private val pageHeading = By.cssSelector("h1")
   private val yesRadio = By.id("confirmDeleteApplication")
   private val noRadio = By.id("confirmDeleteApplication-2")
