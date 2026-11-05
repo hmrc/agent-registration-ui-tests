@@ -31,5 +31,13 @@ extends BasePage:
 
   private val startButton = By.cssSelector("a.govuk-button--start[href*='/agent-registration/provide-details/outcome-status']")
 
+  private val pageHeading = By.cssSelector("h1.govuk-heading-l")
+  private val finishAndSignOutLink = By.linkText("Finish and sign out")
+
   def clickStartButton(): Unit = eventually:
     click(startButton)
+
+  def assertPageHeading(): Unit = eventually:
+    getText(pageHeading).trim shouldBe "Application has expired"
+
+  def clickFinishAndSignOut(): Unit = click(finishAndSignOutLink)
