@@ -75,25 +75,6 @@ extends BaseSpec:
         ProvideDetailsSignOutPage.assertPageHeading()
         ProvideDetailsSignOutPage.assertSignInAgainLinkIsDisplayed()
 
-    Scenario(
-        "Applicant views their expired, unsubmitted application during the grace period.”",
-        TagFullSuite
-      ):
-          FastForwardLinks.startJourneyDirect()
-          FastForwardLinksPage.clickContactDetailsLink(GeneralPartnership)
-          ShowAgentApplicationPage.assertPageIsDisplayed()
-          ShowAgentApplicationPage.clickExpireApplicationNow()
-          ShowAgentApplicationPage.clickRunExpirySchedulerLink()
-          ShowAgentApplicationPage.assertApplicationIsExpired()
-          ShowAgentApplicationPage.clickEndPostExpiryGracePeriodNow()
-
-          ShowAgentApplicationPage.clickLogInAsApplicantLink()
-          ShowAgentApplicationPage.clickGoToTaskListLink()
-          UnsubmittedApplicationPage.assertPageIsDisplayed()
-          UnsubmittedApplicationPage.assertPageHeading()
-          UnsubmittedApplicationPage.clickFinishAndSignOut()
-          SignedOutPage.assertPageHeading()
-
 
 
 

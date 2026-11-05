@@ -107,8 +107,6 @@ extends EntryPage:
 
   private val endPostExpiryGracePeriodNowButton = By.id("end-post-expiry-grace-period-now")
 
-  def clickEndPostExpiryGracePeriodNow(): Unit = clickAndWaitToReturn(endPostExpiryGracePeriodNowButton)
-
   def clickRunExpirySchedulerLink(): Unit = clickAndWaitToReturn(runExpirySchedulerLink)
 
   def clickExpireApplicationNow(): Unit = click(expireApplicationNowButton)
