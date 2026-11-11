@@ -49,7 +49,7 @@ object AgentDetailsFlow:
       selectEmailAddress(AgentDetailOption.YouProvided)
       selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
       businessType match
-        case SoleTrader => verifyCheckYourAnswers(expectedName = "ST Name ST Lastname", expectedNumber = "(+44) 10794554342")
+        case SoleTrader => verifyCheckYourAnswers(expectedName = "Joe Bloggs", expectedNumber = "(+44) 10794554342")
         case LLP => verifyCheckYourAnswers(expectedName = "ABC Accounting LLP", expectedNumber = "(+44) 10794554342")
         case GeneralPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting GP", expectedNumber = "(+44) 10794554342")
         case LimitedPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting LP", expectedNumber = "(+44) 10794554342")
@@ -78,7 +78,7 @@ object AgentDetailsFlow:
       selectEmailAddress(AgentDetailOption.YouProvided)
       selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
       businessType match
-        case SoleTrader => verifyCheckYourAnswers(expectedName = "ST Name ST Lastname", expectedNumber = "(+44) 10794554342")
+        case SoleTrader => verifyCheckYourAnswers(expectedName = "Joe Bloggs", expectedNumber = "(+44) 10794554342")
         case LLP => verifyCheckYourAnswers(expectedName = "ABC Accounting LLP", expectedNumber = "(+44) 10794554342")
         case GeneralPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting GP", expectedNumber = "(+44) 10794554342")
         case LimitedPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting LP", expectedNumber = "(+44) 10794554342")

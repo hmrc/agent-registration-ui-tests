@@ -29,7 +29,7 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
 
-  val defaultSoleTraderName: String = "ST Name ST Lastname"
+  val defaultSoleTraderName: String = "Joe Bloggs"
 
   val defaultAgencyName: String = "ABC Accounting"
 

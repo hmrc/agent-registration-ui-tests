@@ -71,7 +71,7 @@ extends BaseSpec:
       CheckYourAnswersPage.assertSummaryRow("UK-based agent", "Yes")
       CheckYourAnswersPage.assertSummaryRow("Business type", "Sole trader")
       CheckYourAnswersPage.assertSummaryRow("Owner of the business", "Yes")
-      CheckYourAnswersPage.assertSummaryRow("Sole trader name", "ST Name ST Lastname")
+      CheckYourAnswersPage.assertSummaryRow("Sole trader name", "Joe Bloggs")
       CheckYourAnswersPage.assertSummaryRow("Unique taxpayer reference", "1234567895")
       CheckYourAnswersPage.clickOnAssertChangeLink("Business details")
 

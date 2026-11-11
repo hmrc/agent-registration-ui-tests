@@ -53,7 +53,7 @@ object DeclarationFlow:
     businessType match
       case SoleTrader =>
         if soleTraderOwner then DeclarationPage.assertNoAuthorisedByTextDisplayed()
-        else if fastForwardUsed then DeclarationPage.assertAuthorisedByTextDisplayed("ST Name ST Lastname")
+        else if fastForwardUsed then DeclarationPage.assertAuthorisedByTextDisplayed("Joe Bloggs")
         else DeclarationPage.assertAuthorisedByTextDisplayed("Test User")
       case LLP => DeclarationPage.assertAuthorisedByTextDisplayed("ABC Accounting LLP")
       case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("ABC Accounting GP")
