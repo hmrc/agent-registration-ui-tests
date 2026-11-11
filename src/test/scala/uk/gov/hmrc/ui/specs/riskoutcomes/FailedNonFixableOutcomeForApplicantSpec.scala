@@ -161,6 +161,8 @@ extends BaseSpec:
         .FastForward
         .runFlow(Declaration, GeneralPartnership)
 
+      val agencyName: String = "ABC Accounting GP"
+
       ApplicationSubmittedPage.assertPageIsDisplayed()
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
 
@@ -204,7 +206,7 @@ extends BaseSpec:
         "the business was issued with a relevant anti-avoidance penalty within the last 12 months",
         "the business appears on a published HMRC list of tax avoidance promoter, enablers or suppliers",
         "the business has missing tax returns in their HMRC record",
-        "we could not confirm the anti-money laundering supervision for Electronicsson Group based on the information you provided",
+        s"we could not confirm the anti-money laundering supervision for $agencyName based on the information you provided",
         "the business has unpaid tax liabilities",
         "the business has one or more relevant anti-avoidance penalties to pay",
         "one or more relevant individuals linked to the application do not meet the registration conditions",

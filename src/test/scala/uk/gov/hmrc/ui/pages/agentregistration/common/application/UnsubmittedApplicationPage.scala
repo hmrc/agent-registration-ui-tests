@@ -37,8 +37,6 @@ extends BasePage:
   def assertPageHeading(): Unit = eventually:
     getText(pageHeading).trim shouldBe "Your application has expired"
 
-  def clickDeleteAndStartNewApplication(): Unit =
-    click(deleteAndStartAgainButton)
+  def clickDeleteAndStartNewApplication(): Unit = click(deleteAndStartAgainButton)
 
-  def clickFinishAndSignOut(): Unit =
-    click(finishAndSignOutLink)  
+  def clickFinishAndSignOut(): Unit = click(finishAndSignOutLink)

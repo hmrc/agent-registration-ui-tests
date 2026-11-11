@@ -18,7 +18,9 @@ package uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails
 
 import org.openqa.selenium.By
 import uk.gov.hmrc.ui.pages.BasePage
-import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.SignedOutPage.{eventually, findElementBy, getText}
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.SignedOutPage.eventually
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.SignedOutPage.findElementBy
+import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.SignedOutPage.getText
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object ProvideDetailsSignOutPage
@@ -34,7 +36,7 @@ extends BasePage:
   private val signInAgainLink = By.linkText("Sign in again")
 
   def assertPageHeading(): Unit = eventually:
-   getText(pageHeading).trim shouldBe "You have signed out"
+    getText(pageHeading).trim shouldBe "You have signed out"
 
   def assertSignInAgainLinkIsDisplayed(): Unit = eventually:
-   findElementBy(signInAgainLink) shouldBe defined
+    findElementBy(signInAgainLink) shouldBe defined

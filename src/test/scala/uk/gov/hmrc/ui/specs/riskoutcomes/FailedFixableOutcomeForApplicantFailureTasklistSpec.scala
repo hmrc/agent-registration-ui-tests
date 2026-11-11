@@ -31,6 +31,8 @@ import uk.gov.hmrc.ui.utils.MongoHelper
 class FailedFixableOutcomeForApplicantFailureTasklistSpec
 extends BaseSpec:
 
+  private val agencyName: String = "ABC Accounting LLP"
+
   Feature("Applicant Task List Page"):
     Scenario(
       "Applicant actions are incomplete on task list",
@@ -64,12 +66,12 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading(s"$agencyName does not meet the registration conditions yet")
 
       // Click the "View actions to take" button to navigate to the Conditions Not Met Task List page
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Name has not met the registration conditions")
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading(s"Take action: $agencyName has not met the registration conditions")
 
       // verify actions and their status
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
@@ -142,12 +144,12 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading(s"$agencyName does not meet the registration conditions yet")
 
       // Click the "View actions to take" button to navigate to the Conditions Not Met Task List page
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Name has not met the registration conditions")
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading(s"Take action: $agencyName has not met the registration conditions")
 
       // verify actions and their status
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
@@ -219,12 +221,12 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading(s"$agencyName does not meet the registration conditions yet")
 
       // Click the "View actions to take" button to navigate to the Conditions Not Met Task List page
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Name has not met the registration conditions")
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading(s"Take action: $agencyName has not met the registration conditions")
 
       // verify actions and their status
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
@@ -296,12 +298,12 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading(s"$agencyName does not meet the registration conditions yet")
 
       // Click the "View actions to take" button to navigate to the Conditions Not Met Task List page
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Company Name has not met the registration conditions")
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading(s"Take action: $agencyName has not met the registration conditions")
 
       // verify actions and their status
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(

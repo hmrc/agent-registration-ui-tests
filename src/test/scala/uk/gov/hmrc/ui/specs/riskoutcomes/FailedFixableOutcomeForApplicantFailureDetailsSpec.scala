@@ -62,9 +62,11 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickLogInAsApplicantLink()
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
+      val agencyName: String = "ABC Accounting LLP"
+
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertPageHeadingContains("Test Company Name")
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertPageHeadingContains(agencyName)
+      ApplicationSubmittedPage.assertConfirmationTitleHeading(s"$agencyName does not meet the registration conditions yet")
 
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
@@ -76,7 +78,7 @@ extends BaseSpec:
 
       // Click Yes and check that the status is now Completed
       ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageIsDisplayed()
-      ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageHeadingContains("Self Assessment returns for Test Company Name")
+      ConditionsNotYetMetEntityFailureDetailsV41Page.assertPageHeadingContains(s"Self Assessment returns for $agencyName")
       ConditionsNotYetMetEntityFailureDetailsV41Page.selectYes()
       ConditionsNotYetMetEntityFailureDetailsV41Page.clickContinue()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()

@@ -105,16 +105,18 @@ extends BaseSpec:
 
       ApplicationSubmittedPage.clickViewOrPrintLink()
 
+      val agencyName: String = "ABC Accounting SLP"
+
       ViewApplicationFlow
         .ViewApplication
         .runFlow()
       ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
       ViewApplicationPage.assertSummaryRow("Business type", "Scottish limited partnership")
       ViewApplicationPage.assertSummaryRow("Are you a partner in the business?", "No, but I’m authorised by them to set up this account")
-      ViewApplicationPage.assertSummaryRow("Partnership name", "Test Company Name")
+      ViewApplicationPage.assertSummaryRow("Partnership name", agencyName)
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
       ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
-      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test Company Name")
+      ViewApplicationPage.assertSummaryRow("Name shown to clients", agencyName)
       ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
       ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Test Street\nTest Area\nAA1 1AA\nGB")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
@@ -135,4 +137,4 @@ extends BaseSpec:
       ShowAgentApplicationPage.assertPageIsDisplayed()
       ShowAgentApplicationPage.clickGoToTaskListLink()
       ApplicationStatusPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Company Name does not meet the registration conditions")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading(s"$agencyName does not meet the registration conditions")
