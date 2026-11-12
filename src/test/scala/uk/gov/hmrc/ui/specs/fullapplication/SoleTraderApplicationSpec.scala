@@ -39,8 +39,7 @@ extends BaseSpec:
     Scenario(
       "User reviews submitted application and receives approval outcome",
       TagSmokeTests,
-      TagFullSuite,
-      TagRisking
+      TagFullSuite
     ):
 
       val stubbedSignInData = BusinessDetailsFlow

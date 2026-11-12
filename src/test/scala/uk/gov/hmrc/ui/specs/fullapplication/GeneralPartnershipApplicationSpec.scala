@@ -53,8 +53,7 @@ extends BaseSpec:
     Scenario(
       "General Partnership applicant reviews application and resubmits after individual completes fixable failures",
       TagSmokeTests,
-      TagFullSuite,
-      TagRisking
+      TagFullSuite
     ):
 
       val stubbedSignInData = BusinessDetailsFlow

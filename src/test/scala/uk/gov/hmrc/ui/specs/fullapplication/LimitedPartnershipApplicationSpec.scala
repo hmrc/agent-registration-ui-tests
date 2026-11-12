@@ -42,8 +42,7 @@ extends BaseSpec:
     Scenario(
       "User reviews application details and receives application approval",
       TagFullSuite,
-      TagSmokeTests,
-      TagRisking
+      TagSmokeTests
     ):
       val stubbedSignInData = BusinessDetailsFlow
         .HasNoOnlineAccount
