@@ -42,21 +42,19 @@ object PartnerTaxAdvisorInformationFlow:
   enum NumberOfPartners:
 
     case FiveOrLess, SixOrMore
-    def selectOnPage(n: String): Unit =
+    def selectOnPage(n: Option[String] = None): Unit =
       this match
         case FiveOrLess =>
           HowManyPartnersPage.selectFiveOrLess()
-          HowManyPartnersPage.enterExactNumber(n)
-        case SixOrMore =>
-          HowManyPartnersPage.selectSixOrMore()
-          HowManyPartnersPage.enterNumResponsible(n)
+          HowManyPartnersPage.enterExactNumber(n.getOrElse("0"))
+        case SixOrMore => HowManyPartnersPage.selectSixOrMore()
 
   object FiveOrLessPartners:
 
     def runFlow(): Unit = // flow where there are 5 or less partners and all are known to tax authority
       val names = allPartnerNames.take(3)
       startJourney()
-      enterNumberOfPartners("3", FiveOrLess)
+      enterNumberOfPartners(Some("3"), FiveOrLess)
       enterPartners(names)
       checkYourAnswersKeyIndividuals(names)
       noUnofficialPartners()
@@ -71,7 +69,8 @@ object PartnerTaxAdvisorInformationFlow:
     def runFlow(): Unit =
       val names = allPartnerNames
       startJourney()
-      enterNumberOfPartners("7", SixOrMore)
+      enterNumberOfPartners(None, SixOrMore)
+      enterHowManyResponsibleForTax("7")
       enterPartners(names)
       checkYourAnswersKeyIndividuals(names)
       noUnofficialPartners()
@@ -86,7 +85,8 @@ object PartnerTaxAdvisorInformationFlow:
     def runFlow(): Unit =
       val names = allPartnerNames.take(5)
       startJourney()
-      enterNumberOfPartners("3", SixOrMore)
+      enterNumberOfPartners(None, SixOrMore)
+      enterHowManyResponsibleForTax("3")
       enterPartners(names)
       checkYourAnswersKeyIndividuals(names)
       noUnofficialPartners()
@@ -102,7 +102,7 @@ object PartnerTaxAdvisorInformationFlow:
       val names = allPartnerNames.take(3)
       val uNames = allUnofficialPartnerNames.take(3)
       startJourney()
-      enterNumberOfPartners("3", FiveOrLess)
+      enterNumberOfPartners(Some("3"), FiveOrLess)
       enterPartners(names)
       checkYourAnswersKeyIndividuals(names)
       addUnofficialPartners(uNames)
@@ -120,7 +120,8 @@ object PartnerTaxAdvisorInformationFlow:
     def runFlow(): Unit =
       val names = allPartnerNames.take(5)
       startJourney()
-      enterNumberOfPartners("3", SixOrMore)
+      enterNumberOfPartners(None, SixOrMore)
+      enterHowManyResponsibleForTax("3")
       enterPartners(names)
 
   object runToCheckYourAnswersUnofficialPartners: // flow to get to the unofficial partners check your answers page for testing the change scenarios
@@ -129,7 +130,7 @@ object PartnerTaxAdvisorInformationFlow:
       val names = allPartnerNames.take(3)
       val uNames = allUnofficialPartnerNames.take(3)
       startJourney()
-      enterNumberOfPartners("3", FiveOrLess)
+      enterNumberOfPartners(Some("3"), FiveOrLess)
       enterPartners(names)
       checkYourAnswersKeyIndividuals(names)
       addUnofficialPartners(uNames)
@@ -140,7 +141,7 @@ object PartnerTaxAdvisorInformationFlow:
       val names = allPartnerNames.take(3)
       val uNames = allUnofficialPartnerNames.take(3)
       startJourney()
-      enterNumberOfPartners("3", FiveOrLess)
+      enterNumberOfPartners(Some("3"), FiveOrLess)
       enterPartners(names)
       checkYourAnswersKeyIndividuals(names)
       addUnofficialPartners(uNames)
@@ -151,7 +152,7 @@ object PartnerTaxAdvisorInformationFlow:
     def runFlow(): Unit =
       val names = allPartnerNames.take(1)
       startJourney()
-      enterNumberOfPartners("1", FiveOrLess)
+      enterNumberOfPartners(Some("1"), FiveOrLess)
       enterPartners(names)
       checkYourAnswersKeyIndividuals(names)
       noUnofficialPartners()
@@ -167,12 +168,17 @@ object PartnerTaxAdvisorInformationFlow:
     TaskListPage.clickOnPartnerTaxAdvisorInformationLink()
 
   def enterNumberOfPartners(
-    n: String,
+    n: Option[String],
     totalNum: NumberOfPartners
   ): Unit =
     HowManyPartnersPage.assertPageIsDisplayed()
     totalNum.selectOnPage(n)
     HowManyPartnersPage.clickContinue()
+
+  def enterHowManyResponsibleForTax(n: String): Unit =
+    HowManyPartnersResponsibleForTaxPage.assertPageIsDisplayed()
+    HowManyPartnersResponsibleForTaxPage.enterHowManyPartnersResponsibleForTax(n)
+    HowManyPartnersResponsibleForTaxPage.clickContinue()
 
   def enterPartners(names: List[String]): Unit =
     enterFirstPartnerName(names.head)
