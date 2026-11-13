@@ -4,7 +4,9 @@ This repository contains UI tests for agent registration service. The tests requ
 use Selenium WebDriver to interact with the UI elements.
 
 ## Tags
-Test with the TagSmokeTests tag will run as part of the service build pipelines in jenkins. 
+Tests with the TagSmokeTests and TagRisking tags run in separate parallel jobs as part of the service build pipelines in Jenkins.
+Smoke tests cover representative application journeys, including email changes and re-verification, director-count changes,
+and restarting an expired application. Risking tests cover the detailed risking outcome journeys.
 The full suite of tests can be run manually in jenkins as a regression test using the agent-registration-ui-tests-full-suite job.
 
 

@@ -54,6 +54,7 @@ extends BaseSpec:
 
     Scenario(
       "Change Email address from CYA page",
+      TagSmokeTests,
       TagFullSuite
     ):
 

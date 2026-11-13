@@ -32,6 +32,7 @@ extends BaseSpec:
   Feature("Accessing an unsubmitted expired application"):
     Scenario(
       "Applicant views their expired, unsubmitted application",
+      TagSmokeTests,
       TagFullSuite
     ):
 
@@ -74,7 +75,6 @@ extends BaseSpec:
         ProvideDetailsSignOutPage.assertPageIsDisplayed()
         ProvideDetailsSignOutPage.assertPageHeading()
         ProvideDetailsSignOutPage.assertSignInAgainLinkIsDisplayed()
-
 
 
 
