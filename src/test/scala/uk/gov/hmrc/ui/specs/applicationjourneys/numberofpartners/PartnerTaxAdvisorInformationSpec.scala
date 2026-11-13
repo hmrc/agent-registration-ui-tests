@@ -42,7 +42,8 @@ extends BaseSpec:
 
     Scenario(
       "Partnership has 6 or more partners",
-      TagFullSuite
+      TagFullSuite,
+      TagSmokeTests
     ):
 
       FastForwardLinks

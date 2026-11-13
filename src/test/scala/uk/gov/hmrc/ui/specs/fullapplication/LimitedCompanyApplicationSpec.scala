@@ -57,8 +57,7 @@ extends BaseSpec:
     Scenario(
       "User resubmits application following entity and individual risking failures",
       TagSmokeTests,
-      TagFullSuite,
-      TagRisking
+      TagFullSuite
     ):
 
       val stubbedSignInData = BusinessDetailsFlow

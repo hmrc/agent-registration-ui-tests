@@ -29,6 +29,6 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl shouldBe url
 
-  private val howManyPartnersResponsibleForTaxField = By.id("numberOfKeyIndividualsResponsibleForTaxMatters")
+  private val howManyPartnersResponsibleForTaxField = By.id("numberOfPartnersResponsibleForTax")
 
   def enterHowManyPartnersResponsibleForTax(n: String): Unit = sendKeys(howManyPartnersResponsibleForTaxField, n)

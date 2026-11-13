@@ -79,6 +79,7 @@ extends BaseSpec:
 
     Scenario(
       "Change number of directors from Check your answers screen",
+      TagSmokeTests,
       TagFullSuite
     ):
       val stubbedSignInData = BusinessDetailsFlow
