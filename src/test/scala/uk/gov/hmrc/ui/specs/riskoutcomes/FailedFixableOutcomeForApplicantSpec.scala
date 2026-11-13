@@ -72,6 +72,8 @@ extends BaseSpec:
         .FastForward
         .runFlow(Declaration, GeneralPartnership)
 
+      val agencyName: String = "ABC Accounting GP"
+
       ApplicationSubmittedPage.assertPageIsDisplayed()
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
 
@@ -93,5 +95,5 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertPageHeadingContains("Electronicsson Group")
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Electronicsson Group does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertPageHeadingContains(agencyName)
+      ApplicationSubmittedPage.assertConfirmationTitleHeading(s"$agencyName does not meet the registration conditions yet")

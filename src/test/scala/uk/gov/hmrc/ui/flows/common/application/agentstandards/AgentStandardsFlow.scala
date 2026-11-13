@@ -50,7 +50,7 @@ object AgentStandardsFlow:
     AgentStandardsPage.assertPageIsDisplayed()
     businessType match
       case SoleTrader => AgentStandardsPage.assertSoleTraderTextDisplayed(soleTraderOwner, soleTraderName)
-      case LLP => AgentStandardsPage.assertPartnershipTextDisplayed()
+      case LLP => AgentStandardsPage.assertLimitedLiabilityPartnershipTextDisplayed()
       case GeneralPartnership => AgentStandardsPage.assertGeneralPartnershipDisplayed()
       case LimitedPartnership => AgentStandardsPage.assertLimitedPartnershipDisplayed()
       case LimitedCompany => AgentStandardsPage.assertLimitedCompanyTextDisplayed()

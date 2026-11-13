@@ -92,6 +92,8 @@ extends BaseSpec:
         .AcceptDeclaration
         .runFlow(GeneralPartnership)
 
+      val agencyName: String = "ABC Accounting GP"
+
       ApplicationSubmittedPage.assertPageIsDisplayed()
       val applicationReference = ApplicationSubmittedPage.getApplicationReference
 
@@ -103,10 +105,10 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
       ViewApplicationPage.assertSummaryRow("Business type", "General partnership")
       ViewApplicationPage.assertSummaryRow("Are you a partner in the business?", "No, but I’m authorised by them to set up this account")
-      ViewApplicationPage.assertSummaryRow("Partnership name", "Electronicsson Group")
+      ViewApplicationPage.assertSummaryRow("Partnership name", agencyName)
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
       ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
-      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Electronicsson Group")
+      ViewApplicationPage.assertSummaryRow("Name shown to clients", agencyName)
       ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
       ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Test Street\nTest Area\nAA1 1AA\nGB")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")

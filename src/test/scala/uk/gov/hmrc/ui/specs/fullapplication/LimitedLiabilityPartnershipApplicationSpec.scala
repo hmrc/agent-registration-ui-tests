@@ -110,16 +110,18 @@ extends BaseSpec:
 
       ApplicationSubmittedPage.clickViewOrPrintLink()
 
+      val agencyName: String = "ABC Accounting LLP"
+
       ViewApplicationFlow
         .ViewApplication
         .runFlow()
       ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
       ViewApplicationPage.assertSummaryRow("Business type", "Limited liability partnership")
       ViewApplicationPage.assertSummaryRow("Are you a member of the limited liability partnership?", "No, but I’m authorised by them to set up this account")
-      ViewApplicationPage.assertSummaryRow("Company name", "Test Partnership")
+      ViewApplicationPage.assertSummaryRow("Company name", agencyName)
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
       ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
-      ViewApplicationPage.assertSummaryRow("Name shown to clients", "Test Partnership")
+      ViewApplicationPage.assertSummaryRow("Name shown to clients", agencyName)
       ViewApplicationPage.assertSummaryRow("Telephone number", "(+44) 10794554342")
       ViewApplicationPage.assertSummaryRow("Correspondence address", "1 Test Street\nTest Area\nAA1 1AA\nGB")
       ViewApplicationPage.assertSummaryRow("Supervisory body", "HM Revenue and Customs (HMRC)")
@@ -139,10 +141,10 @@ extends BaseSpec:
       ShowAgentApplicationPage.clickGoToTaskListLink()
 
       ApplicationStatusPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertConfirmationTitleHeading("Test Partnership does not meet the registration conditions yet")
+      ApplicationSubmittedPage.assertConfirmationTitleHeading(s"$agencyName does not meet the registration conditions yet")
       ApplicationStatusPage.clickViewActionsToTakeButton()
       ConditionsNotYetMetApplicantTaskListPage.assertPageIsDisplayed()
-      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading("Take action: Test Partnership has not met the registration conditions")
+      ConditionsNotYetMetApplicantTaskListPage.assertTaskListTitleHeading(s"Take action: $agencyName has not met the registration conditions")
 
       ConditionsNotYetMetApplicantTaskListPage.assertActionStatus(
         "Provide your supervision details again",

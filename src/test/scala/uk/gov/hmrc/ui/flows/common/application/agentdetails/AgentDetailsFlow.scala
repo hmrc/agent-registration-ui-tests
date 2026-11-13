@@ -49,13 +49,13 @@ object AgentDetailsFlow:
       selectEmailAddress(AgentDetailOption.YouProvided)
       selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
       businessType match
-        case SoleTrader => verifyCheckYourAnswers(expectedName = "ST Name ST Lastname", expectedNumber = "(+44) 10794554342")
-        case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
-        case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
-        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
-        case LimitedCompany => verifyCheckYourAnswers(expectedName = "Test Company Ltd", expectedNumber = "(+44) 10794554342")
-        case ScottishLimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
-        case ScottishPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
+        case SoleTrader => verifyCheckYourAnswers(expectedName = "Joe Bloggs", expectedNumber = "(+44) 10794554342")
+        case LLP => verifyCheckYourAnswers(expectedName = "ABC Accounting LLP", expectedNumber = "(+44) 10794554342")
+        case GeneralPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting GP", expectedNumber = "(+44) 10794554342")
+        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting LP", expectedNumber = "(+44) 10794554342")
+        case LimitedCompany => verifyCheckYourAnswers(expectedName = "ABC Accounting LC", expectedNumber = "(+44) 10794554342")
+        case ScottishLimitedPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting SLP", expectedNumber = "(+44) 10794554342")
+        case ScottishPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting SP", expectedNumber = "(+44) 10794554342")
       completeCheckYourAnswers()
 
   object WhenUsingCustomValues:
@@ -78,13 +78,13 @@ object AgentDetailsFlow:
       selectEmailAddress(AgentDetailOption.YouProvided)
       selectCorrespondenceAddress(AgentDetailOption.HmrcProvided)
       businessType match
-        case SoleTrader => verifyCheckYourAnswers(expectedName = "ST Name ST Lastname", expectedNumber = "(+44) 10794554342")
-        case LLP => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
-        case GeneralPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
-        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
-        case LimitedCompany => verifyCheckYourAnswers(expectedName = "Test Company Ltd", expectedNumber = "(+44) 10794554342")
-        case ScottishLimitedPartnership => verifyCheckYourAnswers(expectedName = "Test Partnership", expectedNumber = "(+44) 10794554342")
-        case ScottishPartnership => verifyCheckYourAnswers(expectedName = "Electronicsson Group", expectedNumber = "(+44) 10794554342")
+        case SoleTrader => verifyCheckYourAnswers(expectedName = "Joe Bloggs", expectedNumber = "(+44) 10794554342")
+        case LLP => verifyCheckYourAnswers(expectedName = "ABC Accounting LLP", expectedNumber = "(+44) 10794554342")
+        case GeneralPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting GP", expectedNumber = "(+44) 10794554342")
+        case LimitedPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting LP", expectedNumber = "(+44) 10794554342")
+        case LimitedCompany => verifyCheckYourAnswers(expectedName = "ABC Accounting LC", expectedNumber = "(+44) 10794554342")
+        case ScottishLimitedPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting SLP", expectedNumber = "(+44) 10794554342")
+        case ScottishPartnership => verifyCheckYourAnswers(expectedName = "ABC Accounting SP", expectedNumber = "(+44) 10794554342")
 
   def startJourney(): Unit =
     TaskListPage.assertPageIsDisplayed()

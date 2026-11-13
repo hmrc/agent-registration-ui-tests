@@ -29,23 +29,25 @@ extends BasePage:
   inline def assertPageIsDisplayed(): Unit = eventually:
     getCurrentUrl should include(url)
 
-  val defaultSoleTraderName: String = "ST Name ST Lastname"
+  val defaultSoleTraderName: String = "Joe Bloggs"
+
+  val defaultAgencyName: String = "ABC Accounting"
 
   private def soleTraderAgreement(name: String): String = s"I agree that $name will meet the standard when working on behalf of clients."
 
   private def soleTraderOwnerAgreement(name: String): String = s"I agree that I, $name, will meet the standard when working on behalf of clients."
 
-  private val partnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
+  private val limitedLiabilityPartnershipAgreement: String = s"I agree that $defaultAgencyName LLP will meet the standard when working on behalf of clients."
 
-  private val generalPartnershipAgreement: String = "I agree that Electronicsson Group will meet the standard when working on behalf of clients."
+  private val generalPartnershipAgreement: String = s"I agree that $defaultAgencyName GP will meet the standard when working on behalf of clients."
 
-  private val limitedPartnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
+  private val limitedPartnershipAgreement: String = s"I agree that $defaultAgencyName LP will meet the standard when working on behalf of clients."
 
-  private val limitedCompanyAgreement: String = "I agree that Test Company Ltd will meet the standard when working on behalf of clients."
+  private val limitedCompanyAgreement: String = s"I agree that $defaultAgencyName LC will meet the standard when working on behalf of clients."
 
-  private val scottishLimitedPartnershipAgreement: String = "I agree that Test Partnership will meet the standard when working on behalf of clients."
+  private val scottishLimitedPartnershipAgreement: String = s"I agree that $defaultAgencyName SLP will meet the standard when working on behalf of clients."
 
-  private val scottishPartnershipAgreement: String = "I agree that Electronicsson Group will meet the standard when working on behalf of clients."
+  private val scottishPartnershipAgreement: String = s"I agree that $defaultAgencyName SP will meet the standard when working on behalf of clients."
 
   private val bodyParas: By = By.id("main-content")
 
@@ -57,7 +59,7 @@ extends BasePage:
     then getText(bodyParas) should include(soleTraderOwnerAgreement(name))
     else getText(bodyParas) should include(soleTraderAgreement(name))
 
-  def assertPartnershipTextDisplayed(): Unit = getText(bodyParas) should include(partnershipAgreement)
+  def assertLimitedLiabilityPartnershipTextDisplayed(): Unit = getText(bodyParas) should include(limitedLiabilityPartnershipAgreement)
 
   def assertGeneralPartnershipDisplayed(): Unit = getText(bodyParas) should include(generalPartnershipAgreement)
 

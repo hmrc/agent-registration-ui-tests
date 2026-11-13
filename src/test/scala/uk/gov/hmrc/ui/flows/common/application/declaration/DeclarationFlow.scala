@@ -53,14 +53,14 @@ object DeclarationFlow:
     businessType match
       case SoleTrader =>
         if soleTraderOwner then DeclarationPage.assertNoAuthorisedByTextDisplayed()
-        else if fastForwardUsed then DeclarationPage.assertAuthorisedByTextDisplayed("ST Name ST Lastname")
+        else if fastForwardUsed then DeclarationPage.assertAuthorisedByTextDisplayed("Joe Bloggs")
         else DeclarationPage.assertAuthorisedByTextDisplayed("Test User")
-      case LLP => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
-      case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
-      case LimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
-      case LimitedCompany => DeclarationPage.assertAuthorisedByTextDisplayed("Test Company Ltd")
-      case ScottishLimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Test Partnership")
-      case ScottishPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("Electronicsson Group")
+      case LLP => DeclarationPage.assertAuthorisedByTextDisplayed("ABC Accounting LLP")
+      case GeneralPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("ABC Accounting GP")
+      case LimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("ABC Accounting LP")
+      case LimitedCompany => DeclarationPage.assertAuthorisedByTextDisplayed("ABC Accounting LC")
+      case ScottishLimitedPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("ABC Accounting SLP")
+      case ScottishPartnership => DeclarationPage.assertAuthorisedByTextDisplayed("ABC Accounting SP")
     DeclarationPage.clickContinue()
 
   def completeJourney(): Unit =

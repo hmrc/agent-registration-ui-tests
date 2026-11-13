@@ -150,7 +150,7 @@ extends BaseSpec:
       MongoHelper.confirmRiskingOutcomeIndividualFixes(
         applicationReference = applicationReference,
         fixTypesByIndividualName = Map(
-          "ST Name ST Lastname" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
+          "Joe Bloggs" -> Seq("IndividualFix._4._1", "IndividualFix._5._1")
         )
       )
 
