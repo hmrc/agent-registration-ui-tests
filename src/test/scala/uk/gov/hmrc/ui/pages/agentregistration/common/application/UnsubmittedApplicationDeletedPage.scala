@@ -21,7 +21,7 @@ import uk.gov.hmrc.ui.pages.BasePage
 import uk.gov.hmrc.ui.utils.AppConfig
 
 object UnsubmittedApplicationDeletedPage
-  extends BasePage:
+extends BasePage:
 
   override val path: String = "/agent-registration/apply/expired/unsubmitted-application-deleted"
   override val baseUrl: String = AppConfig.baseUrlAgentRegistrationFrontend
@@ -30,8 +30,7 @@ object UnsubmittedApplicationDeletedPage
     getCurrentUrl should include(url)
 
   private val pageHeading = By.cssSelector("h1.govuk-heading-l")
-  private val startNewApplicationLink =
-    By.cssSelector("a.govuk-button[href='/agent-registration/apply']")
+  private val startNewApplicationLink = By.cssSelector("a.govuk-button[href='/agent-registration/apply']")
 
   def assertPageHeading(): Unit = eventually:
     getText(pageHeading).trim shouldBe "Your application has been deleted"
@@ -39,5 +38,4 @@ object UnsubmittedApplicationDeletedPage
   def assertStartNewApplicationLinkIsDisplayed(): Unit = eventually:
     findElementBy(startNewApplicationLink) shouldBe defined
 
-  def clickStartNewApplicationLink(): Unit =
-    click(startNewApplicationLink)
+  def clickStartNewApplicationLink(): Unit = click(startNewApplicationLink)

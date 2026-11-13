@@ -20,9 +20,12 @@ import uk.gov.hmrc.ui.domain.BusinessType
 import uk.gov.hmrc.ui.domain.BusinessType.*
 import uk.gov.hmrc.ui.flows.common.application.FastForwardLinks
 import uk.gov.hmrc.ui.pages.agentregistration.common.application.businessdetails.IsYourAgentBusinessBasedInTheUKPage
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.{UnsubmittedApplicationDeletedPage, UnsubmittedApplicationPage}
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.{FastForwardLinksPage, ShowAgentApplicationPage}
-import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.{ProvideDetailsSignOutPage, SignInAndConfirmDetailsPage}
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.UnsubmittedApplicationDeletedPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.UnsubmittedApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.FastForwardLinksPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.fastforwardlinks.ShowAgentApplicationPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.ProvideDetailsSignOutPage
+import uk.gov.hmrc.ui.pages.agentregistration.common.application.partnerdetails.SignInAndConfirmDetailsPage
 import uk.gov.hmrc.ui.pages.agentregistration.common.riskoutcomes.failuredetails.SignedOutPage
 import uk.gov.hmrc.ui.specs.BaseSpec
 
@@ -56,32 +59,22 @@ extends BaseSpec:
       IsYourAgentBusinessBasedInTheUKPage.assertPageIsDisplayed()
 
     Scenario(
-        "Individual views their expired, unsubmitted application",
-        TagFullSuite
-      ):
+      "Individual views their expired, unsubmitted application",
+      TagFullSuite
+    ):
 
-        FastForwardLinks.startJourneyDirect()
-        FastForwardLinksPage.clickMembersAndOtherRelevantIndividuals2Link(LLP)
-        ShowAgentApplicationPage.clickExpireApplicationNow()
-        ShowAgentApplicationPage.clickRunExpirySchedulerLink()
-        ShowAgentApplicationPage.assertApplicationIsExpired()
-        ShowAgentApplicationPage.clickLoginAsIndividualLink()
-        ShowAgentApplicationPage.clickProvideDetailsLink()
+      FastForwardLinks.startJourneyDirect()
+      FastForwardLinksPage.clickMembersAndOtherRelevantIndividuals2Link(LLP)
+      ShowAgentApplicationPage.clickExpireApplicationNow()
+      ShowAgentApplicationPage.clickRunExpirySchedulerLink()
+      ShowAgentApplicationPage.assertApplicationIsExpired()
+      ShowAgentApplicationPage.clickLoginAsIndividualLink()
+      ShowAgentApplicationPage.clickProvideDetailsLink()
 
-        SignInAndConfirmDetailsPage.assertPageIsDisplayed()
-        SignInAndConfirmDetailsPage.assertPageHeading()
-        SignInAndConfirmDetailsPage.clickFinishAndSignOut()
+      SignInAndConfirmDetailsPage.assertPageIsDisplayed()
+      SignInAndConfirmDetailsPage.assertPageHeading()
+      SignInAndConfirmDetailsPage.clickFinishAndSignOut()
 
-        ProvideDetailsSignOutPage.assertPageIsDisplayed()
-        ProvideDetailsSignOutPage.assertPageHeading()
-        ProvideDetailsSignOutPage.assertSignInAgainLinkIsDisplayed()
-
-
-
-
-
-
-
-
-
-
+      ProvideDetailsSignOutPage.assertPageIsDisplayed()
+      ProvideDetailsSignOutPage.assertPageHeading()
+      ProvideDetailsSignOutPage.assertSignInAgainLinkIsDisplayed()
