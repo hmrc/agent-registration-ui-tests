@@ -248,10 +248,7 @@ object ProvideIndividualDetailsFlow:
     AgentExternalStubCreateUserPage.clickContinue()
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
     if businessType == SoleTrader then
-      if fastForwardUsed then
-        AgentExternalStubConfigureUserPage.enterName("Joe Bloggs")
-      else
-        AgentExternalStubConfigureUserPage.enterName("Test User")
+      AgentExternalStubConfigureUserPage.enterName("Joe Bloggs")
     else
       AgentExternalStubConfigureUserPage.enterName("Bobby Boucher")
     AgentExternalStubConfigureUserPage.selectConfidenceLevel250()
@@ -284,10 +281,7 @@ object ProvideIndividualDetailsFlow:
     AgentExternalStubConfigureUserPage.assertPageIsDisplayed()
     AgentExternalStubConfigureUserPage.selectConfidenceLevel250()
     if businessType == SoleTrader then
-      if fastForwardUsed then
-        AgentExternalStubConfigureUserPage.enterName("Joe Bloggs")
-      else
-        AgentExternalStubConfigureUserPage.enterName("Test User")
+      AgentExternalStubConfigureUserPage.enterName("Joe Bloggs")
     else
       AgentExternalStubConfigureUserPage.enterName("Bobby Boucher")
     AgentExternalStubConfigureUserPage.clickContinue()
