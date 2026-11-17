@@ -102,7 +102,7 @@ extends BaseSpec:
         .runFlow(
           SoleTrader,
           false,
-          "Test User"
+          "Joe Bloggs"
         )
 
       ProvideIndividualDetailsFlow
@@ -140,7 +140,7 @@ extends BaseSpec:
         .runFlow(stubbedSignInData)
 
       ApplicationSubmittedPage.assertPageIsDisplayed()
-      ApplicationSubmittedPage.assertPageHeadingContains("Test User")
+      ApplicationSubmittedPage.assertPageHeadingContains("Joe Bloggs")
 
       ApplicationSubmittedPage.assertOutcomeDescriptionContainsAll(
         "our records show that the business is formally insolvent",

@@ -62,7 +62,7 @@ extends BaseSpec:
         .runFlow(
           SoleTrader,
           true,
-          "Test User"
+          "Joe Bloggs"
         )
 
       ProvideIndividualDetailsFlow
@@ -84,7 +84,7 @@ extends BaseSpec:
       ViewApplicationPage.assertSummaryRow("UK-based agent", "Yes")
       ViewApplicationPage.assertSummaryRow("Business type", "Sole trader")
       ViewApplicationPage.assertSummaryRow("Owner of the business", "Yes")
-      ViewApplicationPage.assertSummaryRow("Sole trader name", "Test User")
+      ViewApplicationPage.assertSummaryRow("Sole trader name", "Joe Bloggs")
       ViewApplicationPage.assertSummaryRowPresent("Unique taxpayer reference")
       ViewApplicationPage.assertSummaryRow("Name", "John Ian Tester")
       ViewApplicationPage.assertSummaryRow(

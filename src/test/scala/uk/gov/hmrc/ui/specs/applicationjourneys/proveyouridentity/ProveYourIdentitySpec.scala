@@ -71,7 +71,7 @@ extends BaseSpec:
         .runFlow(
           SoleTrader,
           false,
-          "Test User"
+          "Joe Bloggs"
         )
 
       ProvideIndividualDetailsFlow

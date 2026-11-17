@@ -58,12 +58,12 @@ extends BaseSpec:
         .runFlow(
           SoleTrader,
           false,
-          "Test User"
+          "Joe Bloggs"
         )
 
       RelevantIndividualFlow
         .WithSoleTrader
-        .runFlow("Test User", "test.user@example.com")
+        .runFlow("Joe Bloggs", "test.user@example.com")
 
       TaskListPage.clickDeclareAndSubmit()
 

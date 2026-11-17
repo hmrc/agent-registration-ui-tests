@@ -145,7 +145,7 @@ extends BaseSpec:
         .runFlow(
           SoleTrader,
           false,
-          "Test User"
+          "Joe Bloggs"
         )
 
       val (_, individualUsername) = ProvideIndividualDetailsFlow
@@ -190,7 +190,7 @@ extends BaseSpec:
       ConditionsNotYetMetIndividualsPage.assertPageIsDisplayed()
       ConditionsNotYetMetIndividualsPage.assertActionsRow(
         ActionRow(
-          name = "Test User",
+          name = "Joe Bloggs",
           actions = Seq("Pay a liability connected to relevant anti-avoidance"),
           completed = "No"
         )
