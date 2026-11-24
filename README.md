@@ -23,10 +23,10 @@ docker run --rm -d -p 27017:27017 --name mongo percona/percona-server-mongodb:6.
 ### Agent Registration Services
 
 Start `AGENT_REGISTRATION_STUBBED_GRS` services:
-Flags required to run the tests with fixable failures enabled and email verification passcodes page injected.
+Flags required to run the tests with email verification passcodes page injected.
 ```bash
 sm2 --start AGENT_REGISTRATION_STUBBED_GRS \
-  --appendArgs '{"AGENT_REGISTRATION_FRONTEND":["-Dfeatures.fixable-failures=true","-Dinject-email-verification-passcodes-page=true"],"AGENT_REGISTRATION_RISKING":["-Dfeatures.fixable-failures=true"]}'
+  --appendArgs '{"AGENT_REGISTRATION_FRONTEND":["-Dinject-email-verification-passcodes-page=true"]}'
 ```
 
 ## Running tests
